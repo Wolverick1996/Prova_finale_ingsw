@@ -9,28 +9,29 @@ public class PubObjHandler {
     //***************************//
 
     private int[] activeID;
+    public static int numPubOC = 0; //Will have a function that extract number of Cards
 
     //***************************//
     //         Methods           //
     //***************************//
 
     //Set the PubOC to be handled in the right position
-    public void setPubOC(){
+    public static void setPubOC(){
 
     }
 
     //Call the method or the right PubOC for counting points
-    public void countPoints(int num){
+    public static void countPoints(int num){
 
     }
 
     //Get the name (on table)
-    public String getName(int num){
+    public static String getName(int num){
         return null;
     }
 
     //Get the description (on table)
-    public String getDescription(int num){
+    public static String getDescription(int num){
         return null;
     }
 
