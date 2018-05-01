@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.lang.*;
+
 public class Dice extends Enum{
 
     //***************************//
@@ -39,5 +41,10 @@ public class Dice extends Enum{
     //give the dice a certain value
     public void assignValue(){
 
+    }
+
+    @Override
+    public String toString(){
+        return "String";
     }
 }

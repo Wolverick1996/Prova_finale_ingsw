@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.lang.*;
+
 public class ToolHandler {
 
     //***************************//
@@ -30,6 +32,11 @@ public class ToolHandler {
     //Get the description of the tool (on table)
     public String getDescription(int num){
         return null;
+    }
+
+    @Override
+    public String toString(){
+        return "String";
     }
 
 }

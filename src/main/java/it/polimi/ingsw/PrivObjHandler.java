@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.lang.*;
+
 public class PrivObjHandler {
 
     //***************************//
@@ -26,6 +28,11 @@ public class PrivObjHandler {
     //Get the description (on table)
     public String getDescription(int num){
         return null;
+    }
+
+    @Override
+    public String toString(){
+        return "String";
     }
 
 }

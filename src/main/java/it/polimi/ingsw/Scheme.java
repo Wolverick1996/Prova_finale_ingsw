@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.lang.*;
+
 public class Scheme {
 
     //***************************//
@@ -37,5 +39,10 @@ public class Scheme {
     //Get the difficulty
     public int getDifficulty(){
         return -1;
+    }
+
+    @Override
+    public String toString(){
+        return "String";
     }
 }

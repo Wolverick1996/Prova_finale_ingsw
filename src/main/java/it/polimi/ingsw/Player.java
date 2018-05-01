@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.lang.*;
+
 public class Player {
 
     //***************************//
@@ -51,5 +53,10 @@ public class Player {
     //Count the points, at game end or game left. Return -1 if unsuccessfull
     public int countPoints(){
         return -1;
+    }
+
+    @Override
+    public String toString(){
+        return "String";
     }
 }

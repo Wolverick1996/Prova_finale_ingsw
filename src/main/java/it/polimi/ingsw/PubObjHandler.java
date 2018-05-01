@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.lang.*;
+
 public class PubObjHandler {
 
     //***************************//
@@ -31,4 +33,10 @@ public class PubObjHandler {
     public String getDescription(int num){
         return null;
     }
+
+    @Override
+    public String toString(){
+        return "String";
+    }
+
 }

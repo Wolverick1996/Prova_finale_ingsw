@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.lang.*;
+
 public class Box extends Enum {
 
     //***************************//
@@ -39,6 +41,11 @@ public class Box extends Enum {
     public Dice getDice(){
         if (isFull == false) {return null;}
         return null;
+    }
+
+    @Override
+    public String toString(){
+        return "String";
     }
 
 }

@@ -13,4 +13,11 @@ public class Enum {
         PURPLE
     }
 
+    public enum Placement{
+        SCHEME,
+        RESERVE,
+        ROUNDTRACK,
+        BAG
+    }
+
 }
