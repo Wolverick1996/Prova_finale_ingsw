@@ -1,5 +1,8 @@
 package it.polimi.ingsw;
 
+import com.sun.xml.internal.bind.v2.TODO;
+
+import java.awt.*;
 import java.util.*;
 import java.lang.*;
 
@@ -10,16 +13,21 @@ public class Table {
     //***************************//
 
     private static Table instance = null;
-    private int[] toolCards = new int[3];
-    private int[] publicOC = new int[3];
-    private ArrayList reserve;
-    private ArrayList roundTrack;
+    private ArrayList<Dice> reserve = new ArrayList<Dice>();
+    private ArrayList<Dice> roundTrack = new ArrayList<Dice>();
+    private int redExt = 0;
+    private int greenExt = 0;
+    private int purpleExt = 0;
+    private int yellowExt = 0;
+    private int bluExt = 0;
+    private int round = 0; //must match ROUND in controller
+    private int numPlayers;
 
     //constructor Singleton
     protected Table(){
-
-
-
+        ToolHandler.setTools();
+        PubObjHandler.setPubOC();
+        //numPlayers = Controller.getNumPlayers(); //Request must be sent to right controller
     }
 
     //***************************//
@@ -44,7 +52,19 @@ public class Table {
 
     //Change round
     public void nextRound(){
+        //set RoundTrack
+        //set Reserve
+        Dice temp = new Dice();
+        int i = 0;
 
+        for(Dice d:reserve){
+            roundTrack.add(d);
+        }
+        reserve.clear();
+
+        //TODO: add new dice to reserve
+
+        round++;
     }
 
     //Pick dice from reserve (num is the position on the table of the dice)

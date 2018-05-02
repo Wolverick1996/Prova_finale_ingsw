@@ -8,7 +8,7 @@ public class PubObjHandler {
     //        Attributes         //
     //***************************//
 
-    private int[] activeID;
+    private static int[] activeID = new int[3];
     public static int numPubOC = 0; //Will have a function that extract number of Cards
 
     //***************************//
@@ -17,7 +17,13 @@ public class PubObjHandler {
 
     //Set the PubOC to be handled in the right position
     public static void setPubOC(){
-
+        try {
+            activeID = Utility.returnRandomInts(3,0,numPubOC);
+        }catch (Exception e){
+            //Unhandled Exception
+            System.out.println("Failed setPubOC");
+            System.exit(-1);
+        }
     }
 
     //Call the method or the right PubOC for counting points
