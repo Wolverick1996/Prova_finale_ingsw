@@ -8,7 +8,7 @@ public class ToolHandler {
     //        Attributes         //
     //***************************//
 
-    private int[] activeID;
+    private static int activeID[] = new int[3];
     public static int numTools = 0; //Will have a function that extract number of Cards
 
     //***************************//
@@ -17,7 +17,13 @@ public class ToolHandler {
 
     //Set the toolcards to be handled in the right position
     public static void setTools(){
-
+        try {
+            activeID = Utility.returnRandomInts(3,0,numTools);
+        }catch (Exception e){
+            //Unhandled exception
+            System.out.println("Failed setTools");
+            System.exit(-1);
+        }
     }
 
     //Call the method or the right tool
