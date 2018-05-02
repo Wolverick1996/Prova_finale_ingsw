@@ -26,7 +26,7 @@ public class Box extends Enum {
 
     //Check if Box can be used
     public boolean isEmployable(Dice dice){
-        if(this.restrictionNum == 0 || this.restrictionCol == Color.RESET ||
+        if(this.restrictionNum == 0 || this.restrictionCol == null ||
                 dice.getColor() == this.restrictionCol || dice.getValue() == this.restrictionNum)
             return true;
         else
@@ -66,9 +66,9 @@ public class Box extends Enum {
     @Override
     public String toString(){
         if(this.diceInside == null || !isFull){
-            if(this.restrictionCol == RESET && this.restrictionNum == 0)
+            if(this.restrictionCol == null && this.restrictionNum == 0)
                 return "The box is empty and has no restrictions";
-            else if(this.restrictionCol != RESET)
+            else if(this.restrictionCol != null)
                 return "The box is empty and has a color restriction ("+restrictionCol+")";
             else
                 return "The box is empty and has a number restriction ("+restrictionNum+")";
