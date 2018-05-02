@@ -8,3 +8,17 @@ This was thought to make calling this methods easier, starting from the GUI (Cli
 This will make flexible positioning in arrays and grids not possible in the Model.
 -- A "Enum" Class has been added, to keep the design simple. In order to use those types, for now, *extends Enum*.
 -- Schemes and Cards are yet to be implemented. CardHandler and Scheme are classes made for pairing elements of the game with data.
+
+v0.2
+
+- ToolHandler and PubObjHandler made static. Added static public attribute with the number of cards
+- Added the "Utility" Class, to create specific algorithms for data management
+NOTES:
+-- The "static" attribute was added in order to call methods without creating instances of the object.
+
+v0.3
+
+- Implemented: Box, Dice, Table (constructor)
+- Added tests on dice
+NOTES:
+-- Added ANSI code to colors

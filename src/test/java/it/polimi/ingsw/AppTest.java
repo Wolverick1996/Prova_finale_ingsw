@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-class AppTest {
+class AppTest{
 
     @Test
     void myFirstTest() {
@@ -20,4 +20,46 @@ class AppTest {
     //control Box (if isFull, you should be able to get diceInside using right methods)
 
     //control Scheme.placeDice() , Scheme.checkBox() (check consistency)
+}
+
+class DiceTest extends Enum {
+
+    @Test
+    void valueTest(){
+        Dice dice;
+        int value;
+
+        value = (int)(Math.random()*6 + 1);
+        dice = new Dice(value);
+        assertEquals(value, dice.getValue());
+
+        value = (int)(Math.random()*6 + 1);
+        dice.assignValue(value);
+        assertEquals(value, dice.getValue());
+    }
+
+    @Test
+    void colorTest(){
+        Dice dice;
+        Color color;
+
+        color = Color.getRandomColor();
+        dice = new Dice(color);
+        assertEquals(color, dice.getColor());
+    }
+
+    @Test
+    void definedDiceTest(){
+        Dice dice;
+        int value;
+        Color color;
+
+        value = (int)(Math.random()*6 + 1);
+        color = Color.getRandomColor();
+        dice = new Dice(color, value);
+
+        assertEquals(value, dice.getValue());
+        assertEquals(color, dice.getColor());
+    }
+
 }
