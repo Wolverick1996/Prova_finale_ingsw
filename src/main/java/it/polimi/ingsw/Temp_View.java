@@ -7,7 +7,9 @@ public class Temp_View {
  */
 
     public static void main( String[] args ) {
-        System.out.println(Enum.Color.RED.escape() + "HELLO " + Enum.Color.PURPLE.escape() + "WORLD" + Enum.Color.RESET );
+        String s = new String("\nciao\nciao");
+        s = s+"\nciaone";
+        System.out.println(Enum.Color.RED.escape() + "HELLO " + Enum.Color.PURPLE.escape() + "WORLD" + Enum.Color.RESET+s );
     }
 
 }
