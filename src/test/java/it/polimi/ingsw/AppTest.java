@@ -20,6 +20,8 @@ class AppTest{
     //control Box (if isFull, you should be able to get diceInside using right methods)
 
     //control Scheme.placeDice() , Scheme.checkBox() (check consistency)
+
+    //control ROUND. Must be < 10
 }
 
 class DiceTest extends Enum {

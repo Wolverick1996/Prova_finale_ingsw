@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import com.sun.xml.internal.bind.v2.TODO;
+import org.w3c.dom.events.EventException;
 
 import java.awt.*;
 import java.util.*;
@@ -54,15 +55,33 @@ public class Table {
     public void nextRound(){
         //set RoundTrack
         //set Reserve
-        Dice temp = new Dice();
-        int i = 0;
+        if (round>9){ System.out.println("WARNING nextRound called, round is already 10"); return;}
 
-        for(Dice d:reserve){
-            roundTrack.add(d);
+        Enum.Color color = Enum.Color.getRandomColor();
+
+        if(!reserve.isEmpty()){
+            for(Dice d:reserve){
+                roundTrack.add(d);
+            }
+            reserve.clear();
         }
-        reserve.clear();
 
-        //TODO: add new dice to reserve
+        //TODO: control this algorithm
+        for (int i=0;i<numPlayers*2+1;i++){
+            boolean isAVB = false;
+            while(!isAVB){
+                color = Enum.Color.getRandomColor();
+                switch (color){
+                    case RED: {if (redExt <= 18) { isAVB = true;} break; }
+                    case PURPLE: {if (purpleExt <= 18) { isAVB = true;} break; }
+                    case BLUE: {if (bluExt <= 18) { isAVB = true;} break; }
+                    case GREEN: {if (greenExt <= 18) { isAVB = true;} break; }
+                    case YELLOW: {if (yellowExt <= 18) { isAVB = true;} break; }
+                    //default: throw new Exception();
+                }
+            }
+            reserve.add(new Dice(color));
+        }
 
         round++;
     }
