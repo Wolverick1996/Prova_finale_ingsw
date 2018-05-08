@@ -1,6 +1,6 @@
 package it.polimi.ingsw;
 
-import java.lang.*;
+import java.util.*;
 
 public class Scheme {
 
@@ -33,28 +33,22 @@ public class Scheme {
         return dice;
     }
 
-    //Place a dice in a box with all restrictions
-    public boolean placeDiceWithAllRestr(Dice dice, int x, int y) {
+    //Check if a dice is placeable in a box with all restrictions
+    public boolean isPlaceableAllRestr(Dice dice, int x, int y) {
         boolean placeable = true;
-        boolean freeGrid = true;
+        boolean freeGrid = isGridFree();
         boolean diceNear = false;
         int i;
         int j;
 
-        //First dice?
-        for (i = 0; i < MAX_ROW; i++) {
-            for (j = 0; j < MAX_COL; j++) {
-                if (!grid[i][j].free()) {
-                    freeGrid = false;
-                }
-            }
-        }
+        if ((x < 0 || x > MAX_ROW) || (y < 0 || y > MAX_COL))
+            return false;
+
         //If first die check if it respects first-dice-placement-rule
         if (freeGrid) {
-            if (grid[x][y].isEmployable(dice) && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1))) {
-                if (grid[x][y].setDice(dice))
-                    return true;
-            } else
+            if (grid[x][y].isEmployable(dice) && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+                return true;
+            else
                 return false;
         }
 
@@ -64,11 +58,10 @@ public class Scheme {
 
         //Algorithm to find if the die respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
-            for (j = y - 1; j <= y + 1; j++) {
-                if (!(i == x && j == y)) {
-                    if ((i >= 0 && j >= 0) || (i < MAX_ROW && j >= 0) ||
-                            (i >= 0 && j < MAX_COL) || (i < MAX_ROW && j < MAX_COL)) {
-                        if (!grid[i][j].free()) {
+            if (i > 0 && i < MAX_ROW){
+                for (j = y - 1; j <= y + 1; j++) {
+                    if (!(i == x && j == y) && j > 0 && j < MAX_COL) {
+                        if (grid[i][j].isFull()) {
                             diceNear = true;
                         }
                         if (j == y || i == x) {
@@ -81,18 +74,21 @@ public class Scheme {
                 }
             }
         }
-        if (placeable && diceNear && grid[x][y].setDice(dice)) {
+        if (placeable && diceNear) {
             return true;
         }
         return false;
     }
 
-    //Place a dice in a box ignoring color restrictions
-    public boolean placeDiceNoCol(Dice dice, int x, int y){
+    //Check if a dice is placeable in a box ignoring color restrictions (TOOL3)
+    public boolean isPlaceableNoCol(Dice dice, int x, int y){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
         int j;
+
+        if ((x < 0 || x > MAX_ROW) || (y < 0 || y > MAX_COL))
+            return false;
 
         //Check if die respects box restrictions
         if (!grid[x][y].isEmployableNoCol(dice))
@@ -100,11 +96,10 @@ public class Scheme {
 
         //Algorithm to find if the die respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
-            for (j = y - 1; j <= y + 1; j++) {
-                if (!(i == x && j == y)){
-                    if ((i >= 0 && j >= 0) || (i < MAX_ROW && j >= 0) ||
-                            (i >= 0 && j < MAX_COL) || (i < MAX_ROW && j < MAX_COL)) {
-                        if (!grid[i][j].free()) {
+            if (i > 0 && i < MAX_ROW){
+                for (j = y - 1; j <= y + 1; j++) {
+                    if (!(i == x && j == y) && j > 0 && j < MAX_COL){
+                        if (grid[i][j].isFull()) {
                             diceNear = true;
                         }
                         if (j == y || i == x) {
@@ -116,18 +111,21 @@ public class Scheme {
                 }
             }
         }
-        if (placeable && diceNear && grid[x][y].setDice(dice)) {
+        if (placeable && diceNear) {
             return true;
         }
         return false;
     }
 
-    //
-    public boolean placeDiceNoNum(int x, int y, Dice dice){
+    //Chech if a dice is placeable in a box ignoring number restrictions (TOOL2)
+    public boolean isPlaceableNoNum(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
         int j;
+
+        if ((x < 0 || x > MAX_ROW) || (y < 0 || y > MAX_COL))
+            return false;
 
         //Check if die respects box restrictions
         if (!grid[x][y].isEmployableNoNum(dice))
@@ -135,13 +133,12 @@ public class Scheme {
 
         //Algorithm to find if the die respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
-            for (j = y - 1; j <= y + 1; j++) {
-                if (!(i == x && j == y)) {
-                    if ((i >= 0 && j >= 0) || (i < MAX_ROW && j >= 0) ||
-                            (i >= 0 && j < MAX_COL) || (i < MAX_ROW && j < MAX_COL)) {
-                        if (!grid[i][j].free()) {
-                            diceNear = true;
-                        }
+            if (i > 0 && i < MAX_ROW){
+                for (j = y - 1; j <= y + 1; j++) {
+                    if (!(i == x && j == y) && j > 0 && j < MAX_COL) {
+                        if (grid[i][j].isFull()) {
+                                diceNear = true;
+                            }
                         if (j == y || i == x) {
                             if (grid[i][j].getDice().getColor() == dice.getColor()) {
                                 placeable = false;
@@ -152,12 +149,45 @@ public class Scheme {
             }
         }
         if (placeable && diceNear) {
-            if (grid[x][y].setDice(dice))
-                return true;
+            return true;
         }
         return false;
     }
 
+    //Check if a dice is placeable ignoring dice-near-rule (TOOL 9)
+    public boolean isPlaceableNoDiceNear(int x, int y, Dice dice){
+        boolean freeGrid = isGridFree();
+
+        if ((x < 0 || x > MAX_ROW) || (y < 0 || y > MAX_COL))
+            return false;
+
+        //If first die check if it respects first-dice-placement-rule
+        if (freeGrid) {
+            if (grid[x][y].isEmployable(dice) && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+                return true;
+            else
+                return false;
+        }
+
+        //Check if die respects box restrictions
+        if (!grid[x][y].isEmployable(dice))
+            return false;
+
+        return true;
+    }
+
+    //Check if the grid is full
+    public boolean isGridFree(){
+        int i, j;
+        for (i = 0; i < MAX_ROW; i++) {
+            for (j = 0; j < MAX_COL; j++) {
+                if (this.grid[i][j].isFull()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     //Get name of the scheme
     public String getName(){
