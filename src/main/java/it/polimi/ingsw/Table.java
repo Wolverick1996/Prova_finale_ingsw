@@ -15,6 +15,7 @@ public class Table {
 
     private static Table instance = null;
     private ArrayList<Dice> reserve = new ArrayList<Dice>();
+    private boolean canExtract = true;
     private ArrayList<Dice> roundTrack = new ArrayList<Dice>();
     private int redExt = 0;
     private int greenExt = 0;
@@ -22,13 +23,16 @@ public class Table {
     private int yellowExt = 0;
     private int bluExt = 0;
     private int round = 0; //must match ROUND in controller
-    private int numPlayers;
+    private boolean clockwise = true;
+    private int turn = 0;
+    private int numPlayers; //must receive data
 
     //constructor Singleton
-    protected Table(){
+    protected Table(int numP){
         ToolHandler.setTools();
         PubObjHandler.setPubOC();
-        //numPlayers = Controller.getNumPlayers(); //Request must be sent to right controller
+        //TODO: numPlayers = Controller.getNumPlayers(); //Request must be sent to right controller
+        numPlayers = numP;
     }
 
     //***************************//
@@ -36,23 +40,38 @@ public class Table {
     //***************************//
 
     //constructor and initializer
-    public Table initialize(){
+    public Table initialize(int numP){
 
         if (instance == null){
-            instance = new Table();
+            instance = new Table(numP);
             return instance;
         }
 
         return null;
     }
 
-    //Change turn
+    //Change turn. TURN GOES FROM 0 TO 3, either clockwise or anticlockwise
     public void nextTurn(){
-
+        canExtract = true;
+        //TODO: call controller to active nextPlayer;
+        if (clockwise){
+            if (turn == numPlayers-1){
+                clockwise = false;
+            } else {
+                turn++;
+            }
+        }else {
+            if (turn == 0){
+                clockwise = true;
+                nextRound();
+            } else {
+                turn--;
+            }
+        }
     }
 
     //Change round
-    public void nextRound(){
+    private void nextRound(){
         //set RoundTrack
         //set Reserve
         if (round>9){ System.out.println("WARNING nextRound called, round is already 10"); return;}
@@ -82,13 +101,20 @@ public class Table {
             }
             reserve.add(new Dice(color));
         }
-
         round++;
     }
 
     //Pick dice from reserve (num is the position on the table of the dice)
+    // NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
     public Dice pickDice(int num){
-        return null;
+        if (canExtract){
+            Dice temp = new Dice();
+            temp = reserve.get(num);
+            reserve.remove(num);
+            return temp;
+        } else {
+            return null;
+        }
     }
 
     @Override
