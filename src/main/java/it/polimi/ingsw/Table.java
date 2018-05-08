@@ -1,8 +1,5 @@
 package it.polimi.ingsw;
 
-import com.sun.xml.internal.bind.v2.TODO;
-import org.w3c.dom.events.EventException;
-
 import java.awt.*;
 import java.util.*;
 import java.lang.*;
