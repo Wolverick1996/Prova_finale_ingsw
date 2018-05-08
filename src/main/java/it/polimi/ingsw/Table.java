@@ -37,7 +37,7 @@ public class Table {
     //***************************//
 
     //constructor and initializer
-    public Table initialize(int numP){
+    public static Table initialize(int numP){
 
         if (instance == null){
             instance = new Table(numP);
@@ -80,39 +80,86 @@ public class Table {
                 roundTrack.add(d);
             }
             reserve.clear();
-        }
+        } else {System.out.println("WARNING reserve is empty"); return;}
 
-        //TODO: control this algorithm
-        for (int i=0;i<numPlayers*2+1;i++){
-            boolean isAVB = false;
-            while(!isAVB){
-                color = Enum.Color.getRandomColor();
-                switch (color){
-                    case RED: {if (redExt <= 18) { isAVB = true;} break; }
-                    case PURPLE: {if (purpleExt <= 18) { isAVB = true;} break; }
-                    case BLUE: {if (bluExt <= 18) { isAVB = true;} break; }
-                    case GREEN: {if (greenExt <= 18) { isAVB = true;} break; }
-                    case YELLOW: {if (yellowExt <= 18) { isAVB = true;} break; }
-                    //default: throw new Exception();
-                }
-            }
-            reserve.add(new Dice(color));
-        }
+        for (int i=0;i<numPlayers*2+1;i++){ reserve.add(pickDiceFromBag()); }
+
         round++;
+    }
+
+    //Pick dice from Bag (TOOL 11)
+    public Dice pickDiceFromBag(){
+        boolean isAVB = false;
+        Enum.Color color = Enum.Color.getRandomColor();
+        while(!isAVB){
+            color = Enum.Color.getRandomColor();
+            switch (color){
+                case RED: {if (redExt < 18) { isAVB = true; redExt++;} break; }
+                case PURPLE: {if (purpleExt < 18) { isAVB = true; purpleExt++;} break; }
+                case BLUE: {if (bluExt < 18) { isAVB = true; bluExt++;} break; }
+                case GREEN: {if (greenExt < 18) { isAVB = true; greenExt++;} break; }
+                case YELLOW: {if (yellowExt < 18) { isAVB = true; yellowExt++;} break; }
+                //default: throw new Exception();
+            }
+        }
+        return new Dice(color);
     }
 
     //Pick dice from reserve (num is the position on the table of the dice)
     // NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
-    public Dice pickDice(int num){
+    public Dice pickDiceFromReserve(int dicePos){
         if (canExtract){
-            Dice temp = new Dice();
-            temp = reserve.get(num);
-            reserve.remove(num);
+            Dice temp = reserve.get(dicePos);
+            reserve.remove(dicePos);
+            canExtract = false;
             return temp;
         } else {
             return null;
         }
     }
+
+    //Pick dice from Roundtrack
+    // NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
+    public Dice pickDiceFromRoundtrack(int dicePos){
+        Dice temp = roundTrack.get(dicePos);
+        roundTrack.remove(dicePos);
+        return temp;
+    }
+
+    //pick dice from reserve, put it in the bag (TOOL 11)
+    public void putDiceInBag(int dicePos){
+        if(!canExtract){System.out.println("Tool card 11 was called without permission (dice already extracted)"); return;}
+        Enum.Color color = roundTrack.get(dicePos).getColor();
+        switch (color){
+            //TODO: colorExt must never be <0
+            case RED: { redExt--; break; }
+            case PURPLE: {purpleExt--; break; }
+            case BLUE: {bluExt--; break; }
+            case GREEN: {greenExt--; break; }
+            case YELLOW: {yellowExt--; break; }
+            //default: throw new Exception();
+        }
+        roundTrack.remove(dicePos);
+    }
+
+    //Reroll Reserve (tool 7)
+    public  boolean rerollReserve(){
+
+        if (clockwise) return false;
+
+        for(Dice d:reserve){
+            d.rollDice();
+        }
+        return true;
+    }
+
+    //Get the dice to check position restrictions
+    public Dice checkDiceFromReserve(int dicePos){return reserve.get(dicePos);}
+    public Dice checkDiceFromRoundtrack(int dicePos){return roundTrack.get(dicePos);}
+
+    //put dice in a particular spot
+    public void putDiceInReserve(Dice d){reserve.add(d);}
+    public void putDiceInRoundtrack(Dice d){roundTrack.add(d);}
 
     @Override
     public String toString(){
