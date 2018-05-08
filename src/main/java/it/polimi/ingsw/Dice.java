@@ -1,7 +1,5 @@
 package it.polimi.ingsw;
 
-import java.lang.*;
-
 public class Dice extends Enum{
 
     //***************************//
@@ -58,6 +56,33 @@ public class Dice extends Enum{
     //return the dice color
     public Color getColor(){
         return this.color;
+    }
+
+    //turn the dice to the opposite face
+    public void turnDice() {
+        switch(this.value) {
+            case 1:
+                this.value = 6;
+                break;
+            case 2:
+                this.value = 5;
+                break;
+            case 3:
+                this.value = 4;
+                break;
+            case 4:
+                this.value = 3;
+                break;
+            case 5:
+                this.value = 2;
+                break;
+            case 6:
+                this.value = 1;
+                break;
+            default:
+                System.out.println("Input value not valid!\n");
+                break;
+        }
     }
 
 

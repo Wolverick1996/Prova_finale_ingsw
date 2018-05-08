@@ -64,4 +64,27 @@ class DiceTest extends Enum {
         assertEquals(color, dice.getColor());
     }
 
+    @Test
+    void turnDiceTest(){
+        Dice dice;
+        int old;
+
+        dice = new Dice();
+        old = dice.getValue();
+        dice.turnDice();
+        assertEquals(7, old + dice.getValue());
+    }
 }
+
+/*class TableTest{
+
+    @Test
+    void singleTableTest(){
+        int numP;
+        Table instance = null;
+
+        numP = (int)(Math.random()*3 + 2);
+        instance = new Table.initialize(numP);
+
+    }
+}*/
