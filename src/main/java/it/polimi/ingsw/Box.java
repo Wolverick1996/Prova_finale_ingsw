@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import java.lang.*;
+import java.util.*;
 
 public class Box extends Enum {
 
@@ -52,19 +53,20 @@ public class Box extends Enum {
     }
 
     //Free the box
-    public boolean free(){
+    public Dice free(){
+        Dice tempDice = this.diceInside;
         if (!this.isFull)
-            return false;
+            return null;
         else{
             this.isFull = false;
             this.diceInside = null;
-            return true;
+            return tempDice;
         }
     }
 
     //Fill the box
     public boolean setDice(Dice dice){
-        if (!this.free())
+        if (isFull)
             return false;
         else{
             this.diceInside = dice;
@@ -89,6 +91,11 @@ public class Box extends Enum {
     //Get the Number restriction
     public int getRestrictionNum (){
         return this.restrictionNum;
+    }
+
+    //is free?
+    public boolean isFull(){
+        return this.isFull;
     }
 
     @Override
