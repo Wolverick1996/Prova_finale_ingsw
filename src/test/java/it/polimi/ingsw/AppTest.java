@@ -1,8 +1,11 @@
 package it.polimi.ingsw;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
+
+import java.lang.*;
 
 class AppTest{
 
@@ -76,7 +79,7 @@ class DiceTest extends Enum {
     }
 }
 
-/*class TableTest{
+class TableTest{
 
     @Test
     void singleTableTest(){
@@ -84,7 +87,8 @@ class DiceTest extends Enum {
         Table instance = null;
 
         numP = (int)(Math.random()*3 + 2);
-        instance = new Table.initialize(numP);
-
+        instance = Table.initialize(numP);
+        instance = Table.initialize(numP);
+        assertNull(instance);
     }
-}*/
+}
