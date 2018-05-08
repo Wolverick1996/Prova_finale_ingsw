@@ -6,13 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="LM053" />
         <module name="LM123" />
+        <module name="LM53" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="LM053" target="1.5" />
       <module name="LM123" target="1.5" />
+      <module name="LM53" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

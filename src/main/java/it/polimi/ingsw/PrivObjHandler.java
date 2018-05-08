@@ -15,7 +15,7 @@ public class PrivObjHandler {
     //         Methods           //
     //***************************//
 
-    //Call the method or the right PriOC for counting points
+    //Call the method or the right PrivOC for counting points
     public void countPoints(int num){
 
     }
