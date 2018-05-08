@@ -33,6 +33,24 @@ public class Box extends Enum {
             return false;
     }
 
+    //Check if Box can be used without color restrictions
+    public boolean isEmployableNoCol(Dice dice){
+        if(this.restrictionNum == 0 || this.restrictionCol == null ||
+                dice.getValue() == this.restrictionNum)
+            return true;
+        else
+            return false;
+    }
+
+    //Check if Box can be used without number restrictions
+    public boolean isEmployableNoNum(Dice dice){
+        if(this.restrictionNum == 0 || this.restrictionCol == null ||
+                dice.getColor() == this.restrictionCol)
+            return true;
+        else
+            return false;
+    }
+
     //Free the box
     public boolean free(){
         if (!this.isFull)
@@ -45,8 +63,8 @@ public class Box extends Enum {
     }
 
     //Fill the box
-    public boolean set(Dice dice){
-        if (!this.free() || !this.isEmployable(dice))
+    public boolean setDice(Dice dice){
+        if (!this.free())
             return false;
         else{
             this.diceInside = dice;
@@ -61,6 +79,16 @@ public class Box extends Enum {
             return null;
         else
             return this.diceInside;
+    }
+
+    //Get the Color restriction
+    public Color getRestrictionCol (){
+        return this.restrictionCol;
+    }
+
+    //Get the Number restriction
+    public int getRestrictionNum (){
+        return this.restrictionNum;
     }
 
     @Override

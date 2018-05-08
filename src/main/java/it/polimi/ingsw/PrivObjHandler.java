@@ -17,7 +17,6 @@ public class PrivObjHandler {
 
     //Call the method or the right PrivOC for counting points
     public void countPoints(int num){
-
     }
 
     //Get the name (on table)
