@@ -34,7 +34,7 @@ public class Scheme {
     }
 
     //Check if a dice is placeable in a box with all restrictions
-    public boolean isPlaceableAllRestr(Dice dice, int x, int y) {
+    public boolean isPlaceableAllRestr(int x, int y, Dice dice) {
         boolean placeable = true;
         boolean freeGrid = isGridFree();
         boolean diceNear = false;
@@ -81,7 +81,7 @@ public class Scheme {
     }
 
     //Check if a dice is placeable in a box ignoring color restrictions (TOOL3)
-    public boolean isPlaceableNoCol(Dice dice, int x, int y){
+    public boolean isPlaceableNoCol(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
@@ -187,6 +187,23 @@ public class Scheme {
             }
         }
         return true;
+    }
+
+    //Remove dice from the grid
+    public Dice removeDice(int x, int y){
+        if(!grid[x][y].isFull())
+            return null;
+        else{
+            return grid[x][y].free();
+        }
+    }
+
+    //Set dice
+    public boolean placeDice(int x, int y, Dice dice){
+        if(grid[x][y].setDice(dice))
+            return true;
+        else
+            return false;
     }
 
     //Get name of the scheme
