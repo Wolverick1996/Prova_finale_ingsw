@@ -91,4 +91,27 @@ class TableTest{
         instance = Table.initialize(numP);
         assertNull(instance);
     }
+
+    @Test
+    void nextRoundTest(){
+        int numP;
+        Table instance = null;
+
+        numP = (int)(Math.random()*3 + 2);
+        instance = Table.initialize(numP);
+    }
+
+    @Test
+    void OneDiceOneTurn(){
+        int dicePos, numP;
+        Dice temp;
+        Table instance = null;
+
+        numP = (int)(Math.random()*3 + 2);
+        instance = Table.initialize(numP);
+        dicePos = (int)(Math.random()*5 + 1);
+        temp = instance.pickDiceFromReserve(dicePos);
+        temp = instance.pickDiceFromReserve(dicePos);
+        assertNull(temp);
+    }
 }
