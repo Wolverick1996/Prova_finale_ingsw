@@ -19,7 +19,7 @@ public class Table {
     private int purpleExt = 0;
     private int yellowExt = 0;
     private int bluExt = 0;
-    private int round = 0; //must match ROUND in controller
+    private int round = -1; //must match ROUND in controller
     private boolean clockwise = true;
     private int turn = 0;
     private int numPlayers; //must receive data
@@ -30,6 +30,7 @@ public class Table {
         PubObjHandler.setPubOC();
         //TODO: numPlayers = Controller.getNumPlayers(); //Request must be sent to right controller
         numPlayers = numP;
+        nextRound();
     }
 
     //***************************//
@@ -108,6 +109,7 @@ public class Table {
     //Pick dice from reserve (num is the position on the table of the dice)
     // NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
     public Dice pickDiceFromReserve(int dicePos){
+        if (dicePos >= reserve.size()) {return null; }
         if (canExtract){
             Dice temp = reserve.get(dicePos);
             reserve.remove(dicePos);
