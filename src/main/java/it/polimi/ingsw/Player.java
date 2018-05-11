@@ -11,14 +11,16 @@ public class Player {
     private String nickname;
     private int points;
     private int tokens;
-    //private Dice diceInHand = null;
+    private Dice diceInHand = null;
+    private Scheme ownScheme;
 
     // PrivateOC will work with indexes;
     private int privateOC;
 
     //constructor
     public Player(String nick){
-
+        this.nickname = nick;
+        this.points = 0;
     }
 
     //***************************//
@@ -32,16 +34,36 @@ public class Player {
 
     // Pick a dice from scheme
     public boolean extractDice(int x, int y){
-        return false;
+        if(ownScheme.checkBox(x, y) != null){
+            this.diceInHand = ownScheme.removeDice(x, y);
+            return true;
+        }
+        else
+            return false;
     }
 
-    //Place a dice in the scheme
-    public boolean placeDice(int x, int y){
-        return false;
+    //Is a dice picked from reserve placeable in the scheme?
+    public boolean isPlaceableDiceFromReserve(int x, int y, Table table, int indexDice){
+        Dice tempDice;
+        if (table ==  null)
+            return false;
+        tempDice = table.checkDiceFromReserve(indexDice);
+        if(ownScheme.isPlaceableAllRestr(x, y, tempDice))
+            return true;
+        else
+            return false;
+    }
+
+    //Place a dice (!!CALL IT AFTER CHECKING THE PLACEMENT CONDITIONS!!)
+    public void placeDice (int x, int y, Table table, int indexDice){
+        Dice tempDice;
+
+        tempDice = table.pickDiceFromReserve(indexDice);
+        ownScheme.placeDice(x, y, tempDice);
     }
 
     //Use a tool card
-    public boolean useCard(int num){
+    public boolean useCard(int indexToolCard){
         return false;
     }
 
