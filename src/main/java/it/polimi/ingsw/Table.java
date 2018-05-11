@@ -58,7 +58,7 @@ public class Table {
             } else {
                 turn++;
             }
-        }else {
+        } else {
             if (turn == 0){
                 clockwise = true;
                 nextRound();
@@ -81,7 +81,7 @@ public class Table {
                 roundTrack.add(d);
             }
             reserve.clear();
-        } else {System.out.println("WARNING reserve is empty"); return;}
+        } else if (round != -1) {System.out.println("WARNING reserve is empty"); return;}
 
         for (int i=0;i<numPlayers*2+1;i++){ reserve.add(pickDiceFromBag()); }
 
@@ -92,6 +92,8 @@ public class Table {
     public Dice pickDiceFromBag(){
         boolean isAVB = false;
         Enum.Color color = Enum.Color.getRandomColor();
+        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){System.out.println("Bag is empty");
+        return null;}
         while(!isAVB){
             color = Enum.Color.getRandomColor();
             switch (color){
@@ -156,12 +158,18 @@ public class Table {
     }
 
     //Get the dice to check position restrictions
-    public Dice checkDiceFromReserve(int dicePos){return reserve.get(dicePos);}
-    public Dice checkDiceFromRoundtrack(int dicePos){return roundTrack.get(dicePos);}
+    public Dice checkDiceFromReserve(int dicePos){if(dicePos<reserve.size()) return reserve.get(dicePos); return null;}
+    public Dice checkDiceFromRoundtrack(int dicePos){if(dicePos<roundTrack.size()) return roundTrack.get(dicePos);
+    return null;}
+
 
     //put dice in a particular spot
     public void putDiceInReserve(Dice d){reserve.add(d);}
     public void putDiceInRoundtrack(Dice d){roundTrack.add(d);}
+
+    public int getTurn(){ return this.turn; }
+
+    public int getRound(){ return this.round; }
 
     @Override
     public String toString(){

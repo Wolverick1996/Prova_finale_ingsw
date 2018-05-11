@@ -1,10 +1,12 @@
 package it.polimi.ingsw;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.OutputStream;
 import java.lang.*;
 
 class AppTest{
@@ -31,11 +33,8 @@ class DiceTest extends Enum {
 
     @Test
     void valueTest(){
-        Dice dice;
-        int value;
-
-        value = (int)(Math.random()*6 + 1);
-        dice = new Dice(value);
+        int value = (int)(Math.random()*6 + 1);
+        Dice dice = new Dice(value);
         assertEquals(value, dice.getValue());
 
         value = (int)(Math.random()*6 + 1);
@@ -45,23 +44,16 @@ class DiceTest extends Enum {
 
     @Test
     void colorTest(){
-        Dice dice;
-        Color color;
-
-        color = Color.getRandomColor();
-        dice = new Dice(color);
+        Color color = Color.getRandomColor();
+        Dice dice = new Dice(color);
         assertEquals(color, dice.getColor());
     }
 
     @Test
     void definedDiceTest(){
-        Dice dice;
-        int value;
-        Color color;
-
-        value = (int)(Math.random()*6 + 1);
-        color = Color.getRandomColor();
-        dice = new Dice(color, value);
+        int value = (int)(Math.random()*6 + 1);
+        Color color = Color.getRandomColor();
+        Dice dice = new Dice(color, value);
 
         assertEquals(value, dice.getValue());
         assertEquals(color, dice.getColor());
@@ -69,11 +61,8 @@ class DiceTest extends Enum {
 
     @Test
     void turnDiceTest(){
-        Dice dice;
-        int old;
-
-        dice = new Dice();
-        old = dice.getValue();
+        Dice dice = new Dice();
+        int old = dice.getValue();
         dice.turnDice();
         assertEquals(7, old + dice.getValue());
     }
@@ -83,35 +72,50 @@ class TableTest{
 
     @Test
     void singleTableTest(){
-        int numP;
-        Table instance = null;
-
-        numP = (int)(Math.random()*3 + 2);
-        instance = Table.initialize(numP);
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = Table.initialize(numP);
         instance = Table.initialize(numP);
         assertNull(instance);
     }
 
     @Test
-    void nextRoundTest(){
-        int numP;
-        Table instance = null;
+    void nextTurnTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = Table.initialize(numP);
 
-        numP = (int)(Math.random()*3 + 2);
-        instance = Table.initialize(numP);
+        for (int i=0; i<numP-1; i++)
+            instance.nextTurn();
+        assertEquals(numP-1, instance.getTurn());
+
+        for (int i=0; i<numP; i++)
+            instance.nextTurn();
+
+        assertEquals(0, instance.getTurn());
     }
 
     @Test
-    void OneDiceOneTurn(){
-        int dicePos, numP;
-        Dice temp;
-        Table instance = null;
+    void allExtractedTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = Table.initialize(numP);
 
-        numP = (int)(Math.random()*3 + 2);
-        instance = Table.initialize(numP);
-        dicePos = (int)(Math.random()*5 + 1);
-        temp = instance.pickDiceFromReserve(dicePos);
-        temp = instance.pickDiceFromReserve(dicePos);
-        assertNull(temp);
+        for (int i=0; i<90-numP*2-1; i++)
+            assertNotNull(instance.pickDiceFromBag());
+
+        assertNull(instance.pickDiceFromBag());
     }
+
+    @Test
+    void pickFromBagTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = Table.initialize(numP);
+
+        //check that reserve size is numP*2+1
+        assertNotNull(instance.checkDiceFromReserve(numP*2));
+        assertNull(instance.checkDiceFromReserve(numP*2+1));
+
+        //test sequential extraction in the same turn
+        instance.pickDiceFromReserve(numP*2);
+        assertNull(instance.pickDiceFromReserve(numP*2-1));
+    }
+
 }
