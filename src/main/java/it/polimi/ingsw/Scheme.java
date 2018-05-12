@@ -64,7 +64,7 @@ public class Scheme {
                         if (grid[i][j].isFull()) {
                             diceNear = true;
                         }
-                        if (j == y || i == x) {
+                        if ((j == y || i == x) && grid[i][j].isFull()) {
                             if (grid[i][j].getDice().getColor() == dice.getColor() ||
                                     grid[i][j].getDice().getValue() == dice.getValue()) {
                                 placeable = false;
@@ -102,7 +102,7 @@ public class Scheme {
                         if (grid[i][j].isFull()) {
                             diceNear = true;
                         }
-                        if (j == y || i == x) {
+                        if ((j == y || i == x) && grid[i][j].isFull()) {
                             if (grid[i][j].getDice().getValue() == dice.getValue()) {
                                 placeable = false;
                             }
@@ -139,7 +139,7 @@ public class Scheme {
                         if (grid[i][j].isFull()) {
                                 diceNear = true;
                             }
-                        if (j == y || i == x) {
+                        if ((j == y || i == x) && grid[i][j].isFull()) {
                             if (grid[i][j].getDice().getColor() == dice.getColor()) {
                                 placeable = false;
                             }
