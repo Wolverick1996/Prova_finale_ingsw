@@ -45,7 +45,7 @@ class TableTest {
     }
 
     @Test
-    void pickFromBagTest(){
+    void pickFromReserveTest(){
         int numP = (int)(Math.random()*3 + 2);
         Table instance = Table.initialize(numP);
 
@@ -57,5 +57,25 @@ class TableTest {
         instance.pickDiceFromReserve(numP*2);
         assertNull(instance.pickDiceFromReserve(numP*2-1));
     }
+
+    /*@Test
+    void putInBagTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = Table.initialize(numP);
+
+        for (int i=0; i<numP-1; i++)
+            instance.nextTurn();
+        assertEquals(numP-1, instance.getTurn());
+
+        for (int i=0; i<numP; i++)
+            instance.nextTurn();
+
+        instance.nextTurn();
+
+        assertNotNull(instance.checkDiceFromRoundtrack(0));
+        instance.putDiceInBag(0);
+        assertNull(instance.checkDiceFromRoundtrack(0));
+
+    }*/
 
 }
