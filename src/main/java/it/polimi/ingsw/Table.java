@@ -133,7 +133,7 @@ public class Table {
     //pick dice from reserve, put it in the bag (TOOL 11)
     public void putDiceInBag(int dicePos){
         if(!canExtract){System.out.println("Tool card 11 was called without permission (dice already extracted)"); return;}
-        Enum.Color color = roundTrack.get(dicePos).getColor();
+        Enum.Color color = reserve.get(dicePos).getColor();
         switch (color){
             //TODO: colorExt must never be <0
             case RED: { redExt--; break; }
@@ -143,7 +143,7 @@ public class Table {
             case YELLOW: {yellowExt--; break; }
             //default: throw new Exception();
         }
-        roundTrack.remove(dicePos);
+        reserve.remove(dicePos);
     }
 
     //Reroll Reserve (tool 7)
@@ -173,7 +173,8 @@ public class Table {
 
     @Override
     public String toString(){
-        return "String";
+        return "Table: \n" + "Dices in reserve: " + reserve.size() + "\nreserve: " + reserve.toString() + "\nroundtrack: " +
+                roundTrack.toString() + "\nTurn: " + turn + "\nRound: " + round + "\nclockwise: " + clockwise;
     }
 
 }
