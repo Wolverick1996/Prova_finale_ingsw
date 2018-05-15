@@ -1,4 +1,9 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model.PubOC;
+
+import it.polimi.ingsw.Model.Box;
+import it.polimi.ingsw.Model.ObjectiveCard;
+import it.polimi.ingsw.Model.Player;
+import it.polimi.ingsw.Model.Scheme;
 
 public class PublicOC7 implements ObjectiveCard {
 
@@ -48,5 +53,10 @@ public class PublicOC7 implements ObjectiveCard {
             }
         }
         return points;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " : " + this.description;
     }
 }

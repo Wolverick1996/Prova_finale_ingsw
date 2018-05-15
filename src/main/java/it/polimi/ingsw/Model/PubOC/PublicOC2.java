@@ -1,8 +1,11 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model.PubOC;
+
+import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Model.Enum;
 
 import java.util.ArrayList;
 
-public class PublicOC2 implements ObjectiveCard{
+public class PublicOC2 implements ObjectiveCard {
 
     private String name;
     private String description;
@@ -40,5 +43,9 @@ public class PublicOC2 implements ObjectiveCard{
         }
 
         return points;
+    }
+    @Override
+    public String toString() {
+        return this.name + " : " + this.description;
     }
 }

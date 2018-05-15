@@ -1,4 +1,7 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.View;
+
+import it.polimi.ingsw.Model.Enum;
+import it.polimi.ingsw.Model.Scheme;
 
 public class Temp_View {
 

@@ -1,7 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 
 import java.lang.*;
-import java.util.*;
 
 public class Box extends Enum {
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 
 import java.lang.*;
 
@@ -13,14 +13,13 @@ public class Player {
     private int tokens;
     private Dice diceInHand = null;
     private Scheme ownScheme;
-
-    // PrivateOC will work with indexes;
-    private int privateOC;
+    private int IDplayer;
 
     //constructor
-    public Player(String nick){
+    public Player(String nick, int ID){
         this.nickname = nick;
         this.points = 0;
+        this.IDplayer = ID;
     }
 
     //***************************//
@@ -80,12 +79,16 @@ public class Player {
 
     //Count the points, at game end or game left. Return -1 if unsuccessfull
     public int countPoints(Table table){
-
+        PrivObjHandler.countPoints(this);
         return -1;
     }
 
     public Scheme getOwnScheme() {
         return ownScheme;
+    }
+
+    public int getIDplayer() {
+        return IDplayer;
     }
 
     @Override

@@ -1,4 +1,6 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model.PubOC;
+
+import it.polimi.ingsw.Model.*;
 
 import java.util.ArrayList;
 
@@ -69,5 +71,10 @@ public class PublicOC9 implements ObjectiveCard {
             }
         }
         return points;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " : " + this.description;
     }
 }

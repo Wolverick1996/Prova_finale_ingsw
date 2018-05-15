@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 
 
 public class PrivateOC implements ObjectiveCard {
@@ -61,5 +61,10 @@ public class PrivateOC implements ObjectiveCard {
         }
 
         return points;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " : " + this.description;
     }
 }

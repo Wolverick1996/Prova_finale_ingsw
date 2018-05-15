@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 
 public interface ObjectiveCard {
     public int countPoints(Player player);

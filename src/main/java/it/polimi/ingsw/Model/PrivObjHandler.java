@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 
 import java.util.ArrayList;
 import static java.lang.System.out;
@@ -10,15 +10,13 @@ public class PrivObjHandler {
     //***************************//
 
     //sorted for players [p1, p2, p3, p4]
-    private ArrayList<PrivateOC> activeID;
+    private static ArrayList<PrivateOC> activeID = new ArrayList<>();
 
     //***************************//
     //         Methods           //
     //***************************//
 
-    //Constructor
-    public PrivObjHandler (int numPlayers){
-        this.activeID = new ArrayList<>();
+    public static void setPrivOC (int numPlayers){
         int redExt = 0;
         int purpleExt = 0;
         int bluExt = 0;
@@ -33,31 +31,31 @@ public class PrivObjHandler {
                 switch (color){
                     case RED:
                         if (redExt < 1){
-                            this.activeID.add(new PrivateOC(color));
+                            activeID.add(new PrivateOC(color));
                             isAVB = true;
                             redExt++;
                         }break;
                     case PURPLE:
                         if (purpleExt < 1) {
-                            this.activeID.add(new PrivateOC(color));
+                            activeID.add(new PrivateOC(color));
                             isAVB = true;
                             purpleExt++;
                         }break;
                     case BLUE:
                         if (bluExt < 1) {
-                            this.activeID.add(new PrivateOC(color));
+                            activeID.add(new PrivateOC(color));
                             isAVB = true;
                             bluExt++;
                         }break;
                     case GREEN:
                         if (greenExt < 1) {
-                            this.activeID.add(new PrivateOC(color));
+                            activeID.add(new PrivateOC(color));
                             isAVB = true;
                             greenExt++;
                         }break;
                     case YELLOW:
                         if (yellowExt < 1) {
-                            this.activeID.add(new PrivateOC(color));
+                            activeID.add(new PrivateOC(color));
                             isAVB = true;
                             yellowExt++;
                         }break;
@@ -70,18 +68,26 @@ public class PrivObjHandler {
     }
 
     //Call the method or the right PrivOC for counting points
-    public int countPoints(Player player, int num){
-        PrivateOC tempPrivateOC = activeID.get(num);
+    public static int countPoints(Player player){
+        PrivateOC tempPrivateOC = activeID.get(player.getIDplayer());
         return tempPrivateOC.countPoints(player);
     }
 
     //Get the name (on table)
-    public String getName(int num){
-        return activeID.get(num).getName();
+    public static String getName(Player player){
+        return activeID.get(player.getIDplayer()).getName();
     }
 
     //Get the description (on table)
-    public String getDescription(int num){
-        return activeID.get(num).getDescription();
+    public static String getDescription(Player player){
+        return activeID.get(player.getIDplayer()).getDescription();
+    }
+
+    @Override
+    public String toString() {
+        String s = "This are the active PrivateOC (from player 1):\n";
+        for(PrivateOC p:activeID)
+            s = s + p.toString() + "\n";
+        return s;
     }
 }

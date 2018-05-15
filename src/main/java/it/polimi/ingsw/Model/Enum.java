@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Model;
 import java.util.Random;
 
 public class Enum {
@@ -13,7 +13,7 @@ public class Enum {
         BLUE("\u001B[34m"),
         PURPLE("\u001B[35m");
 
-        static final String RESET = "\u001B[0m";
+        public static final String RESET = "\u001B[0m";
 
         private String escape;
 

@@ -2,6 +2,8 @@ package it.polimi.ingsw;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import it.polimi.ingsw.Model.Dice;
+import it.polimi.ingsw.Model.Enum;
 import org.junit.jupiter.api.Test;
 
 import java.lang.*;
