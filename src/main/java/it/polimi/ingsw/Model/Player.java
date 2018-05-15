@@ -26,10 +26,6 @@ public class Player {
     //         Methods           //
     //***************************//
 
-    // Private Objective Card picker
-    public void pickOC(){
-
-    }
 
     //Assign Scheme to a player
     public void chooseScheme(Scheme scheme){
@@ -68,19 +64,18 @@ public class Player {
     }
 
     //Use a tool card
-    public boolean useCard(int indexToolCard){
+    public boolean useToolCard(int indexToolCard){
         return false;
     }
 
-    //End the turn
-    public void endTurn(){
 
-    }
-
-    //Count the points, at game end or game left. Return -1 if unsuccessfull
-    public int countPoints(Table table){
-        PrivObjHandler.countPoints(this);
-        return -1;
+    //Count the points, at game end or game left.
+    public int countPoints(){
+        this.points += PrivObjHandler.countPoints(this);
+        for (int i = 0; i<3; i++){
+            this.points += PubObjHandler.countPoints(this, i);
+        }
+        return this.points;
     }
 
     public Scheme getOwnScheme() {
@@ -93,6 +88,6 @@ public class Player {
 
     @Override
     public String toString(){
-        return "String";
+        return this.nickname+" : "+this.IDplayer+"\nActive scheme:\n"+this.ownScheme;
     }
 }
