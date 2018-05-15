@@ -85,7 +85,6 @@ public class Dice extends Enum{
         }
     }
 
-
     @Override
     public String toString(){
         return "This is a "+this.color+" "+this.value+" dice";

@@ -38,4 +38,8 @@ public class Enum {
         BAG
     }
 
+    public enum Values{
+
+    }
+
 }

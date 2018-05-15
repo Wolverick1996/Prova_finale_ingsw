@@ -158,7 +158,7 @@ public class Table {
     }
 
     //Get the dice to check position restrictions
-    public Dice checkDiceFromReserve(int dicePos){if(dicePos<reserve.size()) return reserve.get(dicePos); return null;}
+    public Dice checkDiceFromReserve(int dicePos){if(dicePos<reserve.size()) return reserve.get(dicePos);return null;}
     public Dice checkDiceFromRoundtrack(int dicePos){if(dicePos<roundTrack.size()) return roundTrack.get(dicePos);
     return null;}
 

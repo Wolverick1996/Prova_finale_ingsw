@@ -29,7 +29,13 @@ public class Player {
 
     // Private Objective Card picker
     public void pickOC(){
-        //return still not defined
+
+    }
+
+    //Assign Scheme to a player
+    public void chooseScheme(Scheme scheme){
+        this.ownScheme = scheme;
+        this.tokens = scheme.getDifficulty();
     }
 
     // Pick a dice from scheme
@@ -73,8 +79,13 @@ public class Player {
     }
 
     //Count the points, at game end or game left. Return -1 if unsuccessfull
-    public int countPoints(){
+    public int countPoints(Table table){
+
         return -1;
+    }
+
+    public Scheme getOwnScheme() {
+        return ownScheme;
     }
 
     @Override

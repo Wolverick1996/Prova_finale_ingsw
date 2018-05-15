@@ -9,7 +9,7 @@ public class PubObjHandler {
     //***************************//
 
     private static int[] activeID = new int[3];
-    public static int numPubOC = 0; //Will have a function that extract number of Cards
+    private static final int numPubOC = 3; //Will have a function that extract number of Cards
 
     //***************************//
     //         Methods           //
@@ -28,7 +28,6 @@ public class PubObjHandler {
 
     //Call the method or the right PubOC for counting points
     public static void countPoints(int num){
-
     }
 
     //Get the name (on table)
