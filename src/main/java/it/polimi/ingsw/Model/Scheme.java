@@ -282,7 +282,7 @@ public class Scheme {
         String s = "";
         for (int i=0; i<MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++) {
-                s = s+grid[i][j];
+                s = s+grid[i][j]+"\t";
 
             }
             s = s+"\n";
