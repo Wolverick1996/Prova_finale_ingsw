@@ -51,6 +51,10 @@ public class PublicOC9 implements ObjectiveCard {
                 }catch (NullPointerException e){}
                 try {
                     if (grid[i][j].getDice().getColor() == grid[i+1][j-1].getDice().getColor()){
+                        if (!diceCounted.contains(grid[i][j].getDice())){
+                            diceCounted.add(grid[i+1][j-1].getDice());
+                            points++;
+                        }
                         if (!diceCounted.contains(grid[i+1][j-1].getDice())){
                             diceCounted.add(grid[i+1][j-1].getDice());
                             points++;
