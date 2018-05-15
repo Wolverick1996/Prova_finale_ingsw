@@ -14,6 +14,7 @@ class TableTest {
         Table instance = Table.initialize(numP);
         instance = Table.initialize(numP);
         assertNull(instance);
+        instance.nullify();
     }
 
     @Test
@@ -29,6 +30,7 @@ class TableTest {
             instance.nextTurn();
 
         assertEquals(0, instance.getTurn());
+        instance.nullify();
     }
 
     @Test
@@ -40,6 +42,7 @@ class TableTest {
             assertNotNull(instance.pickDiceFromBag());
 
         assertNull(instance.pickDiceFromBag());
+        instance.nullify();
     }
 
     @Test
@@ -54,6 +57,7 @@ class TableTest {
         //test sequential extraction in the same turn
         assertNotNull(instance.pickDiceFromReserve(numP*2));
         assertNull(instance.pickDiceFromReserve(numP*2-1));
+        instance.nullify();
     }
 
     @Test
@@ -86,6 +90,7 @@ class TableTest {
         for (int i=0; i<numP*2; i++)
             instance.nextTurn();
         assertEquals(10, instance.getRound());
+        instance.nullify();
     }
 
     @Test
@@ -104,6 +109,7 @@ class TableTest {
         //test pickDiceFromRoundtrack method
         instance.pickDiceFromRoundtrack(numP*2);
         assertNull(instance.checkDiceFromRoundtrack(numP*2));
+        instance.nullify();
     }
 
     @Test
@@ -120,6 +126,7 @@ class TableTest {
         for (int i=numP*2-1; i>=0; i--)
             instance.putDiceInBag(i);
         assertNull(instance.checkDiceFromReserve(0));
+        instance.nullify();
     }
 
     @Test
@@ -167,6 +174,7 @@ class TableTest {
             assertTrue(false);
         else
             assertTrue(true);
+        instance.nullify();
     }
 
 }

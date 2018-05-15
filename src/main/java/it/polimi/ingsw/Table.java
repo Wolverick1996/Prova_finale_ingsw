@@ -48,6 +48,9 @@ public class Table {
         return null;
     }
 
+    //destroy singleton instance
+    public static void nullify(){ instance = null; }
+
     //Change turn. TURN GOES FROM 0 TO 3, either clockwise or anticlockwise
     public void nextTurn(){
         canExtract = true;
@@ -109,9 +112,9 @@ public class Table {
     }
 
     //Pick dice from reserve (num is the position on the table of the dice)
-    // NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
+    //NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
     public Dice pickDiceFromReserve(int dicePos){
-        if (dicePos >= reserve.size()) {return null; }
+        if (dicePos >= reserve.size()) {return null;}
         if (canExtract){
             Dice temp = reserve.get(dicePos);
             reserve.remove(dicePos);
@@ -123,7 +126,7 @@ public class Table {
     }
 
     //Pick dice from Roundtrack
-    // NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
+    //NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
     public Dice pickDiceFromRoundtrack(int dicePos){
         Dice temp = roundTrack.get(dicePos);
         roundTrack.remove(dicePos);

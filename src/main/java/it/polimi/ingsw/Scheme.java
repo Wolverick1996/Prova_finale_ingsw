@@ -1,6 +1,7 @@
 package it.polimi.ingsw;
 
 import java.util.*;
+import java.io.*;
 
 public class Scheme {
 
@@ -10,13 +11,59 @@ public class Scheme {
 
     private String name;
     private int difficulty;
-    private static final int MAX_COL = 5;
-    private static final int MAX_ROW = 4;
+    public static final int MAX_COL = 5;
+    public static final int MAX_ROW = 4;
 
-    private Box[][] grid;
+    private Box[][] grid = new Box[MAX_ROW][MAX_COL];
 
     //constructor, takes the ID and call a HandlerMethod in Controller
-    public Scheme(int id){
+    public Scheme (int id){
+        File inputFile = new File("Schemes/Schemes.txt");
+        Scanner scan = null;
+        String s;
+        char [][] c = new char[4][5];
+
+        try {
+            scan = new Scanner(inputFile);
+
+            for (int i=0; i<(id-1)*6; i++)
+                scan.nextLine();
+
+            this.name = scan.nextLine();
+            this.difficulty = Integer.parseInt(scan.nextLine());
+
+            for (int i=0; i<MAX_ROW; i++) {
+                s = scan.nextLine();
+                c[i] = s.toCharArray();
+            }
+
+            for (int i=0; i<MAX_ROW; i++){
+                for (int j=0; j<MAX_COL; j++){
+                    switch(c[i][j]){
+                        case 'r': grid[i][j] = new Box(Enum.Color.RED); break;
+                        case 'g': grid[i][j] = new Box(Enum.Color.GREEN); break;
+                        case 'y': grid[i][j] = new Box(Enum.Color.YELLOW); break;
+                        case 'b': grid[i][j] = new Box(Enum.Color.BLUE); break;
+                        case 'p': grid[i][j] = new Box(Enum.Color.PURPLE); break;
+                        case '1': case '2': case '3': case '4': case '5': case '6':
+                            grid[i][j] = new Box(Character.getNumericValue(c[i][j])); break;
+                        default: grid[i][j] = new Box(); break;
+                    }
+                }
+            }
+        } catch (IOException e){
+            System.out.println("Error");
+        }
+        finally {
+            if (scan != null) {
+                try {
+                    scan.close();
+                } catch (Exception e1) {
+                    System.out.println("Error");
+                }
+            }
+
+        }
 
     }
 
@@ -216,8 +263,21 @@ public class Scheme {
         return this.difficulty;
     }
 
+    //Get grid
+    public Box[][] getGrid() {
+        return grid;
+    }
+
     @Override
     public String toString(){
-        return "Scheme";
+        String s = "";
+        for (int i=0; i<MAX_ROW; i++) {
+            for (int j = 0; j < MAX_COL; j++) {
+                s = s+grid[i][j];
+
+            }
+            s = s+"\n";
+        }
+        return "Name: "+this.name+"\nDifficulty: "+this.difficulty+"\n"+s;
     }
 }
