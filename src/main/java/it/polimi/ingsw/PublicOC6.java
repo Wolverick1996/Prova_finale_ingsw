@@ -26,7 +26,7 @@ public class PublicOC6 implements ObjectiveCard {
         int threes = 0;
         int fours= 0;
 
-        for (int i = 0; i<Scheme.MAX_ROWS; i++){
+        for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++) {
                 try {
                     if (grid[i][j].getDice().getValue() == 3)

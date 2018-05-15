@@ -7,20 +7,18 @@ import org.junit.jupiter.api.Test;
 import java.lang.*;
 
 class TableTest {
+    int numP = (int)(Math.random()*3 + 2);
+    Table instance = Table.initialize(numP);
 
     @Test
     void singleTableTest(){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
-        instance = Table.initialize(numP);
-        assertNull(instance);
+        Table table = Table.initialize(numP);
+        assertNull(table);
         instance.nullify();
     }
 
     @Test
     void nextTurnTest(){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
 
         for (int i=0; i<numP-1; i++)
             instance.nextTurn();
@@ -35,8 +33,6 @@ class TableTest {
 
     @Test
     void allExtractedTest(){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
 
         for (int i=0; i<90-numP*2-1; i++)
             assertNotNull(instance.pickDiceFromBag());
@@ -47,8 +43,6 @@ class TableTest {
 
     @Test
     void pickFromReserveTest(){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
 
         //check that reserve size is numP*2+1
         assertNotNull(instance.checkDiceFromReserve(numP*2));
@@ -62,8 +56,6 @@ class TableTest {
 
     @Test
     void roundTest(){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
 
         for (int i=0; i<numP*2-1; i++)
             instance.nextTurn();
@@ -95,8 +87,6 @@ class TableTest {
 
     @Test
     void pickFromRoundtrack (){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
 
         for (int i=0; i<numP*2-1; i++)
             instance.nextTurn();
@@ -114,8 +104,6 @@ class TableTest {
 
     @Test
     void putInBagTest(){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
 
         //test the movement of a single dice from reserve to bag
         assertNotNull(instance.checkDiceFromReserve(numP*2));
@@ -131,8 +119,6 @@ class TableTest {
 
     @Test
     void rerollTest(){
-        int numP = (int)(Math.random()*3 + 2);
-        Table instance = Table.initialize(numP);
         int[] temp = new int[numP*2];
         int flag1 = 0, flag2 = 0, flag3 = 0;
 
@@ -176,5 +162,4 @@ class TableTest {
             assertTrue(true);
         instance.nullify();
     }
-
 }

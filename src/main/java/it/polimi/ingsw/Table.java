@@ -48,8 +48,21 @@ public class Table {
         return null;
     }
 
-    //destroy singleton instance
-    public static void nullify(){ instance = null; }
+    //Reset table for testing
+    public void nullify(){
+        reserve.clear();
+        roundTrack.clear();
+        canExtract = true;
+        clockwise = true;
+        turn = 0;
+        round = -1;
+        redExt = 0;
+        purpleExt = 0;
+        bluExt = 0;
+        yellowExt = 0;
+        greenExt = 0;
+        nextRound();
+    }
 
     //Change turn. TURN GOES FROM 0 TO 3, either clockwise or anticlockwise
     public void nextTurn(){
