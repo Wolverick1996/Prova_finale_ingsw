@@ -18,7 +18,7 @@ public class Scheme {
 
     //constructor, takes the ID and call a HandlerMethod in Controller
     public Scheme (int id){
-        File inputFile = new File("Schemes/Schemes.txt");
+        File inputFile = new File("src/main/Resources/Schemes/Schemes.txt");
         Scanner scan = null;
         String s;
         char [][] c = new char[4][5];

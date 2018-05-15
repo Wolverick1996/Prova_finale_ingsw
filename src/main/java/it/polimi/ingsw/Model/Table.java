@@ -24,7 +24,7 @@ public class Table {
     private int numPlayers; //must receive data
 
     //constructor Singleton
-    protected Table(int numP){
+    public Table(int numP){
         ToolHandler.setTools();
         PubObjHandler.setPubOC();
         //TODO: numPlayers = Controller.getNumPlayers(); //Request must be sent to right controller
@@ -35,17 +35,6 @@ public class Table {
     //***************************//
     //         Methods           //
     //***************************//
-
-    //constructor and initializer
-    public static Table initialize(int numP){
-
-        if (instance == null){
-            instance = new Table(numP);
-            return instance;
-        }
-
-        return null;
-    }
 
     //Reset table for testing
     public void nullify(){

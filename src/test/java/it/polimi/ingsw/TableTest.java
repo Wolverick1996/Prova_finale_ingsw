@@ -9,11 +9,11 @@ import java.lang.*;
 
 class TableTest {
     int numP = (int)(Math.random()*3 + 2);
-    Table instance = Table.initialize(numP);
+    Table instance = new Table(numP);
 
     @Test
     void singleTableTest(){
-        Table table = Table.initialize(numP);
+        Table table = new Table(numP);
         assertNull(table);
         instance.nullify();
     }
