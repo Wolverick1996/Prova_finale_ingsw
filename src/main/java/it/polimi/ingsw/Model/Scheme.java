@@ -17,7 +17,7 @@ public class Scheme {
     private Box[][] grid = new Box[MAX_ROW][MAX_COL];
 
     //constructor, takes the ID and call a HandlerMethod in Controller
-    public Scheme (int id){
+    protected Scheme (int id){
         File inputFile = new File("src/main/Resources/Schemes/Schemes.txt");
         Scanner scan = null;
         String s;
@@ -70,6 +70,15 @@ public class Scheme {
     //***************************//
     //         Methods           //
     //***************************//
+
+    //Call the constructor if ID is correct (static ???)
+    public static Scheme initialize(int id){
+        if (id < 1 || id >24){
+            System.out.println("ID not valid!");
+            return null;
+        } else
+            return new Scheme(id);
+    }
 
     //Check what dice is in a box
     public Dice checkBox(int x, int y){

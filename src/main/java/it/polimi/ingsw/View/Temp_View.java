@@ -10,9 +10,8 @@ public class Temp_View {
     */
 
     public static void main( String[] args ) {
-        Scheme temp;
-        temp = new Scheme(3);
-        System.out.println(temp.toString());
+        Scheme temp = Scheme.initialize(3);
+        System.out.println(temp);
 
         System.out.println(Enum.Color.RED.escape() + "HELLO " + Enum.Color.PURPLE.escape() + "WORLD" + Enum.Color.RESET);
     }
