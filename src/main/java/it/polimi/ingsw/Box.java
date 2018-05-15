@@ -14,11 +14,23 @@ public class Box extends Enum {
     private boolean isFull;
     private Dice diceInside = null;
 
-    //constructor
-    public Box(Color restrictionCol, int restrictionNum){
+    //constructors
+    public Box(){
+        this.restrictionCol = null;
+        this.restrictionNum = 0;
+        this.isFull = false;
+    }
+
+    public Box(Color restrictionCol){
         this.restrictionCol = restrictionCol;
+        this.restrictionNum = 0;
+        this.isFull = false;
+    }
+
+    public Box(int restrictionNum){
+        this.restrictionCol = null;
         this.restrictionNum = restrictionNum;
-        isFull = false;
+        this.isFull = false;
     }
 
     //***************************//
@@ -102,11 +114,11 @@ public class Box extends Enum {
     public String toString(){
         if(this.diceInside == null || !isFull){
             if(this.restrictionCol == null && this.restrictionNum == 0)
-                return "The box is empty and has no restrictions";
+                return "#\t\t";
             else if(this.restrictionCol != null)
-                return "The box is empty and has a color restriction ("+restrictionCol+")";
+                return ""+this.restrictionCol+"\t";
             else
-                return "The box is empty and has a number restriction ("+restrictionNum+")";
+                return ""+this.restrictionNum+"\t\t";
         }
         else
             return "In the box there is a "+this.diceInside.getColor()+" "+this.diceInside.getValue()+" dice";
