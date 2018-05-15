@@ -12,15 +12,7 @@ class TableTest {
     Table instance = new Table(numP);
 
     @Test
-    void singleTableTest(){
-        Table table = new Table(numP);
-        assertNull(table);
-        instance.nullify();
-    }
-
-    @Test
     void nextTurnTest(){
-
         for (int i=0; i<numP-1; i++)
             instance.nextTurn();
         assertEquals(numP-1, instance.getTurn());
@@ -29,22 +21,18 @@ class TableTest {
             instance.nextTurn();
 
         assertEquals(0, instance.getTurn());
-        instance.nullify();
     }
 
     @Test
     void allExtractedTest(){
-
         for (int i=0; i<90-numP*2-1; i++)
             assertNotNull(instance.pickDiceFromBag());
 
         assertNull(instance.pickDiceFromBag());
-        instance.nullify();
     }
 
     @Test
     void pickFromReserveTest(){
-
         //check that reserve size is numP*2+1
         assertNotNull(instance.checkDiceFromReserve(numP*2));
         assertNull(instance.checkDiceFromReserve(numP*2+1));
@@ -52,12 +40,10 @@ class TableTest {
         //test sequential extraction in the same turn
         assertNotNull(instance.pickDiceFromReserve(numP*2));
         assertNull(instance.pickDiceFromReserve(numP*2-1));
-        instance.nullify();
     }
 
     @Test
     void roundTest(){
-
         for (int i=0; i<numP*2-1; i++)
             instance.nextTurn();
 
@@ -83,12 +69,10 @@ class TableTest {
         for (int i=0; i<numP*2; i++)
             instance.nextTurn();
         assertEquals(10, instance.getRound());
-        instance.nullify();
     }
 
     @Test
     void pickFromRoundtrack (){
-
         for (int i=0; i<numP*2-1; i++)
             instance.nextTurn();
 
@@ -100,12 +84,10 @@ class TableTest {
         //test pickDiceFromRoundtrack method
         instance.pickDiceFromRoundtrack(numP*2);
         assertNull(instance.checkDiceFromRoundtrack(numP*2));
-        instance.nullify();
     }
 
     @Test
     void putInBagTest(){
-
         //test the movement of a single dice from reserve to bag
         assertNotNull(instance.checkDiceFromReserve(numP*2));
         instance.putDiceInBag(numP*2);
@@ -115,7 +97,6 @@ class TableTest {
         for (int i=numP*2-1; i>=0; i--)
             instance.putDiceInBag(i);
         assertNull(instance.checkDiceFromReserve(0));
-        instance.nullify();
     }
 
     @Test
@@ -161,6 +142,5 @@ class TableTest {
             assertTrue(false);
         else
             assertTrue(true);
-        instance.nullify();
     }
 }

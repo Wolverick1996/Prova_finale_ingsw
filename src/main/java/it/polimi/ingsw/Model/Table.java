@@ -9,7 +9,6 @@ public class Table {
     //        Attributes         //
     //***************************//
 
-    private static Table instance = null;
     private ArrayList<Dice> reserve = new ArrayList<Dice>();
     private boolean canExtract = true;
     private ArrayList<Dice> roundTrack = new ArrayList<Dice>();
@@ -35,22 +34,6 @@ public class Table {
     //***************************//
     //         Methods           //
     //***************************//
-
-    //Reset table for testing
-    public void nullify(){
-        reserve.clear();
-        roundTrack.clear();
-        canExtract = true;
-        clockwise = true;
-        turn = 0;
-        round = -1;
-        redExt = 0;
-        purpleExt = 0;
-        bluExt = 0;
-        yellowExt = 0;
-        greenExt = 0;
-        nextRound();
-    }
 
     //Change turn. TURN GOES FROM 0 TO 3, either clockwise or anticlockwise
     public void nextTurn(){
