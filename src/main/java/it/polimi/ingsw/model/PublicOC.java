@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import com.sun.istack.internal.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
