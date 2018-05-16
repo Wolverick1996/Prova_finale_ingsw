@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.model;
 
 import java.util.*;
 import java.io.*;
@@ -16,9 +16,9 @@ public class Scheme {
 
     private Box[][] grid = new Box[MAX_ROW][MAX_COL];
 
-    //constructor, takes the ID and call a HandlerMethod in Controller
+    //constructor, takes the ID and call a HandlerMethod in controller
     protected Scheme (int id){
-        File inputFile = new File("src/main/Resources/Schemes/Schemes.txt");
+        File inputFile = new File("src/main/resources/schemes/Schemes.txt");
         Scanner scan = null;
         String s;
         char [][] c = new char[4][5];
@@ -282,7 +282,7 @@ public class Scheme {
         String s = "";
         for (int i=0; i<MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++) {
-                s = s+grid[i][j]+"\t";
+                s = s+grid[i][j];
 
             }
             s = s+"\n";

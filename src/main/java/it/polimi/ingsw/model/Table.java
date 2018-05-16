@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.model;
 
 import java.util.*;
 import java.lang.*;
@@ -26,7 +26,7 @@ public class Table {
     public Table(int numP){
         ToolHandler.setTools();
         PubObjHandler.setPubOC();
-        //TODO: numPlayers = Controller.getNumPlayers(); //Request must be sent to right controller
+        //TODO: numPlayers = controller.getNumPlayers(); //Request must be sent to right controller
         numPlayers = numP;
         nextRound();
     }

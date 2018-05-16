@@ -1,4 +1,6 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.model;
+
+import com.sun.istack.internal.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +14,7 @@ public class PublicOC implements ObjectiveCard {
 
     public PublicOC(int cardID){
         this.cardID = cardID;
-        File inputFile = new File("src/main/Resources/Cards/PublicOC.txt");
+        File inputFile = new File("src/main/resources/cards/PublicOC.txt");
         Scanner scan = null;
 
         try {
@@ -37,17 +39,14 @@ public class PublicOC implements ObjectiveCard {
             }
         }
     }
-
     @Override
     public String getName() {
         return this.name;
     }
-
     @Override
     public String getDescription() {
         return this.description;
     }
-
     @Override
     public int countPoints(Player player) {
         int points = 0;
@@ -83,7 +82,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC1(Player player) {
+    private int publicOC1(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
         ArrayList<Enum.Color> checkColor = new ArrayList<>();
@@ -101,7 +100,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC2(Player player) {
+    private int publicOC2(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points= 0;
         ArrayList<Enum.Color> checkColor = new ArrayList<>();
@@ -120,7 +119,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC3(Player player) {
+    private int publicOC3(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points= 0;
         ArrayList<Integer> checkValue = new ArrayList<>();
@@ -139,7 +138,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC4(Player player) {
+    private int publicOC4(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points= 0;
         ArrayList<Integer> checkValue = new ArrayList<>();
@@ -158,7 +157,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC567(Player player) {
+    private int publicOC567(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
         int firsValue;
@@ -200,7 +199,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC8(Player player) {
+    private int publicOC8(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
         ArrayList<Integer> checkValue = new ArrayList<>();
@@ -220,7 +219,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC9(Player player) {
+    private int publicOC9(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
         ArrayList<Dice> diceCounted = new ArrayList<>();
@@ -273,7 +272,7 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
-    public int publicOC10(Player player) {
+    private int publicOC10(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
         ArrayList<Enum.Color> checkColor = new ArrayList<>();

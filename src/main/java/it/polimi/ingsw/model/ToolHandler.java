@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Model;
+package it.polimi.ingsw.model;
 
 import java.lang.*;
 
@@ -9,7 +9,7 @@ public class ToolHandler {
     //***************************//
 
     private static int activeID[] = new int[3];
-    public static int numTools = 0; //Will have a function that extract number of Cards
+    public static int numTools = 0; //Will have a function that extract number of cards
 
     //***************************//
     //         Methods           //
