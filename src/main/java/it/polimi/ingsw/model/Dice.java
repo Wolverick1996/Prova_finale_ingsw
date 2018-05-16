@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
+import java.util.Random;
 
-public class Dice extends Enum{
+public class Dice extends Enum {
 
     //***************************//
     //        Attributes         //
@@ -8,30 +9,38 @@ public class Dice extends Enum{
 
     private int value;
     private Color color;
+    private String face;
+    private static final String[] faces = { "\u2680", "\u2681", "\u2682", "\u2683", "\u2684", "\u2685" };
 
     //constructors
     //defined Dice
     public Dice(Color col, int val){
         this.color = col;
         this.value = val;
+        this.face = faces[this.value-1];
     }
 
     //random value
     public Dice(Color col){
+        Random rand = new Random();
         this.color = col;
-        this.value = (int)(Math.random()*6 + 1);
+        this.value = rand.nextInt(6)+1;
+        this.face = faces[this.value-1];
     }
 
     //random color
     public Dice(int val){
         this.color = Color.getRandomColor();
         this.value = val;
+        this.face = faces[this.value-1];
     }
 
     //random Dice
     public Dice(){
+        Random rand = new Random();
         this.color = Color.getRandomColor();
-        this.value = (int)(Math.random()*6 + 1);
+        this.value = rand.nextInt(6)+1;
+        this.face = faces[this.value-1];
     }
 
     //***************************//
@@ -40,12 +49,15 @@ public class Dice extends Enum{
 
     //give the dice another random value
     public void rollDice(){
-        this.value = (int)(Math.random()*6 + 1);
+        Random rand = new Random();
+        this.value = rand.nextInt(6)+1;
+        this.face = faces[this.value-1];
     }
 
     //give the dice a certain value
     public void assignValue(int val){
         this.value = val;
+        this.face = faces[this.value-1];
     }
 
     //return the dice value
@@ -60,33 +72,14 @@ public class Dice extends Enum{
 
     //turn the dice to the opposite face
     public void turnDice() {
-        switch(this.value) {
-            case 1:
-                this.value = 6;
-                break;
-            case 2:
-                this.value = 5;
-                break;
-            case 3:
-                this.value = 4;
-                break;
-            case 4:
-                this.value = 3;
-                break;
-            case 5:
-                this.value = 2;
-                break;
-            case 6:
-                this.value = 1;
-                break;
-            default:
-                System.out.println("Input value not valid!\n");
-                break;
-        }
+        this.value = 7-this.value;
+        this.face = faces[this.value-1];
     }
 
     @Override
     public String toString(){
-        return "This is a "+this.color+" "+this.value+" dice";
+        String escape = this.color.escape();
+        return escape+""+face+""+Color.RESET;
     }
+
 }

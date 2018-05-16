@@ -8,11 +8,12 @@ import org.junit.jupiter.api.Test;
 import java.lang.*;
 
 class TableTest {
-    int numP = (int)(Math.random()*3 + 2);
-    Table instance = new Table(numP);
 
     @Test
     void nextTurnTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
+
         for (int i=0; i<numP-1; i++)
             instance.nextTurn();
         assertEquals(numP-1, instance.getTurn());
@@ -25,6 +26,9 @@ class TableTest {
 
     @Test
     void allExtractedTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
+
         for (int i=0; i<90-numP*2-1; i++)
             assertNotNull(instance.pickDiceFromBag());
 
@@ -33,6 +37,9 @@ class TableTest {
 
     @Test
     void pickFromReserveTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
+
         //check that reserve size is numP*2+1
         assertNotNull(instance.checkDiceFromReserve(numP*2));
         assertNull(instance.checkDiceFromReserve(numP*2+1));
@@ -44,6 +51,9 @@ class TableTest {
 
     @Test
     void roundTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
+
         for (int i=0; i<numP*2-1; i++)
             instance.nextTurn();
 
@@ -73,6 +83,9 @@ class TableTest {
 
     @Test
     void pickFromRoundtrack (){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
+
         for (int i=0; i<numP*2-1; i++)
             instance.nextTurn();
 
@@ -88,6 +101,9 @@ class TableTest {
 
     @Test
     void putInBagTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
+
         //test the movement of a single dice from reserve to bag
         assertNotNull(instance.checkDiceFromReserve(numP*2));
         instance.putDiceInBag(numP*2);
@@ -101,6 +117,8 @@ class TableTest {
 
     @Test
     void rerollTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
         int[] temp = new int[numP*2];
         int flag1 = 0, flag2 = 0, flag3 = 0;
 
@@ -143,4 +161,5 @@ class TableTest {
         else
             assertTrue(true);
     }
+
 }

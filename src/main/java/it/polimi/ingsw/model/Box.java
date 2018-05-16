@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.lang.*;
-
 public class Box extends Enum {
 
     //***************************//
@@ -111,16 +109,17 @@ public class Box extends Enum {
 
     @Override
     public String toString(){
+        String escape;
         if(this.diceInside == null || !isFull){
             if(this.restrictionCol == null && this.restrictionNum == 0)
-                return "#\t\t";
-            else if(this.restrictionCol != null)
-                return ""+this.restrictionCol+"\t";
-            else
-                return ""+this.restrictionNum+"\t\t";
-        }
-        else
-            return "In the box there is a "+this.diceInside.getColor()+" "+this.diceInside.getValue()+" dice";
+                return "[#]\t";
+            else if(this.restrictionCol != null) {
+                escape = this.restrictionCol.escape();
+                return escape+"["+this.restrictionCol.toString().substring(0,1)+"]\t"+Color.RESET;
+            } else
+                return "["+this.restrictionNum+"]\t";
+        } else
+            return "["+this.diceInside+"]\t";
     }
 
 }

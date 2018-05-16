@@ -7,16 +7,18 @@ import it.polimi.ingsw.model.Enum;
 import org.junit.jupiter.api.Test;
 
 import java.lang.*;
+import java.util.Random;
 
 class DiceTest extends Enum {
 
     @Test
     void valueTest(){
-        int value = (int)(Math.random()*6 + 1);
+        Random rand = new Random();
+        int value = rand.nextInt(6)+1;
         Dice dice = new Dice(value);
         assertEquals(value, dice.getValue());
 
-        value = (int)(Math.random()*6 + 1);
+        value = rand.nextInt(6)+1;
         dice.assignValue(value);
         assertEquals(value, dice.getValue());
     }
@@ -30,7 +32,8 @@ class DiceTest extends Enum {
 
     @Test
     void definedDiceTest(){
-        int value = (int)(Math.random()*6 + 1);
+        Random rand = new Random();
+        int value = rand.nextInt(6)+1;
         Color color = Color.getRandomColor();
         Dice dice = new Dice(color, value);
 

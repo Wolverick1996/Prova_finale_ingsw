@@ -130,6 +130,7 @@ public class Scheme {
                 }
             }
         }
+
         if (placeable && diceNear) {
             return true;
         }
@@ -167,13 +168,14 @@ public class Scheme {
                 }
             }
         }
+
         if (placeable && diceNear) {
             return true;
         }
         return false;
     }
 
-    //Chech if a dice is placeable in a box ignoring number restrictions (TOOL2)
+    //Check if a dice is placeable in a box ignoring number restrictions (TOOL2)
     public boolean isPlaceableNoNum(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
@@ -281,10 +283,9 @@ public class Scheme {
     public String toString(){
         String s = "";
         for (int i=0; i<MAX_ROW; i++) {
-            for (int j = 0; j < MAX_COL; j++) {
+            for (int j = 0; j < MAX_COL; j++)
                 s = s+grid[i][j];
 
-            }
             s = s+"\n";
         }
         return "Name: "+this.name+"\nDifficulty: "+this.difficulty+"\n"+s;

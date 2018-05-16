@@ -19,7 +19,7 @@ public class PubObjHandler {
     //Set the PubOC to be handled in the right position
     public static void setPubOC(){
         try {
-            for (int i:  Utility.returnRandomInts(3,0,NUM_PUB_OC)){
+            for (int i:  Utility.returnRandomInts(3,1,NUM_PUB_OC)){
                 switch (i){
                     case 1: activeID.add(new PublicOC(i)); break;
                     case 2: activeID.add(new PublicOC(i)); break;
