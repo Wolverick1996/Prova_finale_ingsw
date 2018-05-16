@@ -16,16 +16,18 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.0.0</version>
+                        <version>1.1.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
+
             <!-- Jacoco is a code coverage library that allows basic report creation -->
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -75,12 +77,6 @@
     </properties>
 
     <dependencies>
-          <dependency>
-              <groupId>junit</groupId>
-              <artifactId>junit</artifactId>
-              <version>4.8.1</version>
-              <scope>test</scope>
-          </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
