@@ -258,10 +258,7 @@ public class Scheme {
 
     //Set dice
     public boolean placeDice(int x, int y, Dice dice){
-        if(grid[x][y].setDice(dice))
-            return true;
-        else
-            return false;
+        return grid[x][y].setDice(dice);
     }
 
     //Get name of the scheme

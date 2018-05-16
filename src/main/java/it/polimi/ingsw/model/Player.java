@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.lang.*;
-
 public class Player {
 
     //***************************//

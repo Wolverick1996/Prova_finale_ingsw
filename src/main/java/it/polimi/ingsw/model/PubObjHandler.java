@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.lang.*;
 import java.util.ArrayList;
 
 public class PubObjHandler {
@@ -15,6 +14,9 @@ public class PubObjHandler {
     //***************************//
     //         Methods           //
     //***************************//
+
+    private PubObjHandler(){
+    }
 
     //Set the PubOC to be handled in the right position
     public static void setPubOC(){
@@ -31,10 +33,10 @@ public class PubObjHandler {
                     case 8: activeID.add(new PublicOC(i)); break;
                     case 9: activeID.add(new PublicOC(i)); break;
                     case 10: activeID.add(new PublicOC(i)); break;
-                    default: throw new Exception();
+                    default: throw new NullPointerException();
                 }
             }
-        }catch (Exception e){
+        }catch (NullPointerException e){
             //Unhandled Exception
             System.out.println("Failed setPubOC");
             System.exit(-1);
