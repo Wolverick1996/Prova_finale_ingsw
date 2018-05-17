@@ -34,18 +34,9 @@ public class Box extends Enum {
     //         Methods           //
     //***************************//
 
-    //Check if Box can be used
-    public boolean isEmployable(Dice dice){
-        if((this.restrictionNum == 0 || this.restrictionCol == null ||
-                dice.getColor() == this.restrictionCol || dice.getValue() == this.restrictionNum) && !isFull)
-            return true;
-        else
-            return false;
-    }
-
     //Check if Box can be used without color restrictions
     public boolean isEmployableNoCol(Dice dice){
-        if((this.restrictionNum == 0 || this.restrictionCol == null ||
+        if(((this.restrictionNum == 0 && this.restrictionCol == null) ||
                 dice.getValue() == this.restrictionNum) && !isFull)
             return true;
         else
@@ -54,7 +45,7 @@ public class Box extends Enum {
 
     //Check if Box can be used without number restrictions
     public boolean isEmployableNoNum(Dice dice){
-        if((this.restrictionNum == 0 || this.restrictionCol == null ||
+        if(((this.restrictionNum == 0 && this.restrictionCol == null) ||
                 dice.getColor() == this.restrictionCol) && !isFull)
             return true;
         else

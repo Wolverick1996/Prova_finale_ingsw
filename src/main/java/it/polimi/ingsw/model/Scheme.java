@@ -102,14 +102,15 @@ public class Scheme {
 
         //If first die check if it respects first-dice-placement-rule
         if (freeGrid) {
-            if (grid[x][y].isEmployable(dice) && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+            if (grid[x][y].isEmployableNoNum(dice) && grid[x][y].isEmployableNoCol(dice) &&
+                    ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
                 return true;
             else
                 return false;
         }
 
         //Check if die respects box restrictions
-        if (!grid[x][y].isEmployable(dice))
+        if (!grid[x][y].isEmployableNoNum(dice) && !grid[x][y].isEmployableNoCol(dice))
             return false;
 
         //Algorithm to find if the die respects placement restrictions
@@ -221,14 +222,15 @@ public class Scheme {
 
         //If first die check if it respects first-dice-placement-rule
         if (freeGrid) {
-            if (grid[x][y].isEmployable(dice) && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+            if (grid[x][y].isEmployableNoNum(dice) && grid[x][y].isEmployableNoCol(dice)
+                    && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
                 return true;
             else
                 return false;
         }
 
         //Check if die respects box restrictions
-        if (!grid[x][y].isEmployable(dice))
+        if (!grid[x][y].isEmployableNoNum(dice) && !grid[x][y].isEmployableNoCol(dice))
             return false;
 
         return true;
