@@ -45,7 +45,7 @@ class BoxTest {
     }
 
     @Test
-    void isEmployableNoNum() {
+    void isEmployableNoNumTest() {
         Dice dice = new Dice();
         Box box = new Box();
         Enum.Color otherColor;
@@ -72,7 +72,7 @@ class BoxTest {
     }
 
     @Test
-    void getDice() {
+    void getDiceTest() {
         Dice dice = new Dice();
         Box box = new Box();
 
@@ -88,7 +88,7 @@ class BoxTest {
     }
 
     @Test
-    void isFull() {
+    void isFullTest() {
         Dice dice = new Dice();
         Box box = new Box();
 

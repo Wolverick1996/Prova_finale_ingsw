@@ -49,7 +49,7 @@ public class Player {
         if (table ==  null)
             return false;
         tempDice = table.checkDiceFromReserve(indexDice);
-        if(ownScheme.isPlaceableAllRestr(x, y, tempDice))
+        if(ownScheme.isPlaceableNoCol(x, y, tempDice) && ownScheme.isPlaceableNoNum(x, y, tempDice))
             return true;
         else
             return false;

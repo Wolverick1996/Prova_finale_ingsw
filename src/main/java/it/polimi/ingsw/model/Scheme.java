@@ -89,57 +89,8 @@ public class Scheme {
         return dice;
     }
 
-    //Check if a dice is placeable in a box with all restrictions
-    public boolean isPlaceableAllRestr(int x, int y, Dice dice) {
-        boolean placeable = true;
-        boolean freeGrid = isGridFree();
-        boolean diceNear = false;
-        int i;
-        int j;
-
-        if ((x < 0 || x > MAX_ROW) || (y < 0 || y > MAX_COL))
-            return false;
-
-        //If first die check if it respects first-dice-placement-rule
-        if (freeGrid) {
-            if (grid[x][y].isEmployableNoNum(dice) && grid[x][y].isEmployableNoCol(dice) &&
-                    ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
-                return true;
-            else
-                return false;
-        }
-
-        //Check if die respects box restrictions
-        if (!grid[x][y].isEmployableNoNum(dice) && !grid[x][y].isEmployableNoCol(dice))
-            return false;
-
-        //Algorithm to find if the die respects placement restrictions
-        for (i = x - 1; i <= x + 1 && placeable; i++) {
-            if (i > 0 && i < MAX_ROW){
-                for (j = y - 1; j <= y + 1; j++) {
-                    if (!(i == x && j == y) && j > 0 && j < MAX_COL) {
-                        if (grid[i][j].isFull()) {
-                            diceNear = true;
-                        }
-                        if ((j == y || i == x) && grid[i][j].isFull()) {
-                            if (grid[i][j].getDice().getColor() == dice.getColor() ||
-                                    grid[i][j].getDice().getValue() == dice.getValue()) {
-                                placeable = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (placeable && diceNear) {
-            return true;
-        }
-        return false;
-    }
-
     //Check if a dice is placeable in a box ignoring color restrictions (TOOL3)
-    public boolean isPlaceableNoCol(int x, int y, Dice dice){
+    protected boolean isPlaceableNoCol(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
@@ -177,7 +128,7 @@ public class Scheme {
     }
 
     //Check if a dice is placeable in a box ignoring number restrictions (TOOL2)
-    public boolean isPlaceableNoNum(int x, int y, Dice dice){
+    protected boolean isPlaceableNoNum(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
@@ -207,6 +158,7 @@ public class Scheme {
                 }
             }
         }
+
         if (placeable && diceNear) {
             return true;
         }
@@ -214,7 +166,7 @@ public class Scheme {
     }
 
     //Check if a dice is placeable ignoring dice-near-rule (TOOL 9)
-    public boolean isPlaceableNoDiceNear(int x, int y, Dice dice){
+    protected boolean isPlaceableNoDiceNear(int x, int y, Dice dice){
         boolean freeGrid = isGridFree();
 
         if ((x < 0 || x > MAX_ROW) || (y < 0 || y > MAX_COL))
@@ -253,17 +205,28 @@ public class Scheme {
     public Dice removeDice(int x, int y){
         if(!grid[x][y].isFull())
             return null;
-        else{
+        else {
             return grid[x][y].free();
         }
     }
 
+    public boolean placeFromTool(int x, int y, int id, Dice dice){
+        if (id == 2)
+            isPlaceableNoCol(x, y, dice);
+        else if (id == 3)
+            isPlaceableNoNum(x, y, dice);
+        else if (id == 9)
+            isPlaceableNoDiceNear(x, y, dice);
+
+        return grid[x][y].setDice(dice);
+    }
+
     //Set dice
     public boolean placeDice(int x, int y, Dice dice){
-        if(grid[x][y].setDice(dice))
-            return true;
-        else
+        if (!isPlaceableNoNum(x, y, dice) || !isPlaceableNoCol(x, y, dice))
             return false;
+
+        return grid[x][y].setDice(dice);
     }
 
     //Get name of the scheme

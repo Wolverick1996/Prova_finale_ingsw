@@ -9,7 +9,7 @@ public class ToolHandler {
     //***************************//
 
     private static int activeID[] = new int[3];
-    public static int numTools = 0; //Will have a function that extract number of cards
+    public static final int numTools = 0; //Will have a function that extract number of cards
 
     //***************************//
     //         Methods           //
@@ -19,7 +19,7 @@ public class ToolHandler {
     public static void setTools(){
         try {
             activeID = Utility.returnRandomInts(3,0,numTools);
-        }catch (Exception e){
+        } catch (Exception e){
             //Unhandled exception
             System.out.println("Failed setTools");
             System.exit(-1);
