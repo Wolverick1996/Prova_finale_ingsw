@@ -1,39 +1,42 @@
 package it.polimi.ingsw.model;
 
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class PrivateOC implements ObjectiveCard {
     private String name;
     private String description;
     private Enum.Color color;
 
-    public PrivateOC (Enum.Color color){
+    public PrivateOC(Enum.Color color){
         this.color = color;
+        int index = color.ordinal();
 
-        switch (color){
-            case BLUE:
-                this.name = "Blue shades";
-                this.description = "Sum the values of all blue dice";
-                break;
-            case GREEN:
-                this.name = "Green shades";
-                this.description = "Sum the values of all green dice";
-                break;
-            case RED:
-                this.name = "Red shades";
-                this.description = "Sum the values of all red dice";
-                break;
-            case PURPLE:
-                this.name = "Purple shades";
-                this.description = "Sum the values of all purple dice";
-                break;
-            case YELLOW:
-                this.name = "Yellow shades";
-                this.description = "Sum the values of all yellow dice";
-                break;
-            default:
-                this.name = "ERROR";
-                this.description = "ERROR";
-                break;
+        File inputFile = new File("src/main/resources/cards/PrivateOC.txt");
+        Scanner scan = null;
+
+        try {
+            scan = new Scanner(inputFile);
+
+            for (int i = 0; i<index*2; i++)
+                scan.nextLine();
+
+            this.name = scan.nextLine();
+            this.description = scan.nextLine();
+
+        } catch (IOException e){
+            System.out.println("Error");
+        }
+        finally {
+            if (scan != null) {
+                try {
+                    scan.close();
+                } catch (Exception e1) {
+                    System.out.println("Error");
+                }
+            }
         }
     }
 

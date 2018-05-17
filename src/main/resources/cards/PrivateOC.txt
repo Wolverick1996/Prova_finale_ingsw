@@ -1,0 +1,10 @@
+Red shades
+Sum the values of all red dice
+Green shades
+Sum the values of all green dice
+Yellow shades
+Sum the values of all yellow dice
+Blue shades
+Sum the values of all blue dice
+Purple shades
+Sum the values of all purple dice

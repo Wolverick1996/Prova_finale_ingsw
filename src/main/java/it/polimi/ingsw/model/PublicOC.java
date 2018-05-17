@@ -41,6 +41,7 @@ public class PublicOC implements ObjectiveCard {
     public String getName() {
         return this.name;
     }
+
     @Override
     public String getDescription() {
         return this.description;

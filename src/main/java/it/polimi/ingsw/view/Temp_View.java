@@ -13,7 +13,6 @@ public class Temp_View {
     public static void main( String[] args ) {
         Scheme temp = Scheme.initialize(3);
         System.out.println(temp);
-
         Dice d = new Dice(Enum.Color.RED, 5);
         if (temp.placeDice(0,0, d))
             System.out.println(temp);
