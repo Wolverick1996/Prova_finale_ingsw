@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import java.util.*;
-import java.lang.*;
 
 public class Table {
 

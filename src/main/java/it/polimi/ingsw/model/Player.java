@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.lang.*;
-
 public class Player {
 
     //***************************//
@@ -70,20 +68,39 @@ public class Player {
 
 
     //Count the points, at game end or game left.
-    public int countPoints(){
+    public void countPoints(){
+        int freeBoxes = 0;
+        Box[][] tempGrid = this.ownScheme.getGrid();
+
+        for (int i = 0; i<Scheme.MAX_ROW; i++){
+            for (int j = 0; j<Scheme.MAX_COL; j++){
+                if (!tempGrid[i][j].isFull())
+                    freeBoxes++;
+            }
+        }
+
         this.points += PrivObjHandler.countPoints(this);
         for (int i = 0; i<3; i++){
             this.points += PubObjHandler.countPoints(this, i);
         }
-        return this.points;
+        this.points += this.tokens;
+        this.points -= freeBoxes;
     }
 
     public Scheme getOwnScheme() {
-        return ownScheme;
+        return this.ownScheme;
     }
 
     public int getIDplayer() {
-        return IDplayer;
+        return this.IDplayer;
+    }
+
+    public int getPoints() {
+        return this.points;
+    }
+
+    public Dice getDiceInHand() {
+        return this.diceInHand;
     }
 
     @Override

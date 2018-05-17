@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
-import static java.lang.System.out;
 
 public class PrivObjHandler {
 
@@ -60,7 +59,7 @@ public class PrivObjHandler {
                             yellowExt++;
                         }break;
                     default:
-                        out.println("ERROR");
+                        System.out.println("ERROR");
                         break;
                 }
             }

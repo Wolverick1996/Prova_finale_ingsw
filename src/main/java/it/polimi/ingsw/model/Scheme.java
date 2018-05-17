@@ -225,7 +225,7 @@ public class Scheme {
     public boolean placeDice(int x, int y, Dice dice){
         if (!isPlaceableNoNum(x, y, dice) || !isPlaceableNoCol(x, y, dice))
             return false;
-
+        
         return grid[x][y].setDice(dice);
     }
 
