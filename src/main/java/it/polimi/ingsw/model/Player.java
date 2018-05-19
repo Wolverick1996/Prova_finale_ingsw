@@ -41,33 +41,23 @@ public class Player {
             return false;
     }
 
-    //Is a dice picked from reserve placeable in the scheme?
-    public boolean isPlaceableDiceFromReserve(int x, int y, Table table, int indexDice){
+    //Place a dice (if possible)
+    public boolean placeDice (int x, int y, Table table, int indexDice){
         Dice tempDice;
         if (table ==  null)
             return false;
-        tempDice = table.checkDiceFromReserve(indexDice);
-        if(ownScheme.checkValueRestr(x, y, tempDice) && ownScheme.checkColorRestr(x, y, tempDice))
-            return true;
-        else
-            return false;
-    }
-
-    //Place a dice (!!CALL IT AFTER CHECKING THE PLACEMENT CONDITIONS!!)
-    public void placeDice (int x, int y, Table table, int indexDice){
-        Dice tempDice;
 
         tempDice = table.pickDiceFromReserve(indexDice);
-        ownScheme.placeDice(x, y, tempDice);
+        if (tempDice == null)
+            return false;
+
+        return ownScheme.placeDice(x, y, tempDice);
     }
 
     //Use a tool card
-    public boolean useToolCard(int indexToolCard){
-        return false;
-    }
+    public boolean useToolCard(int indexToolCard){ return false; }
 
-
-    //Count the points, at game end or game left.
+    //Count the points, at game end or game left
     public void countPoints(){
         int freeBoxes = 0;
         Box[][] tempGrid = this.ownScheme.getGrid();
@@ -80,9 +70,9 @@ public class Player {
         }
 
         this.points += PrivObjHandler.countPoints(this);
-        for (int i = 0; i<3; i++){
+        for (int i = 0; i<3; i++)
             this.points += PubObjHandler.countPoints(this, i);
-        }
+
         this.points += this.tokens;
         this.points -= freeBoxes;
     }
@@ -99,12 +89,17 @@ public class Player {
         return this.points;
     }
 
+    public int getTokens() {
+        return this.tokens;
+    }
+
     public Dice getDiceInHand() {
         return this.diceInHand;
     }
 
     @Override
     public String toString(){
-        return this.nickname+" : "+this.IDplayer+"\nActive scheme:\n"+this.ownScheme;
+        return this.nickname+" : "+this.IDplayer+
+                "\nTokens available: "+this.tokens+"\nActive scheme:\n"+this.ownScheme;
     }
 }
