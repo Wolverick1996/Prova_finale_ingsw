@@ -21,7 +21,7 @@ public class Table {
     private int turn = 0;
     private int numPlayers; //must receive data
 
-    //constructor Singleton
+    //constructor Singleton (?)
     public Table(int numP){
         ToolHandler.setTools();
         PubObjHandler.setPubOC();
@@ -148,7 +148,6 @@ public class Table {
     public Dice checkDiceFromRoundtrack(int dicePos){if(dicePos<roundTrack.size()) return roundTrack.get(dicePos);
     return null;}
 
-
     //put dice in a particular spot
     public void putDiceInReserve(Dice d){reserve.add(d);}
     public void putDiceInRoundtrack(Dice d){roundTrack.add(d);}
@@ -159,8 +158,8 @@ public class Table {
 
     @Override
     public String toString(){
-        return "Table: \n" + "Dices in reserve: " + reserve.size() + "\nreserve: " + reserve.toString() + "\nroundtrack: " +
-                roundTrack.toString() + "\nTurn: " + turn + "\nRound: " + round + "\nclockwise: " + clockwise;
+        return "Table: \n" + "Dice in reserve: " + reserve.size() + "\nReserve: " + reserve.toString() + "\nRoundtrack: " +
+                roundTrack.toString() + "\nTurn: " + turn + "\nRound: " + round + "\nClockwise: " + clockwise;
     }
 
 }
