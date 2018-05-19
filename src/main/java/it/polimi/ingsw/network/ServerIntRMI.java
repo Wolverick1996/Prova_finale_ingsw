@@ -4,11 +4,20 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Vector;
 
-/*public interface ServerIntRMI extends Remote {
+public interface ServerIntRMI extends Remote {
+
+    boolean login(ClientIntRMI client) throws RemoteException;
+
+    void send(String message) throws RemoteException;
+
+}
+/*
+public interface ServerIntRMI extends Remote {
     public boolean login (ClientIntRMI a)throws RemoteException;
     public boolean logout (ClientIntRMI a) throws RemoteException;
     public Vector getConnected() throws RemoteException ;
 }
+
 public interface ServerIntRMI extends Remote{
     public boolean login (ClientIntRMI a)throws RemoteException ;
     public boolean logout (ClientIntRMI a) throws RemoteException;
