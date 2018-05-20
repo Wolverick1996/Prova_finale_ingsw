@@ -1,20 +1,20 @@
 Different colors - rows
-Rows without repeated colors
+[6 points each] Rows without repeated colors
 Different colors - columns
-Columns without repeated colors
+[5 points each] Columns without repeated colors
 Different shades - rows
-Rows without repeated shades
+[5 points each] Rows without repeated shades
 Different shades - columns
-Columns without repeated shades
+[4 points each] Columns without repeated shades
 Light shades
-Sets of 1 & 2 everywhere
+[2 points each] Sets of 1 & 2 everywhere
 Medium shades
-Sets of 3 & 4 everywhere
+[2 points each] Sets of 3 & 4 everywhere
 Dark shades
-Sets of 5 & 6 everywhere
+[2 points each] Sets of 5 & 6 everywhere
 Different shades
-Sets of dice each value everywhere
+[5 points each] Sets of dice each value everywhere
 Colored diagonals
-Number of same-colored dice diagonally adjacent
+[# points] Number of same-colored dice diagonally adjacent
 Variety of color
-Sets of dice each color everywhere
+[4 points each] Sets of dice each color everywhere
