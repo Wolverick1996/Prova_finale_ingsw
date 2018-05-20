@@ -21,7 +21,7 @@ public class Scheme {
         File inputFile = new File("src/main/resources/schemes/Schemes.txt");
         Scanner scan = null;
         String s;
-        char [][] c = new char[4][5];
+        char [][] c = new char[MAX_ROW][MAX_COL];
 
         try {
             scan = new Scanner(inputFile);
