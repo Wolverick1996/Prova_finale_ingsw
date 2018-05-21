@@ -62,7 +62,7 @@ public class ClientMainRMI {
                         active = false;
                     }
                 }
-                if(on)
+                if(!on)
                     scanner.close();
             }while (on);
 
