@@ -5,24 +5,30 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 public class ServerImplementationRMI extends UnicastRemoteObject implements
         ServerIntRMI {
 
     private ArrayList<ClientIntRMI> clients = new ArrayList<>();
+    static final int MAX_PLAYERS = 4;
 
-    protected ServerImplementationRMI() throws RemoteException {
+    ServerImplementationRMI() throws RemoteException {
         super(0);
     }
 
     public boolean login(ClientIntRMI a) throws RemoteException{
 
-        if (clients.size() > 0){
+        if (clients.size() >= 4){
+            System.out.println("Max number of players reached!");
+            a.notify("The lobby is full!");
+            return false;
+        }
+
+        if (!clients.isEmpty()){
             for (ClientIntRMI c : clients){
                 if (c.getName().equals(a.getName())){
                     System.out.println("Connection failed, userID already used");
-                    a.notify("Connection failed, userID already used");
                     return false;
                 }
             }
@@ -30,21 +36,15 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
 
         System.out.println(a.getName() + "  got connected....");
         a.notify("You have Connected successfully.");
-        send(a.getName()+ " has just connected.");
+        send(a.getName()+ " has just connected.\t[Players in the lobby: "+clients.size()+"]");
         clients.add(a);
         return true;
     }
 
-    /*public void login(ClientIntRMI client) throws RemoteException {
-        clients.add(client);
-        System.out.println("Client "+ (clients.indexOf(client)+1) + " connesso!");
-    }*/
-
-    public boolean logout(ClientIntRMI a) throws RemoteException{
+    public void logout(ClientIntRMI a) throws RemoteException{
         clients.remove(a);
         a.notify("You have disconnected successfully");
-        send(a.getName()+"has just disconnected");
-        return true;
+        send(a.getName()+"has just disconnected.\t[Players in the lobby: "+clients.size()+"]");
     }
 
     public void send(String message) throws RemoteException {
@@ -59,45 +59,17 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         }
     }
 
-    public ArrayList<ClientIntRMI> getClients() {
+    public List<ClientIntRMI> getConnected() {
         return clients;
     }
-}
-/*public class ServerImplementationRMI extends UnicastRemoteObject implements ServerIntRMI{
 
-    private Vector v = new Vector();
-    public ServerImplementationRMI() throws RemoteException {}
-
-    public boolean login(ClientIntRMI a) throws RemoteException{
-        System.out.println(a.getName() + "  got connected....");
-        a.tell("You have Connected successfully.");
-        publish(a.getName()+ " has just connected.");
-        v.add(a);
-        return true;
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 
-    public boolean logout(ClientIntRMI a) throws RemoteException{
-        v.removeElement(a);
-        a.tell("You have disconnected successfully");
-        publish(a.getName()+"has just disconnected");
-        return true;
-    }
-
-    public void publish(String s) throws RemoteException{
-        System.out.println(s);
-        for(int i=0;i<v.size();i++){
-            try{
-                ClientIntRMI tmp=(ClientIntRMI) v.get(i);
-                tmp.tell(s);
-            }catch(Exception e){
-                //problem with the client not connected.
-                //Better to remove it
-            }
-        }
-    }
-
-    public Vector getConnected() throws RemoteException{
-        return v;
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }
-*/

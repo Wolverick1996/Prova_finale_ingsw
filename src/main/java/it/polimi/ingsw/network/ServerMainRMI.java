@@ -22,7 +22,7 @@ public class ServerMainRMI {
 
             ServerImplementationRMI serverImplementation = new ServerImplementationRMI();
 
-           Naming.rebind("//localhost/MyServer", serverImplementation);
+            Naming.rebind("//localhost/MyServer", serverImplementation);
 
             System.out.println("[Server] Server is ready...");
 
@@ -33,5 +33,4 @@ public class ServerMainRMI {
         }
 
     }
-
 }
