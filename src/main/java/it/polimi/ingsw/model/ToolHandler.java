@@ -21,9 +21,9 @@ public class ToolHandler {
         int[] numOnTable = new int[3];
 
         while (numOnTable[0] == numOnTable[1] || numOnTable[1] == numOnTable[2] || numOnTable[0] == numOnTable[2]){
-            numOnTable[0] = rand.nextInt(10)+1;
-            numOnTable[1] = rand.nextInt(10)+1;
-            numOnTable[2] = rand.nextInt(10)+1;
+            numOnTable[0] = rand.nextInt(12)+1;
+            numOnTable[1] = rand.nextInt(12)+1;
+            numOnTable[2] = rand.nextInt(12)+1;
         }
 
         try {
