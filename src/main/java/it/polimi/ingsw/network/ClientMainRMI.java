@@ -13,26 +13,44 @@ public class ClientMainRMI {
 
     public static void main(String[] args) {
         ServerIntRMI server;
-        boolean on = true;
+        boolean on = false;
+        String ipAddress;
         try {
+            do {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("IP address of the Server: ");
+                ipAddress = scanner.nextLine();
+                if (ipAddress.equals(""))
+                    System.out.println("Not a valid IP");
+                else
+                    on = true;
+            } while (!on);
             do {
                 boolean loginSuccess = false;
                 boolean idTaken = false;
                 boolean fullLobby = false;
                 ClientIntRMI validRemoteRef = null;
-                server = (ServerIntRMI) Naming.lookup("//localhost/MyServer");
+                server = (ServerIntRMI) Naming.lookup("//" + ipAddress + "/MyServer");
                 do {
-                    if (fullLobby)
+                    if (fullLobby) {
                         System.out.println("Retry later...");
+                        fullLobby = false;
+                    }
 
-                    if (idTaken)
+                    if (idTaken) {
                         System.out.println("Login failed, this userID is already used");
+                        idTaken = false;
+                    }
 
                     Scanner scanner = new Scanner(System.in);
-                    System.out.println("[Players in the lobby: " + server.getConnected().size() + "]\nLogin:\t\t(to refresh the page type 'r')");
+                    System.out.println("[Players in the lobby: " + server.getConnected().size() + "]\nLogin:\t\t(to refresh the page type '*')");
                     String text = scanner.nextLine();
 
-                    if (!text.equals("r")) {
+                    if (text.equals("")){
+                        System.out.println("Invalid name, your ID should be an alphanumeric of at least 1 character");
+                        text = "*";
+                    }
+                    if (!text.equals("*")) {
                         ClientImplementationRMI client = new ClientImplementationRMI(text);
 
                         ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
@@ -62,9 +80,9 @@ public class ClientMainRMI {
                         active = false;
                     }
                 }
-                if(!on)
+                if (!on)
                     scanner.close();
-            }while (on);
+            } while (on);
 
         } catch (MalformedURLException e) {
             System.err.println("URL not found!");
@@ -72,7 +90,7 @@ public class ClientMainRMI {
             System.err.println("Connection error: " + e.getMessage() + "!");
         } catch (NotBoundException e) {
             System.err.println("This reference is not connected!");
-        } catch (NoSuchElementException e){}
+        } catch (NoSuchElementException e) {}
     }
 }
 

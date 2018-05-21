@@ -22,7 +22,7 @@ public class ServerMainRMI {
 
             ServerImplementationRMI serverImplementation = new ServerImplementationRMI();
 
-            Naming.rebind("//localhost/MyServer", serverImplementation);
+            Naming.rebind("//127.0.0.1/MyServer", serverImplementation);
 
             System.out.println("[Server] Server is ready...");
 
@@ -31,6 +31,5 @@ public class ServerMainRMI {
         } catch (RemoteException e) {
             System.err.println("Connection error: " + e.getMessage() + "!");
         }
-
     }
 }

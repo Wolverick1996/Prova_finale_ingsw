@@ -27,17 +27,16 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
 
         if (!clients.isEmpty()){
             for (ClientIntRMI c : clients){
-                if (c.getName().equals(a.getName())){
-                    System.out.println("Connection failed, userID already used");
+                if (c.getName().equals(a.getName()))
                     return false;
-                }
             }
         }
 
         System.out.println(a.getName() + "  got connected....");
-        a.notify("You have Connected successfully.");
-        send(a.getName()+ " has just connected.\t[Players in the lobby: "+clients.size()+"]");
+        a.notify("Welcome " +a.getName()+ ".\nYou have connected successfully.");
+        send(a.getName()+ " has just connected.");
         clients.add(a);
+        send("[Players in the lobby: "+clients.size()+"]");
         return true;
     }
 
@@ -59,7 +58,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         }
     }
 
-    public List<ClientIntRMI> getConnected() {
+    public List<ClientIntRMI> getConnected() throws RemoteException{
         return clients;
     }
 
