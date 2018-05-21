@@ -11,6 +11,9 @@ public class PublicOC implements ObjectiveCard {
     private int cardID;
 
     public PublicOC(int cardID){
+        if (cardID < 1 || cardID > 10)
+            throw new IllegalArgumentException("not valid ID: " + cardID);
+
         this.cardID = cardID;
         File inputFile = new File("src/main/resources/cards/PublicOC.txt");
         Scanner scan = null;
@@ -37,6 +40,7 @@ public class PublicOC implements ObjectiveCard {
             }
         }
     }
+
     @Override
     public String getName() {
         return this.name;
@@ -46,6 +50,7 @@ public class PublicOC implements ObjectiveCard {
     public String getDescription() {
         return this.description;
     }
+
     @Override
     public int countPoints(Player player) {
         int points = 0;
@@ -88,13 +93,14 @@ public class PublicOC implements ObjectiveCard {
 
         for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++){
-                try{
+                try {
                     if (checkColor.isEmpty() || !checkColor.contains(grid[i][j].getDice().getColor()))
                         checkColor.add(grid[i][j].getDice().getColor());
-                }catch (NullPointerException e){}
+                } catch (NullPointerException e){}
             }
             if(checkColor.size() == 5)
                 points += 6;
+            checkColor.clear();
         }
         return points;
     }
@@ -104,17 +110,17 @@ public class PublicOC implements ObjectiveCard {
         int points= 0;
         ArrayList<Enum.Color> checkColor = new ArrayList<>();
 
-        for (int j = 0; j<Scheme.MAX_ROW; j++){
-            for (int i = 0; i<Scheme.MAX_COL; i++){
-                try{
+        for (int j = 0; j<Scheme.MAX_COL; j++){
+            for (int i = 0; i<Scheme.MAX_ROW; i++){
+                try {
                     if (checkColor.isEmpty() || !checkColor.contains(grid[i][j].getDice().getColor()))
                         checkColor.add(grid[i][j].getDice().getColor());
-                }catch (NullPointerException e){}
+                } catch (NullPointerException e){}
             }
             if(checkColor.size() == 4)
                 points += 5;
+            checkColor.clear();
         }
-
         return points;
     }
 
@@ -125,15 +131,15 @@ public class PublicOC implements ObjectiveCard {
 
         for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++){
-                try{
+                try {
                     if (checkValue.isEmpty() || !checkValue.contains(grid[i][j].getDice().getValue()))
                         checkValue.add(grid[i][j].getDice().getValue());
-                }catch (NullPointerException e){}
+                } catch (NullPointerException e){}
             }
             if(checkValue.size() == 5)
                 points += 5;
+            checkValue.clear();
         }
-
         return points;
     }
 
@@ -142,17 +148,17 @@ public class PublicOC implements ObjectiveCard {
         int points= 0;
         ArrayList<Integer> checkValue = new ArrayList<>();
 
-        for (int j = 0; j<Scheme.MAX_ROW; j++){
-            for (int i = 0; i<Scheme.MAX_COL; i++){
-                try{
+        for (int j = 0; j<Scheme.MAX_COL; j++){
+            for (int i = 0; i<Scheme.MAX_ROW; i++){
+                try {
                     if (checkValue.isEmpty() || !checkValue.contains(grid[i][j].getDice().getValue()))
                         checkValue.add(grid[i][j].getDice().getValue());
-                }catch (NullPointerException e){}
+                } catch (NullPointerException e){}
             }
             if(checkValue.size() == 4)
                 points += 4;
+            checkValue.clear();
         }
-
         return points;
     }
 
@@ -167,10 +173,10 @@ public class PublicOC implements ObjectiveCard {
         if (this.cardID == 5){
             firsValue = 1;
             secondValue = 2;
-        }else if (this.cardID == 6){
+        } else if (this.cardID == 6){
             firsValue = 3;
             secondValue = 4;
-        }else{
+        } else {
             firsValue = 5;
             secondValue = 6;
         }
@@ -188,7 +194,7 @@ public class PublicOC implements ObjectiveCard {
 
         if (firsts == 0 || seconds == 0)
             return points;
-        else{
+        else {
             for (int i = 0; i<firsts && i<seconds;){
                 points += 2;
                 firsts--;
@@ -200,20 +206,28 @@ public class PublicOC implements ObjectiveCard {
 
     private int publicOC8(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
+        boolean[][] flag = new boolean[Scheme.MAX_ROW][Scheme.MAX_COL];
         int points = 0;
+        int i = 0;
+        int j = 0;
         ArrayList<Integer> checkValue = new ArrayList<>();
 
-        for (int i = 0; i<Scheme.MAX_ROW; i++){
-            for (int j = 0; j<Scheme.MAX_COL; j++){
-                if(checkValue.size() == 6){
-                    points += 5;
-                    checkValue.clear();
+        while (i < Scheme.MAX_ROW || j < Scheme.MAX_COL) {
+            for (i = 0; i < Scheme.MAX_ROW  && checkValue.size() != 6; i++) {
+                for (j = 0; j < Scheme.MAX_COL && checkValue.size() != 6; j++) {
+                    try {
+                        if (checkValue.isEmpty() ||
+                                (!checkValue.contains(grid[i][j].getDice().getValue()) && !flag[i][j])) {
+                            checkValue.add(grid[i][j].getDice().getValue());
+                            flag[i][j] = true;
+                        }
+                    } catch (NullPointerException e) { }
+
+                    if (checkValue.size() == 6)
+                        points += 5;
                 }
-                try{
-                    if (checkValue.isEmpty() || !checkValue.contains(grid[i][j].getDice().getValue()))
-                        checkValue.add(grid[i][j].getDice().getValue());
-                }catch (NullPointerException e){}
             }
+            checkValue.clear();
         }
         return points;
     }
@@ -226,46 +240,58 @@ public class PublicOC implements ObjectiveCard {
         for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++){
                 try {
-                    if (grid[i][j].getDice().getColor() == grid[i+1][j+1].getDice().getColor()
-                            && !diceCounted.contains(grid[i][j].getDice()) && !diceCounted.contains(grid[i+1][j+1].getDice())){
-                        diceCounted.add(grid[i][j].getDice());
-                        diceCounted.add(grid[i+1][j+1].getDice());
-                        points += 2;
-                        if (grid[i][j].getDice().getColor() == grid[i+2][j+2].getDice().getColor()
-                                && !diceCounted.contains(grid[i+2][j+2].getDice())){
-                            diceCounted.add(grid[i+2][j+2].getDice());
-                            points++;
-                            if (grid[i][j].getDice().getColor() == grid[i+3][j+3].getDice().getColor()
-                                    && !diceCounted.contains(grid[i+3][j+3].getDice())){
-                                diceCounted.add(grid[i+3][j+3].getDice());
-                                points++;
+                    if (grid[i+1][j+1] != null) {
+                        if (grid[i][j].getDice().getColor() == grid[i + 1][j + 1].getDice().getColor()
+                                && !diceCounted.contains(grid[i][j].getDice()) && !diceCounted.contains(grid[i + 1][j + 1].getDice())) {
+                            diceCounted.add(grid[i][j].getDice());
+                            diceCounted.add(grid[i + 1][j + 1].getDice());
+                            points += 2;
+                            if (grid[i+2][j+2] != null) {
+                                if (grid[i][j].getDice().getColor() == grid[i + 2][j + 2].getDice().getColor()
+                                        && !diceCounted.contains(grid[i + 2][j + 2].getDice())) {
+                                    diceCounted.add(grid[i + 2][j + 2].getDice());
+                                    points++;
+                                    if (grid[i+3][j+3] != null) {
+                                        if (grid[i][j].getDice().getColor() == grid[i + 3][j + 3].getDice().getColor()
+                                                && !diceCounted.contains(grid[i + 3][j + 3].getDice())) {
+                                            diceCounted.add(grid[i + 3][j + 3].getDice());
+                                            points++;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                }catch (NullPointerException e){}
+                } catch (NullPointerException e){}
                 try {
-                    if (grid[i][j].getDice().getColor() == grid[i+1][j-1].getDice().getColor()){
-                        if (!diceCounted.contains(grid[i][j].getDice())){
-                            diceCounted.add(grid[i+1][j-1].getDice());
-                            points++;
-                        }
-                        if (!diceCounted.contains(grid[i+1][j-1].getDice())){
-                            diceCounted.add(grid[i+1][j-1].getDice());
-                            points++;
-                        }
-                        if (grid[i][j].getDice().getColor() == grid[i+2][j-2].getDice().getColor()){
-                            if (!diceCounted.contains(grid[i+2][j-2].getDice())){
-                                diceCounted.add(grid[i+2][j-2].getDice());
+                    if (grid[i+1][j-1] != null) {
+                        if (grid[i][j].getDice().getColor() == grid[i + 1][j - 1].getDice().getColor()) {
+                            if (!diceCounted.contains(grid[i][j].getDice())) {
+                                diceCounted.add(grid[i + 1][j - 1].getDice());
                                 points++;
                             }
-                            if (grid[i][j].getDice().getColor() == grid[i+3][j-3].getDice().getColor()
-                                    && !diceCounted.contains(grid[i+3][j-3].getDice())){
-                                diceCounted.add(grid[i+3][j-3].getDice());
+                            if (!diceCounted.contains(grid[i + 1][j - 1].getDice())) {
+                                diceCounted.add(grid[i + 1][j - 1].getDice());
                                 points++;
+                            }
+                            if (grid[i+2][j-2] != null) {
+                                if (grid[i][j].getDice().getColor() == grid[i + 2][j - 2].getDice().getColor()) {
+                                    if (!diceCounted.contains(grid[i + 2][j - 2].getDice())) {
+                                        diceCounted.add(grid[i + 2][j - 2].getDice());
+                                        points++;
+                                    }
+                                    if (grid[i+3][j-3] != null) {
+                                        if (grid[i][j].getDice().getColor() == grid[i + 3][j - 3].getDice().getColor()
+                                                && !diceCounted.contains(grid[i + 3][j - 3].getDice())) {
+                                            diceCounted.add(grid[i + 3][j - 3].getDice());
+                                            points++;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                }catch (NullPointerException e){}
+                } catch (NullPointerException e){}
             }
         }
         return points;
@@ -273,27 +299,32 @@ public class PublicOC implements ObjectiveCard {
 
     private int publicOC10(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
+        boolean[][] flag = new boolean[Scheme.MAX_ROW][Scheme.MAX_COL];
         int points = 0;
+        int i = 0;
+        int j = 0;
         ArrayList<Enum.Color> checkColor = new ArrayList<>();
 
-        for (int i = 0; i<Scheme.MAX_ROW; i++){
-            for (int j = 0; j<Scheme.MAX_COL; j++){
-                if(checkColor.size() == 5){
-                    points += 4;
-                    checkColor.clear();
-                }
-                try{
-                    if (checkColor.isEmpty() || !checkColor.contains(grid[i][j].getDice().getColor()))
-                        checkColor.add(grid[i][j].getDice().getColor());
-                }catch (NullPointerException e){}
-            }
-        }
+        while (i < Scheme.MAX_ROW || j < Scheme.MAX_COL) {
+            for (i = 0; i < Scheme.MAX_ROW  && checkColor.size() != 5; i++) {
+                for (j = 0; j < Scheme.MAX_COL && checkColor.size() != 5; j++) {
+                    try {
+                        if (checkColor.isEmpty() ||
+                                (!checkColor.contains(grid[i][j].getDice().getColor()) && !flag[i][j])) {
+                            checkColor.add(grid[i][j].getDice().getColor());
+                            flag[i][j] = true;
+                        }
+                    } catch (NullPointerException e) { }
 
+                    if (checkColor.size() == 5)
+                        points += 4;
+                }
+            }
+            checkColor.clear();
+        }
         return points;
     }
 
     @Override
-    public String toString() {
-        return this.name + " : " + this.description;
-    }
+    public String toString() { return this.name + " : " + this.description; }
 }
