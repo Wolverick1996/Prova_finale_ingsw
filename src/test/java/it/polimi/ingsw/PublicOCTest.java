@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.Enum;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PublicOC;
 import it.polimi.ingsw.model.Scheme;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PublicOCTest {
 
-    private Player createPlayerScheme(){
+    protected static Player createPlayerScheme(){
         Player p = new Player("ingconti", 0);
         Scheme scheme = Scheme.initialize(1);
         p.chooseScheme(scheme);
@@ -47,7 +46,7 @@ class PublicOCTest {
         return p;
     }
 
-    private Player editPlayerScheme(Player p){
+    protected static Player editPlayerScheme(Player p){
         Scheme scheme = p.getOwnScheme();
 
         scheme.removeDice(1, 2);

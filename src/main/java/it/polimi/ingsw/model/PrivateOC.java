@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -56,10 +55,10 @@ public class PrivateOC implements ObjectiveCard {
 
         for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++){
-                try{
+                try {
                     if(grid[i][j].getDice().getColor() == this.color)
                         points += grid[i][j].getDice().getValue();
-                }catch (NullPointerException e){}
+                } catch (NullPointerException e){}
             }
         }
 
