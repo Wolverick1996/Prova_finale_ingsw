@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class PubObjHandler {
 
@@ -15,13 +16,21 @@ public class PubObjHandler {
     //         Methods           //
     //***************************//
 
-    private PubObjHandler(){
-    }
+    private PubObjHandler(){ }
 
     //Set the PubOC to be handled in the right position
     public static void setPubOC(){
+        Random rand = new Random ();
+        int[] numOnTable = new int[3];
+
+        while (numOnTable[0] == numOnTable[1] || numOnTable[1] == numOnTable[2] || numOnTable[0] == numOnTable[2]){
+            numOnTable[0] = rand.nextInt(10)+1;
+            numOnTable[1] = rand.nextInt(10)+1;
+            numOnTable[2] = rand.nextInt(10)+1;
+        }
+
         try {
-            for (int i:  Utility.returnRandomInts(3,1,NUM_PUB_OC)){
+            for (int i:  numOnTable){
                 switch (i){
                     case 1: activeID.add(new PublicOC(i)); break;
                     case 2: activeID.add(new PublicOC(i)); break;
@@ -36,7 +45,7 @@ public class PubObjHandler {
                     default: throw new NullPointerException();
                 }
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e){
             //Unhandled Exception
             System.out.println("Failed setPubOC");
             System.exit(-1);

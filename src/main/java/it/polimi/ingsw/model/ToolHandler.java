@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.Random;
+
 public class ToolHandler {
 
     //***************************//
@@ -15,8 +17,17 @@ public class ToolHandler {
 
     //Set the toolcards to be handled in the right position
     public static void setTools(){
+        Random rand = new Random ();
+        int[] numOnTable = new int[3];
+
+        while (numOnTable[0] == numOnTable[1] || numOnTable[1] == numOnTable[2] || numOnTable[0] == numOnTable[2]){
+            numOnTable[0] = rand.nextInt(10)+1;
+            numOnTable[1] = rand.nextInt(10)+1;
+            numOnTable[2] = rand.nextInt(10)+1;
+        }
+
         try {
-            activeID = Utility.returnRandomInts(3,0,numTools);
+            activeID = numOnTable;
         } catch (Exception e){
             //Unhandled exception
             System.out.println("Failed setTools");
@@ -25,9 +36,7 @@ public class ToolHandler {
     }
 
     //Call the method or the right tool
-    public static void useTool(int num){
-
-    }
+    public static void useTool(int num){ }
 
     //Get the name of the tool (on table)
     public static String getName(int num){
