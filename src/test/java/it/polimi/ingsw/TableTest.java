@@ -2,12 +2,52 @@ package it.polimi.ingsw;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.PrivObjHandler;
+import it.polimi.ingsw.model.PubObjHandler;
 import it.polimi.ingsw.model.Table;
 import org.junit.jupiter.api.Test;
 
 import java.lang.*;
+import java.util.Arrays;
+import java.util.List;
 
 class TableTest {
+
+    //SHOULD BE COMPLETED WHEN TOOL CARDS WILL BE IMPLEMENTED
+    @Test
+    void initializeTest(){
+        int numP = (int)(Math.random()*3 + 2);
+        Table instance = new Table(numP);
+
+        assertNotNull(PubObjHandler.getName(0));
+        assertNotNull(PubObjHandler.getName(1));
+        assertNotNull(PubObjHandler.getName(2));
+        assertNotEquals(PubObjHandler.getName(0), PubObjHandler.getName(1), PubObjHandler.getName(2));
+    }
+
+    @Test
+    void setPlayersTest(){
+        Player p1 = new Player("ingconti", 0);
+        Player p2 = new Player("n1zzo", 1);
+        Player p3 = new Player("michele-bertoni", 2);
+        Player p4 = new Player("valerio-castelli", 3);
+        List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
+
+        Table instance = new Table(4);
+
+        instance.setPlayers(nicknames);
+
+        assertThrows(IllegalArgumentException.class, () -> PrivObjHandler.setPrivOC(5) );
+
+        assertNotNull(PrivObjHandler.getName(p1));
+        assertNotNull(PrivObjHandler.getName(p2));
+        assertNotNull(PrivObjHandler.getName(p3));
+        assertNotNull(PrivObjHandler.getName(p4));
+        assertNotEquals(PrivObjHandler.getName(p1), PrivObjHandler.getName(p2), PrivObjHandler.getName(p3));
+        assertNotEquals(PrivObjHandler.getName(p2), PrivObjHandler.getName(p3), PrivObjHandler.getName(p4));
+        assertNotEquals(PrivObjHandler.getName(p1), PrivObjHandler.getName(p4));
+    }
 
     @Test
     void nextTurnTest(){

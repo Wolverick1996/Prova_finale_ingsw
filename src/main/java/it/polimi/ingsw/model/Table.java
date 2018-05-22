@@ -27,7 +27,7 @@ public class Table {
         ToolHandler.setTools();
         PubObjHandler.setPubOC();
         //TODO: numPlayers = controller.getNumPlayers(); //Request must be sent to right controller
-        numPlayers = numP;
+        this.numPlayers = numP;
         nextRound();
     }
 
@@ -66,16 +66,14 @@ public class Table {
     private void nextRound(){
         //set RoundTrack
         //set Reserve
-        if (round>9){ System.out.println("WARNING nextRound called, round is already 10"); return;}
+        if (round>9){ System.out.println("WARNING nextRound called, round is already 10"); return; }
 
-        Enum.Color color = Enum.Color.getRandomColor();
-
-        if(!reserve.isEmpty()){
-            for(Dice d:reserve){
+        if (!reserve.isEmpty()){
+            for (Dice d:reserve)
                 roundTrack.add(d);
-            }
+
             reserve.clear();
-        } else if (round != -1) {System.out.println("WARNING reserve is empty"); return;}
+        } else if (round != -1) { System.out.println("WARNING reserve is empty"); return; }
 
         for (int i=0;i<numPlayers*2+1;i++){ reserve.add(pickDiceFromBag()); }
 

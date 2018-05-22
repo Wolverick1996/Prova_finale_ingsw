@@ -1,10 +1,6 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.model.Dice;
-import it.polimi.ingsw.model.Enum;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Scheme;
-import it.polimi.ingsw.model.Table;
+import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -63,6 +59,32 @@ class PlayerTest {
         p.placeDice(0, 2, instance, 0);
         assertTrue(p.extractDice(0, 2));
         assertEquals(dice, p.getDiceInHand());
+    }
+
+    @Test
+    void countPointsTest() {
+        Player p1 = PublicOCTest.createPlayerScheme();
+
+        Player p2 = new Player("n1zzo", 1);
+        Scheme scheme = Scheme.initialize(2);
+        p2.chooseScheme(scheme);
+
+        PrivObjHandler.setPrivOC(2);
+        PubObjHandler.setPubOC();
+
+        p1.countPoints();
+
+        //p1 points should be equals to the sum of points obtained from his privOC and from pubOCs
+        assertEquals(p1.getPoints(), PrivObjHandler.countPoints(p1) + PubObjHandler.countPoints(p1, 0) +
+                PubObjHandler.countPoints(p1, 1) + PubObjHandler.countPoints(p1, 2) + p1.getTokens());
+
+        p1 = PublicOCTest.editPlayerScheme(p1);
+        p1.countPoints();
+
+        //p1 points should be decreased cause of grid changes and free boxes
+        //4 free boxes in the grid = 4 points less
+        assertEquals(p1.getPoints(), PrivObjHandler.countPoints(p1) + PubObjHandler.countPoints(p1, 0) +
+                PubObjHandler.countPoints(p1, 1) + PubObjHandler.countPoints(p1, 2) + p1.getTokens() -4);
     }
 
 }

@@ -18,11 +18,14 @@ public class PrivObjHandler {
     public static void setPrivOC (int numPlayers){
         int redExt = 0;
         int purpleExt = 0;
-        int bluExt = 0;
+        int blueExt = 0;
         int greenExt = 0;
         int yellowExt = 0;
 
-        for(int i = 0; i<numPlayers; i++){
+        if (numPlayers < 2 || numPlayers > 4)
+            throw new IllegalArgumentException("Number of players not valid!");
+
+        for (int i = 0; i<numPlayers; i++){
             boolean isAVB = false;
             Enum.Color color;
             while(!isAVB){
@@ -33,31 +36,31 @@ public class PrivObjHandler {
                             activeID.add(new PrivateOC(color));
                             isAVB = true;
                             redExt++;
-                        }break;
+                        } break;
                     case PURPLE:
                         if (purpleExt < 1) {
                             activeID.add(new PrivateOC(color));
                             isAVB = true;
                             purpleExt++;
-                        }break;
+                        } break;
                     case BLUE:
-                        if (bluExt < 1) {
+                        if (blueExt < 1) {
                             activeID.add(new PrivateOC(color));
                             isAVB = true;
-                            bluExt++;
-                        }break;
+                            blueExt++;
+                        } break;
                     case GREEN:
                         if (greenExt < 1) {
                             activeID.add(new PrivateOC(color));
                             isAVB = true;
                             greenExt++;
-                        }break;
+                        } break;
                     case YELLOW:
                         if (yellowExt < 1) {
                             activeID.add(new PrivateOC(color));
                             isAVB = true;
                             yellowExt++;
-                        }break;
+                        } break;
                     default:
                         System.out.println("ERROR");
                         break;
@@ -85,7 +88,7 @@ public class PrivObjHandler {
     @Override
     public String toString() {
         String s = "This are the active PrivateOC (from player 1):\n";
-        for(PrivateOC p:activeID)
+        for(PrivateOC p: activeID)
             s = s + p.toString() + "\n";
         return s;
     }

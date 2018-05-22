@@ -33,7 +33,7 @@ public class Player {
 
     // Pick a dice from scheme
     public boolean extractDice(int x, int y){
-        if(ownScheme.checkBox(x, y) != null){
+        if (ownScheme.checkBox(x, y) != null){
             this.diceInHand = ownScheme.removeDice(x, y);
             return true;
         }
@@ -59,6 +59,7 @@ public class Player {
 
     //Count the points, at game end or game left
     public void countPoints(){
+        this.points = 0;
         int freeBoxes = 0;
         Box[][] tempGrid = this.ownScheme.getGrid();
 
