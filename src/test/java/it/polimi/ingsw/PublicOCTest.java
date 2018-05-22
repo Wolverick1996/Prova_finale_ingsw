@@ -173,7 +173,7 @@ class PublicOCTest {
         assertEquals(10, pub.countPoints(p));
     }
 
-    /*@Test
+    @Test
     void pubOC9Test() {
         Player p = createPlayerScheme();
         PublicOC pub = new PublicOC(9);
@@ -185,7 +185,7 @@ class PublicOCTest {
 
         //4 dice of the same color diagonally adjacent
         assertEquals(4, pub.countPoints(p));
-    }*/
+    }
 
     @Test
     void pubOC10Test() {

@@ -8,9 +8,10 @@ public class Table {
     //        Attributes         //
     //***************************//
 
-    private ArrayList<Dice> reserve = new ArrayList<Dice>();
+    private ArrayList<Dice> reserve = new ArrayList<>();
+    private ArrayList<Player> activePlayers = new ArrayList<>();
     private boolean canExtract = true;
-    private ArrayList<Dice> roundTrack = new ArrayList<Dice>();
+    private ArrayList<Dice> roundTrack = new ArrayList<>();
     private int redExt = 0;
     private int greenExt = 0;
     private int purpleExt = 0;
@@ -33,6 +34,13 @@ public class Table {
     //***************************//
     //         Methods           //
     //***************************//
+
+    //Set active Players in the activePlayers ArrayList
+    public void setPlayers (List<String> nicknames){
+        for (int i = 0; i < this.numPlayers; i++)
+            this.activePlayers.add(new Player(nicknames.get(i), i));
+        PrivObjHandler.setPrivOC(this.numPlayers);
+    }
 
     //Change turn. TURN GOES FROM 0 TO 3, either clockwise or anticlockwise
     public void nextTurn(){
@@ -152,9 +160,17 @@ public class Table {
     public void putDiceInReserve(Dice d){reserve.add(d);}
     public void putDiceInRoundtrack(Dice d){roundTrack.add(d);}
 
-    public int getTurn(){ return this.turn; }
+    public int getTurn(){
+        return this.turn;
+    }
 
-    public int getRound(){ return this.round; }
+    public int getRound(){
+        return this.round;
+    }
+
+    public List<Player> getActivePlayers() {
+        return this.activePlayers;
+    }
 
     @Override
     public String toString(){

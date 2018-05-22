@@ -89,7 +89,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         clients.remove(a);
         //clientsName.remove(a.getName());
         a.notify("You have disconnected successfully");
-        send(a.getName()+"has just disconnected.\t[Players in the lobby: "+clients.size()+"]");
+        send(a.getName()+" has just disconnected.\t[Players in the lobby: "+clients.size()+"]");
     }
 
     public void send(String message) throws RemoteException {
