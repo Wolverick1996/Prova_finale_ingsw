@@ -241,11 +241,15 @@ public class PublicOC implements ObjectiveCard {
             for (int j = 0; j<Scheme.MAX_COL; j++){
                 try {
                     if ((i+1 >= 0 && i+1 < Scheme.MAX_ROW) && (j+1 >= 0 && j+1 < Scheme.MAX_COL)) {
-                        if (grid[i][j].getDice().getColor() == grid[i + 1][j + 1].getDice().getColor()
-                                && !diceCounted.contains(grid[i][j].getDice()) && !diceCounted.contains(grid[i + 1][j + 1].getDice())) {
-                            diceCounted.add(grid[i][j].getDice());
-                            diceCounted.add(grid[i + 1][j + 1].getDice());
-                            points += 2;
+                        if (grid[i][j].getDice().getColor() == grid[i + 1][j + 1].getDice().getColor()) {
+                            if (!diceCounted.contains(grid[i][j].getDice())) {
+                                diceCounted.add(grid[i][j].getDice());
+                                points++;
+                            }
+                            if (!diceCounted.contains(grid[i + 1][j + 1].getDice())) {
+                                diceCounted.add(grid[i + 1][j + 1].getDice());
+                                points++;
+                            }
                             if ((i+2 >= 0 && i+2 < Scheme.MAX_ROW) && (j+2 >= 0 && j+2 < Scheme.MAX_COL)) {
                                 if (grid[i][j].getDice().getColor() == grid[i + 2][j + 2].getDice().getColor()
                                         && !diceCounted.contains(grid[i + 2][j + 2].getDice())) {
@@ -267,7 +271,7 @@ public class PublicOC implements ObjectiveCard {
                     if ((i+1 >= 0 && i+1 < Scheme.MAX_ROW) && (j-1 >= 0 && j-1 < Scheme.MAX_COL)) {
                         if (grid[i][j].getDice().getColor() == grid[i + 1][j - 1].getDice().getColor()) {
                             if (!diceCounted.contains(grid[i][j].getDice())) {
-                                diceCounted.add(grid[i + 1][j - 1].getDice());
+                                diceCounted.add(grid[i][j].getDice());
                                 points++;
                             }
                             if (!diceCounted.contains(grid[i + 1][j - 1].getDice())) {
