@@ -48,6 +48,7 @@ public class ServerMainRMI {
             Naming.rebind("//" +ip+ "/MyServer", serverImplementation);
 
             System.out.println("[Server] Server is ready...");
+            //(new Thread(new ServerImplementationRMI())).start();
 
         } catch (MalformedURLException e) {
             System.err.println("Impossible to register this object!");

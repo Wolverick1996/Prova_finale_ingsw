@@ -8,14 +8,58 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ServerImplementationRMI extends UnicastRemoteObject implements
-        ServerIntRMI {
+        ServerIntRMI{
 
     private ArrayList<ClientIntRMI> clients = new ArrayList<>();
+    /*private ArrayList<String> clientsName = new ArrayList<>();
+    private ClientIntRMI disconnected = null;
+    private String disconnectedClient = null;*/
     static final int MAX_PLAYERS = 4;
 
     ServerImplementationRMI() throws RemoteException {
         super(0);
     }
+
+    /*public void run(){
+        boolean gameStart = false;
+        while (!gameStart){
+            try {
+                if (!checkConnection()){
+                    System.out.println("User " +disconnectedClient+ "interrupted his connection!");
+                    disconnectedClient = null;
+                }
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean checkConnection (){
+
+        if (!clients.isEmpty()) {
+            Iterator<ClientIntRMI> clientIterator = clients.iterator();
+            while(clientIterator.hasNext()){
+                ClientIntRMI c = null;
+                String s = null;
+                try{
+                    c = clientIterator.next();
+                    s = c.getName();
+                    c.confirmConnection();
+                } catch(ConnectException e) {
+                    clientIterator.remove();
+                    System.out.println("Client removed!");
+                } catch (RemoteException e) {
+                    disconnectedClient = s;
+                    clients.remove(c);
+                    return false;
+                }
+            }
+        }
+        if (clients.isEmpty())
+            return true;
+        return false;
+    }*/
 
     public boolean login(ClientIntRMI a) throws RemoteException{
 
@@ -36,12 +80,14 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         a.notify("Welcome " +a.getName()+ ".\nYou have connected successfully.");
         send(a.getName()+ " has just connected.");
         clients.add(a);
+        //clientsName.add(a.getName());
         send("[Players in the lobby: "+clients.size()+"]");
         return true;
     }
 
     public void logout(ClientIntRMI a) throws RemoteException{
         clients.remove(a);
+        //clientsName.remove(a.getName());
         a.notify("You have disconnected successfully");
         send(a.getName()+"has just disconnected.\t[Players in the lobby: "+clients.size()+"]");
     }

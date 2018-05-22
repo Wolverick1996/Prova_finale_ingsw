@@ -17,5 +17,9 @@ public class ClientImplementationRMI implements ClientIntRMI {
     public String getName() throws RemoteException{
         return name;
     }
+
+    /*public void confirmConnection () throws RemoteException{
+        return;
+    }*/
 }
 
