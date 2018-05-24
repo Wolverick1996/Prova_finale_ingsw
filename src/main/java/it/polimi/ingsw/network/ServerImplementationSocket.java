@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.Lobby;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 
 public class ServerImplementationSocket implements Runnable {
@@ -18,19 +19,36 @@ public class ServerImplementationSocket implements Runnable {
         try {
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
-            // leggo e scrivo nella connessione finche' non ricevo "quit"
-            boolean on = true;
-            boolean ok = false;
-            while (on) {
-                String line = in.nextLine();
-                if (line.equals("andrea")) {
-                    out.println(ok);
-                    out.flush();
-                    //on = false;
-                } else {
-                    out.println(!ok);
-                    out.flush();
+            boolean loginSuccess = false;
+            while (!loginSuccess) {
+                out.println(this.lobby.getPlayers().size());
+                out.flush();
+                String string = in.nextLine();
+                if (!string.equals("*")){
+                    if (this.lobby.addPlayer(string)){
+                        loginSuccess = true;
+                        System.out.println("[Socket Server]\t" +string+ "  got connected....");
+                        out.println(loginSuccess);
+                        out.flush();
+                    }else {
+                        boolean sameUsername = false;
+                        for (String s : this.lobby.getPlayers())
+                            if (s.equals(string))
+                                sameUsername = true;
+                        if (sameUsername){
+                            out.println("same");
+                            out.flush();
+                        }
+                        else {
+                            out.println("max");
+                            out.flush();
+                        }
+                    }
                 }
+            }
+            boolean gameCanStart = false;
+            while (!gameCanStart){
+
             }
             // chiudo gli stream e il socket
             in.close();

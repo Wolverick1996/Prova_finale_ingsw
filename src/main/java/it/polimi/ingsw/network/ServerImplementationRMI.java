@@ -14,7 +14,6 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
 
     private ArrayList<ClientIntRMI> clients = new ArrayList<>();
     private Lobby lobby;
-    static final int MAX_PLAYERS = 4;
 
     ServerImplementationRMI(Lobby lobby) throws RemoteException {
         super(0);

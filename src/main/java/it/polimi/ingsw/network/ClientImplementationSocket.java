@@ -15,26 +15,41 @@ class ClientImplementationSocket {
 
     void login (){
         boolean success = false;
+        int playersInLobby;
         Scanner scanner = new Scanner(System.in);
         String string;
         try {
             Scanner in = new Scanner(this.socket.getInputStream());
             PrintWriter out = new PrintWriter(this.socket.getOutputStream());
             do {
-                System.out.println("Login:\t\t(to refresh the page type '*')");
+                playersInLobby = Integer.parseInt(in.nextLine());
+                System.out.println("[Players in the lobby: " + playersInLobby + "]\nLogin:\t\t(to refresh the page type '*')");
                 string = scanner.nextLine();
                 if (!string.equals("*")){
                     out.println(string);
                     out.flush();
-                    if (in.nextLine().equals("true")){
+                    String result = in.nextLine();
+                    if (result.equals("true")){
                         System.out.println("Welcome " +string+ ".\nYou have connected successfully.");
                         success = true;
                     }
                     else{
-                        System.out.println("Login failed! Retry with another username.");
+                        if (result.equals("same"))
+                            System.out.println("Login failed, this userID is already used");
+                        else
+                            System.out.println("Retry later...");
                     }
                 }
+                else {
+                    out.println("*");
+                    out.flush();
+                }
             }while (!success);
+
+            while (success){
+
+            }
+
             in.close();
             out.close();
             scanner.close();

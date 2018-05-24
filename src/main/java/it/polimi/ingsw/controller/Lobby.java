@@ -8,6 +8,8 @@ public class Lobby /*extends Observer*/ {
     //        Attributes         //
     //***************************//
 
+
+    public static final int MAX_PLAYERS = 4;
     List<String> players = new ArrayList<>();
     Boolean streetlight;
 
@@ -22,10 +24,19 @@ public class Lobby /*extends Observer*/ {
         while(!canIGo()){
             //TODO: add feedback for user
         }
-        if (this.players.size()<=4 && !this.players.contains(username)){
+        if (this.players.size()<= MAX_PLAYERS){
+
+            for (String s : this.players)
+                if (s.equals(username)){
+                this.streetlight = true;
+                    return false;
+                }
+
             this.players.add(username);
+            this.streetlight = true;
             return true;
         }
+        this.streetlight = true;
         return false;
     }
 

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.controller.Lobby;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -72,6 +74,7 @@ public class ClientMain {
                     }
 
                     Scanner scanner = new Scanner(System.in);
+                    System.out.println("Connection established");
                     System.out.println("[Players in the lobby: " + server.getConnected().size() + "]\nLogin:\t\t(to refresh the page type '*')");
                     String text = scanner.nextLine();
 
@@ -88,7 +91,7 @@ public class ClientMain {
                         if (server.login(remoteRef))
                             loginSuccess = true;
                         else {
-                            if (server.getConnected().size() >= ServerImplementationRMI.MAX_PLAYERS)
+                            if (server.getConnected().size() >= Lobby.MAX_PLAYERS)
                                 fullLobby = true;
                             else
                                 idTaken = true;
@@ -102,7 +105,7 @@ public class ClientMain {
                     System.out.println("Waiting for other players...if you want to disconnect type 'e'");
                     String text = scanner.nextLine();
                     if (!text.equals("e")) {
-                        if (server.getConnected().size() == ServerImplementationRMI.MAX_PLAYERS)
+                        if (server.getConnected().size() == Lobby.MAX_PLAYERS)
                             System.out.println("The game is starting...");
                     } else {
                         server.logout(validRemoteRef);
@@ -129,26 +132,7 @@ public class ClientMain {
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             clientImplementationSocket.login();
-            Scanner socketIn = new Scanner(socket.getInputStream());
-            PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
-            Scanner stdin = new Scanner(System.in);
-            Boolean goOn = true;
-            try {
-                while (goOn) {
-                    String inputLine = stdin.nextLine();
-                    socketOut.println(inputLine);
-                    socketOut.flush();
-                    String socketLine = socketIn.nextLine();
-                    System.out.println(socketLine);
-                }
-            } catch (NoSuchElementException e) {
-                System.out.println("Connection closed");
-            } finally {
-                stdin.close();
-                socketIn.close();
-                socketOut.close();
-                socket.close();
-            }
+
         }catch (NoSuchElementException e){
             System.out.println("Connection closed");
         }
