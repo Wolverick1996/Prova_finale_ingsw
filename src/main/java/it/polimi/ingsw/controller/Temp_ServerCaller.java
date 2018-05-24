@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
 import it.polimi.ingsw.model.Table;
 
 import java.util.*;
@@ -14,7 +13,7 @@ public class Temp_ServerCaller {
         nn.add("Davide");
         nn.add("Valentina");
 
-        Temp_Lobby lobby = new Temp_Lobby();
+        Lobby lobby = new Lobby();
 
         Table table = Controller.startGame(nn, lobby);
     }

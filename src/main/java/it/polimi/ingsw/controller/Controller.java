@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Table;
 
 import java.util.*;
@@ -12,7 +10,7 @@ public class Controller {
     NOTE:
  */
 
-    public static Table startGame(List<String> nicknames, Temp_Lobby lobby){
+    public static Table startGame(List<String> nicknames, Lobby lobby){
 
         try {
 
