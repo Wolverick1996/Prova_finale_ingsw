@@ -48,7 +48,20 @@ public class Lobby /*extends Observer*/ {
         return true;
     }
 
+    public List<String> getPlayers() {
+        return players;
+    }
+
     public void broadcast(Object message){
         System.out.println(message);
+    }
+
+    @Override
+    public String toString() {
+        String string = "";
+        for (int i = 0; i < players.size(); i++){
+            string += "Player " +i+ ":\t" +players.get(i);
+        }
+        return string;
     }
 }

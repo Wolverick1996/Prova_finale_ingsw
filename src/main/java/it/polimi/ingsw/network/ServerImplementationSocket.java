@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.controller.Lobby;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -7,8 +9,10 @@ import java.util.Scanner;
 
 public class ServerImplementationSocket implements Runnable {
     private Socket socket;
-    ServerImplementationSocket(Socket socket) {
+    private Lobby lobby;
+    ServerImplementationSocket(Socket socket, Lobby lobby) {
         this.socket = socket;
+        this.lobby = lobby;
     }
     public void run() {
         try {
@@ -16,12 +20,15 @@ public class ServerImplementationSocket implements Runnable {
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             // leggo e scrivo nella connessione finche' non ricevo "quit"
             boolean on = true;
+            boolean ok = false;
             while (on) {
                 String line = in.nextLine();
-                if (line.equals("quit")) {
-                    on = false;
+                if (line.equals("andrea")) {
+                    out.println(ok);
+                    out.flush();
+                    //on = false;
                 } else {
-                    out.println("Received: " + line);
+                    out.println(!ok);
                     out.flush();
                 }
             }

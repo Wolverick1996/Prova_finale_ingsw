@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.controller.Lobby;
+
 import java.io.IOException;
 import java.net.*;
 import java.rmi.Naming;
@@ -8,19 +10,20 @@ import java.rmi.registry.LocateRegistry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ServerMainRMI {
+public class ServerMain {
 
     private static final int PORTRMI = 1099; // porta di default
     private static final int PORTSOCKET = 1337; // porta di default
+    private Lobby lobby;
 
-    private ServerMainRMI (){
-        super();
+    private ServerMain(){
+        this.lobby = new Lobby();
     }
 
     public static void main(String[] args) {
-        ServerMainRMI serverMainRMI = new ServerMainRMI();
-        serverMainRMI.startServerRMI();
-        serverMainRMI.startServerSocket();
+        ServerMain serverMain = new ServerMain();
+        serverMain.startServerRMI();
+        serverMain.startServerSocket();
     }
 
     private void startServerRMI (){
@@ -33,7 +36,7 @@ public class ServerMainRMI {
 
         try {
 
-            ServerImplementationRMI serverImplementation = new ServerImplementationRMI();
+            ServerImplementationRMI serverImplementation = new ServerImplementationRMI(lobby);
             InetAddress ip;
             ip = InetAddress.getLocalHost();
             Naming.rebind("//" +ip.getHostAddress()+ "/MyServer", serverImplementation);
@@ -58,7 +61,7 @@ public class ServerMainRMI {
             while (on) {
                 try {
                     Socket socket = serverSocket.accept();
-                    executor.submit(new ServerImplementationSocket(socket));
+                    executor.submit(new ServerImplementationSocket(socket, lobby));
                 } catch(IOException e) {
                     on = false;
                 }

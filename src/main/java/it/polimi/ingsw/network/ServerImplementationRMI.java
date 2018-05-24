@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.controller.Lobby;
+
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,10 +13,12 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         ServerIntRMI{
 
     private ArrayList<ClientIntRMI> clients = new ArrayList<>();
+    private Lobby lobby;
     static final int MAX_PLAYERS = 4;
 
-    ServerImplementationRMI() throws RemoteException {
+    ServerImplementationRMI(Lobby lobby) throws RemoteException {
         super(0);
+        this.lobby = lobby;
     }
 
     public boolean login(ClientIntRMI a) throws RemoteException{
