@@ -1,6 +1,9 @@
 package it.polimi.ingsw.network;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -9,15 +12,23 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
-public class ClientMainRMI {
+public class ClientMain {
+
+    private String ip;
+    private static final int PORT = 1337;
+
+    private ClientMain(String ip){
+        this.ip = ip;
+    }
 
     public static void main(String[] args) {
-        ServerIntRMI server;
-        boolean on = false;
-        String ipAddress;
-        try {
+        System.out.println("Which kind of connection do you want to use? [RMI or socket]");
+        Scanner scanner = new Scanner(System.in);
+        String string = scanner.nextLine();
+        String ipAddress = null;
+        if (string.equals("RMI") || string.equals("rmi") || string.equals("socket") || string.equals("Socket")){
+            Boolean on = false;
             do {
-                Scanner scanner = new Scanner(System.in);
                 System.out.println("IP address of the Server: ");
                 ipAddress = scanner.nextLine();
                 if (ipAddress.equals(""))
@@ -25,12 +36,30 @@ public class ClientMainRMI {
                 else
                     on = true;
             } while (!on);
+            ClientMain clientMain = new ClientMain(ipAddress);
+            if (string.equals("RMI") || string.equals("rmi")){
+                clientMain.startClientRMI();
+            }else{
+                try {
+                    clientMain.startClientSocket();
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        scanner.close();
+    }
+
+    private void startClientRMI(){
+        ServerIntRMI server;
+        boolean on = false;
+        try {
             do {
                 boolean loginSuccess = false;
                 boolean idTaken = false;
                 boolean fullLobby = false;
                 ClientIntRMI validRemoteRef = null;
-                server = (ServerIntRMI) Naming.lookup("//" + ipAddress + "/MyServer");
+                server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
                 do {
                     if (fullLobby) {
                         System.out.println("Retry later...");
@@ -91,6 +120,42 @@ public class ClientMainRMI {
         } catch (NotBoundException e) {
             System.err.println("This reference is not connected!");
         } catch (NoSuchElementException e) {}
+    }
+
+    private void startClientSocket() throws IOException{
+        Socket socket = null;
+        try {
+            socket = new Socket(ip, PORT);
+            System.out.println("Connection established");
+            ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
+            clientImplementationSocket.login();
+            Scanner socketIn = new Scanner(socket.getInputStream());
+            PrintWriter socketOut = new PrintWriter(socket.getOutputStream());
+            Scanner stdin = new Scanner(System.in);
+            Boolean goOn = true;
+            try {
+                while (goOn) {
+                    String inputLine = stdin.nextLine();
+                    socketOut.println(inputLine);
+                    socketOut.flush();
+                    String socketLine = socketIn.nextLine();
+                    System.out.println(socketLine);
+                }
+            } catch (NoSuchElementException e) {
+                System.out.println("Connection closed");
+            } finally {
+                stdin.close();
+                socketIn.close();
+                socketOut.close();
+                socket.close();
+            }
+        }catch (NoSuchElementException e){
+            System.out.println("Connection closed");
+        }
+        finally {
+            if (socket != null)
+                socket.close();
+        }
     }
 }
 
