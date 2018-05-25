@@ -22,32 +22,30 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
 
     public boolean login(ClientIntRMI a) throws RemoteException{
 
-        if (clients.size() >= 4){
+        if (lobby.getPlayers().size() >= Lobby.MAX_PLAYERS){
             System.out.println("Max number of players reached!");
             a.notify("The lobby is full!");
             return false;
         }
 
-        if (!clients.isEmpty()){
-            for (ClientIntRMI c : clients){
-                if (c.getName().equals(a.getName()))
-                    return false;
-            }
+        if (!lobby.addPlayer(a.getName()))
+            return false;
+        else {
+            clients.add(a);
+            System.out.println("[RMI Server]\t" +a.getName()+ "  got connected....");
+            a.notify("Welcome " +a.getName()+ ".\nYou have connected successfully.");
+            send(a.getName()+ " has just connected.");
+            send("[Players in the lobby: "+lobby.getPlayers().size()+"]");
+            return true;
         }
-
-        System.out.println("[RMI Server]\t" +a.getName()+ "  got connected....");
-        a.notify("Welcome " +a.getName()+ ".\nYou have connected successfully.");
-        send(a.getName()+ " has just connected.");
-        clients.add(a);
-        send("[Players in the lobby: "+clients.size()+"]");
-        return true;
     }
 
     public void logout(ClientIntRMI a) throws RemoteException{
         System.out.println("[RMI Server]\t" +a.getName()+ "  disconnected....");
+        lobby.removePlayer(a.getName());
         clients.remove(a);
         a.notify("You have disconnected successfully");
-        send(a.getName()+" has just disconnected.\t[Players in the lobby: "+clients.size()+"]");
+        send(a.getName()+" has just disconnected.\t[Players in the lobby: "+lobby.getPlayers().size()+"]");
     }
 
     public void send(String message) throws RemoteException {
@@ -64,6 +62,10 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
 
     public List<ClientIntRMI> getConnected() throws RemoteException{
         return clients;
+    }
+
+    public int playersInLobby() {
+        return this.lobby.getPlayers().size();
     }
 
     @Override

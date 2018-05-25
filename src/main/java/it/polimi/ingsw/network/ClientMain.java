@@ -3,7 +3,6 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.Lobby;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.rmi.Naming;
@@ -75,7 +74,8 @@ public class ClientMain {
 
                     Scanner scanner = new Scanner(System.in);
                     System.out.println("Connection established");
-                    System.out.println("[Players in the lobby: " + server.getConnected().size() + "]\nLogin:\t\t(to refresh the page type '*')");
+                    System.out.println("[Players in the lobby: " + server.playersInLobby() + "]\n" +
+                            "Login:\t\t(to refresh the page type '*')");
                     String text = scanner.nextLine();
 
                     if (text.equals("")){
@@ -102,10 +102,10 @@ public class ClientMain {
                 Scanner scanner = new Scanner(System.in);
                 boolean active = true;
                 while (active) {
-                    System.out.println("Waiting for other players...if you want to disconnect type 'e'");
+                    System.out.println("Waiting for other players...\nIf you want to disconnect type 'e'");
                     String text = scanner.nextLine();
                     if (!text.equals("e")) {
-                        if (server.getConnected().size() == Lobby.MAX_PLAYERS)
+                        if (server.playersInLobby() == Lobby.MAX_PLAYERS)
                             System.out.println("The game is starting...");
                     } else {
                         server.logout(validRemoteRef);
@@ -127,14 +127,39 @@ public class ClientMain {
 
     private void startClientSocket() throws IOException{
         Socket socket = null;
+        boolean success = false;
         try {
             socket = new Socket(ip, PORT);
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
-            clientImplementationSocket.login();
+            do {
+                clientImplementationSocket.login();
+                success = true;
+                while (success){
+                    System.out.println("Waiting for other players...\n" +
+                            "If you want to disconnect type 'e' or '*' to check how many players are in the lobby");
+                    Scanner scanner = new Scanner(System.in);
+                    String string = scanner.nextLine();
+                    if (string.equals("e")){
+                        clientImplementationSocket.logout();
+                        success = false;
+                    }
+                    Scanner in = new Scanner(socket.getInputStream());
+                    int activePlayers = Integer.parseInt(in.nextLine());
+                    System.out.println("[Players in the lobby: " + activePlayers + "]");
+                    in.close();
+                }
+            }while (!success);
 
+            while (!success){
+                Scanner s = new Scanner(System.in);
+                String t = s.nextLine();
+                System.err.println(t);
+            }
         }catch (NoSuchElementException e){
-            System.out.println("Connection closed");
+            System.err.println("Connection closed "+e.getMessage());
+        }catch (IOException e){
+            System.err.println(e.getMessage());
         }
         finally {
             if (socket != null)

@@ -63,6 +63,7 @@ public class ServerMain {
                     Socket socket = serverSocket.accept();
                     executor.submit(new ServerImplementationSocket(socket, lobby));
                 } catch(IOException e) {
+                    System.err.println(e.getMessage());
                     on = false;
                 }
             }

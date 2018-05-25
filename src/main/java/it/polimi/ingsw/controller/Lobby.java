@@ -44,10 +44,14 @@ public class Lobby /*extends Observer*/ {
         while(!canIGo()){
             //TODO: add feedback for user
         }
-        if (this.players.contains(username)){
-            this.players.remove(username);
-            return true;
+        for (String s : this.players){
+            if (s.equals(username)){
+                this.players.remove(s);
+                this.streetlight = true;
+                return true;
+            }
         }
+        this.streetlight = true;
         return false;
     }
 
