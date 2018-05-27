@@ -9,4 +9,5 @@ public interface ServerIntRMI extends Remote {
     void logout (ClientIntRMI client) throws RemoteException;
     void send(String message) throws RemoteException;
     List<ClientIntRMI> getConnected() throws RemoteException;
+    int playersInLobby() throws RemoteException;
 }

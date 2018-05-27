@@ -8,6 +8,7 @@ import java.util.Scanner;
 class ClientImplementationSocket {
 
     private Socket socket;
+    private String username;
 
     ClientImplementationSocket (Socket socket){
         this.socket = socket;
@@ -31,6 +32,7 @@ class ClientImplementationSocket {
                     String result = in.nextLine();
                     if (result.equals("true")){
                         System.out.println("Welcome " +string+ ".\nYou have connected successfully.");
+                        this.username = string;
                         success = true;
                     }
                     else{
@@ -45,14 +47,29 @@ class ClientImplementationSocket {
                     out.flush();
                 }
             }while (!success);
-
-            while (success){
-
-            }
-
             in.close();
             out.close();
             scanner.close();
+        }catch (IOException e){
+            System.err.println(e.getMessage());
+        }
+    }
+
+    void logout(){
+        String result;
+        try {
+            Scanner in = new Scanner(this.socket.getInputStream());
+            PrintWriter out = new PrintWriter(this.socket.getOutputStream());
+
+            out.println(this.username);
+            result = in.nextLine();
+            if (result.equals("ok")){
+                System.out.println("You have disconnected successfully");
+                this.username = null;
+            }else
+                System.out.println("Error in your disconnection!!");
+            in.close();
+            out.close();
         }catch (IOException e){
             System.err.println(e.getMessage());
         }
