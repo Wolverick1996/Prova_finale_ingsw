@@ -1,33 +1,46 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Table;
+import it.polimi.ingsw.view.IOhandler;
+import it.polimi.ingsw.view.Temp_View;
 
 import java.util.*;
 
 public class Controller {
 
-/* This class is intended for alpha testing of the game mechanics, not for single-method testing.
-    NOTE:
+    private static List<Lobby> lobbies = new ArrayList<>();
+    private static List<Game> games = new ArrayList<>();
+    private static List<IOhandler> speakers = new ArrayList<>();
+/* These attributes only serve as contrller's addresses
  */
 
     public static Table startGame(List<String> nicknames, Lobby lobby){
 
         try {
 
-            lobby.broadcast("Creating table ... ");
+            lobbies.add(lobby);
+            int i = lobbies.size() - 1;
+            String s = "";
             Table table = new Table(nicknames.size());
-            lobby.broadcast("OK");
-            lobby.broadcast("This are the players: ");
-            for(String player:nicknames){lobby.broadcast(player);}
-            lobby.broadcast("Setting players ...");
             table.setPlayers(nicknames);
-            lobby.broadcast("OK");
-            //TODO: Implementation of prep phase
-            lobby.broadcast("Game is ready");
+            speakers.add(new IOhandler(table.getActivePlayers()));
+            speakers.get(i).broadcast("OK");
+            speakers.get(i).broadcast("These are the players: ");
+            for(String player:nicknames){speakers.get(i).broadcast(player);}
 
-            lobby.broadcast("Printing reserve...");
-            for (int i=0; i<nicknames.size()*2 + 1; i++){lobby.broadcast(table.checkDiceFromReserve(i));}
+            //TODO: Implementation of prep phase
+            games.add(new Game(table.getActivePlayers()));
+
+            speakers.get(i).broadcast("Game is ready");
+
+            speakers.get(i).broadcast("Printing reserve...");
+            for (int k=0; k<nicknames.size()*2 + 1; k++){
+                s += table.checkDiceFromReserve(k) + "\t";
+            }
+            speakers.get(i).broadcast(s);
             //TODO: print status of game
+            speakers.get(i).broadcast("This is the lobby: \n" + lobby);
+            speakers.get(i).broadcast(table);
 
             return table;
 
