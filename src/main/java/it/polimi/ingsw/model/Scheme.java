@@ -3,6 +3,12 @@ package it.polimi.ingsw.model;
 import java.util.*;
 import java.io.*;
 
+/**
+ * Scheme represents the 5x4 window pattern of each player
+ *
+ * @author Andrea
+ * @author Riccardo
+ */
 public class Scheme {
 
     //***************************//
@@ -16,7 +22,14 @@ public class Scheme {
 
     private Box[][] grid = new Box[MAX_ROW][MAX_COL];
 
-    //constructor, takes the ID and call a HandlerMethod in controller
+    /**
+     * Constructor for the window pattern which reads from file the specific grid to create
+     *
+     * @param id: identification number of the window pattern to be created
+     * @throws IOException if there are problems with reading from file
+     * @throws Exception if there are problems with scanner closing
+     * @author Riccardo
+     */
     protected Scheme (int id){
         File inputFile = new File("src/main/resources/schemes/Schemes.txt");
         Scanner scan = null;
@@ -71,7 +84,13 @@ public class Scheme {
     //         Methods           //
     //***************************//
 
-    //Call the constructor if ID is correct (static ???)
+    /**
+     * Calls the constructor and gives it the ID to create a window pattern if it's a correct one
+     *
+     * @param id: identification number of the window pattern to be created
+     * @return the specific window pattern required if it exists, otherwise null
+     * @author Riccardo
+     */
     public static Scheme initialize(int id){
         if (id < 1 || id >24){
             System.out.println("ID not valid!");
@@ -80,10 +99,25 @@ public class Scheme {
             return new Scheme(id);
     }
 
-    //Check what dice is in a box
+    /**
+     * Checks which dice is in a specific box
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @return the dice in the specified box (null if the box is empty)
+     * @author Andrea
+     */
     public Dice checkBox(int x, int y){ return this.grid[x][y].getDice(); }
 
-    //Placement of the first dice
+    /**
+     * Checks if restrictions inherent to the first dice placement are correctly respected
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return true if the placement is allowed, otherwise false
+     * @author Andrea
+     */
     private boolean firstDice(int x, int y, Dice dice){
         if (grid[x][y].isEmployableNoNum(dice) && grid[x][y].isEmployableNoCol(dice)
                 && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
@@ -95,7 +129,16 @@ public class Scheme {
         }
     }
 
-    //Check if a dice is placeable in a box ignoring color restrictions (TOOL3)
+    /**
+     * Checks if value restrictions inherent a dice placement are correctly respected
+     * Color restrictions are ignored (useful for tool card 3)
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return true if the placement is allowed, otherwise false
+     * @author Andrea
+     */
     protected boolean checkValueRestr(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
@@ -143,7 +186,16 @@ public class Scheme {
         return false;
     }
 
-    //Check if a dice is placeable in a box ignoring value restrictions (TOOL2)
+    /**
+     * Checks if color restrictions inherent a dice placement are correctly respected
+     * Value restrictions are ignored (useful for tool card 2)
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return true if the placement is allowed, otherwise false
+     * @author Andrea
+     */
     protected boolean checkColorRestr(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
@@ -191,7 +243,16 @@ public class Scheme {
         return false;
     }
 
-    //Check if a dice is placeable ignoring dice-near-rule (TOOL 9)
+    /**
+     * Checks if color and value restrictions inherent a dice placement are correctly respected ignoring the dice-near rule
+     * Dice-near rule ignoring is useful for tool card 9
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return true if the placement is allowed, otherwise false
+     * @author Andrea
+     */
     protected boolean isPlaceableNoDiceNear(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
@@ -238,6 +299,16 @@ public class Scheme {
         return true;
     }
 
+    /**
+     * Placement of a dice in a specific box using tool cards (and ignoring specific rules according to the effect of the card)
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param id: identifier of the tool card used
+     * @param dice: the dice to be placed in the box
+     * @return Box setDice method result (true if the dice is correctly placed, false if the box is already full)
+     * @author Riccardo
+     */
     public boolean placeFromTool(int x, int y, int id, Dice dice){
         if (id == 2) {
             if (!(checkValueRestr(x, y, dice)))
@@ -253,7 +324,15 @@ public class Scheme {
         return grid[x][y].setDice(dice);
     }
 
-    //Set dice
+    /**
+     * Standard placement of a dice in a specific box (normal move of the game, without using tool cards)
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return Box setDice method result (true if the dice is correctly placed, false if the box is already full)
+     * @author Andrea
+     */
     public boolean placeDice(int x, int y, Dice dice){
         if (!checkValueRestr(x, y, dice) || !checkColorRestr(x, y, dice))
             return false;
@@ -261,7 +340,12 @@ public class Scheme {
         return grid[x][y].setDice(dice);
     }
 
-    //Check if the grid is empty
+    /**
+     * Checks if the grid of the window pattern is empty
+     *
+     * @return true if the grid is empty, otherwise false
+     * @author Andrea
+     */
     public boolean isGridEmpty(){
         for (int i = 0; i < MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++) {
@@ -273,33 +357,58 @@ public class Scheme {
         return true;
     }
 
-    //Remove dice from the grid
+    /**
+     * Removes a dice from a specific box of the grid
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @return Box free method result (the dice in the box before the calling of the method, otherwise null)
+     * @author Andrea
+     */
     public Dice removeDice(int x, int y){
-        if(!grid[x][y].isFull())
-            return null;
-        else
-            return grid[x][y].free();
+        return grid[x][y].free();
     }
 
-    //Get name of the scheme
+    /**
+     * Gets the name of the window pattern
+     *
+     * @return the name of the window pattern
+     * @author Andrea
+     */
     public String getName(){
         return this.name;
     }
 
-    //Get the difficulty
+    /**
+     * Gets the degree of difficulty of the window pattern
+     *
+     * @return the degree of difficulty of the window pattern
+     * @author Andrea
+     */
     public int getDifficulty(){
         return this.difficulty;
     }
 
-    //Get grid
+    /**
+     * Gets the actual situation of the grid of the window pattern
+     *
+     * @return the grid at the time the method is called
+     * @author Andrea
+     */
     public Box[][] getGrid() {
         return grid;
     }
 
+    /**
+     * Used to print a window pattern
+     *
+     * @return the string that represents the window pattern
+     * @author Riccardo
+     */
     @Override
     public String toString(){
         String s = "";
-        for (int i=0; i<MAX_ROW; i++) {
+        for (int i = 0; i < MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++)
                 s = s+grid[i][j];
 
@@ -307,4 +416,5 @@ public class Scheme {
         }
         return "Name: "+this.name+"\nDifficulty: "+this.difficulty+"\n"+s;
     }
+
 }

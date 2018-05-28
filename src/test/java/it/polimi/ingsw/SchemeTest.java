@@ -9,8 +9,18 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * SchemeTest is the class which contains tests related to window pattern functions
+ *
+ * @author Riccardo
+ */
 class SchemeTest {
 
+    /**
+     * Tests the initialization of a window pattern (in both incorrect and correct cases)
+     *
+     * @author Riccardo
+     */
     @Test
     void initializeTest() {
         Random rand = new Random();
@@ -23,6 +33,12 @@ class SchemeTest {
         assertNotNull(scheme.initialize(id));
     }
 
+    /**
+     * Tests methods to check if the grid is empty and to remove a specific dice
+     * Dice placement is implicitly tested (without checking restrictions but placing correctly the dice)
+     *
+     * @author Riccardo
+     */
     @Test
     void empty_removeTest() {
         Scheme scheme = Scheme.initialize(1);
@@ -42,6 +58,11 @@ class SchemeTest {
         assertTrue(scheme.isGridEmpty());
     }
 
+    /**
+     * Tests if placements in inexistent boxes are effectively not allowed
+     *
+     * @author Riccardo
+     */
     @Test
     void wrongBoxesTest() {
         Scheme scheme = Scheme.initialize(1);
@@ -53,6 +74,12 @@ class SchemeTest {
         assertFalse(scheme.placeDice(4,0, dice));
     }
 
+    /**
+     * Tests the placement of the first dice (checking all related restrictions)
+     * Methods to check color and value restrictions are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void firstDiceTest() {
         Scheme scheme = Scheme.initialize(1);
@@ -71,6 +98,12 @@ class SchemeTest {
         System.out.println(scheme);
     }
 
+    /**
+     * Tests the placement of a dice checking both adjacency, color and value restrictions
+     * Placement in a full box is implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void isPlaceableNoAdjTest() {
         Scheme scheme = Scheme.initialize(1);
@@ -104,6 +137,11 @@ class SchemeTest {
         System.out.println(scheme);
     }
 
+    /**
+     * Tests the placement of a dice correctly adjacent to another but with the same value
+     *
+     * @author Riccardo
+     */
     @Test
     void valueAdjacencesTest() {
         Scheme scheme = Scheme.initialize(1);
@@ -122,6 +160,11 @@ class SchemeTest {
         System.out.println(scheme);
     }
 
+    /**
+     * Tests the placement of a dice correctly adjacent to another but with the same color
+     *
+     * @author Riccardo
+     */
     @Test
     void colorAdjacencesTest() {
         Scheme scheme = Scheme.initialize(1);
@@ -140,6 +183,12 @@ class SchemeTest {
         System.out.println(scheme);
     }
 
+    /**
+     * Tests the placement of a dice using the tool card 2 (which ignores value restrictions)
+     * First dice placement, placement in a full box and methods to check color restrictions are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void placementTool2Test() {
         Scheme scheme = Scheme.initialize(1);
@@ -168,6 +217,12 @@ class SchemeTest {
         assertFalse(scheme.placeFromTool(3, 1, 2, dice));
     }
 
+    /**
+     * Tests the placement of a dice using the tool card 3 (which ignores color restrictions)
+     * First dice placement, placement in a full box and methods to check value restrictions are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void placementTool3Test() {
         Scheme scheme = Scheme.initialize(1);
@@ -196,6 +251,12 @@ class SchemeTest {
         assertFalse(scheme.placeFromTool(3, 1, 2, dice));
     }
 
+    /**
+     * Tests the placement of a dice using the tool card 9 (which ignores and not allows adjacency restrictions)
+     * First dice placement and methods to check color and value restrictions are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void placementTool9Test() {
         Scheme scheme = Scheme.initialize(1);

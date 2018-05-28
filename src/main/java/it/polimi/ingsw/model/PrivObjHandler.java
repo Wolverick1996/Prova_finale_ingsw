@@ -2,6 +2,11 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 
+/**
+ * PrivObjHandler represents a kind of private objective card's controller, whose function is mainly to associate each player with a different card
+ *
+ * @author Andrea
+ */
 public class PrivObjHandler {
 
     //***************************//
@@ -15,6 +20,13 @@ public class PrivObjHandler {
     //         Methods           //
     //***************************//
 
+    /**
+     * Gives each player a different private objective card
+     *
+     * @param numPlayers: number of players
+     * @throws IllegalArgumentException if number of players is not valid
+     * @author Andrea
+     */
     public static void setPrivOC (int numPlayers){
         int redExt = 0;
         int purpleExt = 0;
@@ -69,27 +81,52 @@ public class PrivObjHandler {
         }
     }
 
-    //Call the method or the right PrivOC for counting points
+    /**
+     * Calls the method of the right private objective card to count the points
+     *
+     * @param player: the player whose window pattern is asked to count the points
+     * @return PrivateOC countPoints method result (the number of points earned by the card)
+     * @author Andrea
+     */
     public static int countPoints(Player player){
         PrivateOC tempPrivateOC = activeID.get(player.getIDplayer());
         return tempPrivateOC.countPoints(player);
     }
 
-    //Get the name (on table)
+    /**
+     * Gets the name of the private objective card (on table)
+     *
+     * @param player: the player whose card is asked for the name
+     * @return private objective card's name
+     * @author Andrea
+     */
     public static String getName(Player player){
         return activeID.get(player.getIDplayer()).getName();
     }
 
-    //Get the description (on table)
+    /**
+     * Gets the description of the private objective card (on table)
+     *
+     * @param player: the player whose card is asked for the description
+     * @return private objective card's description
+     * @author Andrea
+     */
     public static String getDescription(Player player){
         return activeID.get(player.getIDplayer()).getDescription();
     }
 
+    /**
+     * Used to print all the private objective cards in play
+     *
+     * @return the string that includes all the private objective cards in play
+     * @author Andrea
+     */
     @Override
     public String toString() {
-        String s = "This are the active PrivateOC (from player 1):\n";
+        String s = "These are the active PrivateOCs (from player 1):\n";
         for(PrivateOC p: activeID)
             s = s + p.toString() + "\n";
         return s;
     }
+
 }

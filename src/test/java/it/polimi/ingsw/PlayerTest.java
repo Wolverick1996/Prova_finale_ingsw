@@ -2,13 +2,23 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * PlayerTest is the class which contains tests related to player functions
+ * PrivObjHandler and PubObjHandler are also tested predominantly in this class and in the TableTest one
+ *
+ * @author Riccardo
+ */
 class PlayerTest {
 
+    /**
+     * Tests the choice of a window pattern and the correct attribution of tokens
+     *
+     * @author Riccardo
+     */
     @Test
     void chooseSchemeTest() {
         Random rand = new Random();
@@ -20,6 +30,12 @@ class PlayerTest {
         assertEquals(p.getOwnScheme(), scheme);
     }
 
+    /**
+     * Tests the placement of a dice (inexistent position, right position, wrong position)
+     * Table methods to initialize a table and to check from reserve are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void placeDiceTest() {
         Player p = new Player("ingconti", 0);
@@ -29,7 +45,7 @@ class PlayerTest {
         Table instance = new Table(numP);
         Dice dice = instance.checkDiceFromReserve(0);
 
-        //trying to pick a dice from inexistent position
+        //trying to place a dice in an inexistent position
         assertFalse(p.placeDice(0, 2, instance, 10));
 
         assertTrue(p.placeDice(0, 2, instance, 0));
@@ -46,6 +62,13 @@ class PlayerTest {
         assertNotNull(instance.checkDiceFromReserve(numP*2-1));
     }
 
+    /**
+     * Tests the extraction of a dice from the window pattern
+     * Table methods to initialize a table and to check from reserve are implicitly tested
+     * Methods to place dice and to get dice in hand are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void extractDiceTest() {
         Player p = new Player("ingconti", 0);
@@ -61,6 +84,13 @@ class PlayerTest {
         assertEquals(dice, p.getDiceInHand());
     }
 
+    /**
+     * Tests the counting of points
+     * Table method to initialize a table is implicitly tested
+     * PrivObjHandler and PubObjHandler methods to count points are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void countPointsTest() {
         Player p1 = PublicOCTest.createPlayerScheme();

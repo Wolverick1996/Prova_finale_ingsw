@@ -1,6 +1,12 @@
 package it.polimi.ingsw.model;
+
 import java.util.Random;
 
+/**
+ * Dice has 6 faces and 5 possible colors
+ *
+ * @author Riccardo
+ */
 public class Dice extends Enum {
 
     //***************************//
@@ -12,15 +18,25 @@ public class Dice extends Enum {
     private String face;
     private static final String[] faces = { "\u2680", "\u2681", "\u2682", "\u2683", "\u2684", "\u2685" };
 
-    //constructors
-    //defined Dice
+    /**
+     * Specific constructor for the dice: it creates a dice with predetermined color and value
+     *
+     * @param col: the color that the dice will have to take
+     * @param val: the value that the dice will have to take
+     * @author Riccardo
+     */
     public Dice(Color col, int val){
         this.color = col;
         this.value = val;
         this.face = faces[this.value-1];
     }
 
-    //random value
+    /**
+     * Constructor for the dice: it creates a dice with predetermined color and random value
+     *
+     * @param col: the color that the dice will have to take
+     * @author Riccardo
+     */
     public Dice(Color col){
         Random rand = new Random();
         this.color = col;
@@ -28,14 +44,23 @@ public class Dice extends Enum {
         this.face = faces[this.value-1];
     }
 
-    //random color
+    /**
+     * Constructor for the dice: it creates a dice with predetermined value and random color
+     *
+     * @param val: the value that the dice will have to take
+     * @author Riccardo
+     */
     public Dice(int val){
         this.color = Color.getRandomColor();
         this.value = val;
         this.face = faces[this.value-1];
     }
 
-    //random Dice
+    /**
+     * Generic constructor for the dice: it creates a dice with random color and value
+     *
+     * @author Riccardo
+     */
     public Dice(){
         Random rand = new Random();
         this.color = Color.getRandomColor();
@@ -47,35 +72,63 @@ public class Dice extends Enum {
     //         Methods           //
     //***************************//
 
-    //give the dice another random value
+    /**
+     * Gives the dice another random value rolling it
+     *
+     * @author Riccardo
+     */
     public void rollDice(){
         Random rand = new Random();
         this.value = rand.nextInt(6)+1;
         this.face = faces[this.value-1];
     }
 
-    //give the dice a certain value
+    /**
+     * Gives the dice another specific value (useful for tool cards)
+     *
+     * @author Riccardo
+     */
     public void assignValue(int val){
         this.value = val;
         this.face = faces[this.value-1];
     }
 
-    //return the dice value
+    /**
+     * Returns the dice value
+     *
+     * @return the dice value
+     * @author Riccardo
+     */
     public int getValue(){
         return this.value;
     }
 
-    //return the dice color
+    /**
+     * Returns the dice color
+     *
+     * @return the dice color
+     * @author Riccardo
+     */
     public Color getColor(){
         return this.color;
     }
 
-    //turn the dice to the opposite face
+    /**
+     * Turns the dice to the opposite face
+     *
+     * @author Riccardo
+     */
     public void turnDice() {
         this.value = 7-this.value;
         this.face = faces[this.value-1];
     }
 
+    /**
+     * Used to print a dice
+     *
+     * @return the string that represents the dice
+     * @author Riccardo
+     */
     @Override
     public String toString(){
         String escape = this.color.escape();

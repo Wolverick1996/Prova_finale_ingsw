@@ -11,8 +11,20 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * PublicOCTest is the class which contains tests related to public objective card functions
+ *
+ * @author Riccardo
+ */
 class PublicOCTest {
 
+    /**
+     * Associates a player with a window pattern and fills the grid with dice correctly placed
+     * The method was created to be used only in tests
+     *
+     * @return the player, with his completely filled window pattern
+     * @author Riccardo
+     */
     protected static Player createPlayerScheme(){
         Player p = new Player("ingconti", 0);
         Scheme scheme = Scheme.initialize(1);
@@ -46,6 +58,14 @@ class PublicOCTest {
         return p;
     }
 
+    /**
+     * Edits the window pattern of the player removing some dice
+     * The method was created to be used only in tests
+     *
+     * @param p: the player whose window pattern should be modified
+     * @return the player, with his modified window pattern
+     * @author Riccardo
+     */
     protected static Player editPlayerScheme(Player p){
         Scheme scheme = p.getOwnScheme();
 
@@ -58,6 +78,12 @@ class PublicOCTest {
         return p;
     }
 
+    /**
+     * Tests the constructor of the public objective card, trying also to create inexistent cards
+     *
+     * @throws IllegalArgumentException if ID passed as a parameter is not valid
+     * @author Riccardo
+     */
     @Test
     void initializeTest() {
         Random rand = new Random();
@@ -72,6 +98,11 @@ class PublicOCTest {
         assertNotNull(pub.getDescription());
     }
 
+    /**
+     * Tests the counting of points related to the public objective card 1
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC1Test() {
         Player p = createPlayerScheme();
@@ -86,6 +117,11 @@ class PublicOCTest {
         assertEquals(6, pub.countPoints(p));
     }
 
+    /**
+     * Tests the counting of points related to the public objective card 2
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC2Test() {
         Player p = createPlayerScheme();
@@ -100,6 +136,11 @@ class PublicOCTest {
         assertEquals(5, pub.countPoints(p));
     }
 
+    /**
+     * Tests the counting of points related to the public objective card 3
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC3Test() {
         Player p = createPlayerScheme();
@@ -114,6 +155,11 @@ class PublicOCTest {
         assertEquals(5, pub.countPoints(p));
     }
 
+    /**
+     * Tests the counting of points related to the public objective card 4
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC4Test() {
         Player p = createPlayerScheme();
@@ -128,6 +174,11 @@ class PublicOCTest {
         assertEquals(0, pub.countPoints(p));
     }
 
+    /**
+     * Tests the counting of points related to public objective cards 5, 6 and 7
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC567Test() {
         Player p = createPlayerScheme();
@@ -159,6 +210,11 @@ class PublicOCTest {
         assertEquals(4, pub.countPoints(p));
     }
 
+    /**
+     * Tests the counting of points related to the public objective card 8
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC8Test() {
         Player p = createPlayerScheme();
@@ -173,6 +229,11 @@ class PublicOCTest {
         assertEquals(10, pub.countPoints(p));
     }
 
+    /**
+     * Tests the counting of points related to the public objective card 9
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC9Test() {
         Player p = createPlayerScheme();
@@ -187,6 +248,11 @@ class PublicOCTest {
         assertEquals(4, pub.countPoints(p));
     }
 
+    /**
+     * Tests the counting of points related to the public objective card 10
+     *
+     * @author Riccardo
+     */
     @Test
     void pubOC10Test() {
         Player p = createPlayerScheme();

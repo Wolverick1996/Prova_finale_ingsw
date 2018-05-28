@@ -5,11 +5,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * PublicOC represents the public objective card: there are 10 in total and 3 of them are permanently on the table
+ *
+ * @author Andrea
+ */
 public class PublicOC implements ObjectiveCard {
     private String name;
     private String description;
     private int cardID;
 
+    /**
+     * Constructor for the public objective card
+     *
+     * @param cardID: the ID of the public objective card to be created (1 to 10)
+     * @throws IllegalArgumentException if ID passed as a parameter is not valid
+     * @throws IOException if there are problems with reading from file
+     * @throws Exception if there are problems with scanner closing
+     * @author Andrea
+     */
     public PublicOC(int cardID){
         if (cardID < 1 || cardID > 10)
             throw new IllegalArgumentException("not valid ID: " + cardID);
@@ -41,16 +55,35 @@ public class PublicOC implements ObjectiveCard {
         }
     }
 
+    /**
+     * Returns the public objective card's name
+     *
+     * @return public objective card's name
+     * @author Andrea
+     */
     @Override
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Returns the public objective card's description
+     *
+     * @return public objective card's description
+     * @author Andrea
+     */
     @Override
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * Receives a player as a parameter and calls cards in play methods to count his points related to public objectives
+     *
+     * @param player: player whose points the method must calculate
+     * @return the amount of points earned from public objective cards in play
+     * @author Andrea
+     */
     @Override
     public int countPoints(Player player) {
         int points = 0;
@@ -86,6 +119,14 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective card 1
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 1
+     * @author Andrea
+     */
     private int publicOC1(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
@@ -105,6 +146,14 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective card 2
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 2
+     * @author Andrea
+     */
     private int publicOC2(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points= 0;
@@ -124,6 +173,14 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective card 3
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 3
+     * @author Andrea
+     */
     private int publicOC3(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points= 0;
@@ -143,6 +200,14 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective card 4
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 4
+     * @author Andrea
+     */
     private int publicOC4(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points= 0;
@@ -162,29 +227,37 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective cards 5, 6 or 7
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 5, 6 or 7
+     * @author Andrea
+     */
     private int publicOC567(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
-        int firsValue;
+        int firstValue;
         int secondValue;
         int firsts = 0;
         int seconds = 0;
 
         if (this.cardID == 5){
-            firsValue = 1;
+            firstValue = 1;
             secondValue = 2;
         } else if (this.cardID == 6){
-            firsValue = 3;
+            firstValue = 3;
             secondValue = 4;
         } else {
-            firsValue = 5;
+            firstValue = 5;
             secondValue = 6;
         }
 
         for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++) {
                 try {
-                    if (grid[i][j].getDice().getValue() == firsValue)
+                    if (grid[i][j].getDice().getValue() == firstValue)
                         firsts++;
                     else if (grid[i][j].getDice().getValue() == secondValue)
                         seconds++;
@@ -204,6 +277,14 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective card 8
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 8
+     * @author Andrea
+     */
     private int publicOC8(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         boolean[][] flag = new boolean[Scheme.MAX_ROW][Scheme.MAX_COL];
@@ -232,6 +313,14 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective card 9
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 9
+     * @author Andrea
+     */
     private int publicOC9(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         int points = 0;
@@ -240,7 +329,7 @@ public class PublicOC implements ObjectiveCard {
         for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++){
                 try {
-                    if ((i+1 >= 0 && i+1 < Scheme.MAX_ROW) && (j+1 >= 0 && j+1 < Scheme.MAX_COL)) {
+                    if ((i+1 < Scheme.MAX_ROW) && (j+1 < Scheme.MAX_COL)) {
                         if (grid[i][j].getDice().getColor() == grid[i + 1][j + 1].getDice().getColor()) {
                             if (!diceCounted.contains(grid[i][j].getDice())) {
                                 diceCounted.add(grid[i][j].getDice());
@@ -250,12 +339,12 @@ public class PublicOC implements ObjectiveCard {
                                 diceCounted.add(grid[i + 1][j + 1].getDice());
                                 points++;
                             }
-                            if ((i+2 >= 0 && i+2 < Scheme.MAX_ROW) && (j+2 >= 0 && j+2 < Scheme.MAX_COL)) {
+                            if ((i+2 < Scheme.MAX_ROW) && (j+2 < Scheme.MAX_COL)) {
                                 if (grid[i][j].getDice().getColor() == grid[i + 2][j + 2].getDice().getColor()
                                         && !diceCounted.contains(grid[i + 2][j + 2].getDice())) {
                                     diceCounted.add(grid[i + 2][j + 2].getDice());
                                     points++;
-                                    if ((i+3 >= 0 && i+3 < Scheme.MAX_ROW) && (j+3 >= 0 && j+3 < Scheme.MAX_COL)) {
+                                    if ((i+3 < Scheme.MAX_ROW) && (j+3 < Scheme.MAX_COL)) {
                                         if (grid[i][j].getDice().getColor() == grid[i + 3][j + 3].getDice().getColor()
                                                 && !diceCounted.contains(grid[i + 3][j + 3].getDice())) {
                                             diceCounted.add(grid[i + 3][j + 3].getDice());
@@ -268,7 +357,7 @@ public class PublicOC implements ObjectiveCard {
                     }
                 } catch (NullPointerException e){}
                 try {
-                    if ((i+1 >= 0 && i+1 < Scheme.MAX_ROW) && (j-1 >= 0 && j-1 < Scheme.MAX_COL)) {
+                    if ((i+1 < Scheme.MAX_ROW) && (j-1 >= 0)) {
                         if (grid[i][j].getDice().getColor() == grid[i + 1][j - 1].getDice().getColor()) {
                             if (!diceCounted.contains(grid[i][j].getDice())) {
                                 diceCounted.add(grid[i][j].getDice());
@@ -278,13 +367,13 @@ public class PublicOC implements ObjectiveCard {
                                 diceCounted.add(grid[i + 1][j - 1].getDice());
                                 points++;
                             }
-                            if ((i+2 >= 0 && i+2 < Scheme.MAX_ROW) && (j-2 >= 0 && j-2 < Scheme.MAX_COL)) {
+                            if ((i+2 < Scheme.MAX_ROW) && (j-2 >= 0)) {
                                 if (grid[i][j].getDice().getColor() == grid[i + 2][j - 2].getDice().getColor()) {
                                     if (!diceCounted.contains(grid[i + 2][j - 2].getDice())) {
                                         diceCounted.add(grid[i + 2][j - 2].getDice());
                                         points++;
                                     }
-                                    if ((i+3 >= 0 && i+3 < Scheme.MAX_ROW) && (j-3 >= 0 && j-3 < Scheme.MAX_COL)) {
+                                    if ((i+3 < Scheme.MAX_ROW) && (j-3 >= 0)) {
                                         if (grid[i][j].getDice().getColor() == grid[i + 3][j - 3].getDice().getColor()
                                                 && !diceCounted.contains(grid[i + 3][j - 3].getDice())) {
                                             diceCounted.add(grid[i + 3][j - 3].getDice());
@@ -301,6 +390,14 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Receives a player as a parameter and calculate the amount of points earned from the public objective card 10
+     *
+     * @param player: player whose points the method must calculate
+     * @throws NullPointerException if there are problems with scrolling the grid
+     * @return the amount of points earned from the public objective card 10
+     * @author Andrea
+     */
     private int publicOC10(Player player) {
         Box[][] grid = player.getOwnScheme().getGrid();
         boolean[][] flag = new boolean[Scheme.MAX_ROW][Scheme.MAX_COL];
@@ -329,6 +426,13 @@ public class PublicOC implements ObjectiveCard {
         return points;
     }
 
+    /**
+     * Used to print a public objective card
+     *
+     * @return the string that represents the public objective card
+     * @author Andrea
+     */
     @Override
     public String toString() { return this.name + " : " + this.description; }
+
 }

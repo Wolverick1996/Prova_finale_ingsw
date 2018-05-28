@@ -9,8 +9,19 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * BoxTest is the class which contains tests related to box functions
+ *
+ * @author Riccardo
+ */
 class BoxTest {
 
+    /**
+     * Tests if a box is employable checking ONLY value restrictions
+     * Placement and emptying methods are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void isEmployableNoColTest() {
         Random rand = new Random();
@@ -44,6 +55,12 @@ class BoxTest {
         assertFalse(box.isEmployableNoCol(dice));
     }
 
+    /**
+     * Tests if a box is employable checking ONLY color restrictions
+     * Placement and emptying methods are implicitly tested
+     *
+     * @author Riccardo
+     */
     @Test
     void isEmployableNoNumTest() {
         Dice dice = new Dice();
@@ -71,6 +88,11 @@ class BoxTest {
         assertFalse(box.isEmployableNoNum(dice));
     }
 
+    /**
+     * Tests the method to view which dice is inside a box and methods to get restrictions of the box
+     *
+     * @author Riccardo
+     */
     @Test
     void getDiceTest() {
         Dice dice = new Dice();
@@ -87,6 +109,11 @@ class BoxTest {
         assertEquals(1, box.getRestrictionNum());
     }
 
+    /**
+     * Tests the method to check if a box is full
+     *
+     * @author Riccardo
+     */
     @Test
     void isFullTest() {
         Dice dice = new Dice();

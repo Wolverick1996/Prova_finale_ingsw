@@ -1,11 +1,20 @@
 package it.polimi.ingsw.model;
+
 import java.util.Random;
 
+/**
+ * Enum is the class which contains every enum classes and methods, created to simplify the design
+ * To use this class type *extends Enum*
+ *
+ * @author Matteo
+ */
 public class Enum {
 
-    //Here you can find every enum, created to simplify the design
-    //To use this *extends enum*
-
+    /**
+     * Color class defines the 5 colors of dice and the RESET value
+     *
+     * @author Riccardo
+     */
     public enum Color{
         RED("\u001B[31m"),
         GREEN("\u001B[32m"),
@@ -17,14 +26,31 @@ public class Enum {
 
         private String escape;
 
-        Color(String escape) {
+        /**
+         * Sets the specified color
+         *
+         * @param escape: string containing color to set
+         * @author Riccardo
+         */
+        Color (String escape) {
             this.escape = escape;
         }
 
+        /**
+         * Used to print colored output
+         *
+         * @author Riccardo
+         */
         public String escape() {
             return escape;
         }
 
+        /**
+         * Generates a random color of the 5 possible
+         *
+         * @return the random color generated
+         * @author Riccardo
+         */
         public static Color getRandomColor() {
             Random random = new Random();
             return values()[random.nextInt(values().length)];

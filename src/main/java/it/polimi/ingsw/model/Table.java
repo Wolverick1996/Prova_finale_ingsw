@@ -2,6 +2,11 @@ package it.polimi.ingsw.model;
 
 import java.util.*;
 
+/**
+ * Table represents the current situation of the game: it contains the dice reserve and round track and it is responsible of turns and rounds
+ *
+ * @author Matteo
+ */
 public class Table {
 
     //***************************//
@@ -22,7 +27,12 @@ public class Table {
     private int turn = 0;
     private int numPlayers; //must receive data
 
-    //constructor Singleton (?)
+    /**
+     * Constructor of the table which sets tool cards and public objective cards of the game and starts the first round
+     *
+     * @param numP: number of players
+     * @author Matteo
+     */
     public Table(int numP){
         ToolHandler.setTools();
         PubObjHandler.setPubOC();
@@ -35,14 +45,23 @@ public class Table {
     //         Methods           //
     //***************************//
 
-    //Set active Players in the activePlayers ArrayList
+    /**
+     * Sets active players in the activePlayers ArrayList
+     *
+     * @param nicknames: list of player nicknames passed by the controller
+     * @author Andrea
+     */
     public void setPlayers (List<String> nicknames){
         for (int i = 0; i < this.numPlayers; i++)
             this.activePlayers.add(new Player(nicknames.get(i), i));
         PrivObjHandler.setPrivOC(this.numPlayers);
     }
 
-    //Change turn. TURN GOES FROM 0 TO 3, either clockwise or anticlockwise
+    /**
+     * Changes turn: turn goes from 0 to 3, either clockwise or anticlockwise
+     *
+     * @author Matteo
+     */
     public void nextTurn(){
         canExtract = true;
         //TODO: call controller to active nextPlayer;
@@ -62,7 +81,11 @@ public class Table {
         }
     }
 
-    //Change round
+    /**
+     * Changes round, putting the remaining dice in the round track and refilling the reserve
+     *
+     * @author Matteo
+     */
     private void nextRound(){
         //set RoundTrack
         //set Reserve
@@ -80,7 +103,12 @@ public class Table {
         round++;
     }
 
-    //Pick dice from Bag (TOOL 11)
+    /**
+     * Picks a new dice from bag (tool card 11)
+     *
+     * @return the new extracted dice
+     * @author Matteo
+     */
     public Dice pickDiceFromBag(){
         boolean isAVB = false;
         Enum.Color color = Enum.Color.getRandomColor();
@@ -89,21 +117,27 @@ public class Table {
         while(!isAVB){
             color = Enum.Color.getRandomColor();
             switch (color){
-                case RED: {if (redExt < 18) { isAVB = true; redExt++;} break; }
-                case PURPLE: {if (purpleExt < 18) { isAVB = true; purpleExt++;} break; }
-                case BLUE: {if (bluExt < 18) { isAVB = true; bluExt++;} break; }
-                case GREEN: {if (greenExt < 18) { isAVB = true; greenExt++;} break; }
-                case YELLOW: {if (yellowExt < 18) { isAVB = true; yellowExt++;} break; }
+                case RED: { if (redExt < 18) { isAVB = true; redExt++;} break; }
+                case PURPLE: { if (purpleExt < 18) { isAVB = true; purpleExt++;} break; }
+                case BLUE: { if (bluExt < 18) { isAVB = true; bluExt++;} break; }
+                case GREEN: { if (greenExt < 18) { isAVB = true; greenExt++;} break; }
+                case YELLOW: { if (yellowExt < 18) { isAVB = true; yellowExt++;} break; }
                 //default: throw new Exception();
             }
         }
         return new Dice(color);
     }
 
-    //Pick dice from reserve (num is the position on the table of the dice)
-    //NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
+    /**
+     * Picks a dice from reserve
+     * NOTE: Call this method only after move has been confirmed
+     *
+     * @param dicePos: the dice position on the reserve
+     * @return the extracted dice if the extraction is allowed, otherwise null
+     * @author Matteo
+     */
     public Dice pickDiceFromReserve(int dicePos){
-        if (dicePos >= reserve.size()) {return null;}
+        if (dicePos >= reserve.size()) { return null; }
         if (canExtract){
             Dice temp = reserve.get(dicePos);
             reserve.remove(dicePos);
@@ -114,62 +148,128 @@ public class Table {
         }
     }
 
-    //Pick dice from Roundtrack
-    //NOTE: CALL THIS METHOD ONLY AFTER MOVE HAS BEEN CONFIRMED
+    /**
+     * Picks a dice from round track
+     * NOTE: Call this method only after move has been confirmed
+     *
+     * @param dicePos: the dice position on the round track
+     * @return the extracted dice
+     * @author Matteo
+     */
     public Dice pickDiceFromRoundtrack(int dicePos){
         Dice temp = roundTrack.get(dicePos);
         roundTrack.remove(dicePos);
         return temp;
     }
 
-    //pick dice from reserve, put it in the bag (TOOL 11)
+    /**
+     * Picks a dice from reserve and puts it in the bag (tool card 11)
+     *
+     * @param dicePos: the dice position on the reserve
+     * @author Matteo
+     */
     public void putDiceInBag(int dicePos){
         if(!canExtract){System.out.println("Tool card 11 was called without permission (dice already extracted)"); return;}
         Enum.Color color = reserve.get(dicePos).getColor();
         switch (color){
             //TODO: colorExt must never be <0
             case RED: { redExt--; break; }
-            case PURPLE: {purpleExt--; break; }
-            case BLUE: {bluExt--; break; }
-            case GREEN: {greenExt--; break; }
-            case YELLOW: {yellowExt--; break; }
+            case PURPLE: { purpleExt--; break; }
+            case BLUE: { bluExt--; break; }
+            case GREEN: { greenExt--; break; }
+            case YELLOW: { yellowExt--; break; }
             //default: throw new Exception();
         }
         reserve.remove(dicePos);
     }
 
-    //Reroll Reserve (tool 7)
+    /**
+     * Rerolls the reserve (tool card 7)
+     *
+     * @return true if the operation is allowed (in the second part of the round), otherwise false
+     * @author Matteo
+     */
     public  boolean rerollReserve(){
-
         if (clockwise) return false;
 
-        for(Dice d:reserve){
+        for(Dice d:reserve)
             d.rollDice();
-        }
+
         return true;
     }
 
-    //Get the dice to check position restrictions
-    public Dice checkDiceFromReserve(int dicePos){if(dicePos<reserve.size()) return reserve.get(dicePos);return null;}
-    public Dice checkDiceFromRoundtrack(int dicePos){if(dicePos<roundTrack.size()) return roundTrack.get(dicePos);
-    return null;}
+    /**
+     * Gets the dice to check position restrictions [reserve]
+     *
+     * @param dicePos: the dice position on the reserve
+     * @return the dice in the specified position if it exists, otherwise null
+     * @author Matteo
+     */
+    public Dice checkDiceFromReserve(int dicePos){
+        if(dicePos<reserve.size())
+            return reserve.get(dicePos);
+        return null;
+    }
 
-    //put dice in a particular spot
+    /**
+     * Gets the dice to check position restrictions [round track]
+     *
+     * @param dicePos: the dice position on the round track
+     * @return the dice in the specified position if it exists, otherwise null
+     * @author Matteo
+     */
+    public Dice checkDiceFromRoundtrack(int dicePos){
+        if(dicePos<roundTrack.size())
+            return roundTrack.get(dicePos);
+        return null;
+    }
+
+    /**
+     * Puts a dice in a particular spot [reserve]
+     *
+     * @param d: the dice to place
+     * @author Matteo
+     */
     public void putDiceInReserve(Dice d){reserve.add(d);}
+
+    /**
+     * Puts a dice in a particular spot [round track]
+     *
+     * @param d: the dice to place
+     * @author Matteo
+     */
     public void putDiceInRoundtrack(Dice d){roundTrack.add(d);}
 
-    public int getTurn(){
-        return this.turn;
-    }
+    /**
+     * Gets the current turn
+     *
+     * @return the current turn
+     * @author Matteo
+     */
+    public int getTurn(){ return this.turn; }
 
-    public int getRound(){
-        return this.round;
-    }
+    /**
+     * Gets the current round
+     *
+     * @return the current round
+     * @author Matteo
+     */
+    public int getRound(){ return this.round; }
 
-    public List<Player> getActivePlayers() {
-        return this.activePlayers;
-    }
+    /**
+     * Gets the list of active players
+     *
+     * @return the list of active players
+     * @author Matteo
+     */
+    public List<Player> getActivePlayers() { return this.activePlayers; }
 
+    /**
+     * Used to print the table and its contents
+     *
+     * @return the string that represents the table
+     * @author Matteo
+     */
     @Override
     public String toString(){
         return "Table: \n" + "Dice in reserve: " + reserve.size() + "\nReserve: " + reserve.toString() + "\nRoundtrack: " +

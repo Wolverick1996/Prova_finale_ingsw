@@ -6,11 +6,20 @@ import it.polimi.ingsw.model.Dice;
 import it.polimi.ingsw.model.Enum;
 import org.junit.jupiter.api.Test;
 
-import java.lang.*;
 import java.util.Random;
 
+/**
+ * DiceTest is the class which contains tests related to dice functions
+ *
+ * @author Riccardo
+ */
 class DiceTest extends Enum {
 
+    /**
+     * Tests one of dice constructors (defined value) and methods to assign and get the value of a dice
+     *
+     * @author Riccardo
+     */
     @Test
     void valueTest(){
         Random rand = new Random();
@@ -23,6 +32,11 @@ class DiceTest extends Enum {
         assertEquals(value, dice.getValue());
     }
 
+    /**
+     * Tests one of dice constructors (defined color) and the method to get the color of a dice
+     *
+     * @author Riccardo
+     */
     @Test
     void colorTest(){
         Color color = Color.getRandomColor();
@@ -30,6 +44,11 @@ class DiceTest extends Enum {
         assertEquals(color, dice.getColor());
     }
 
+    /**
+     * Tests the specific dice constructor (defined color and value)
+     *
+     * @author Riccardo
+     */
     @Test
     void definedDiceTest(){
         Random rand = new Random();
@@ -41,6 +60,11 @@ class DiceTest extends Enum {
         assertEquals(color, dice.getColor());
     }
 
+    /**
+     * Tests the method to turn a dice to the opposite face
+     *
+     * @author Riccardo
+     */
     @Test
     void turnDiceTest(){
         Dice dice = new Dice();

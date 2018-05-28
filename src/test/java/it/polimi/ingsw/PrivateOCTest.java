@@ -4,11 +4,20 @@ import it.polimi.ingsw.model.Enum;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PrivateOC;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * PrivateOCTest is the class which contains tests related to private objective card functions
+ *
+ * @author Riccardo
+ */
 class PrivateOCTest {
 
+    /**
+     * Tests the constructor of the private objective card
+     *
+     * @author Riccardo
+     */
     @Test
     void initializeTest() {
         PrivateOC priv = new PrivateOC(Enum.Color.getRandomColor());
@@ -17,6 +26,11 @@ class PrivateOCTest {
         assertNotNull(priv.getDescription());
     }
 
+    /**
+     * Tests the counting of points related to the private objective
+     *
+     * @author Riccardo
+     */
     @Test
     void countPointsTest() {
         Player p = PublicOCTest.createPlayerScheme();
