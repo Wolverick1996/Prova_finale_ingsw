@@ -1,5 +1,9 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Table;
+import it.polimi.ingsw.view.IOhandler;
+import it.polimi.ingsw.view.Temp_View;
+
 import java.util.*;
 
 public class Lobby /*extends Observer*/ {
@@ -19,6 +23,12 @@ public class Lobby /*extends Observer*/ {
     //***************************//
     //         Methods           //
     //***************************//
+
+    //TODO: define this method (is now equal to controller's startGame)
+    public void startGame(){
+        Table table = Controller.startGame(players, this);
+        IOhandler.broadcast("\n\n\tSwitching from lobby to Game ... \n\n");
+    }
 
     public boolean addPlayer(String username){
         while(!canIGo()){
@@ -67,15 +77,11 @@ public class Lobby /*extends Observer*/ {
         return players;
     }
 
-    public void broadcast(Object message){
-        System.out.println(message);
-    }
-
     @Override
     public String toString() {
         String string = "";
-        for (int i = 0; i < players.size(); i++){
-            string += "Player " +i+ ":\t" +players.get(i);
+        for (int i = 1; i <= players.size(); i++){
+            string += "Player " +i+ ":\t" +players.get(i - 1) + "\n";
         }
         return string;
     }

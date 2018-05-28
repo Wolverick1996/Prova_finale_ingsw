@@ -1,38 +1,38 @@
 package it.polimi.ingsw.network;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 class ClientImplementationSocket {
 
     private Socket socket;
-    private String username;
-
     ClientImplementationSocket (Socket socket){
         this.socket = socket;
     }
 
-    void login (){
+    void login() throws IOException {
         boolean success = false;
         int playersInLobby;
         Scanner scanner = new Scanner(System.in);
         String string;
         try {
-            Scanner in = new Scanner(this.socket.getInputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             PrintWriter out = new PrintWriter(this.socket.getOutputStream());
             do {
-                playersInLobby = Integer.parseInt(in.nextLine());
+                playersInLobby = Integer.parseInt(in.readLine());
                 System.out.println("[Players in the lobby: " + playersInLobby + "]\nLogin:\t\t(to refresh the page type '*')");
                 string = scanner.nextLine();
+                out.println(string);
+                out.flush();
                 if (!string.equals("*")){
-                    out.println(string);
-                    out.flush();
-                    String result = in.nextLine();
+                    String result = in.readLine();
                     if (result.equals("true")){
                         System.out.println("Welcome " +string+ ".\nYou have connected successfully.");
-                        this.username = string;
                         success = true;
                     }
                     else{
@@ -42,36 +42,19 @@ class ClientImplementationSocket {
                             System.out.println("Retry later...");
                     }
                 }
-                else {
-                    out.println("*");
-                    out.flush();
-                }
             }while (!success);
-            in.close();
-            out.close();
-            scanner.close();
-        }catch (IOException e){
-            System.err.println(e.getMessage());
+        }catch (NoSuchElementException e){
+            System.err.println("ERROR "+e.getMessage());
         }
     }
 
-    void logout(){
+    void logout() throws IOException{
         String result;
-        try {
-            Scanner in = new Scanner(this.socket.getInputStream());
-            PrintWriter out = new PrintWriter(this.socket.getOutputStream());
-
-            out.println(this.username);
-            result = in.nextLine();
-            if (result.equals("ok")){
-                System.out.println("You have disconnected successfully");
-                this.username = null;
-            }else
-                System.out.println("Error in your disconnection!!");
-            in.close();
-            out.close();
-        }catch (IOException e){
-            System.err.println(e.getMessage());
-        }
+        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        result = in.readLine();
+        if (result.equals("ok")){
+            System.out.println("You have disconnected successfully");
+        }else
+            System.out.println("Error in your disconnection!!");
     }
 }

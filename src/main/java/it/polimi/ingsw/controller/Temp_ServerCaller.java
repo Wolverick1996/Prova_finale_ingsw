@@ -7,14 +7,10 @@ import java.util.*;
 public class Temp_ServerCaller {
 
     public static void main(String[] args) {
-        List<String> nn = new ArrayList<String>();
-
-        nn.add("Duco");
-        nn.add("Davide");
-        nn.add("Valentina");
-
         Lobby lobby = new Lobby();
-
-        Table table = Controller.startGame(nn, lobby);
+        lobby.addPlayer("Duco");
+        lobby.addPlayer("Crive");
+        lobby.addPlayer("Ricky");
+        lobby.startGame();
     }
 }

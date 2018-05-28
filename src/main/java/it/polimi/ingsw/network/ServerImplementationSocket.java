@@ -2,7 +2,9 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Lobby;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -10,27 +12,32 @@ import java.util.Scanner;
 public class ServerImplementationSocket implements Runnable {
     private Socket socket;
     private Lobby lobby;
+    private String playerConnected;
+
     ServerImplementationSocket(Socket socket, Lobby lobby) {
         this.socket = socket;
         this.lobby = lobby;
     }
     public void run() {
         try {
-            Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            BufferedReader in;
+            PrintWriter out;
             String string;
-            boolean gameCanStart = false;
+            boolean gameCanStart;
             do{
                 login();
+                in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+                out = new PrintWriter(this.socket.getOutputStream());
                 gameCanStart = true;
                 while (gameCanStart){
-                    string = in.nextLine();
+                    string = in.readLine();
                     if (string.equals("e")){
                         logout();
                         gameCanStart = false;
+                    }else{
+                        out.println(this.lobby.getPlayers().size());
+                        out.flush();
                     }
-                    out.println(this.lobby.getPlayers().size());
-                    out.flush();
                 }
             }while (!gameCanStart);
 
@@ -40,25 +47,32 @@ public class ServerImplementationSocket implements Runnable {
             }
             in.close();
             out.close();
-            socket.close();
+            this.socket.close();
         }catch (IOException e){
-            System.err.println(e.getMessage());
+            System.err.println("Connection lost from a client");
+            if (this.playerConnected != null){
+                System.out.println("[Socket Server]\t" +this.playerConnected+ "  disconnected....");
+                this.lobby.removePlayer(this.playerConnected);
+                this.playerConnected = null;
+            }
         }
     }
 
     private void login() throws IOException{
-        Scanner in = new Scanner(socket.getInputStream());
-        PrintWriter out = new PrintWriter(socket.getOutputStream());
+        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        PrintWriter out = new PrintWriter(this.socket.getOutputStream());
         boolean loginSuccess = false;
+
         while (!loginSuccess) {
             out.println(this.lobby.getPlayers().size());
             out.flush();
-            String string = in.nextLine();
+            String string = in.readLine();
             if (!string.equals("*")){
                 if (this.lobby.addPlayer(string)){
                     loginSuccess = true;
                     System.out.println("[Socket Server]\t" +string+ "  got connected....");
-                    out.println(loginSuccess);
+                    this.playerConnected = string;
+                    out.println("true");
                     out.flush();
                 }else {
                     boolean sameUsername = false;
@@ -76,30 +90,18 @@ public class ServerImplementationSocket implements Runnable {
                 }
             }
         }
-        // chiudo gli stream
-        in.close();
-        out.close();
     }
 
-    private void logout(){
-        try {
-            Scanner in = new Scanner(socket.getInputStream());
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            String playerDisconnected;
-            playerDisconnected = in.nextLine();
-            if(this.lobby.removePlayer(playerDisconnected)){
-                out.println("ok");
-                out.flush();
-                System.out.println("[RMI Server]\t" +playerDisconnected+ "  disconnected....");
-            }
-            else{
-                out.println("ko");
-                out.flush();
-            }
-            in.close();
-            out.close();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+    private void logout() throws IOException{
+        PrintWriter out = new PrintWriter(this.socket.getOutputStream());
+        if(this.lobby.removePlayer(this.playerConnected)){
+            out.println("ok");
+            out.flush();
+            System.out.println("[RMI Server]\t" +this.playerConnected+ "  disconnected....");
+        }
+        else{
+            out.println("ko");
+            out.flush();
         }
     }
 }
