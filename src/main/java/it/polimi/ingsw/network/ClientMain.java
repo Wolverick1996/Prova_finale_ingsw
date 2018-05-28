@@ -2,7 +2,10 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Lobby;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.rmi.Naming;
@@ -26,7 +29,7 @@ public class ClientMain {
         System.out.println("Which kind of connection do you want to use? [RMI or socket]");
         Scanner scanner = new Scanner(System.in);
         String string = scanner.nextLine();
-        String ipAddress = null;
+        String ipAddress;
         if (string.equals("RMI") || string.equals("rmi") || string.equals("socket") || string.equals("Socket")){
             Boolean on = false;
             do {
@@ -45,6 +48,8 @@ public class ClientMain {
                     clientMain.startClientSocket();
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
+                }catch (NoSuchElementException e){
+                    System.err.println("Nothing to read " +e.getMessage());
                 }
             }
         }
@@ -53,7 +58,7 @@ public class ClientMain {
 
     private void startClientRMI(){
         ServerIntRMI server;
-        boolean on = false;
+        boolean on = true;
         try {
             do {
                 boolean loginSuccess = false;
@@ -122,14 +127,19 @@ public class ClientMain {
             System.err.println("Connection error: " + e.getMessage() + "!");
         } catch (NotBoundException e) {
             System.err.println("This reference is not connected!");
-        } catch (NoSuchElementException e) {}
+        } catch (NoSuchElementException e) {
+            System.err.println("NOTHING TO READ " +e.getMessage());
+        }
     }
 
     private void startClientSocket() throws IOException{
         Socket socket = null;
-        boolean success = false;
+        boolean success;
         try {
             socket = new Socket(ip, PORT);
+            Scanner scanner = new Scanner(System.in);
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             do {
@@ -137,17 +147,19 @@ public class ClientMain {
                 success = true;
                 while (success){
                     System.out.println("Waiting for other players...\n" +
-                            "If you want to disconnect type 'e' or '*' to check how many players are in the lobby");
-                    Scanner scanner = new Scanner(System.in);
+                            "If you want to disconnect type 'e' or type any other character to refresh and check how many players there are in the lobby");
+
                     String string = scanner.nextLine();
+                    out.println(string);
+                    out.flush();
                     if (string.equals("e")){
                         clientImplementationSocket.logout();
                         success = false;
                     }
-                    Scanner in = new Scanner(socket.getInputStream());
-                    int activePlayers = Integer.parseInt(in.nextLine());
-                    System.out.println("[Players in the lobby: " + activePlayers + "]");
-                    in.close();
+                    else {
+                        int activePlayers = Integer.parseInt(in.readLine());
+                        System.out.println("[Players in the lobby: " + activePlayers + "]");
+                    }
                 }
             }while (!success);
 
@@ -156,8 +168,11 @@ public class ClientMain {
                 String t = s.nextLine();
                 System.err.println(t);
             }
+            scanner.close();
+            in.close();
+            out.close();
         }catch (NoSuchElementException e){
-            System.err.println("Connection closed "+e.getMessage());
+            System.err.println("NOTHING TO READ "+e.getMessage());
         }catch (IOException e){
             System.err.println(e.getMessage());
         }
