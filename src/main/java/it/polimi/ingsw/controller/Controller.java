@@ -11,6 +11,7 @@ public class Controller {
     private static List<Lobby> lobbies = new ArrayList<>();
     private static List<Game> games = new ArrayList<>();
     private static List<IOhandler> speakers = new ArrayList<>();
+    private static String STATUS = "status";
 /* These attributes only serve as contrller's addresses
  */
 
@@ -23,13 +24,13 @@ public class Controller {
             String s = "";
             Table table = new Table(nicknames.size());
             table.setPlayers(nicknames);
-            speakers.add(new IOhandler(table.getActivePlayers()));
+            speakers.add(new IOhandler(table.getActivePlayers(), table/*, table*/  )); //TODO: add on Table extends observable
             speakers.get(i).broadcast("OK");
             speakers.get(i).broadcast("These are the players: ");
             for(String player:nicknames){speakers.get(i).broadcast(player);}
 
             //TODO: Implementation of prep phase
-            games.add(new Game(table.getActivePlayers()));
+            games.add(new Game(table.getActivePlayers(), table));
 
             speakers.get(i).broadcast("Game is ready");
 
@@ -55,5 +56,34 @@ public class Controller {
             return null;
         }
 
+    }
+
+    public static void switchContext(Lobby lobby){
+        try {
+
+            games.get(lobbies.indexOf(lobby)).begin();
+
+        }
+        catch (NullPointerException n){
+            System.out.println("Null Pointer exception");
+            n.printStackTrace();
+            return;
+        }
+        catch (Exception e){
+            System.out.println("Exception caught");
+            e.printStackTrace();
+            return;
+        }
+
+    }
+
+    public static IOhandler getMyIO (Object caller){
+        if(caller.getClass() == Lobby.class){
+            return speakers.get(lobbies.indexOf(caller));
+        } else if (caller.getClass() == Game.class){
+            return speakers.get(games.indexOf(caller));
+        } else {
+            return null;
+        }
     }
 }

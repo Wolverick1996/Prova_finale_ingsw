@@ -134,6 +134,16 @@ public class Player {
     }
 
     /**
+     * Gets the own Username
+     *
+     * @return own username
+     * @author Matteo
+     */
+    public String getUsername() {
+        return this.nickname;
+    }
+
+    /**
      * Returns the amount of current points
      *
      * @return the amount of own points
@@ -172,7 +182,7 @@ public class Player {
     @Override
     public String toString(){
         return this.nickname+" : "+this.IDplayer+
-                "\nTokens available: "+this.tokens+"\nActive scheme:\n"+this.ownScheme;
+                "\n Tokens available: "+this.tokens+"\nActive scheme:\n"+this.ownScheme;
     }
 
 }
