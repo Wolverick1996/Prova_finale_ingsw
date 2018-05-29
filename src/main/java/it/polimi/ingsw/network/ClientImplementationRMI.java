@@ -18,5 +18,7 @@ public class ClientImplementationRMI implements ClientIntRMI {
         return name;
     }
 
+    public void confirmConnection() throws RemoteException{
+    }
 }
 

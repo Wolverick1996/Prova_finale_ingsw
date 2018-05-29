@@ -13,6 +13,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         ServerIntRMI{
 
     private ArrayList<ClientIntRMI> clients = new ArrayList<>();
+    private ArrayList<String> usernames = new ArrayList<>();
     private Lobby lobby;
 
     ServerImplementationRMI(Lobby lobby) throws RemoteException {
@@ -21,6 +22,8 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
     }
 
     public boolean login(ClientIntRMI a) throws RemoteException{
+
+        confirmConnections();
 
         if (lobby.getPlayers().size() >= Lobby.MAX_PLAYERS){
             System.out.println("Max number of players reached!");
@@ -32,31 +35,38 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
             return false;
         else {
             clients.add(a);
+            usernames.add(a.getName());
             System.out.println("[RMI Server]\t" +a.getName()+ "  got connected....");
             a.notify("Welcome " +a.getName()+ ".\nYou have connected successfully.");
-            send(a.getName()+ " has just connected.");
-            send("[Players in the lobby: "+lobby.getPlayers().size()+"]");
             return true;
         }
     }
 
     public void logout(ClientIntRMI a) throws RemoteException{
+
+        confirmConnections();
+
         System.out.println("[RMI Server]\t" +a.getName()+ "  disconnected....");
         lobby.removePlayer(a.getName());
+        usernames.remove(a.getName());
         clients.remove(a);
         a.notify("You have disconnected successfully");
-        send(a.getName()+" has just disconnected.\t[Players in the lobby: "+lobby.getPlayers().size()+"]");
     }
 
-    public void send(String message) throws RemoteException {
+
+    public void confirmConnections() throws RemoteException{
         Iterator<ClientIntRMI> clientIterator = clients.iterator();
+        int i = 0;
         while(clientIterator.hasNext()){
+            String s = usernames.get(i);
             try{
-                clientIterator.next().notify(message);
+                clientIterator.next().confirmConnection();
             }catch(ConnectException e) {
                 clientIterator.remove();
-                System.out.println("Client rimosso!");
+                lobby.removePlayer(s);
+                System.out.println("[RMI Server]\t" +s+ "  disconnected....");
             }
+            i++;
         }
     }
 

@@ -14,6 +14,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class ClientMain {
@@ -58,6 +60,7 @@ public class ClientMain {
 
     private void startClientRMI(){
         ServerIntRMI server;
+        Timer timer = new Timer();
         boolean on = true;
         try {
             do {
@@ -107,15 +110,20 @@ public class ClientMain {
                 Scanner scanner = new Scanner(System.in);
                 boolean active = true;
                 while (active) {
-                    System.out.println("Waiting for other players...\nIf you want to disconnect type 'e'");
+
+                    System.out.println("Waiting for other players...\n" +
+                        "If you want to disconnect type 'e' or type any other character to refresh and check how many players there are in the lobby");
                     String text = scanner.nextLine();
-                    if (!text.equals("e")) {
-                        if (server.playersInLobby() == Lobby.MAX_PLAYERS)
-                            System.out.println("The game is starting...");
-                    } else {
+                    if (text.equals("e")) {
                         server.logout(validRemoteRef);
                         active = false;
+                    } else {
+                        server.confirmConnections();
+                        System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
+                        if (server.playersInLobby() == Lobby.MAX_PLAYERS)
+                            System.out.println("The game is starting...");
                     }
+
                 }
                 if (!on)
                     scanner.close();

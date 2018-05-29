@@ -97,7 +97,7 @@ public class ServerImplementationSocket implements Runnable {
         if(this.lobby.removePlayer(this.playerConnected)){
             out.println("ok");
             out.flush();
-            System.out.println("[RMI Server]\t" +this.playerConnected+ "  disconnected....");
+            System.out.println("[Socket Server]\t" +this.playerConnected+ "  disconnected....");
         }
         else{
             out.println("ko");
