@@ -26,6 +26,7 @@ public class Table {
     private boolean clockwise = true;
     private int turn = 0;
     private int numPlayers; //must receive data
+    private int realTurn = 1;
 
     /**
      * Constructor of the table which sets tool cards and public objective cards of the game and starts the first round
@@ -79,6 +80,7 @@ public class Table {
                 turn--;
             }
         }
+        this.realTurn++;
     }
 
     /**
@@ -273,7 +275,7 @@ public class Table {
     @Override
     public String toString(){
         return "Table: \n" + "Dice in reserve: " + reserve.size() + "\nReserve: " + reserve.toString() + "\nRoundtrack: " +
-                roundTrack.toString() + "\nTurn: " + turn + "\nRound: " + round + "\nClockwise: " + clockwise;
+                roundTrack.toString() + "\nTurn: " + realTurn + "\nRound: " + (round+1) + "\nClockwise: " + clockwise;
     }
 
 }

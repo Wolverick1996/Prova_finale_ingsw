@@ -27,7 +27,8 @@ public class Lobby /*extends Observer*/ {
     //TODO: define this method (is now equal to controller's startGame)
     public void startGame(){
         Table table = Controller.startGame(players, this);
-        IOhandler.broadcast("\n\n\tSwitching from lobby to Game ... \n\n");
+        Controller.getMyIO(this).broadcast("\n\n\tSwitching from lobby to Game ... \n\n");
+        Controller.switchContext(this);
     }
 
     public boolean addPlayer(String username){
