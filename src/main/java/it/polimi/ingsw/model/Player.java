@@ -181,7 +181,7 @@ public class Player {
      */
     @Override
     public String toString(){
-        return this.nickname+" : "+this.IDplayer+
+        return this.nickname+
                 "\n Tokens available: "+this.tokens+"\nActive scheme:\n"+this.ownScheme;
     }
 

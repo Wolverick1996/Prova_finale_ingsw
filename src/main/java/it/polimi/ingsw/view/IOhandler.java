@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Dice;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Scheme;
 import it.polimi.ingsw.model.Table;
 import javafx.beans.value.ObservableValue;
 
@@ -89,5 +90,35 @@ public class IOhandler implements Observer{
         {
             System.out.println(ov);
         }
+    }
+
+    public int chooseScheme(int s1, int s2, int s3, int s4){
+
+        int answer = -1;
+        boolean isValid = false;
+        Scanner s = new Scanner(System.in);
+
+        Integer[] schemes = new Integer[4];
+        schemes[0] = s1;
+        schemes[1] = s2;
+        schemes[2] = s3;
+        schemes[3] = s4;
+
+        for (int i = 0; i<4; i++){
+            System.out.println("Scheme " + (i+1));
+            System.out.println(Scheme.initialize(schemes[i]));
+        }
+
+        while(!isValid){
+            System.out.println("Pick a scheme (write 1, 2, 3 or 4)");
+            answer = Integer.parseInt(s.nextLine());
+
+            if (answer == 1 || answer == 2 || answer == 3 || answer == 4){
+                isValid = true;
+            } else {
+                System.out.println("Not a scheme!");
+            }
+        }
+        return answer;
     }
 }

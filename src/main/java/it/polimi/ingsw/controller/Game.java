@@ -30,12 +30,23 @@ public class Game {
 
     public void begin(){
 
-        //TODO: modify the algorithm that gives schemes
-        int i = 1;
-        for(Player p:this.players){
-            p.chooseScheme(Scheme.initialize(i));
-            i++;
+        int i,j;
+        Integer[] schemes = new Integer[12];
+        for (int k = 1; k < schemes.length; k++) {
+            schemes[k] = k;
         }
+        Collections.shuffle(Arrays.asList(schemes));
+        //TODO: PLACE CORRECTLY SCHEMES IN FILE
+        for(Player p:this.players){
+            Controller.getMyIO(this).broadcast("Player " + (this.players.indexOf(p)+1) + " has to choose a scheme");
+
+            i = schemes[this.players.indexOf(p)];
+            j = schemes[this.players.indexOf(p) + 4];
+
+            p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+12,j+12)));
+        }
+
+
 
         this.active = 0; //TODO: add algorithm to define starting player
         Controller.getMyIO(this).broadcast(STATUS);
@@ -45,7 +56,7 @@ public class Game {
 
     public void next(){
         if(this.turn > this.players.size()*2*10){
-            System.out.println("Game has ended! Closing..."); //TODO: implement end of game
+            Controller.getMyIO(this).broadcast("Game has ended! Closing..."); //TODO: implement end of game
             System.exit(0);
         } else {
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn");
