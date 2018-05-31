@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
+
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.view.IOhandler;
 
 import java.util.*;
 

@@ -4,11 +4,6 @@ import it.polimi.ingsw.model.Dice;
 import it.polimi.ingsw.model.Enum;
 import it.polimi.ingsw.model.Scheme;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
 public class Temp_View {
 
     /* This class is intended for alpha testing of the game mechanics, not for single-method testing.

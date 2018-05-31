@@ -33,15 +33,12 @@ public class ServerMain {
         } catch (RemoteException e) {
             System.out.println("There is already a registry!");
         }
-
         try {
-
             ServerImplementationRMI serverImplementation = new ServerImplementationRMI(lobby);
             InetAddress ip;
             ip = InetAddress.getLocalHost();
             Naming.rebind("//" +ip.getHostAddress()+ "/MyServer", serverImplementation);
             System.out.println("[RMI Server]\tServer is ready...");
-            this.lobby.setServerRMI(serverImplementation);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {

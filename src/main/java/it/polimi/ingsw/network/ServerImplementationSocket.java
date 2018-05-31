@@ -28,6 +28,11 @@ public class ServerImplementationSocket implements Runnable {
                 login();
                 in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
                 out = new PrintWriter(this.socket.getOutputStream());
+                out.println(this.lobby.getPlayers().size());
+                out.flush();
+                if (this.lobby.getPlayers().size() == 1){
+                    this.lobby.setDelay(Integer.parseInt(in.readLine()));
+                }
                 gameCanStart = true;
                 while (gameCanStart){
                     string = in.readLine();

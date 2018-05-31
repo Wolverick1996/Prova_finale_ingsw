@@ -10,4 +10,5 @@ public interface ServerIntRMI extends Remote {
     void confirmConnections () throws RemoteException;
     List<ClientIntRMI> getConnected() throws RemoteException;
     int playersInLobby() throws RemoteException;
+    void setDelay(int delay) throws RemoteException;
 }

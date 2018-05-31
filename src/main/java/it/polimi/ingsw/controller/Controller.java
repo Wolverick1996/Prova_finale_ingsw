@@ -2,7 +2,6 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Table;
 import it.polimi.ingsw.view.IOhandler;
-import it.polimi.ingsw.view.Temp_View;
 
 import java.util.*;
 

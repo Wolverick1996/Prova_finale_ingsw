@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Dice;
+
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Scheme;
 import it.polimi.ingsw.model.Table;

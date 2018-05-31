@@ -14,8 +14,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class ClientMain {
@@ -60,7 +58,6 @@ public class ClientMain {
 
     private void startClientRMI(){
         ServerIntRMI server;
-        Timer timer = new Timer();
         boolean on = true;
         try {
             do {
@@ -108,6 +105,10 @@ public class ClientMain {
                 } while (!loginSuccess);
 
                 Scanner scanner = new Scanner(System.in);
+                if (server.playersInLobby() == 1){
+                    System.out.println("You are the first player of the lobby, please set a timer (min 15 s, max 60s)");
+                    server.setDelay(Integer.parseInt(scanner.nextLine()));
+                }
                 boolean active = true;
                 while (active) {
 
@@ -142,6 +143,7 @@ public class ClientMain {
 
     private void startClientSocket() throws IOException{
         Socket socket = null;
+        int activePlayers;
         boolean success;
         try {
             socket = new Socket(ip, PORT);
@@ -152,6 +154,12 @@ public class ClientMain {
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             do {
                 clientImplementationSocket.login();
+                activePlayers = Integer.parseInt(in.readLine());
+                if (activePlayers == 1){
+                    System.out.println("You are the first player of the lobby, please set a timer (min 15 s, max 60s)");
+                    out.println(scanner.nextLine());
+                    out.flush();
+                }
                 success = true;
                 while (success){
                     System.out.println("Waiting for other players...\n" +
@@ -165,7 +173,7 @@ public class ClientMain {
                         success = false;
                     }
                     else {
-                        int activePlayers = Integer.parseInt(in.readLine());
+                        activePlayers = Integer.parseInt(in.readLine());
                         System.out.println("[Players in the lobby: " + activePlayers + "]");
                     }
                 }

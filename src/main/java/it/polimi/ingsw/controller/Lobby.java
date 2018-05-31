@@ -1,10 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Table;
-import it.polimi.ingsw.network.ServerImplementationRMI;
 import it.polimi.ingsw.network.ServerIntRMI;
-import it.polimi.ingsw.view.IOhandler;
-import it.polimi.ingsw.view.Temp_View;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -18,7 +14,7 @@ public class Lobby /*extends Observer*/ {
     private ServerIntRMI server;
 
     public static final int MAX_PLAYERS = 4;
-    public static final int DELAY = 20000;
+    private int delay = 20000;
     private List<String> players = new ArrayList<>();
     private Boolean streetlight;
     private Timer timer = new Timer();
@@ -67,7 +63,7 @@ public class Lobby /*extends Observer*/ {
             this.players.add(username);
 
             if (this.players.size() == 2){
-                this.timer.schedule(this.task, DELAY);
+                this.timer.schedule(this.task, delay);
             }
 
             this.streetlight = true;
@@ -108,6 +104,10 @@ public class Lobby /*extends Observer*/ {
 
     public void setServerRMI(ServerIntRMI server){
         this.server = server;
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
     }
 
     public List<String> getPlayers() {

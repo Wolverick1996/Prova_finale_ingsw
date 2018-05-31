@@ -19,6 +19,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
     ServerImplementationRMI(Lobby lobby) throws RemoteException {
         super(0);
         this.lobby = lobby;
+        this.lobby.setServerRMI(this);
     }
 
     public boolean login(ClientIntRMI a) throws RemoteException{
@@ -74,8 +75,12 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         return clients;
     }
 
-    public int playersInLobby() {
+    public int playersInLobby() throws RemoteException{
         return this.lobby.getPlayers().size();
+    }
+
+    public void setDelay(int delay) throws RemoteException{
+        this.lobby.setDelay(delay);
     }
 
     @Override
