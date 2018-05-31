@@ -17,7 +17,7 @@ public class IOhandler implements Observer{
     private static List<Player> players = new ArrayList<>();
     private Observable ov = null;
     private static Table table = null;
-    private static String STATUS = "STATUS";
+    private static final String STATUS = "STATUS";
 
     public IOhandler(List<Player> users, Table board/*, Observable observed*/){
         this.players = users;
@@ -119,6 +119,6 @@ public class IOhandler implements Observer{
                 System.out.println("Not a scheme!");
             }
         }
-        return answer;
+        return schemes[answer-1];
     }
 }

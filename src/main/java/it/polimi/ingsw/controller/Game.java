@@ -14,7 +14,7 @@ public class Game {
     private Table table = null;
     private int active = -1;
     private int turn = 1;
-    private static String STATUS = "STATUS";
+    private static final String STATUS = "STATUS";
     private int count = 0;
     private boolean clockwise = true;
 
@@ -38,7 +38,7 @@ public class Game {
         Collections.shuffle(Arrays.asList(schemes));
         //TODO: PLACE CORRECTLY SCHEMES IN FILE
         for(Player p:this.players){
-            Controller.getMyIO(this).broadcast("Player " + (this.players.indexOf(p)+1) + " has to choose a scheme");
+            Controller.getMyIO(this).broadcast(p.getUsername() + " has to choose a scheme");
 
             i = schemes[this.players.indexOf(p)];
             j = schemes[this.players.indexOf(p) + 4];

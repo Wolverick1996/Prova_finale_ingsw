@@ -11,8 +11,8 @@ public class Controller {
     private static List<Lobby> lobbies = new ArrayList<>();
     private static List<Game> games = new ArrayList<>();
     private static List<IOhandler> speakers = new ArrayList<>();
-    private static String STATUS = "status";
-/* These attributes only serve as contrller's addresses
+    private static final String STATUS = "status";
+/* These attributes only serve as controller's addresses
  */
 
     public static Table startGame(List<String> nicknames, Lobby lobby){
