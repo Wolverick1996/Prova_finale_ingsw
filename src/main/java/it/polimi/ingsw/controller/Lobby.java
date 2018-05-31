@@ -1,9 +1,12 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Table;
+import it.polimi.ingsw.network.ServerImplementationRMI;
+import it.polimi.ingsw.network.ServerIntRMI;
 import it.polimi.ingsw.view.IOhandler;
 import it.polimi.ingsw.view.Temp_View;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class Lobby /*extends Observer*/ {
@@ -12,10 +15,26 @@ public class Lobby /*extends Observer*/ {
     //        Attributes         //
     //***************************//
 
+    private ServerIntRMI server;
 
     public static final int MAX_PLAYERS = 4;
-    List<String> players = new ArrayList<>();
-    Boolean streetlight;
+    public static final int DELAY = 20000;
+    private List<String> players = new ArrayList<>();
+    private Boolean streetlight;
+    private Timer timer = new Timer();
+    private boolean isGoing = false;
+    private TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            try {
+                server.confirmConnections();
+                startGame();
+            } catch (RemoteException re){
+                System.err.println("ERROR" + re.getMessage());
+            }
+
+        }
+    };
 
     public Lobby(){
         streetlight = true;
@@ -26,7 +45,7 @@ public class Lobby /*extends Observer*/ {
 
     //TODO: define this method (is now equal to controller's startGame)
     public void startGame(){
-        Table table = Controller.startGame(players, this);
+        Controller.startGame(players, this);
         Controller.getMyIO(this).broadcast("\n\n\tSwitching from lobby to Game ... \n\n");
         Controller.switchContext(this);
     }
@@ -35,15 +54,22 @@ public class Lobby /*extends Observer*/ {
         while(!canIGo()){
             //TODO: add feedback for user
         }
+
         if (this.players.size()<= MAX_PLAYERS){
 
-            for (String s : this.players)
+            for (String s : this.players){
                 if (s.equals(username)){
-                this.streetlight = true;
+                    this.streetlight = true;
                     return false;
                 }
+            }
 
             this.players.add(username);
+
+            if (this.players.size() == 2){
+                this.timer.schedule(this.task, DELAY);
+            }
+
             this.streetlight = true;
             return true;
         }
@@ -58,6 +84,12 @@ public class Lobby /*extends Observer*/ {
         for (String s : this.players){
             if (s.equals(username)){
                 this.players.remove(s);
+                if (this.players.size() < 2){
+                    if(this.isGoing){
+                        this.timer.cancel();
+                        this.isGoing = false;
+                    }
+                }
                 this.streetlight = true;
                 return true;
             }
@@ -72,6 +104,10 @@ public class Lobby /*extends Observer*/ {
         }
         this.streetlight = false;
         return true;
+    }
+
+    public void setServerRMI(ServerIntRMI server){
+        this.server = server;
     }
 
     public List<String> getPlayers() {

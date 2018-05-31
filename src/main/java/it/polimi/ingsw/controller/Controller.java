@@ -15,7 +15,7 @@ public class Controller {
 /* These attributes only serve as controller's addresses
  */
 
-    public static Table startGame(List<String> nicknames, Lobby lobby){
+    public static void startGame(List<String> nicknames, Lobby lobby){
 
         try {
 
@@ -43,17 +43,17 @@ public class Controller {
             speakers.get(i).broadcast("This is the lobby: \n" + lobby);
             speakers.get(i).broadcast(table);
 
-            return table;
+            return;
 
         }catch (NullPointerException n){
             System.out.println("Null Pointer exception");
             n.printStackTrace();
-            return null;
+            return;
         }
         catch (Exception e){
             System.out.println("Exception caught");
             e.printStackTrace();
-            return null;
+            return;
         }
 
     }
