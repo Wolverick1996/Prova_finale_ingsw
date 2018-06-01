@@ -1,0 +1,9 @@
+package it.polimi.ingsw.client.view;
+
+public class CLI {
+
+    public CLI(){
+
+    }
+
+}

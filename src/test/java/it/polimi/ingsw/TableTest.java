@@ -2,10 +2,10 @@ package it.polimi.ingsw;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PrivObjHandler;
-import it.polimi.ingsw.model.PubObjHandler;
-import it.polimi.ingsw.model.Table;
+import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.PrivObjHandler;
+import it.polimi.ingsw.server.model.PubObjHandler;
+import it.polimi.ingsw.server.model.Table;
 import org.junit.jupiter.api.Test;
 import java.lang.*;
 import java.util.Arrays;

@@ -1,8 +1,8 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.model.Dice;
-import it.polimi.ingsw.model.Enum;
-import it.polimi.ingsw.model.Scheme;
+import it.polimi.ingsw.server.model.Dice;
+import it.polimi.ingsw.server.model.Enum;
+import it.polimi.ingsw.server.model.Scheme;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

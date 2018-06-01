@@ -1,8 +1,8 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.model.Enum;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PrivateOC;
+import it.polimi.ingsw.server.model.Enum;
+import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.PrivateOC;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

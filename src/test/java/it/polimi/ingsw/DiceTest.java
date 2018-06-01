@@ -2,8 +2,8 @@ package it.polimi.ingsw;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import it.polimi.ingsw.model.Dice;
-import it.polimi.ingsw.model.Enum;
+import it.polimi.ingsw.server.model.Dice;
+import it.polimi.ingsw.server.model.Enum;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
