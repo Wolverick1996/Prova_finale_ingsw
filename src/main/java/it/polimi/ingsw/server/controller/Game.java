@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.model.*;
 
 import java.util.*;
 
-public class Game {
+class Game {
 
     //***************************//
     //        Attributes         //
@@ -18,7 +18,7 @@ public class Game {
     private int count = 0;
     private boolean clockwise = true;
 
-    public Game(List<Player> users, Table board){
+    Game(List<Player> users, Table board){
 
         this.players = users;
         this.table = board;
@@ -28,12 +28,13 @@ public class Game {
     //         Methods           //
     //***************************//
 
-    public void begin(){
+    void begin(){
 
-        int i,j;
+        int i;
+        int j;
         Integer[] schemes = new Integer[12];
-        for (int k = 1; k < schemes.length; k++) {
-            schemes[k] = k;
+        for (int k = 0; k < schemes.length; k++) {
+            schemes[k] = k+1;
         }
         Collections.shuffle(Arrays.asList(schemes));
         //TODO: PLACE CORRECTLY SCHEMES IN FILE
@@ -54,42 +55,20 @@ public class Game {
         this.next();
     }
 
-    public void next(){
+    private void next(){
         if(this.turn > this.players.size()*2*10){
             Controller.getMyIO(this).broadcast("Game has ended! Closing..."); //TODO: implement end of game
             System.exit(0);
         } else {
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn");
-            String action = null;
-            action = Controller.getMyIO(this).getStandardAction();
+            String action = Controller.getMyIO(this).getStandardAction();
             switch (action){
                 case "d": {
-                    Dice dice = null;
-                    boolean check = false;
-                    while (!check){
-                        try{
-                            int index = Controller.getMyIO(this).getDice();
-                            dice = this.table.checkDiceFromReserve(index);
-                            check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x"),
-                                    Controller.getMyIO(this).getCoordinate("y"),
-                                    this.table, index);
-
-                            if (!check){
-                                Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
-                                if (dice!= null && dice != this.table.checkDiceFromReserve(index)) this.table.putDiceInReserve(dice);
-                                Controller.getMyIO(this).broadcast(this.table);
-                            }
-
-                        } catch (Exception e){
-                            Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
-                            if (dice!= null) this.table.putDiceInReserve(dice);
-                            Controller.getMyIO(this).broadcast(this.table);
-                        }
-                    }
+                    putDiceStandard();
                     break;
                 }
                 case "q":{
-
+                    Controller.getMyIO(this).broadcast("Turn passed");
                     break;
                 }
                 default: System.out.println("FATAL ERROR, UNKNOWN INPUT"); System.exit(-1); //TODO: implement input error manager
@@ -126,6 +105,32 @@ public class Game {
         this.table.nextTurn();
         Controller.getMyIO(this).broadcast(STATUS);
         next();
+    }
+
+    private void putDiceStandard(){
+        Dice dice = null;
+        boolean check = false;
+        while (!check){
+            try{
+                int index = Controller.getMyIO(this).getDice();
+                dice = this.table.checkDiceFromReserve(index);
+                check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x"),
+                        Controller.getMyIO(this).getCoordinate("y"),
+                        this.table, index);
+
+                if (!check){
+                    Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
+                    if (dice!= null && dice != this.table.checkDiceFromReserve(index)) this.table.putDiceInReserve(dice);
+                    Controller.getMyIO(this).broadcast(this.table);
+                }
+
+            } catch (Exception e){
+                Controller.getMyIO(this).broadcast("EXCEPTION CAUGHT! Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
+                Controller.getMyIO(this).broadcast(e.getMessage());
+                if (dice!= null) this.table.putDiceInReserve(dice);
+                Controller.getMyIO(this).broadcast(this.table);
+            }
+        }
     }
 
 }

@@ -17,17 +17,15 @@ public class Scheme {
 
     private String name;
     private int difficulty;
-    public static final int MAX_COL = 5;
-    public static final int MAX_ROW = 4;
+    static final int MAX_COL = 5;
+    static final int MAX_ROW = 4;
 
     private Box[][] grid = new Box[MAX_ROW][MAX_COL];
 
     /**
      * Constructor for the window pattern which reads from file the specific grid to create
      *
-     * @param id: identification number of the window pattern to be created
-     * @throws IOException if there are problems with reading from file
-     * @throws Exception if there are problems with scanner closing
+     * @param id: identification number of the window pattern to be created (id range 1-24)
      * @author Riccardo
      */
     protected Scheme (int id){
@@ -65,14 +63,14 @@ public class Scheme {
                 }
             }
         } catch (IOException e){
-            System.out.println("Error");
+            System.err.println("Error");
         }
         finally {
             if (scan != null) {
                 try {
                     scan.close();
                 } catch (Exception e1) {
-                    System.out.println("Error");
+                    System.err.println("Error");
                 }
             }
 
@@ -93,7 +91,7 @@ public class Scheme {
      */
     public static Scheme initialize(int id){
         if (id < 1 || id >24){
-            System.out.println("ID not valid!");
+            System.err.println("ID not valid!");
             return null;
         } else
             return new Scheme(id);
@@ -124,7 +122,7 @@ public class Scheme {
             return true;
         else {
             if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
-                System.out.println("You can't place the first dice out of border");
+                System.err.println("You can't place the first dice out of border");
             return false;
         }
     }
@@ -139,14 +137,14 @@ public class Scheme {
      * @return true if the placement is allowed, otherwise false
      * @author Andrea
      */
-    protected boolean checkValueRestr(int x, int y, Dice dice){
+    private boolean checkValueRestr(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
         int j;
 
         if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)){
-            System.out.println("This box doesn't exists");
+            System.err.println("This box doesn't exists");
             return false; }
 
         //If first dice check if it respects first-dice-placement-rule
@@ -172,7 +170,7 @@ public class Scheme {
         }
 
         if (!diceNear) {
-            System.out.println("You can't place the dice in a box not adjacent to another full one");
+            System.err.println("You can't place the dice in a box not adjacent to another full one");
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
@@ -182,7 +180,7 @@ public class Scheme {
                 return true;
         }
 
-        System.out.println("There is another dice near with the same value!");
+        System.err.println("There is another dice near with the same value!");
         return false;
     }
 
@@ -196,14 +194,14 @@ public class Scheme {
      * @return true if the placement is allowed, otherwise false
      * @author Andrea
      */
-    protected boolean checkColorRestr(int x, int y, Dice dice){
+    private boolean checkColorRestr(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
         int j;
 
         if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)){
-            System.out.println("This box doesn't exists");
+            System.err.println("This box doesn't exists");
             return false; }
 
         //If first dice check if it respects first-dice-placement-rule
@@ -229,7 +227,7 @@ public class Scheme {
         }
 
         if (!diceNear) {
-            System.out.println("You can't place the dice in a box not adjacent to another full one");
+            System.err.println("You can't place the dice in a box not adjacent to another full one");
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
@@ -239,7 +237,7 @@ public class Scheme {
                 return true;
         }
 
-        System.out.println("There is another dice near with the same color!");
+        System.err.println("There is another dice near with the same color!");
         return false;
     }
 
@@ -253,14 +251,14 @@ public class Scheme {
      * @return true if the placement is allowed, otherwise false
      * @author Andrea
      */
-    protected boolean isPlaceableNoDiceNear(int x, int y, Dice dice){
+    private boolean isPlaceableNoDiceNear(int x, int y, Dice dice){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
         int j;
 
         if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)) {
-            System.out.println("This box doesn't exists");
+            System.err.println("This box doesn't exists");
             return false; }
 
         //If first dice check if it respects first-dice-placement-rule
@@ -287,7 +285,7 @@ public class Scheme {
         }
 
         if (diceNear) {
-            System.out.println
+            System.err.println
                     ("You can't place the dice in a box adjacent to another full one using this tool card");
             return false;
         } else if (placeable && !diceNear) {
@@ -395,7 +393,7 @@ public class Scheme {
      * @return the grid at the time the method is called
      * @author Andrea
      */
-    public Box[][] getGrid() {
+    Box[][] getGrid() {
         return grid;
     }
 

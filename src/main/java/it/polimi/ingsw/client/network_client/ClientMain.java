@@ -16,7 +16,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-
 public class ClientMain {
 
     private String ip;
@@ -29,35 +28,44 @@ public class ClientMain {
     public static void main(String[] args) {
         System.out.println("Which kind of connection do you want to use? [RMI or socket]");
         Scanner scanner = new Scanner(System.in);
-        String string = scanner.nextLine();
-        String ipAddress;
-        if (string.equals("RMI") || string.equals("rmi") || string.equals("socket") || string.equals("Socket")){
-            Boolean on = false;
-            do {
-                System.out.println("IP address of the Server: ");
-                ipAddress = scanner.nextLine();
-                if (ipAddress.equals(""))
-                    System.out.println("Not a valid IP");
-                else
-                    on = true;
-            } while (!on);
-            ClientMain clientMain = new ClientMain(ipAddress);
-            if (string.equals("RMI") || string.equals("rmi")){
-                clientMain.startClientRMI();
-            }else{
-                try {
-                    clientMain.startClientSocket();
-                } catch (IOException e) {
-                    System.err.println(e.getMessage());
-                }catch (NoSuchElementException e){
-                    System.err.println("Nothing to read " +e.getMessage());
+        String string;
+        Boolean check = false;
+        while (!check) {
+            string = scanner.nextLine();
+            string = string.toLowerCase();
+            if (string.equals("rmi") || string.equals("socket")) {
+                check = true;
+                boolean ipOK = false;
+                while(!ipOK){
+                    ClientMain clientMain = new ClientMain(askIP());
+                    if (string.equals("rmi")) {
+                        try {
+                            clientMain.startClientRMI();
+                            ipOK = true; //unreachable
+                        } catch (MalformedURLException | RemoteException e){
+                            System.out.println("IP not correct");
+                        }
+                    } else {
+                        try {
+                            clientMain.startClientSocket();
+                            ipOK = true; //unreachable
+                        } catch (IOException e) {
+                            System.out.println("IP not correct");
+                        } catch (NoSuchElementException e) {
+                            System.err.println("Nothing to read " + e.getMessage());
+                        }
+                    }
                 }
+
+            }
+            if (!check){
+                System.out.println("Invalid name. Type rmi or socket");
             }
         }
         scanner.close();
     }
 
-    private void startClientRMI(){
+    private void startClientRMI() throws MalformedURLException, RemoteException{
         ServerIntRMI server;
         boolean on = true;
         try {
@@ -107,8 +115,13 @@ public class ClientMain {
 
                 Scanner scanner = new Scanner(System.in);
                 if (server.playersInLobby() == 1){
-                    System.out.println("You are the first player of the lobby, please set a timer (min 15 s, max 60s)");
-                    server.setDelay(Integer.parseInt(scanner.nextLine()));
+                    System.out.println("You are the first player of the lobby!");
+                    int delay = 0;
+                    while(delay < 15 || delay > 60){
+                        System.out.println("Please set a timer (min 15 s, max 60s)");
+                        delay = Integer.parseInt(scanner.nextLine());
+                    }
+                    server.setDelay(delay);
                 }
                 boolean active = true;
                 while (active) {
@@ -131,10 +144,6 @@ public class ClientMain {
                     scanner.close();
             } while (on);
 
-        } catch (MalformedURLException e) {
-            System.err.println("URL not found!");
-        } catch (RemoteException e) {
-            System.err.println("Connection error: " + e.getMessage() + "!");
         } catch (NotBoundException e) {
             System.err.println("This reference is not connected!");
         } catch (NoSuchElementException e) {
@@ -157,8 +166,15 @@ public class ClientMain {
                 clientImplementationSocket.login();
                 activePlayers = Integer.parseInt(in.readLine());
                 if (activePlayers == 1){
-                    System.out.println("You are the first player of the lobby, please set a timer (min 15 s, max 60s)");
-                    out.println(scanner.nextLine());
+                    System.out.println("You are the first player of the lobby!");
+                    int delay = 0;
+                    String delayString = null;
+                    while (delay < 15 || delay > 60){
+                        System.out.println("Please set a timer (min 15 s, max 60s)");
+                        delayString = scanner.nextLine();
+                        delay = Integer.parseInt(delayString);
+                    }
+                    out.println(delayString);
                     out.flush();
                 }
                 success = true;
@@ -190,13 +206,17 @@ public class ClientMain {
             out.close();
         }catch (NoSuchElementException e){
             System.err.println("NOTHING TO READ "+e.getMessage());
-        }catch (IOException e){
-            System.err.println(e.getMessage());
         }
         finally {
             if (socket != null)
                 socket.close();
         }
     }
-}
 
+    private static String askIP(){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("IP address of the Server: ");
+        return scanner.nextLine();
+    }
+}

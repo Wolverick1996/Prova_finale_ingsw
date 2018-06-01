@@ -31,7 +31,7 @@ public class ServerMain {
             LocateRegistry.createRegistry(PORTRMI);
 
         } catch (RemoteException e) {
-            System.out.println("There is already a registry!");
+            System.err.println("There is already a registry!");
         }
         try {
             ServerImplementationRMI serverImplementation = new ServerImplementationRMI(lobby);

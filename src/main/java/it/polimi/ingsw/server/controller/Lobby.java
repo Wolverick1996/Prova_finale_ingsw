@@ -14,22 +14,11 @@ public class Lobby /*extends Observer*/ {
     private ServerIntRMI server;
 
     public static final int MAX_PLAYERS = 4;
+    private static final int ONE_SEC = 1000;
     private int delay = 20000;
     private List<String> players = new ArrayList<>();
     private Boolean streetlight;
-    private Timer timer = new Timer();
-    private boolean isGoing = false;
-    private TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            try {
-                server.confirmConnections();
-                startGame();
-            } catch (RemoteException re){
-                System.err.println("ERROR" + re.getMessage());
-            }
-        }
-    };
+    private Timer timer;
 
     public Lobby(){
         streetlight = true;
@@ -38,7 +27,6 @@ public class Lobby /*extends Observer*/ {
     //         Methods           //
     //***************************//
 
-    //TODO: define this method (is now equal to controller's startGame)
     public void startGame(){
         Controller.startGame(players, this);
         Controller.getMyIO(this).broadcast("\n\n\tSwitching from lobby to Game ... \n\n");
@@ -46,10 +34,7 @@ public class Lobby /*extends Observer*/ {
     }
 
     public boolean addPlayer(String username){
-        while(!canIGo()){
-            //TODO: add feedback for user
-        }
-
+        canIGo();
         if (this.players.size()<= MAX_PLAYERS){
 
             for (String s : this.players){
@@ -61,8 +46,28 @@ public class Lobby /*extends Observer*/ {
 
             this.players.add(username);
 
-            if (this.players.size() == 2){
-                this.timer.schedule(this.task, delay);
+            if (this.players.size() >= 2) {
+                if (this.timer != null){
+                    this.timer.cancel();
+                }
+                this.timer = new Timer();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        try {
+                            List<String> check = players;
+                            server.confirmConnections();
+                            canIGo();
+                            streetlight = true;
+                            if (players.size() >= 2 && check.equals(players)){
+                                startGame();
+                            }
+                        } catch (RemoteException re){
+                            System.err.println("ERROR" + re.getMessage());
+                        }
+                    }
+                };
+                this.timer.schedule(task, delay);
             }
 
             this.streetlight = true;
@@ -73,17 +78,12 @@ public class Lobby /*extends Observer*/ {
     }
 
     public boolean removePlayer(String username){
-        while(!canIGo()){
-            //TODO: add feedback for user
-        }
+        canIGo();
         for (String s : this.players){
             if (s.equals(username)){
                 this.players.remove(s);
-                if (this.players.size() < 2){
-                    if(this.isGoing){
+                if (this.players.size() == 1){
                         this.timer.cancel();
-                        this.isGoing = false;
-                    }
                 }
                 this.streetlight = true;
                 return true;
@@ -93,12 +93,11 @@ public class Lobby /*extends Observer*/ {
         return false;
     }
 
-    private boolean canIGo(){
-        while (this.streetlight==false){
-            //TODO: add feedback for user
+    private void canIGo(){
+        while (!this.streetlight){
+            assert true;
         }
         this.streetlight = false;
-        return true;
     }
 
     public void setServerRMI(ServerIntRMI server){
@@ -106,7 +105,7 @@ public class Lobby /*extends Observer*/ {
     }
 
     public void setDelay(int delay) {
-        this.delay = delay;
+        this.delay = delay*ONE_SEC;
     }
 
     public List<String> getPlayers() {

@@ -13,6 +13,7 @@ public class Table {
     //        Attributes         //
     //***************************//
 
+    private static final int NUM_CARDS = 3;
     private ArrayList<Dice> reserve = new ArrayList<>();
     private ArrayList<Player> activePlayers = new ArrayList<>();
     private boolean canExtract = true;
@@ -232,7 +233,10 @@ public class Table {
      * @param d: the dice to place
      * @author Matteo
      */
-    public void putDiceInReserve(Dice d){reserve.add(d);}
+    public void putDiceInReserve(Dice d){
+        reserve.add(d);
+        canExtract = true;
+    }
 
     /**
      * Puts a dice in a particular spot [round track]
@@ -274,8 +278,14 @@ public class Table {
      */
     @Override
     public String toString(){
+        String s = "\n";
+        for(int i = 0; i<NUM_CARDS ; i++){
+            s += PubObjHandler.getName(i) + "\n";
+            s += PubObjHandler.getDescription(i) + "\n";
+        }
         return "Table: \n" + "Dice in reserve: " + reserve.size() + "\nReserve: " + reserve.toString() + "\nRoundtrack: " +
-                roundTrack.toString() + "\nTurn: " + realTurn + "\nRound: " + (round+1) + "\nClockwise: " + clockwise;
+                roundTrack.toString() + "\nTurn: " + realTurn + "\nRound: " + (round+1) + "\nClockwise: " + clockwise +
+                "\nPublic Objective cards: " + s;
     }
 
 }

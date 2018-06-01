@@ -97,15 +97,14 @@ public class IOhandler implements Observer{
         boolean isValid = false;
         Scanner s = new Scanner(System.in);
 
-        Integer[] schemes = new Integer[4];
-        schemes[0] = s1;
-        schemes[1] = s2;
-        schemes[2] = s3;
-        schemes[3] = s4;
-
-        for (int i = 0; i<4; i++){
-            System.out.println("Scheme " + (i+1));
-            System.out.println(Scheme.initialize(schemes[i]));
+        ArrayList<Integer> schemes = new ArrayList<>();
+        schemes.add(s1);
+        schemes.add(s2);
+        schemes.add(s3);
+        schemes.add(s4);
+        for (Integer i:schemes){
+            System.out.println("Scheme " + (schemes.indexOf(i)+1));
+            System.out.println(Scheme.initialize(i));
         }
 
         while(!isValid){
@@ -118,6 +117,6 @@ public class IOhandler implements Observer{
                 System.out.println("Not a scheme!");
             }
         }
-        return schemes[answer-1];
+        return schemes.get(answer-1);
     }
 }
