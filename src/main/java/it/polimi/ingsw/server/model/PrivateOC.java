@@ -19,8 +19,6 @@ public class PrivateOC implements ObjectiveCard {
      * Constructor for the private objective card
      *
      * @param color: the color that will become the one of interest to the player, going to form his private objective card
-     * @throws IOException if there are problems with reading from file
-     * @throws Exception if there are problems with scanner closing
      * @author Andrea
      */
     public PrivateOC(Enum.Color color){
@@ -40,14 +38,14 @@ public class PrivateOC implements ObjectiveCard {
             this.description = scan.nextLine();
 
         } catch (IOException e){
-            System.out.println("Error");
+            System.err.println("Error");
         }
         finally {
             if (scan != null) {
                 try {
                     scan.close();
                 } catch (Exception e1) {
-                    System.out.println("Error");
+                    System.err.println("Error");
                 }
             }
         }

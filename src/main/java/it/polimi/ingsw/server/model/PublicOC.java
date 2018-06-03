@@ -20,13 +20,11 @@ public class PublicOC implements ObjectiveCard {
      *
      * @param cardID: the ID of the public objective card to be created (1 to 10)
      * @throws IllegalArgumentException if ID passed as a parameter is not valid
-     * @throws IOException if there are problems with reading from file
-     * @throws Exception if there are problems with scanner closing
      * @author Andrea
      */
     public PublicOC(int cardID){
-        if (cardID < 1 || cardID > 10)
-            throw new IllegalArgumentException("not valid ID: " + cardID);
+        if (cardID < 1 || cardID > PubObjHandler.NUM_PUB_OC)
+            throw new IllegalArgumentException("Not valid ID: " + cardID);
 
         this.cardID = cardID;
         File inputFile = new File("src/main/resources/cards/PublicOC.txt");
@@ -42,14 +40,14 @@ public class PublicOC implements ObjectiveCard {
             this.description = scan.nextLine();
 
         } catch (IOException e){
-            System.out.println("Error");
+            System.err.println("Error");
         }
         finally {
             if (scan != null) {
                 try {
                     scan.close();
                 } catch (Exception e1) {
-                    System.out.println("Error");
+                    System.err.println("Error");
                 }
             }
         }

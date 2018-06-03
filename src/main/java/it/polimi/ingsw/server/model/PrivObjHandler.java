@@ -74,7 +74,7 @@ public class PrivObjHandler {
                             yellowExt++;
                         } break;
                     default:
-                        System.out.println("ERROR");
+                        System.err.println("Failed setPrivOC");
                         break;
                 }
             }

@@ -195,7 +195,7 @@ class TableTest {
         instance.putDiceInBag(numP*2);
         assertNull(instance.checkDiceFromReserve(numP*2));
 
-        //try moving all dices from reserve to bag
+        //try moving all dice from reserve to bag
         for (int i=numP*2-1; i>=0; i--)
             instance.putDiceInBag(i);
         assertNull(instance.checkDiceFromReserve(0));

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.server.model;
 
 /**
- * Player class contains method related to player's actions in the game
+ * Player class contains methods related to player's actions in the game
  *
  * @author Andrea
  */
-public class Player {
+public class Player extends Enum {
 
     //***************************//
     //        Attributes         //
@@ -17,6 +17,7 @@ public class Player {
     private Dice diceInHand = null;
     private Scheme ownScheme;
     private int IDplayer;
+    private int turns;
 
     /**
      * Constructor for the player which receives from controller nickname and ID
@@ -29,6 +30,7 @@ public class Player {
         this.nickname = nick;
         this.points = 0;
         this.IDplayer = ID;
+        this.turns = 0;
     }
 
     //***************************//
@@ -84,9 +86,6 @@ public class Player {
 
         return ownScheme.placeDice(x, y, tempDice);
     }
-
-    //Use a tool card
-    public boolean useToolCard(int indexToolCard){ return false; }
 
     /**
      * Counts player's points at the end of the game, when player decides to leave or whenever else the method is called
@@ -164,6 +163,19 @@ public class Player {
     }
 
     /**
+     * Decrements the number of player tokens when the player uses a tool card
+     *
+     * @param used: an integer that represents the number of tokens already on the tool card used
+     * @author Riccardo
+     */
+    public void decrementTokens(int used){
+        if (used == 0)
+            this.tokens--;
+        else
+            this.tokens -= 2;
+    }
+
+    /**
      * Returns the dice currently in hand (useful for tool cards)
      *
      * @return dice in hand (null if there is not)
@@ -172,6 +184,21 @@ public class Player {
     public Dice getDiceInHand() {
         return this.diceInHand;
     }
+
+    /**
+     * Update the turns variable when the player end a turn in a round
+     * Turns can go from 0 to 2 in a round, then it will be reset
+     *
+     * @author Riccardo
+     */
+    public void addTurn() { this.turns++; }
+
+    /**
+     * Reset the turns variable when the round ends
+     *
+     * @author Riccardo
+     */
+    public void resetTurns() { this.turns = 0; }
 
     /**
      * Used to print a player

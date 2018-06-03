@@ -36,7 +36,7 @@ public class Table {
      * @author Matteo
      */
     public Table(int numP){
-        ToolHandler.setTools();
+        //ToolHandler.setTools();
         PubObjHandler.setPubOC();
         //TODO: numPlayers = controller.getNumPlayers(); //Request must be sent to right controller
         this.numPlayers = numP;
@@ -104,6 +104,13 @@ public class Table {
         for (int i=0;i<numPlayers*2+1;i++){ reserve.add(pickDiceFromBag()); }
 
         round++;
+
+        //At the beginning of each round turns restart from 1
+        //It will be incremented to 1 at the end of the nextTurn method
+        this.realTurn = 0;
+
+        //Resetting turns of players
+        for (Player p : activePlayers) { p.resetTurns(); }
     }
 
     /**
@@ -160,6 +167,7 @@ public class Table {
      * @author Matteo
      */
     public Dice pickDiceFromRoundtrack(int dicePos){
+        if (dicePos >= roundTrack.size()) { return null; }
         Dice temp = roundTrack.get(dicePos);
         roundTrack.remove(dicePos);
         return temp;
@@ -247,12 +255,31 @@ public class Table {
     public void putDiceInRoundtrack(Dice d){roundTrack.add(d);}
 
     /**
-     * Gets the current turn
+     * This method is called by controller when the player decides to use a tool card
+     *
+     * @param indexToolCard: the identifier of the tool card on the table
+     * @param activePlayer: the player who decides to use the tool card
+     * @return true if the tool card is correctly used, otherwise false
+     */
+    public boolean useToolCard(int indexToolCard, Player activePlayer) {
+        return ToolHandler.useTool(indexToolCard, activePlayer, this);
+    }
+
+    /**
+     * Gets the current turn (0 to numPlayers-1 in the first part of the round, numPlayers-1 to 0 in the second part)
      *
      * @return the current turn
      * @author Matteo
      */
     public int getTurn(){ return this.turn; }
+
+    /**
+     * Gets the current turn (1 to 2*numPlayers)
+     *
+     * @return the current turn
+     * @author Matteo
+     */
+    public int getRealTurn(){ return this.realTurn; }
 
     /**
      * Gets the current round

@@ -323,6 +323,17 @@ public class Scheme {
     }
 
     /**
+     * Simple method that calls methods to check restrictions and returns true if the dice is placeable
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return false if the dice is not placeable cause of value or color restrictions, otherwise true
+     * @author Riccardo
+     */
+    public boolean isPlaceable(int x, int y, Dice dice){ return !(!checkValueRestr(x, y, dice) || !checkColorRestr(x, y, dice)); }
+
+    /**
      * Standard placement of a dice in a specific box (normal move of the game, without using tool cards)
      *
      * @param x: identifier of the row number
@@ -332,7 +343,7 @@ public class Scheme {
      * @author Andrea
      */
     public boolean placeDice(int x, int y, Dice dice){
-        if (!checkValueRestr(x, y, dice) || !checkColorRestr(x, y, dice))
+        if (!isPlaceable(x, y, dice))
             return false;
 
         return grid[x][y].setDice(dice);

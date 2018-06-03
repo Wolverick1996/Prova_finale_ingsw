@@ -15,7 +15,7 @@ public class PubObjHandler {
     //***************************//
 
     private static ArrayList<PublicOC> activeID = new ArrayList<>();
-    private static final int NUM_PUB_OC = 10;
+    static final int NUM_PUB_OC = 10;
 
     //***************************//
     //         Methods           //
@@ -55,7 +55,7 @@ public class PubObjHandler {
             }
         } catch (NullPointerException e){
             //Unhandled Exception
-            System.out.println("Failed setPubOC");
+            System.err.println("Failed setPubOC");
             System.exit(-1);
         }
     }
