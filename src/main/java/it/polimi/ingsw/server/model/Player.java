@@ -5,7 +5,7 @@ package it.polimi.ingsw.server.model;
  *
  * @author Andrea
  */
-public class Player extends Enum {
+public class Player {
 
     //***************************//
     //        Attributes         //
