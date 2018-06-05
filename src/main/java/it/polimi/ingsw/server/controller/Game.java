@@ -145,7 +145,7 @@ class Game {
         boolean check = false;
         while (!check){
             try{
-                int index = Controller.getMyIO(this).getDice(players.get(active).getUsername());
+                int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
                     Controller.getMyIO(this).broadcast("Nope, nothing done");
                     return;
