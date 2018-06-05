@@ -423,7 +423,8 @@ public class Scheme {
 
             s = s+"\n";
         }
-        return "Name: "+this.name+"\nDifficulty: "+this.difficulty+"\n"+s;
+        return Enum.Color.BLUE.escape() + "Name: " + Enum.Color.RESET + this.name + Enum.Color.BLUE.escape() +
+                "\nDifficulty: " + Enum.Color.RESET + this.difficulty + "\n" + s;
     }
 
 }

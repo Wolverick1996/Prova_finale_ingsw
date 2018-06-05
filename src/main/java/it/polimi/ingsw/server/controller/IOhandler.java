@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.controller;
 
-
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.server.model.Table;
@@ -47,10 +46,9 @@ public class IOhandler implements Observer{
                 }
                 System.out.println(DIVISOR);
                 server.broadcast(DIVISOR);
-            }
-            else
+            } else
                 server.broadcast(message.toString());
-        }catch (RemoteException e){
+        } catch (RemoteException e){
             System.err.println("ERROR BROADCAST: "+e.getMessage());
         }
 
@@ -59,7 +57,7 @@ public class IOhandler implements Observer{
     public String getStandardAction(String player){
         try {
             boolean send = false;
-            String answer = null;
+            String answer;
             while (!send){
 
                 notify(player, "Insert action (d = place dice, t = use tool, q = pass turn)");
@@ -72,12 +70,12 @@ public class IOhandler implements Observer{
                 } else if (answer.equals("q")){
                     return "q";
                 }
-                else{
+                else {
                     notify(player, "Invalid input!");
                 }
             }
-        }catch (RemoteException e){
-            System.err.println("GETSTDACTION ERROR: "+e.getMessage());
+        } catch (RemoteException e){
+            System.err.println("GETSTDACTION ERROR: " +e.getMessage());
         }
         return null;
     }
@@ -88,7 +86,7 @@ public class IOhandler implements Observer{
             notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
             answer = Integer.parseInt(server.getInput(player));
             return answer-1;
-        }catch (RemoteException e){
+        } catch (RemoteException e){
             System.err.println("GETDICE ERROR: " +e.getMessage());
         }
        //TODO: CHECK THIS INPUT!
@@ -102,8 +100,8 @@ public class IOhandler implements Observer{
             answer = Integer.parseInt(server.getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;
-        }catch (RemoteException e){
-            System.err.println("GETCOORDINATE: "+e.getMessage());
+        } catch (RemoteException e){
+            System.err.println("GETCOORDINATE: " +e.getMessage());
         }
         return -1;
     }
@@ -111,13 +109,10 @@ public class IOhandler implements Observer{
     @Override
     public void update(Observable o, Object arg) {
         if (o == ov)
-        {
             System.out.println(ov);
-        }
     }
 
     public int chooseScheme(int s1, int s2, int s3, int s4, String player){
-
         int answer = -1;
         boolean isValid = false;
 
@@ -143,7 +138,7 @@ public class IOhandler implements Observer{
                 }
             }
             return schemes.get(answer-1);
-        }catch (RemoteException e){
+        } catch (RemoteException e){
             System.err.println("CHOOSESCHEME ERROR: " +e.getMessage());
         }
         return -1;
@@ -152,12 +147,12 @@ public class IOhandler implements Observer{
     public int getDiceFromRoundtrack(String player){
         int answer;
         try {
-            notify(player,"Choose a dice from Round Track [from 1 to n]");
+            notify(player,"Choose a dice from round track [from 1 to N]");
             answer = Integer.parseInt(server.getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;
-        }catch (RemoteException e){
-            System.err.println("GETTOOL: "+e.getMessage());
+        } catch (RemoteException e){
+            System.err.println("GETTOOL: " + e.getMessage());
         }
         return -1;
     }
@@ -165,12 +160,12 @@ public class IOhandler implements Observer{
     public int getTool(String player){
         int answer;
         try {
-            notify(player,"Choose a tool card [1, 2, 3] or type '0' if you want to go back");
+            notify(player,"\nChoose a tool card [1, 2, 3] or type '0' if you want to go back");
             answer = Integer.parseInt(server.getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;
-        }catch (RemoteException e){
-            System.err.println("GETTOOL: "+e.getMessage());
+        } catch (RemoteException e){
+            System.err.println("GETTOOL: " + e.getMessage());
         }
         return -1;
     }
@@ -178,17 +173,15 @@ public class IOhandler implements Observer{
     public int chooseDiceValue(String player, boolean restricted){
         int answer;
         try {
-            if (restricted){
+            if (restricted)
                 notify(player,"Increment or decrement the value typing '+1' or '-1'");
-            }
-            else{
+            else
                 notify(player,"Insert the new value [1-6]");
-            }
             answer = Integer.parseInt(server.getInput(player));
             //TODO: CHECK THE INPUT!
             return answer;
-        }catch (RemoteException e){
-            System.err.println("GETTOOL: "+e.getMessage());
+        } catch (RemoteException e){
+            System.err.println("GETTOOL: " + e.getMessage());
         }
         return -1;
     }
@@ -197,7 +190,7 @@ public class IOhandler implements Observer{
         this.server = server;
     }
 
-    public void notify(String player, String message)throws RemoteException{
+    public void notify(String player, String message) throws RemoteException {
         server.notify(player, message);
     }
 }

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import it.polimi.ingsw.server.controller.IOhandler;
 
 import java.rmi.RemoteException;
@@ -81,22 +80,58 @@ public class ToolHandler {
         return activeID.get(index).useEffect(player, table);
     }
 
+    /**
+     * Calls the IOhandler to ask coordinates from input
+     *
+     * @param coord: the coordinate to ask (x or y)
+     * @param player: the player who is using the tool card
+     * @return the coordinate asked (integer)
+     * @author Matteo
+     */
     public static int getCoordinates(String coord, Player player){
         return currentIO.getCoordinate(coord, player.getUsername());
     }
 
+    /**
+     * Calls the IOhandler to ask a dice position on the round track from input
+     *
+     * @param player: the player who is using the tool card
+     * @return the dice position asked (integer)
+     * @author Matteo
+     */
     public static int getFromRoundtrack(Player player){
         return currentIO.getDiceFromRoundtrack(player.getUsername());
     }
 
+    /**
+     * Calls the IOhandler to ask a dice position on the reserve from input
+     *
+     * @param player: the player who is using the tool card
+     * @return the dice position asked (integer)
+     * @author Matteo
+     */
     public static int getFromReserve(Player player){
         return currentIO.getDiceFromReserve(player.getUsername());
     }
 
+    /**
+     * Calls the IOhandler to ask a value from input
+     *
+     * @param player: the player who is using the tool card
+     * @return the value asked
+     * @author Matteo
+     */
     public static int getDiceValue(Boolean restricted, Player player){
         return currentIO.chooseDiceValue(player.getUsername(), restricted);
     }
 
+    /**
+     * Calls the IOhandler to send it messages to print out
+     *
+     * @param player: the player who is using the tool card
+     * @param string: the string to print
+     * @author Matteo
+     */
     public static void notify(Player player, String string){
         try {
             currentIO.notify(player.getUsername(), string);

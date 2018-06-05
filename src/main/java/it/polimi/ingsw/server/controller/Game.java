@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.*;
+import it.polimi.ingsw.server.model.Enum;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -11,8 +12,8 @@ class Game {
     //        Attributes         //
     //***************************//
 
-    private List<Player> players = new ArrayList<>();
-    private Table table = null;
+    private List<Player> players;
+    private Table table;
     private int active = -1;
     private int turn = 1;
     private static final String STATUS = "STATUS";
@@ -22,29 +23,28 @@ class Game {
     private boolean dicePlaced = false;
 
     Game(List<Player> users, Table board){
-
         this.players = users;
         this.table = board;
-
     }
+
     //***************************//
     //         Methods           //
     //***************************//
 
     void begin(){
-
         int i;
         int j;
         Integer[] schemes = new Integer[12];
-        for (int k = 0; k < schemes.length; k++) {
+        for (int k = 0; k < schemes.length; k++)
             schemes[k] = k+1;
-        }
+
         Collections.shuffle(Arrays.asList(schemes));
         //TODO: PLACE CORRECTLY SCHEMES IN FILE
-        for(Player p:this.players){
+        for (Player p:this.players){
             try {
-                Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card: " +
-                        PrivObjHandler.getName(p) + "\n" + PrivObjHandler.getDescription(p));
+                Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card:\n" +
+                        Enum.Color.GREEN.escape() + PrivObjHandler.getName(p) + "\n" + Enum.Color.RESET +
+                        PrivObjHandler.getDescription(p) + "\n");
             } catch (RemoteException e) {
                 e.printStackTrace();
                 //THIS PLAYER HAS DISCONNECTED
@@ -57,8 +57,6 @@ class Game {
             p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+12,j+12, p.getUsername())));
         }
 
-
-
         this.active = 0; //TODO: add algorithm to define starting player
         Controller.getMyIO(this).broadcast(STATUS);
         Controller.getMyIO(this).broadcast("Game is starting!\n");
@@ -66,40 +64,39 @@ class Game {
     }
 
     private void next(){
-        if(this.turn > this.players.size()*2*10){
+        if (this.turn > this.players.size()*2*10){
             Controller.getMyIO(this).broadcast("Game has ended! Closing..."); //TODO: implement end of game
             System.exit(0);
         } else {
-            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn");
+            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
             Boolean end = false;
             while (!end){
                 String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
                 switch (action){
-                    case "d": {
+                    case "d":
                         Controller.getMyIO(this).broadcast("Is putting a dice...");
                         putDiceStandard();
                         break;
-                    }
-                    case "q":{
+                    case "q":
                         Controller.getMyIO(this).broadcast("Turn passed");
                         end = true;
                         toolUsed = false;
                         dicePlaced = false;
                         break;
-                    }
-                    case "t":{
+                    case "t":
                         Controller.getMyIO(this).broadcast("Is using a tool...");
                         useTool();
                         break;
-                    }
-                    default: System.out.println("FATAL ERROR, UNKNOWN INPUT"); System.exit(-1); //TODO: implement input error manager
+                    default:
+                        System.err.println("FATAL ERROR, UNKNOWN INPUT");
+                        System.exit(-1); //TODO: implement input error manager
                 }
             }
 
         }
 
         //This is made to keep track of the active player
-        if (this.count == this.players.size() - 1 && this.clockwise) {
+        if (this.count == this.players.size() - 1 && this.clockwise){
             this.clockwise = false;
         } else if(this.count == 0 && !this.clockwise){
             if (this.active == this.players.size() - 1){
@@ -132,40 +129,40 @@ class Game {
 
     private void useTool(){
         if (toolUsed){
-            Controller.getMyIO(this).broadcast("Someone is trying to use a Tool TWICE... YOU CAAAAAAAAAAAAAN'T");
+            Controller.getMyIO(this).broadcast("Someone is trying to use a tool card TWICE... YOU CAAAAAAAAAAAAAN'T");
             return;
         }
         int index = -2;
         toolUsed = true;
         //Table temp = table;
         try {
-
+            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "\nTool Cards on table:\n");
             for (int i = 0; i<3; i++) {
-                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "\n Tool Card:\n" +
-                        ToolHandler.getName(i) + "\n Description:\n" + ToolHandler.getDescription(i) + "\n Tokens on: "
-                        + ToolHandler.getTokens(i));
+                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), Enum.Color.YELLOW.escape()
+                        + ToolHandler.getName(i) + "\n" + Enum.Color.RESET + ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() +
+                        "\n Tokens on: " + Enum.Color.RESET + ToolHandler.getTokens(i) + "\n");
             }
         } catch (RemoteException e) {
             e.printStackTrace();
             return;
         }
-        while(index<0 || index>2){
+        while (index<0 || index>2){
 
             if (index == -1){
                 toolUsed = false;
-                Controller.getMyIO(this).broadcast("Nope, nothing done");
+                Controller.getMyIO(this).broadcast("Nope, nothing done :(");
                 return;
             }
 
             index = Controller.getMyIO(this).getTool(this.players.get(active).getUsername());
         }
 
-        if(this.table.useToolCard(index, this.players.get(active), Controller.getMyIO(this))){
+        if (this.table.useToolCard(index, this.players.get(active), Controller.getMyIO(this))){
             Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() +
             " has used " + ToolHandler.getName(index) + " correctly! :)");
         } else {
             toolUsed = false;
-            Controller.getMyIO(this).broadcast("Something went wrong ... ");
+            Controller.getMyIO(this).broadcast("Something went wrong... :(");
             //table = temp;
         }
     }
@@ -179,7 +176,7 @@ class Game {
         Dice dice = null;
         boolean check = false;
         while (!check){
-            try{
+            try {
                 int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
                     dicePlaced = false;
@@ -194,14 +191,14 @@ class Game {
                 if (!check){
                     Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
                     if (dice!= null && dice != this.table.checkDiceFromReserve(index)) this.table.putDiceInReserve(dice);
-                    Controller.getMyIO(this).broadcast(this.table);
+                    Controller.getMyIO(this).notify(this.players.get(active).getUsername(), this.table.toString());
+                    Controller.getMyIO(this).notify(this.players.get(active).getUsername(), this.players.get(active).getOwnScheme().toString());
                 }
 
             } catch (Exception e){
                 Controller.getMyIO(this).broadcast("EXCEPTION CAUGHT! Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
                 Controller.getMyIO(this).broadcast(e.getMessage());
                 if (dice!= null) this.table.putDiceInReserve(dice);
-                Controller.getMyIO(this).broadcast(this.table);
             }
 
         }

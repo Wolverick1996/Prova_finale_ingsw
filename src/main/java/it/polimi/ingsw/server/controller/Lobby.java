@@ -29,7 +29,7 @@ public class Lobby /*extends Observer*/ {
 
     public void startGame(){
         Controller.startGame(players, this, this.server);
-        Controller.getMyIO(this).broadcast("\n\n\tSwitching from lobby to Game ... \n\n");
+        Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
         Controller.switchContext(this);
     }
 
@@ -47,9 +47,9 @@ public class Lobby /*extends Observer*/ {
             this.players.add(username);
 
             if (this.players.size() >= 2) {
-                if (this.timer != null){
+                if (this.timer != null)
                     this.timer.cancel();
-                }
+
                 this.timer = new Timer();
                 TimerTask task = new TimerTask() {
                     @Override
@@ -59,9 +59,9 @@ public class Lobby /*extends Observer*/ {
                             server.confirmConnections();
                             canIGo();
                             streetlight = true;
-                            if (players.size() >= 2 && check.equals(players)){
+                            if (players.size() >= 2 && check.equals(players))
                                 startGame();
-                            }
+
                         } catch (RemoteException re){
                             System.err.println("ERROR" + re.getMessage());
                         }

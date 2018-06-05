@@ -309,12 +309,15 @@ public class Table {
     public String toString(){
         String s = "\n";
         for(int i = 0; i<NUM_CARDS ; i++){
-            s += PubObjHandler.getName(i) + "\n";
+            s += Enum.Color.RED.escape() + PubObjHandler.getName(i) + Enum.Color.RESET + "\n";
             s += PubObjHandler.getDescription(i) + "\n";
         }
-        return "Table: \n" + "Dice in reserve: " + reserve.size() + "\nReserve: " + reserve.toString() + "\nRoundtrack: " +
-                roundTrack.toString() + "\nTurn: " + realTurn + "\nRound: " + (round+1) + "\nClockwise: " + clockwise +
-                "\nPublic Objective cards: " + s;
+        return "Table: \n" + Enum.Color.PURPLE.escape() + "Dice in reserve: " + Enum.Color.RESET + reserve.size() +
+                Enum.Color.PURPLE.escape() + "\nReserve: " + Enum.Color.RESET + reserve.toString() + Enum.Color.PURPLE.escape() +
+                "\nRoundtrack: " + Enum.Color.RESET + roundTrack.toString() + Enum.Color.PURPLE.escape() + "\nTurn: " +
+                Enum.Color.RESET + realTurn + Enum.Color.PURPLE.escape() + "\nRound: " + Enum.Color.RESET + (round+1) +
+                Enum.Color.PURPLE.escape() + "\nClockwise: " + Enum.Color.RESET + clockwise + Enum.Color.PURPLE.escape() +
+                "\nPublic Objective cards: " + Enum.Color.RESET + s;
     }
 
 }

@@ -208,8 +208,7 @@ public class Player {
      */
     @Override
     public String toString(){
-        return this.nickname+
-                "\n Tokens available: "+this.tokens+"\nActive scheme:\n"+this.ownScheme;
+        return this.nickname+ "\n Tokens available: "+this.tokens+Enum.Color.BLUE.escape()+"\nActive scheme:\n"+this.ownScheme;
     }
 
 }

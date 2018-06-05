@@ -10,46 +10,38 @@ public class Controller {
     private static List<Lobby> lobbies = new ArrayList<>();
     private static List<Game> games = new ArrayList<>();
     private static List<IOhandler> speakers = new ArrayList<>();
-    private static final String STATUS = "status";
-/* These attributes only serve as controller's addresses
- */
+    /* These attributes only serve as controller's addresses */
 
     public static void startGame(List<String> nicknames, Lobby lobby, ServerIntRMI server){
 
         try {
-
             lobbies.add(lobby);
             int i = lobbies.size() - 1;
             String s = "";
             Table table = new Table(nicknames.size());
             table.setPlayers(nicknames);
-            speakers.add(new IOhandler(table.getActivePlayers(), table/*, table*/  )); //TODO: add on Table extends observable
+            speakers.add(new IOhandler(table.getActivePlayers(), table)); //TODO: add on Table extends observable
             speakers.get(i).setServer(server);
-            speakers.get(i).broadcast("OK");
-            speakers.get(i).broadcast("These are the players: ");
-            for(String player:nicknames){speakers.get(i).broadcast(player);}
+            speakers.get(i).broadcast("\nOK\nGame is ready!");
 
             //TODO: Implementation of prep phase
             games.add(new Game(table.getActivePlayers(), table));
 
-            speakers.get(i).broadcast("Game is ready");
-
-            speakers.get(i).broadcast("Printing reserve...");
-            for (int k=0; k<nicknames.size()*2 + 1; k++){
+            speakers.get(i).broadcast("\nPrinting reserve...");
+            for (int k=0; k<nicknames.size()*2 + 1; k++)
                 s += table.checkDiceFromReserve(k) + "\t";
-            }
+
             speakers.get(i).broadcast(s);
             //TODO: print status of game
-            speakers.get(i).broadcast("This is the lobby: \n" + lobby);
+            speakers.get(i).broadcast("\nThis is the lobby: \n" + lobby);
             speakers.get(i).broadcast(table);
-
-
-        }catch (NullPointerException n){
-            System.out.println("Null Pointer exception");
+        }
+        catch (NullPointerException n){
+            System.err.println("Null Pointer exception");
             n.printStackTrace();
         }
         catch (Exception e){
-            System.out.println("Exception caught");
+            System.err.println("Exception caught");
             e.printStackTrace();
         }
 
@@ -57,23 +49,21 @@ public class Controller {
 
     public static void switchContext(Lobby lobby){
         try {
-
             games.get(lobbies.indexOf(lobby)).begin();
-
         }
         catch (NullPointerException n){
-            System.out.println("Null Pointer exception");
+            System.err.println("Null Pointer exception");
             n.printStackTrace();
         }
         catch (Exception e){
-            System.out.println("Exception caught");
+            System.err.println("Exception caught");
             e.printStackTrace();
         }
 
     }
 
     public static IOhandler getMyIO (Object caller){
-        if(caller.getClass() == Lobby.class){
+        if (caller.getClass() == Lobby.class){
             return speakers.get(lobbies.indexOf(caller));
         } else if (caller.getClass() == Game.class){
             return speakers.get(games.indexOf(caller));
