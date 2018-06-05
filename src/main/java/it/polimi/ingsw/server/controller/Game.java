@@ -61,30 +61,41 @@ class Game {
             System.exit(0);
         } else {
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn");
-            String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
-            switch (action){
-                case "d": {
-                    putDiceStandard();
-                    break;
+            Boolean end = false;
+            while (!end){
+                String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
+                switch (action){
+                    case "d": {
+                        Controller.getMyIO(this).broadcast("Is putting a dice...");
+                        putDiceStandard();
+                        break;
+                    }
+                    case "q":{
+                        Controller.getMyIO(this).broadcast("Turn passed");
+                        end = true;
+                        break;
+                    }
+                    case "t":{
+                        Controller.getMyIO(this).broadcast("Is using a tool...");
+                        useTool();
+                        break;
+                    }
+                    default: System.out.println("FATAL ERROR, UNKNOWN INPUT"); System.exit(-1); //TODO: implement input error manager
                 }
-                case "q":{
-                    Controller.getMyIO(this).broadcast("Turn passed");
-                    break;
-                }
-                default: System.out.println("FATAL ERROR, UNKNOWN INPUT"); System.exit(-1); //TODO: implement input error manager
             }
+
         }
 
         //This is made to keep track of the active player
-        if (this.count == players.size() - 1 && this.clockwise) {
-            clockwise = false;
+        if (this.count == this.players.size() - 1 && this.clockwise) {
+            this.clockwise = false;
         } else if(this.count == 0 && !this.clockwise){
             if (this.active == this.players.size() - 1){
                 this.active = 0;
             } else {
                 this.active ++;
             }
-            clockwise = true;
+            this.clockwise = true;
         } else if (this.clockwise){
             if (this.active == this.players.size() - 1){
                 this.active = 0;
@@ -107,12 +118,38 @@ class Game {
         next();
     }
 
+    private void useTool(){
+        int index = -2;
+        //Table temp = table;
+        while(index<0 || index>2){
+
+            if (index == -1){
+                Controller.getMyIO(this).broadcast("Nope, nothing done");
+                return;
+            }
+
+            index = Controller.getMyIO(this).getTool(this.players.get(active).getUsername());
+        }
+
+        if(this.table.useToolCard(index, this.players.get(active), Controller.getMyIO(this))){
+            Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() +
+            " has used " + ToolHandler.getName(index));
+        } else {
+            Controller.getMyIO(this).broadcast("Something went wrong ... ");
+            //table = temp;
+        }
+    }
+
     private void putDiceStandard(){
         Dice dice = null;
         boolean check = false;
         while (!check){
             try{
                 int index = Controller.getMyIO(this).getDice(players.get(active).getUsername());
+                if (index == -1){
+                    Controller.getMyIO(this).broadcast("Nope, nothing done");
+                    return;
+                }
                 dice = this.table.checkDiceFromReserve(index);
                 check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x", this.players.get(active).getUsername()),
                         Controller.getMyIO(this).getCoordinate("y", this.players.get(active).getUsername()),

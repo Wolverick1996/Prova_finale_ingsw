@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.controller.IOhandler;
+
 import java.util.*;
 
 /**
@@ -261,8 +263,8 @@ public class Table {
      * @param activePlayer: the player who decides to use the tool card
      * @return true if the tool card is correctly used, otherwise false
      */
-    public boolean useToolCard(int indexToolCard, Player activePlayer) {
-        return ToolHandler.useTool(indexToolCard, activePlayer, this);
+    public boolean useToolCard(int indexToolCard, Player activePlayer, IOhandler out) {
+        return ToolHandler.useTool(indexToolCard, activePlayer, this, out);
     }
 
     /**

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.model;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import it.polimi.ingsw.server.controller.IOhandler;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,7 +18,8 @@ public class ToolHandler {
     //***************************//
 
     private static ArrayList<ToolCard> activeID = new ArrayList<>();
-    static final int NUM_TOOLS = 12;
+    static final int NUM_TOOLS = 6;
+    private static IOhandler currentIO;
 
     //***************************//
     //         Methods           //
@@ -71,7 +75,30 @@ public class ToolHandler {
      * @return ToolCard useEffect method result (true if the card is correctly used, otherwise false)
      * @author Riccardo
      */
-    public static boolean useTool(int index, Player player, Table table){ return activeID.get(index).useEffect(player, table); }
+    public static boolean useTool(int index, Player player, Table table, IOhandler out){
+        currentIO = out;
+        return activeID.get(index).useEffect(player, table);
+    }
+
+    public static int getCoordinates(String coord, Player player){
+        return currentIO.getCoordinate(coord, player.getUsername());
+    }
+
+    public static int getFromRoundtrack(Player player){
+        return currentIO.getDiceFromRoundtrack(player.getUsername());
+    }
+
+    public static int getFromReserve(Player player){
+        return currentIO.getDiceFromReserve(player.getUsername());
+    }
+
+    public static int getDiceValue(Boolean restricted, Player player){
+        return currentIO.chooseValue(player.getUsername(), restricted);
+    }
+
+    public static void notify(Player player, String string){
+        currentIO.notify(player, string);
+    }
 
     /**
      * Gets the name of the tool card (on table)
