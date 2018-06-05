@@ -112,7 +112,7 @@ class Game {
         boolean check = false;
         while (!check){
             try{
-                int index = Controller.getMyIO(this).getDice(players.get(active).getUsername());
+                int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 dice = this.table.checkDiceFromReserve(index);
                 check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x", this.players.get(active).getUsername()),
                         Controller.getMyIO(this).getCoordinate("y", this.players.get(active).getUsername()),

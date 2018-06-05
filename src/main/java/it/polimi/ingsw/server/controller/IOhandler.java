@@ -62,15 +62,18 @@ public class IOhandler implements Observer{
             String answer = null;
             while (!send){
 
-                server.notify(player, "Insert action (d = place dice, q = pass turn)");
+                notify(player, "Insert action (d = place dice, q = pass turn)");
                 answer = server.getInput(player);
 
                 if (answer.equals("d")){
                     return "d";
+                } else if (answer.equals("t")){
+                    return "t";
                 } else if (answer.equals("q")){
                     return "q";
-                } else {
-                    server.notify(player, "Invalid input!");
+                }
+                else{
+                    notify(player, "Invalid input!");
                 }
             }
         }catch (RemoteException e){
@@ -79,10 +82,10 @@ public class IOhandler implements Observer{
         return null;
     }
 
-    public int getDice(String player){
+    public int getDiceFromReserve(String player){
         int answer;
         try {
-            server.notify(player, "Insert the place of the dice in the reserve");
+            notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
             answer = Integer.parseInt(server.getInput(player));
             return answer-1;
         }catch (RemoteException e){
@@ -95,7 +98,7 @@ public class IOhandler implements Observer{
     public int getCoordinate(String coor, String player){
         int answer;
         try {
-            server.notify(player,"Insert coordinate " + coor + " of the dice");
+            notify(player,"Insert coordinate " + coor + " of the dice");
             answer = Integer.parseInt(server.getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;
@@ -125,18 +128,18 @@ public class IOhandler implements Observer{
         schemes.add(s4);
         try {
             for (Integer i:schemes){
-                server.notify(player, "Scheme " + (schemes.indexOf(i)+1));
-                server.notify(player, Scheme.initialize(i).toString());
+                notify(player, "Scheme " + (schemes.indexOf(i)+1));
+                notify(player, Scheme.initialize(i).toString());
             }
 
             while(!isValid){
-                server.notify(player, "Pick a scheme (write 1, 2, 3 or 4)");
+                notify(player, "Pick a scheme (write 1, 2, 3 or 4)");
                 answer = Integer.parseInt(server.getInput(player));
 
                 if (answer == 1 || answer == 2 || answer == 3 || answer == 4){
                     isValid = true;
                 } else {
-                    server.notify(player, "Not a scheme!");
+                    notify(player, "Not a scheme!");
                 }
             }
             return schemes.get(answer-1);
@@ -146,7 +149,55 @@ public class IOhandler implements Observer{
         return -1;
     }
 
+    public int getDiceFromRoundtrack(String player){
+        int answer;
+        try {
+            notify(player,"Choose a dice from Round Track [from 1 to n]");
+            answer = Integer.parseInt(server.getInput(player));
+            //TODO: CHECK THE INPUT!
+            return answer-1;
+        }catch (RemoteException e){
+            System.err.println("GETTOOL: "+e.getMessage());
+        }
+        return -1;
+    }
+
+    public int getTool(String player){
+        int answer;
+        try {
+            notify(player,"Choose a tool card [1, 2, 3] or type '0' if you want to go back");
+            answer = Integer.parseInt(server.getInput(player));
+            //TODO: CHECK THE INPUT!
+            return answer-1;
+        }catch (RemoteException e){
+            System.err.println("GETTOOL: "+e.getMessage());
+        }
+        return -1;
+    }
+
+    public int chooseDiceValue(String player, boolean restricted){
+        int answer;
+        try {
+            if (restricted){
+                notify(player,"Increment or decrement the value typing '+1' or '-1'");
+            }
+            else{
+                notify(player,"Insert the new value [1-6]");
+            }
+            answer = Integer.parseInt(server.getInput(player));
+            //TODO: CHECK THE INPUT!
+            return answer;
+        }catch (RemoteException e){
+            System.err.println("GETTOOL: "+e.getMessage());
+        }
+        return -1;
+    }
+
     public void setServer(ServerIntRMI server) {
         this.server = server;
+    }
+
+    public void notify(String player, String message)throws RemoteException{
+        server.notify(player, message);
     }
 }
