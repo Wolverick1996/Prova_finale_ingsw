@@ -13,4 +13,7 @@ public interface ServerIntRMI extends Remote {
     List<ClientIntRMI> getConnected() throws RemoteException;
     int playersInLobby() throws RemoteException;
     void setDelay(int delay) throws RemoteException;
+    void notify(String username, String message) throws RemoteException;
+    void broadcast (String message) throws RemoteException;
+    String getInput (String username) throws RemoteException;
 }

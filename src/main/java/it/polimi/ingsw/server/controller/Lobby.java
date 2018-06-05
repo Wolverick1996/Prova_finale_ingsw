@@ -28,7 +28,7 @@ public class Lobby /*extends Observer*/ {
     //***************************//
 
     public void startGame(){
-        Controller.startGame(players, this);
+        Controller.startGame(players, this, this.server);
         Controller.getMyIO(this).broadcast("\n\n\tSwitching from lobby to Game ... \n\n");
         Controller.switchContext(this);
     }

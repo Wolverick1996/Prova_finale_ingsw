@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.network_client;
 
 import java.rmi.RemoteException;
+import java.util.Scanner;
 
 public class ClientImplementationRMI implements ClientIntRMI {
 
@@ -16,6 +17,11 @@ public class ClientImplementationRMI implements ClientIntRMI {
 
     public String getName() throws RemoteException{
         return name;
+    }
+
+    public String getInput() throws RemoteException{
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
     }
 
     public void confirmConnection() throws RemoteException{

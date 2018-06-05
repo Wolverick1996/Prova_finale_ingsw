@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.Table;
-import it.polimi.ingsw.client.view.IOhandler;
+import it.polimi.ingsw.server.network_server.ServerIntRMI;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class Controller {
 /* These attributes only serve as controller's addresses
  */
 
-    public static void startGame(List<String> nicknames, Lobby lobby){
+    public static void startGame(List<String> nicknames, Lobby lobby, ServerIntRMI server){
 
         try {
 
@@ -24,6 +24,7 @@ public class Controller {
             Table table = new Table(nicknames.size());
             table.setPlayers(nicknames);
             speakers.add(new IOhandler(table.getActivePlayers(), table/*, table*/  )); //TODO: add on Table extends observable
+            speakers.get(i).setServer(server);
             speakers.get(i).broadcast("OK");
             speakers.get(i).broadcast("These are the players: ");
             for(String player:nicknames){speakers.get(i).broadcast(player);}
@@ -42,17 +43,14 @@ public class Controller {
             speakers.get(i).broadcast("This is the lobby: \n" + lobby);
             speakers.get(i).broadcast(table);
 
-            return;
 
         }catch (NullPointerException n){
             System.out.println("Null Pointer exception");
             n.printStackTrace();
-            return;
         }
         catch (Exception e){
             System.out.println("Exception caught");
             e.printStackTrace();
-            return;
         }
 
     }
@@ -66,12 +64,10 @@ public class Controller {
         catch (NullPointerException n){
             System.out.println("Null Pointer exception");
             n.printStackTrace();
-            return;
         }
         catch (Exception e){
             System.out.println("Exception caught");
             e.printStackTrace();
-            return;
         }
 
     }

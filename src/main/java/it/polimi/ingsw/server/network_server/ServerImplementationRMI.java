@@ -9,6 +9,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 public class ServerImplementationRMI extends UnicastRemoteObject implements
         ServerIntRMI{
@@ -70,6 +71,35 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
             }
             i++;
         }
+    }
+
+    public void notify(String username, String message){
+        try{
+            for (ClientIntRMI c : clients){
+                if(c.getName().equals(username)){
+                    c.notify(message);
+                }
+            }
+        } catch (RemoteException e){
+            System.err.println("NOTIFY FAILED");
+        } catch (NullPointerException e){
+            System.err.println("CLIENTRMI DOES NOT EXIST");
+        }
+    }
+
+    public void broadcast(String message) throws RemoteException{
+        for(ClientIntRMI user:clients){
+            user.notify(message);
+        }
+    }
+
+    public String getInput(String username) throws RemoteException{
+        for (ClientIntRMI c : clients){
+            if(c.getName().equals(username)){
+                return c.getInput();
+            }
+        }
+        return null;
     }
 
     public List<ClientIntRMI> getConnected() throws RemoteException{

@@ -44,7 +44,7 @@ class Game {
             i = schemes[this.players.indexOf(p)];
             j = schemes[this.players.indexOf(p) + 4];
 
-            p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+12,j+12)));
+            p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+12,j+12, p.getUsername())));
         }
 
 
@@ -61,7 +61,7 @@ class Game {
             System.exit(0);
         } else {
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn");
-            String action = Controller.getMyIO(this).getStandardAction();
+            String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
             switch (action){
                 case "d": {
                     putDiceStandard();
@@ -112,10 +112,10 @@ class Game {
         boolean check = false;
         while (!check){
             try{
-                int index = Controller.getMyIO(this).getDice();
+                int index = Controller.getMyIO(this).getDice(players.get(active).getUsername());
                 dice = this.table.checkDiceFromReserve(index);
-                check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x"),
-                        Controller.getMyIO(this).getCoordinate("y"),
+                check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x", this.players.get(active).getUsername()),
+                        Controller.getMyIO(this).getCoordinate("y", this.players.get(active).getUsername()),
                         this.table, index);
 
                 if (!check){

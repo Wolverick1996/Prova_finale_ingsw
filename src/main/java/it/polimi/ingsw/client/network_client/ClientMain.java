@@ -124,11 +124,12 @@ public class ClientMain {
                     server.setDelay(delay);
                 }
                 boolean active = true;
+                System.out.println("Waiting for other players...\n" +
+                        "If you want to disconnect type 'e' or type any other character to refresh and check how many players there are in the lobby");
+
                 while (active) {
 
-                    System.out.println("Waiting for other players...\n" +
-                        "If you want to disconnect type 'e' or type any other character to refresh and check how many players there are in the lobby");
-                    String text = scanner.nextLine();
+                    /*String text = scanner.nextLine();
                     if (text.equals("e")) {
                         server.logout(validRemoteRef);
                         active = false;
@@ -137,7 +138,7 @@ public class ClientMain {
                         System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                         if (server.playersInLobby() == Lobby.MAX_PLAYERS)
                             System.out.println("The game is starting...");
-                    }
+                    }*/
 
                 }
                 if (!on)
