@@ -21,6 +21,7 @@ public class ClientImplementationRMI implements ClientIntRMI {
 
     public String getInput() throws RemoteException{
         Scanner scanner = new Scanner(System.in);
+        //TODO: solve "FLUSH" problem
         return scanner.nextLine();
     }
 

@@ -62,8 +62,8 @@ public class IOhandler implements Observer{
             String answer = null;
             while (!send){
 
-                notify(player, "Insert action (d = place dice, q = pass turn)");
-                answer = server.getInput(player);
+                notify(player, "Insert action (d = place dice, t = use tool, q = pass turn)");
+                answer = server.getInput(player).toLowerCase();
 
                 if (answer.equals("d")){
                     return "d";

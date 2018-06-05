@@ -38,7 +38,7 @@ public class Table {
      * @author Matteo
      */
     public Table(int numP){
-        //ToolHandler.setTools();
+        ToolHandler.setTools();
         PubObjHandler.setPubOC();
         //TODO: numPlayers = controller.getNumPlayers(); //Request must be sent to right controller
         this.numPlayers = numP;

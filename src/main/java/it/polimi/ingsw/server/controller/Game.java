@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.*;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 class Game {
@@ -17,6 +18,8 @@ class Game {
     private static final String STATUS = "STATUS";
     private int count = 0;
     private boolean clockwise = true;
+    private boolean toolUsed = false;
+    private boolean dicePlaced = false;
 
     Game(List<Player> users, Table board){
 
@@ -39,6 +42,13 @@ class Game {
         Collections.shuffle(Arrays.asList(schemes));
         //TODO: PLACE CORRECTLY SCHEMES IN FILE
         for(Player p:this.players){
+            try {
+                Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card: " +
+                        PrivObjHandler.getName(p) + "\n" + PrivObjHandler.getDescription(p));
+            } catch (RemoteException e) {
+                e.printStackTrace();
+                //THIS PLAYER HAS DISCONNECTED
+            }
             Controller.getMyIO(this).broadcast(p.getUsername() + " has to choose a scheme");
 
             i = schemes[this.players.indexOf(p)];
@@ -73,6 +83,8 @@ class Game {
                     case "q":{
                         Controller.getMyIO(this).broadcast("Turn passed");
                         end = true;
+                        toolUsed = false;
+                        dicePlaced = false;
                         break;
                     }
                     case "t":{
@@ -119,11 +131,28 @@ class Game {
     }
 
     private void useTool(){
+        if (toolUsed){
+            Controller.getMyIO(this).broadcast("Someone is trying to use a Tool TWICE... YOU CAAAAAAAAAAAAAN'T");
+            return;
+        }
         int index = -2;
+        toolUsed = true;
         //Table temp = table;
+        try {
+
+            for (int i = 0; i<3; i++) {
+                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "\n Tool Card:\n" +
+                        ToolHandler.getName(i) + "\n Description:\n" + ToolHandler.getDescription(i) + "\n Tokens on: "
+                        + ToolHandler.getTokens(i));
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return;
+        }
         while(index<0 || index>2){
 
             if (index == -1){
+                toolUsed = false;
                 Controller.getMyIO(this).broadcast("Nope, nothing done");
                 return;
             }
@@ -133,20 +162,27 @@ class Game {
 
         if(this.table.useToolCard(index, this.players.get(active), Controller.getMyIO(this))){
             Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() +
-            " has used " + ToolHandler.getName(index));
+            " has used " + ToolHandler.getName(index) + " correctly! :)");
         } else {
+            toolUsed = false;
             Controller.getMyIO(this).broadcast("Something went wrong ... ");
             //table = temp;
         }
     }
 
     private void putDiceStandard(){
+        if (dicePlaced){
+            Controller.getMyIO(this).broadcast("Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T");
+            return;
+        }
+        dicePlaced = true;
         Dice dice = null;
         boolean check = false;
         while (!check){
             try{
                 int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
+                    dicePlaced = false;
                     Controller.getMyIO(this).broadcast("Nope, nothing done");
                     return;
                 }
@@ -167,7 +203,9 @@ class Game {
                 if (dice!= null) this.table.putDiceInReserve(dice);
                 Controller.getMyIO(this).broadcast(this.table);
             }
+
         }
+        Controller.getMyIO(this).broadcast("Dice correctly placed!");
     }
 
 }

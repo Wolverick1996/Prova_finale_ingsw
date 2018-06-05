@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.model;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import it.polimi.ingsw.server.controller.IOhandler;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -93,11 +94,15 @@ public class ToolHandler {
     }
 
     public static int getDiceValue(Boolean restricted, Player player){
-        return currentIO.chooseValue(player.getUsername(), restricted);
+        return currentIO.chooseDiceValue(player.getUsername(), restricted);
     }
 
     public static void notify(Player player, String string){
-        currentIO.notify(player, string);
+        try {
+            currentIO.notify(player.getUsername(), string);
+        } catch (RemoteException e) {
+            System.err.println("ERROR IN TOOLHANDLER NOTIFY()" + e.getMessage());
+        }
     }
 
     /**

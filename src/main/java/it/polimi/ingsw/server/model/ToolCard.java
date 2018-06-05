@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -243,13 +242,9 @@ public class ToolCard {
         int y;
 
         do {
-            //CONTROLLER CALL: Request to the player coordinates of dice to EXTRACT
-
-            //DELETE THE FOLLOWING LINES WHEN THE RELATIVE READING-FROM-INPUT METHOD WILL BE IMPLEMENTED
-            x = 1;
-            y = 1;
-
-        } while (!(1 <= x && x <= Scheme.MAX_ROW) || !(1 <= y && y <= Scheme.MAX_COL));
+            x = ToolHandler.getCoordinates("x", player);
+            y = ToolHandler.getCoordinates("y", player);
+        } while (!(0 <= x && x <= Scheme.MAX_ROW-1) || !(0 <= y && y <= Scheme.MAX_COL-1));
         coordinates[0] = x;
         coordinates[1] = y;
 
@@ -346,10 +341,7 @@ public class ToolCard {
      * @author Riccardo
      */
     private Dice chooseFromRoundtrack(int index, Player player, Table table){
-        //CONTROLLER CALL: Request to the player dice position on ROUNDTRACK
-
-        //DELETE THE FOLLOWING LINES WHEN THE RELATIVE READING-FROM-INPUT METHOD WILL BE IMPLEMENTED
-        int dicePos = 0;
+        int dicePos = ToolHandler.getFromRoundtrack(player);
 
         if (index == 5)
             return table.pickDiceFromRoundtrack(dicePos);
@@ -366,10 +358,7 @@ public class ToolCard {
      * @author Riccardo
      */
     private Dice extractFromReserve(Player player, Table table){
-        //CONTROLLER CALL: Request to the player dice position on RESERVE
-
-        //DELETE THE FOLLOWING LINES WHEN THE RELATIVE READING-FROM-INPUT METHOD WILL BE IMPLEMENTED
-        int dicePos = 0;
+        int dicePos = ToolHandler.getFromReserve(player);
 
         return table.pickDiceFromReserve(dicePos);
     }
@@ -395,12 +384,14 @@ public class ToolCard {
      * @author Riccardo
      */
     private boolean modifyDiceValue(int index, Player player, Dice dice){
-        //CONTROLLER CALL: Request a value from the player
         //NOTE: for the tool card 1 it MUST be +/-1, for the tool card 11 it MUST be a dice value (1 to 6)
+        Boolean restricted;
+        if (this.cardID == 1)
+            restricted = true;
+        else    //index == 11
+            restricted = false;
 
-        //DELETE THE FOLLOWING LINES WHEN THE RELATIVE READING-FROM-INPUT METHOD WILL BE IMPLEMENTED
-        Random random = new Random();
-        int value = random.nextInt(6)+1;
+        int value = ToolHandler.getDiceValue(restricted, player);
 
         //Return false if the value in incompatible with the tool card
         if (index == 1 && (value != +1 && value != -1))
@@ -472,10 +463,7 @@ public class ToolCard {
      * @author Riccardo
      */
     private void putDiceInBag(Player player, Table table){
-        //CONTROLLER CALL: Request to the player dice position on RESERVE
-
-        //DELETE THE FOLLOWING LINES WHEN THE RELATIVE READING-FROM-INPUT METHOD WILL BE IMPLEMENTED
-        int dicePos = 0;
+        int dicePos = ToolHandler.getFromReserve(player);
 
         table.putDiceInBag(dicePos);
     }

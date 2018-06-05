@@ -94,6 +94,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
     }
 
     public String getInput(String username) throws RemoteException{
+
         for (ClientIntRMI c : clients){
             if(c.getName().equals(username)){
                 return c.getInput();
