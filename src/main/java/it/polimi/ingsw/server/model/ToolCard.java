@@ -103,13 +103,17 @@ public class ToolCard {
         Dice dice2;
         int[] coordOLD;
         int[] coordNEW;
+        boolean canExtract;
 
         switch (this.cardID) {
             case 1:
+                canExtract = table.getCanExtract();
                 dice1 = extractFromReserve(player, table);
+                table.setCanExtract(true);
                 //Dice extraction failed
-                if (dice1 == null)
-                    return false;
+                if (dice1 == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
 
                 //If inserted value is not allowed the method returns false
                 if (!modifyDiceValue(this.cardID, player, dice1)) {
@@ -140,10 +144,13 @@ public class ToolCard {
                 break;
 
             case 5:
+                canExtract = table.getCanExtract();
                 dice1 = extractFromReserve(player, table);
+                table.setCanExtract(true);
                 //Dice extraction failed
-                if (dice1 == null)
-                    return false;
+                if (dice1 == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
 
                 dice2 = chooseFromRoundtrack(this.cardID, player, table);
                 //Dice extraction failed: the first dice is reinserted in the reserve
@@ -156,10 +163,13 @@ public class ToolCard {
                 break;
 
             case 6:
+                canExtract = table.getCanExtract();
                 dice1 = extractFromReserve(player, table);
+                table.setCanExtract(true);
                 //Dice extraction failed
-                if (dice1 == null)
-                    return false;
+                if (dice1 == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
 
                 dice1.rollDice();
                 if (isPlaceable(dice1, player) == null) {
@@ -185,10 +195,13 @@ public class ToolCard {
                 break;
 
             case 10:
+                canExtract = table.getCanExtract();
                 dice1 = extractFromReserve(player, table);
+                table.setCanExtract(true);
                 //Dice extraction failed
-                if (dice1 == null)
-                    return false;
+                if (dice1 == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
 
                 dice1.turnDice();
                 table.putDiceInReserve(dice1);

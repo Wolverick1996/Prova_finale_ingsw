@@ -108,6 +108,46 @@ public class Scheme {
     public Dice checkBox(int x, int y){ return this.grid[x][y].getDice(); }
 
     /**
+     * Checks if color restrictions inherent to the first dice placement are correctly respected
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return true if the placement is allowed, otherwise false
+     * @author Riccardo
+     */
+    private boolean firstDiceNoNum(int x, int y, Dice dice){
+        if (grid[x][y].isEmployableNoNum(dice)
+                && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+            return true;
+        else {
+            if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+                System.err.println("You can't place the first dice out of border");
+            return false;
+        }
+    }
+
+    /**
+     * Checks if value restrictions inherent to the first dice placement are correctly respected
+     *
+     * @param x: identifier of the row number
+     * @param y: identifier of the column number
+     * @param dice: the dice to be placed in the box
+     * @return true if the placement is allowed, otherwise false
+     * @author Riccardo
+     */
+    private boolean firstDiceNoCol(int x, int y, Dice dice){
+        if (grid[x][y].isEmployableNoCol(dice)
+                && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+            return true;
+        else {
+            if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+                System.err.println("You can't place the first dice out of border");
+            return false;
+        }
+    }
+
+    /**
      * Checks if restrictions inherent to the first dice placement are correctly respected
      *
      * @param x: identifier of the row number
@@ -117,14 +157,7 @@ public class Scheme {
      * @author Andrea
      */
     private boolean firstDice(int x, int y, Dice dice){
-        if (grid[x][y].isEmployableNoNum(dice) && grid[x][y].isEmployableNoCol(dice)
-                && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
-            return true;
-        else {
-            if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
-                System.err.println("You can't place the first dice out of border");
-            return false;
-        }
+        return (firstDiceNoCol(x, y, dice) && firstDiceNoNum(x, y, dice));
     }
 
     /**
@@ -149,7 +182,7 @@ public class Scheme {
 
         //If first dice check if it respects first-dice-placement-rule
         if (isGridEmpty())
-            return firstDice(x, y, dice);
+            return firstDiceNoCol(x, y, dice);
 
         //Algorithm to find if the dice respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
@@ -206,7 +239,7 @@ public class Scheme {
 
         //If first dice check if it respects first-dice-placement-rule
         if (isGridEmpty())
-            return firstDice(x, y, dice);
+            return firstDiceNoNum(x, y, dice);
 
         //Algorithm to find if the dice respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
@@ -308,6 +341,7 @@ public class Scheme {
      * @author Riccardo
      */
     public boolean placeFromTool(int x, int y, int id, Dice dice){
+
         if (id == 2) {
             if (!(checkValueRestr(x, y, dice)))
                 return false;

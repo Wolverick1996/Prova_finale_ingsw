@@ -182,15 +182,14 @@ public class Table {
      * @author Matteo
      */
     public void putDiceInBag(int dicePos){
-        if(!canExtract){System.out.println("Tool card 11 was called without permission (dice already extracted)"); return;}
         Enum.Color color = reserve.get(dicePos).getColor();
         switch (color){
             //TODO: colorExt must never be <0
-            case RED: { redExt--; break; }
-            case PURPLE: { purpleExt--; break; }
-            case BLUE: { bluExt--; break; }
-            case GREEN: { greenExt--; break; }
-            case YELLOW: { yellowExt--; break; }
+            case RED: redExt--; break;
+            case PURPLE: purpleExt--; break;
+            case BLUE: bluExt--; break;
+            case GREEN: greenExt--; break;
+            case YELLOW: yellowExt--; break;
             //default: throw new Exception();
         }
         reserve.remove(dicePos);
@@ -266,6 +265,22 @@ public class Table {
     public boolean useToolCard(int indexToolCard, Player activePlayer, IOhandler out) {
         return ToolHandler.useTool(indexToolCard, activePlayer, this, out);
     }
+
+    /**
+     * Sets the canExtract flag to the boolean value passed as parameter
+     *
+     * @param bool: the boolean value that canExtract should assumes
+     * @author Riccardo
+     */
+    public void setCanExtract(Boolean bool){ this.canExtract = bool; }
+
+    /**
+     * Gets the current value of the canExtract flag
+     *
+     * @return the current value of canExtract
+     * @author Riccardo
+     */
+    public boolean getCanExtract(){ return this.canExtract; }
 
     /**
      * Gets the current turn (0 to numPlayers-1 in the first part of the round, numPlayers-1 to 0 in the second part)
