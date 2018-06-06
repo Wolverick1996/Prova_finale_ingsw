@@ -103,13 +103,12 @@ public class ToolCard {
         Dice dice2;
         int[] coordOLD;
         int[] coordNEW;
-        boolean canExtract;
+        boolean canExtract = table.getCanExtract();
 
         switch (this.cardID) {
             case 1:
-                canExtract = table.getCanExtract();
-                dice1 = extractFromReserve(player, table);
                 table.setCanExtract(true);
+                dice1 = extractFromReserve(player, table);
                 //Dice extraction failed
                 if (dice1 == null) {
                     table.setCanExtract(canExtract);
@@ -144,9 +143,8 @@ public class ToolCard {
                 break;
 
             case 5:
-                canExtract = table.getCanExtract();
-                dice1 = extractFromReserve(player, table);
                 table.setCanExtract(true);
+                dice1 = extractFromReserve(player, table);
                 //Dice extraction failed
                 if (dice1 == null) {
                     table.setCanExtract(canExtract);
@@ -163,9 +161,8 @@ public class ToolCard {
                 break;
 
             case 6:
-                canExtract = table.getCanExtract();
-                dice1 = extractFromReserve(player, table);
                 table.setCanExtract(true);
+                dice1 = extractFromReserve(player, table);
                 //Dice extraction failed
                 if (dice1 == null) {
                     table.setCanExtract(canExtract);
@@ -195,9 +192,8 @@ public class ToolCard {
                 break;
 
             case 10:
-                canExtract = table.getCanExtract();
-                dice1 = extractFromReserve(player, table);
                 table.setCanExtract(true);
+                dice1 = extractFromReserve(player, table);
                 //Dice extraction failed
                 if (dice1 == null) {
                     table.setCanExtract(canExtract);
@@ -208,19 +204,24 @@ public class ToolCard {
                 break;
 
             case 11:
+                table.setCanExtract(true);
                 putDiceInBag(player, table);
                 dice1 = table.pickDiceFromBag();
+                System.out.println("Dice extracted: " + dice1);
 
                 //If inserted value is not allowed the method returns false
                 if (!modifyDiceValue(this.cardID, player, dice1)) {
+                    System.out.println("Placement not allowed, " + dice1 + " is now in the reserve");
                     table.putDiceInReserve(dice1);
+                    table.setCanExtract(canExtract);
                     return false; }
 
                 coordNEW = getCoordinates(player);
 
                 //Placement of the extracted dice: if it fails the dice is putted in the reserve
-                if (!player.getOwnScheme().placeDice(coordNEW[0], coordNEW[1], dice1))
-                    table.putDiceInReserve(dice1);
+                if (!player.getOwnScheme().placeDice(coordNEW[0], coordNEW[1], dice1)) {
+                    System.out.println("Placement not allowed, " + dice1 + " is now in the reserve");
+                    table.putDiceInReserve(dice1); }
                 break;
 
             case 12:
@@ -456,7 +457,7 @@ public class ToolCard {
         for (int i = 0; i < Scheme.MAX_ROW; i++) {
             for (int j = 0; j < Scheme.MAX_COL; j++) {
                 if (player.getOwnScheme().isPlaceable(i, j, dice)) {
-                    s = s + "[" + i + "]" + "[" + j + "]\t";
+                    s = s + "[" + i+1 + ", " + j+1 + "]\t";
                     flag = 1;
                 }
             }

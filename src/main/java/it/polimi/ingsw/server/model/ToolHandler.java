@@ -18,7 +18,7 @@ public class ToolHandler {
     //***************************//
 
     private static ArrayList<ToolCard> activeID = new ArrayList<>();
-    static final int NUM_TOOLS = 6;
+    static final int NUM_TOOLS = 12;
     private static IOhandler currentIO;
 
     //***************************//
