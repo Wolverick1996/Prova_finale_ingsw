@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,29 +26,19 @@ public class PublicOC implements ObjectiveCard {
             throw new IllegalArgumentException("Not valid ID: " + cardID);
 
         this.cardID = cardID;
-        File inputFile = new File("src/main/resources/cards/PublicOC.txt");
-        Scanner scan = null;
+        InputStream inputFile = PublicOC.class.getResourceAsStream("/cards/PublicOC.txt");
+        Scanner scan = new Scanner(inputFile);
+
+        for (int i=0; i<(cardID-1)*2; i++)
+            scan.nextLine();
+
+        this.name = scan.nextLine();
+        this.description = scan.nextLine();
 
         try {
-            scan = new Scanner(inputFile);
-
-            for (int i=0; i<(cardID-1)*2; i++)
-                scan.nextLine();
-
-            this.name = scan.nextLine();
-            this.description = scan.nextLine();
-
-        } catch (IOException e){
-            System.err.println("Error");
-        }
-        finally {
-            if (scan != null) {
-                try {
-                    scan.close();
-                } catch (Exception e1) {
-                    System.err.println("Error");
-                }
-            }
+            scan.close();
+        } catch (Exception e1) {
+            System.err.println("Error closing scan (publicOC)");
         }
     }
 

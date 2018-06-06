@@ -29,53 +29,43 @@ public class Scheme {
      * @author Riccardo
      */
     protected Scheme (int id){
-        File inputFile = new File("src/main/resources/schemes/Schemes.txt");
-        Scanner scan = null;
+        InputStream inputFile = Scheme.class.getResourceAsStream("/schemes/Schemes.txt");
+
         String s;
         char [][] c = new char[MAX_ROW][MAX_COL];
 
+        Scanner scan = new Scanner(inputFile);
+
+        for (int i=0; i<(id-1)*6; i++)
+            scan.nextLine();
+
+        this.name = scan.nextLine();
+        this.difficulty = Integer.parseInt(scan.nextLine());
+
+        for (int i=0; i<MAX_ROW; i++) {
+            s = scan.nextLine();
+            c[i] = s.toCharArray();
+        }
+
+        for (int i=0; i<MAX_ROW; i++){
+            for (int j=0; j<MAX_COL; j++){
+                switch(c[i][j]){
+                    case 'r': grid[i][j] = new Box(Enum.Color.RED); break;
+                    case 'g': grid[i][j] = new Box(Enum.Color.GREEN); break;
+                    case 'y': grid[i][j] = new Box(Enum.Color.YELLOW); break;
+                    case 'b': grid[i][j] = new Box(Enum.Color.BLUE); break;
+                    case 'p': grid[i][j] = new Box(Enum.Color.PURPLE); break;
+                    case '1': case '2': case '3': case '4': case '5': case '6':
+                        grid[i][j] = new Box(Character.getNumericValue(c[i][j])); break;
+                    default: grid[i][j] = new Box(); break;
+                }
+            }
+        }
         try {
-            scan = new Scanner(inputFile);
-
-            for (int i=0; i<(id-1)*6; i++)
-                scan.nextLine();
-
-            this.name = scan.nextLine();
-            this.difficulty = Integer.parseInt(scan.nextLine());
-
-            for (int i=0; i<MAX_ROW; i++) {
-                s = scan.nextLine();
-                c[i] = s.toCharArray();
-            }
-
-            for (int i=0; i<MAX_ROW; i++){
-                for (int j=0; j<MAX_COL; j++){
-                    switch(c[i][j]){
-                        case 'r': grid[i][j] = new Box(Enum.Color.RED); break;
-                        case 'g': grid[i][j] = new Box(Enum.Color.GREEN); break;
-                        case 'y': grid[i][j] = new Box(Enum.Color.YELLOW); break;
-                        case 'b': grid[i][j] = new Box(Enum.Color.BLUE); break;
-                        case 'p': grid[i][j] = new Box(Enum.Color.PURPLE); break;
-                        case '1': case '2': case '3': case '4': case '5': case '6':
-                            grid[i][j] = new Box(Character.getNumericValue(c[i][j])); break;
-                        default: grid[i][j] = new Box(); break;
-                    }
-                }
-            }
-        } catch (IOException e){
-            System.err.println("Error");
+            scan.close();
+        } catch (Exception e1) {
+            System.err.println("Error closing scan (schemes)");
         }
-        finally {
-            if (scan != null) {
-                try {
-                    scan.close();
-                } catch (Exception e1) {
-                    System.err.println("Error");
-                }
-            }
-
-        }
-
     }
 
     //***************************//

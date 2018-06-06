@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 /**
@@ -24,30 +23,19 @@ public class PrivateOC implements ObjectiveCard {
     public PrivateOC(Enum.Color color){
         this.color = color;
         int index = color.ordinal();
+        InputStream inputFile = PrivateOC.class.getResourceAsStream("/cards/PrivateOC.txt");
+        Scanner scan = new Scanner(inputFile);
 
-        File inputFile = new File("src/main/resources/cards/PrivateOC.txt");
-        Scanner scan = null;
+        for (int i = 0; i<index*2; i++)
+            scan.nextLine();
+
+        this.name = scan.nextLine();
+        this.description = scan.nextLine();
 
         try {
-            scan = new Scanner(inputFile);
-
-            for (int i = 0; i<index*2; i++)
-                scan.nextLine();
-
-            this.name = scan.nextLine();
-            this.description = scan.nextLine();
-
-        } catch (IOException e){
-            System.err.println("Error");
-        }
-        finally {
-            if (scan != null) {
-                try {
-                    scan.close();
-                } catch (Exception e1) {
-                    System.err.println("Error");
-                }
-            }
+            scan.close();
+        } catch (Exception e1) {
+            System.err.println("Error closing scan (privateOC)");
         }
     }
 

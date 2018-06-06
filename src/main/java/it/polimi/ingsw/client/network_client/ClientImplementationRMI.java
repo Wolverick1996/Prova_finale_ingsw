@@ -7,7 +7,7 @@ public class ClientImplementationRMI implements ClientIntRMI {
 
     private String name;
 
-    ClientImplementationRMI (String n) throws RemoteException {
+    ClientImplementationRMI (String n){
         name=n;
     }
 
@@ -19,13 +19,20 @@ public class ClientImplementationRMI implements ClientIntRMI {
         return name;
     }
 
+    public void freeScanner() throws RemoteException{
+        Scanner scanner = new Scanner(System.in);
+        scanner.reset();
+    }
+
     public String getInput() throws RemoteException{
         Scanner scanner = new Scanner(System.in);
+        scanner.reset();
         //TODO: solve "FLUSH" problem
         return scanner.nextLine();
     }
 
     public void confirmConnection() throws RemoteException{
+        //used to ping and check connection
     }
 }
 
