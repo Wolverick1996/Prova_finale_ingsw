@@ -96,6 +96,7 @@ public class PrivateOC implements ObjectiveCard {
 
         return points;
     }
+
     /**
      * Returns the private objective card's color
      *
