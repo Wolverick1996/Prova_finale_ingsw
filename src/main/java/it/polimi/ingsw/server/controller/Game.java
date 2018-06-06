@@ -43,7 +43,7 @@ class Game {
         for (Player p:this.players){
             try {
                 Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card:\n" +
-                        Enum.Color.GREEN.escape() + PrivObjHandler.getName(p) + "\n" + Enum.Color.RESET +
+                        PrivObjHandler.getColor(p).escape() + PrivObjHandler.getName(p) + "\n" + Enum.Color.RESET +
                         PrivObjHandler.getDescription(p) + "\n");
             } catch (RemoteException e) {
                 e.printStackTrace();
