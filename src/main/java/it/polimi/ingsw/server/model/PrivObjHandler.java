@@ -116,6 +116,17 @@ public class PrivObjHandler {
     }
 
     /**
+     * Gets the color of the private objective card (on table)
+     *
+     * @param player: the player whose card is asked for the color
+     * @return private objective card's color
+     * @author Andrea
+     */
+    public static Enum.Color getColor(Player player){
+        return activeID.get(player.getIDplayer()).getColor();
+    }
+
+    /**
      * Used to print all the private objective cards in play
      *
      * @return the string that includes all the private objective cards in play
