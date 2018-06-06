@@ -207,7 +207,7 @@ public class ToolCard {
                 table.setCanExtract(true);
                 putDiceInBag(player, table);
                 dice1 = table.pickDiceFromBag();
-                System.out.println("Dice extracted" + dice1);
+                System.out.println("Dice extracted: " + dice1);
 
                 //If inserted value is not allowed the method returns false
                 if (!modifyDiceValue(this.cardID, player, dice1)) {
@@ -457,7 +457,7 @@ public class ToolCard {
         for (int i = 0; i < Scheme.MAX_ROW; i++) {
             for (int j = 0; j < Scheme.MAX_COL; j++) {
                 if (player.getOwnScheme().isPlaceable(i, j, dice)) {
-                    s = s + "[" + i + "]" + "[" + j + "]\t";
+                    s = s + "[" + i+1 + ", " + j+1 + "]\t";
                     flag = 1;
                 }
             }
