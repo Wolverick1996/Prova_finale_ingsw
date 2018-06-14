@@ -6,10 +6,7 @@ import it.polimi.ingsw.server.controller.Lobby;
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ServerImplementationRMI extends UnicastRemoteObject implements
         ServerIntRMI{

@@ -57,15 +57,4 @@ public class Enum {
         }
     }
 
-    public enum Placement{
-        SCHEME,
-        RESERVE,
-        ROUNDTRACK,
-        BAG
-    }
-
-    public enum Values{
-
-    }
-
 }

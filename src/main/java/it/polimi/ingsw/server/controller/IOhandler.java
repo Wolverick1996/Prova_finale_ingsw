@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.client.network_client.ClientIntRMI;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.server.model.Table;
@@ -14,18 +15,16 @@ public class IOhandler implements Observer{
     //        Attributes         //
     //***************************//
 
-    private ServerIntRMI server;
+    private List<ClientIntRMI> usersRMI = new ArrayList<>();
     private static List<Player> players = new ArrayList<>();
     private Observable ov = null;
     private static Table table = null;
     private static final String STATUS = "STATUS";
     private static final String DIVISOR = "\n\n---------------------------------------------\n\n";
 
-
-    public IOhandler(List<Player> users, Table board/*, Observable observed*/){
+    IOhandler(List<Player> users, Table board){
         this.players = users;
         this.table = board;
-        /*this.ov = observed;*/
     }
 
     //***************************//
@@ -37,17 +36,17 @@ public class IOhandler implements Observer{
             System.out.println(message);
             if (message.equals(STATUS)){
                 System.out.println(DIVISOR);
-                server.broadcast(DIVISOR);
+                for (Player p: players) this.notify(p.getUsername(), DIVISOR);
                 System.out.println(table);
-                server.broadcast(table.toString());
+                for (Player p: players) this.notify(p.getUsername(), table.toString());
                 for (Player p: players){
                     System.out.println(p);
-                    server.broadcast(p.toString());
+                    for (Player pl: players) this.notify(pl.getUsername(), p.toString());
                 }
                 System.out.println(DIVISOR);
-                server.broadcast(DIVISOR);
+                for (Player p: players) this.notify(p.getUsername(), DIVISOR);
             } else
-                server.broadcast(message.toString());
+                for (Player p: players) this.notify(p.getUsername(), message.toString());
         } catch (RemoteException e){
             System.err.println("ERROR BROADCAST: "+e.getMessage());
         }
@@ -61,7 +60,7 @@ public class IOhandler implements Observer{
             while (!send){
 
                 notify(player, "Insert action (d = place dice, t = use tool, q = pass turn)");
-                answer = server.getInput(player).toLowerCase();
+                answer = getInput(player).toLowerCase();
 
                 if (answer.equals("d")){
                     return "d";
@@ -84,7 +83,7 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
-            answer = Integer.parseInt(server.getInput(player));
+            answer = Integer.parseInt(getInput(player));
             return answer-1;
         } catch (RemoteException e){
             System.err.println("GETDICE ERROR: " +e.getMessage());
@@ -97,7 +96,7 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player,"Insert coordinate " + coor + " of the dice");
-            answer = Integer.parseInt(server.getInput(player));
+            answer = Integer.parseInt(getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;
         } catch (RemoteException e){
@@ -129,7 +128,7 @@ public class IOhandler implements Observer{
 
             while(!isValid){
                 notify(player, "Pick a scheme (write 1, 2, 3 or 4)");
-                answer = Integer.parseInt(server.getInput(player));
+                answer = Integer.parseInt(getInput(player));
 
                 if (answer == 1 || answer == 2 || answer == 3 || answer == 4){
                     isValid = true;
@@ -148,7 +147,7 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player,"Choose a dice from round track [from 1 to N]");
-            answer = Integer.parseInt(server.getInput(player));
+            answer = Integer.parseInt(getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;
         } catch (RemoteException e){
@@ -161,7 +160,7 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player,"\nChoose a tool card [1, 2, 3] or type '0' if you want to go back");
-            answer = Integer.parseInt(server.getInput(player));
+            answer = Integer.parseInt(getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;
         } catch (RemoteException e){
@@ -177,7 +176,7 @@ public class IOhandler implements Observer{
                 notify(player,"Increment or decrement the value typing '+1' or '-1'");
             else
                 notify(player,"Insert the new value [1-6]");
-            answer = Integer.parseInt(server.getInput(player));
+            answer = Integer.parseInt(getInput(player));
             //TODO: CHECK THE INPUT!
             return answer;
         } catch (RemoteException e){
@@ -187,10 +186,32 @@ public class IOhandler implements Observer{
     }
 
     public void setServer(ServerIntRMI server) {
-        this.server = server;
+
+        try {
+            usersRMI = server.getConnected();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public void notify(String player, String message) throws RemoteException {
-        server.notify(player, message);
+
+        for (int i = 0; i<usersRMI.size(); i++){
+            if (usersRMI.get(i).getName().equals(player)){
+                usersRMI.get(i).notify(message);
+                break;
+            }
+        }
+
+    }
+
+    private String getInput(String player) throws RemoteException {
+        for (int i = 0; i<usersRMI.size(); i++){
+            if (usersRMI.get(i).getName().equals(player)){
+                return usersRMI.get(i).getInput();
+            }
+        }
+        System.err.println("COULD NOT FIND PLAYER FOR THE INPUT");
+        return "INVALID";
     }
 }

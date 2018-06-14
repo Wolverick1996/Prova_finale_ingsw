@@ -1,34 +1,33 @@
 package it.polimi.ingsw.client.network_client;
 
+import it.polimi.ingsw.client.view.IOHandlerClient;
+
 import java.rmi.RemoteException;
+import java.util.Observable;
 import java.util.Scanner;
 
-public class ClientImplementationRMI implements ClientIntRMI {
+import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
+
+public class ClientImplementationRMI extends Observable implements ClientIntRMI {
 
     private String name;
+    private IOHandlerClient handler;
 
     ClientImplementationRMI (String n){
         name=n;
+        this.handler = new IOHandlerClient(n, cli); //TODO: LET CHOOSE BETWEEN CLI AND GUI
     }
 
     public void notify(String message) throws RemoteException {
-        System.out.println(message);
+        this.handler.send(message);
     }
 
     public String getName() throws RemoteException{
-        return name;
-    }
-
-    public void freeScanner() throws RemoteException{
-        Scanner scanner = new Scanner(System.in);
-        scanner.reset();
+        return this.name;
     }
 
     public String getInput() throws RemoteException{
-        Scanner scanner = new Scanner(System.in);
-        scanner.reset();
-        //TODO: solve "FLUSH" problem
-        return scanner.nextLine();
+        return this.handler.request();
     }
 
     public void confirmConnection() throws RemoteException{
