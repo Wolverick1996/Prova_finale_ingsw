@@ -28,8 +28,14 @@ public class CLI {
         String input = "???";
         boolean exc;
 
-        do{
+        try {
+            System.in.read(new byte[System.in.available()]);
+        } catch (IOException e) {
+            System.err.println("Error in Sysin flush");
+            e.printStackTrace();
+        }
 
+        do{
             exc = false;
             try {
                 input = reader.readLine();
