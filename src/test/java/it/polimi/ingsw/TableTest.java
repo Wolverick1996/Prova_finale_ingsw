@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.PrivObjHandler;
 import it.polimi.ingsw.server.model.PubObjHandler;
 import it.polimi.ingsw.server.model.Table;
 import org.junit.jupiter.api.Test;
-import java.lang.*;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -50,19 +50,21 @@ class TableTest {
         Player p4 = new Player("valerio-castelli", 3);
         List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
 
-        Table instance = new Table(4);
-
-        instance.setPlayers(nicknames);
-
         assertThrows(IllegalArgumentException.class, () -> PrivObjHandler.setPrivOC(5) );
+
+        Table instance = new Table(4);
+        instance.setPlayers(nicknames);
 
         assertNotNull(PrivObjHandler.getName(p1));
         assertNotNull(PrivObjHandler.getName(p2));
         assertNotNull(PrivObjHandler.getName(p3));
         assertNotNull(PrivObjHandler.getName(p4));
-        assertNotEquals(PrivObjHandler.getName(p1), PrivObjHandler.getName(p2), PrivObjHandler.getName(p3));
-        assertNotEquals(PrivObjHandler.getName(p2), PrivObjHandler.getName(p3), PrivObjHandler.getName(p4));
+        assertNotEquals(PrivObjHandler.getName(p1), PrivObjHandler.getName(p2));
+        assertNotEquals(PrivObjHandler.getName(p1), PrivObjHandler.getName(p3));
         assertNotEquals(PrivObjHandler.getName(p1), PrivObjHandler.getName(p4));
+        assertNotEquals(PrivObjHandler.getName(p2), PrivObjHandler.getName(p3));
+        assertNotEquals(PrivObjHandler.getName(p2), PrivObjHandler.getName(p4));
+        assertNotEquals(PrivObjHandler.getName(p3), PrivObjHandler.getName(p4));
     }
 
     /**

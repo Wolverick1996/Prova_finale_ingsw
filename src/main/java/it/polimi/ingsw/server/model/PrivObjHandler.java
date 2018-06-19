@@ -28,6 +28,8 @@ public class PrivObjHandler {
      * @author Andrea
      */
     public static void setPrivOC (int numPlayers){
+        activeID.clear();
+
         int redExt = 0;
         int purpleExt = 0;
         int blueExt = 0;
