@@ -92,7 +92,6 @@ class Game {
                         System.exit(-1); //TODO: implement input error manager
                 }
             }
-
         }
 
         //This is made to keep track of the active player
@@ -130,8 +129,8 @@ class Game {
     private void useTool(){
         if (toolUsed){
             Controller.getMyIO(this).broadcast("Someone is trying to use a tool card TWICE... YOU CAAAAAAAAAAAAAN'T");
-            return;
-        }
+            return; }
+
         int index = -2;
         toolUsed = true;
         //Table temp = table;
@@ -147,12 +146,10 @@ class Game {
             return;
         }
         while (index<0 || index>2){
-
             if (index == -1){
                 toolUsed = false;
                 Controller.getMyIO(this).broadcast("Nope, nothing done :(");
-                return;
-            }
+                return; }
 
             index = Controller.getMyIO(this).getTool(this.players.get(active).getUsername());
         }
@@ -170,8 +167,8 @@ class Game {
     private void putDiceStandard(){
         if (dicePlaced){
             Controller.getMyIO(this).broadcast("Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T");
-            return;
-        }
+            return; }
+
         dicePlaced = true;
         Dice dice = null;
         boolean check = false;
@@ -181,8 +178,8 @@ class Game {
                 if (index == -1){
                     dicePlaced = false;
                     Controller.getMyIO(this).broadcast("Nope, nothing done");
-                    return;
-                }
+                    return; }
+
                 dice = this.table.checkDiceFromReserve(index);
                 check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x", this.players.get(active).getUsername()),
                         Controller.getMyIO(this).getCoordinate("y", this.players.get(active).getUsername()),

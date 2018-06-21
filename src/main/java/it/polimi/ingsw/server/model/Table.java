@@ -315,6 +315,27 @@ public class Table {
     public List<Player> getActivePlayers() { return this.activePlayers; }
 
     /**
+     * Used to print the reserve
+     *
+     * @return the string that represents the reserve
+     * @author Riccardo
+     */
+    public String printReserve(){
+        return Enum.Color.PURPLE.escape() + "Dice in reserve: " + Enum.Color.RESET + reserve.size() +
+                Enum.Color.PURPLE.escape() + "\nReserve: " + Enum.Color.RESET + reserve.toString();
+    }
+
+    /**
+     * Used to print the round track
+     *
+     * @return the string that represents the round track
+     * @author Riccardo
+     */
+    public String printRoundtrack(){
+        return Enum.Color.PURPLE.escape() + "\nRoundtrack: " + Enum.Color.RESET + roundTrack.toString();
+    }
+
+    /**
      * Used to print the table and its contents
      *
      * @return the string that represents the table
@@ -327,12 +348,9 @@ public class Table {
             s += Enum.Color.RED.escape() + PubObjHandler.getName(i) + Enum.Color.RESET + "\n";
             s += PubObjHandler.getDescription(i) + "\n";
         }
-        return "Table: \n" + Enum.Color.PURPLE.escape() + "Dice in reserve: " + Enum.Color.RESET + reserve.size() +
-                Enum.Color.PURPLE.escape() + "\nReserve: " + Enum.Color.RESET + reserve.toString() + Enum.Color.PURPLE.escape() +
-                "\nRoundtrack: " + Enum.Color.RESET + roundTrack.toString() + Enum.Color.PURPLE.escape() + "\nTurn: " +
+        return "Table: \n" + printReserve() + printRoundtrack() + Enum.Color.PURPLE.escape() + "\nTurn: " +
                 Enum.Color.RESET + realTurn + Enum.Color.PURPLE.escape() + "\nRound: " + Enum.Color.RESET + (round+1) +
-                Enum.Color.PURPLE.escape() + "\nClockwise: " + Enum.Color.RESET + clockwise + Enum.Color.PURPLE.escape() +
-                "\nPublic Objective cards: " + Enum.Color.RESET + s;
+                Enum.Color.PURPLE.escape() + "\nPublic Objective cards: " + Enum.Color.RESET + s;
     }
 
 }

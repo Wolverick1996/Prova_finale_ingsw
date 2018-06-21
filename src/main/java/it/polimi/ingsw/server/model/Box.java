@@ -181,7 +181,7 @@ public class Box extends Enum {
         String escape;
         if(this.diceInside == null || !isFull){
             if(this.restrictionCol == null && this.restrictionNum == 0)
-                return "[#]\t";
+                return "[ ]\t";
             else if(this.restrictionCol != null) {
                 escape = this.restrictionCol.escape();
                 return escape+"["+this.restrictionCol.toString().substring(0,1)+"]\t"+Color.RESET;

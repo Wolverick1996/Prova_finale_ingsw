@@ -72,12 +72,12 @@ public class ToolHandler {
      * @param index: the value that indicates the position of the card in the vector of the tool cards in play
      * @param player: the player who wants to use the tool card
      * @param table: the instance of table (useful for certain tool cards)
-     * @return ToolCard useEffect method result (true if the card is correctly used, otherwise false)
+     * @return ToolCard toolEffect method result (true if the card is correctly used, otherwise false)
      * @author Riccardo
      */
     public static boolean useTool(int index, Player player, Table table, IOhandler out){
         currentIO = out;
-        return activeID.get(index).useEffect(player, table);
+        return activeID.get(index).toolEffect(player, table);
     }
 
     /**

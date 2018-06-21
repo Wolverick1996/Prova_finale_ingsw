@@ -50,7 +50,6 @@ public class IOhandler implements Observer{
         } catch (RemoteException e){
             System.err.println("ERROR BROADCAST: "+e.getMessage());
         }
-
     }
 
     public String getStandardAction(String player){
@@ -83,12 +82,27 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
+            notify(player, this.table.printReserve());
             answer = Integer.parseInt(getInput(player));
             return answer-1;
         } catch (RemoteException e){
             System.err.println("GETDICE ERROR: " +e.getMessage());
         }
        //TODO: CHECK THIS INPUT!
+        return -1;
+    }
+
+    public int getDiceFromRoundtrack(String player){
+        int answer;
+        try {
+            notify(player,"Choose a dice from round track [from 1 to N]");
+            notify(player, this.table.printRoundtrack());
+            answer = Integer.parseInt(getInput(player));
+            //TODO: CHECK THE INPUT!
+            return answer-1;
+        } catch (RemoteException e){
+            System.err.println("GETDICE ERROR: " + e.getMessage());
+        }
         return -1;
     }
 
@@ -143,19 +157,6 @@ public class IOhandler implements Observer{
         return -1;
     }
 
-    public int getDiceFromRoundtrack(String player){
-        int answer;
-        try {
-            notify(player,"Choose a dice from round track [from 1 to N]");
-            answer = Integer.parseInt(getInput(player));
-            //TODO: CHECK THE INPUT!
-            return answer-1;
-        } catch (RemoteException e){
-            System.err.println("GETTOOL: " + e.getMessage());
-        }
-        return -1;
-    }
-
     public int getTool(String player){
         int answer;
         try {
@@ -186,7 +187,6 @@ public class IOhandler implements Observer{
     }
 
     public void setServer(ServerIntRMI server) {
-
         try {
             usersRMI = server.getConnected();
         } catch (RemoteException e) {
@@ -195,14 +195,12 @@ public class IOhandler implements Observer{
     }
 
     public void notify(String player, String message) throws RemoteException {
-
         for (int i = 0; i<usersRMI.size(); i++){
             if (usersRMI.get(i).getName().equals(player)){
                 usersRMI.get(i).notify(message);
                 break;
             }
         }
-
     }
 
     private String getInput(String player) throws RemoteException {

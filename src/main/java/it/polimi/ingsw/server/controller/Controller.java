@@ -27,20 +27,14 @@ public class Controller {
             //TODO: Implementation of prep phase
             games.add(new Game(table.getActivePlayers(), table));
 
-            speakers.get(i).broadcast("\nPrinting reserve...");
-            for (int k=0; k<nicknames.size()*2 + 1; k++)
-                s += table.checkDiceFromReserve(k) + "\t";
-
             speakers.get(i).broadcast(s);
             //TODO: print status of game
             speakers.get(i).broadcast("\nThis is the lobby: \n" + lobby);
             speakers.get(i).broadcast(table);
-        }
-        catch (NullPointerException n){
+        } catch (NullPointerException n){
             System.err.println("Null Pointer exception");
             n.printStackTrace();
-        }
-        catch (Exception e){
+        } catch (Exception e){
             System.err.println("Exception caught");
             e.printStackTrace();
         }
@@ -50,12 +44,10 @@ public class Controller {
     public static void switchContext(Lobby lobby){
         try {
             games.get(lobbies.indexOf(lobby)).begin();
-        }
-        catch (NullPointerException n){
+        } catch (NullPointerException n){
             System.err.println("Null Pointer exception");
             n.printStackTrace();
-        }
-        catch (Exception e){
+        } catch (Exception e){
             System.err.println("Exception caught");
             e.printStackTrace();
         }
@@ -71,4 +63,5 @@ public class Controller {
             return null;
         }
     }
+
 }

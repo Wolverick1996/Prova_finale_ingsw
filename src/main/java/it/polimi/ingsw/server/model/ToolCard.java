@@ -86,161 +86,242 @@ public class ToolCard {
     }
 
     /**
-     * Receives a player and the table as parameters and calls methods related to the tool card to be used
+     * Defines a function to be override and executed in the tool effects array using lambda expressions
+     *
+     * @author Riccardo
+     */
+    interface useEffect {
+
+        /**
+         * Function to be override and executed in the tool effects array using lambda expressions
+         *
+         * @param player: the player who wants to use the tool card
+         * @param table: the instance of table (useful for certain tool cards)
+         * @return true if the card is correctly used, otherwise false
+         * @author Riccardo
+         */
+        boolean use(Player player, Table table);
+
+    }
+
+    private useEffect[] useEffects = new useEffect[] {
+
+            //TOOL 1
+            ((Player player, Table table) -> {
+                boolean canExtract = table.getCanExtract();
+                table.setCanExtract(true);
+                Dice dice = extractFromReserve(player, table);
+
+                //Dice extraction failed
+                if (dice == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
+
+                //If inserted value is not allowed the method returns false
+                if (!modifyDiceValue(this.cardID, player, dice)) {
+                    table.putDiceInReserve(dice);
+                    return false; }
+
+                table.putDiceInReserve(dice);
+                return true;
+            }),
+
+            //TOOL 2 & 3 (& 9)
+            ((Player player, Table table) -> {
+                int[] coordOLD = getCoordinates(player);
+
+                //Dice extraction failed
+                if (!extractDice(player, coordOLD))
+                    return false;
+
+                int[] coordNEW = getCoordinates(player);
+
+                //If placement fails the dice is reinserted into the previous box
+                if (!moveDice(this.cardID, player, coordNEW)) {
+                    player.getOwnScheme().placeDice(coordOLD[0], coordOLD[1], player.getDiceInHand());
+                    return false; }
+
+                return true;
+            }),
+
+            //TOOL 4
+            (Player player, Table table) -> !twoDiceMovement(this.cardID, player, null),
+
+            //TOOL 5
+            ((Player player, Table table) -> {
+                boolean canExtract = table.getCanExtract();
+                table.setCanExtract(true);
+                Dice dice1 = extractFromReserve(player, table);
+
+                //Dice extraction failed
+                if (dice1 == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
+
+                Dice dice2 = chooseFromRoundtrack(this.cardID, player, table);
+
+                //Dice extraction failed: the first dice is reinserted in the reserve
+                if (dice2 == null) {
+                    table.putDiceInReserve(dice1);
+                    return false; }
+
+                table.putDiceInRoundtrack(dice1);
+                table.putDiceInReserve(dice2);
+                return true;
+            }),
+
+            //TOOL 6
+            ((Player player, Table table) -> {
+                boolean canExtract = table.getCanExtract();
+                table.setCanExtract(true);
+                Dice dice = extractFromReserve(player, table);
+
+                //Dice extraction failed
+                if (dice == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
+
+                dice.rollDice();
+                if (isPlaceable(dice, player) == null) {
+                    System.out.println("You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
+                    table.putDiceInReserve(dice);
+                } else {
+                    System.out.println(isPlaceable(dice, player));
+
+                    int[] coord = getCoordinates(player);
+
+                    //TODO: find a way to allow just one placement per turn: player can't place dice after using tool 6
+                    //Placement of the extracted dice: if it fails the dice is putted in the reserve
+                    if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice))
+                        table.putDiceInReserve(dice);
+
+                    //NOTE: if the placement fails the method should not return false because the dice roll affects the game
+                }
+
+                return true;
+            }),
+
+            //TOOL 7
+            ((Player player, Table table) -> {
+                if (table.getRealTurn() < table.getActivePlayers().size())
+                    return false;
+
+                table.rerollReserve();
+                return true;
+            }),
+
+            //TOOL 8
+            ((Player player, Table table) -> {
+                //NOTE: This tool card will affect the controller turn logic
+                if (table.getRealTurn() > table.getActivePlayers().size())
+                    return false;
+
+                player.addTurn();
+                return true;
+            }),
+
+            ((Player player, Table table) -> {
+                boolean canExtract = table.getCanExtract();
+                table.setCanExtract(true);
+                Dice dice = extractFromReserve(player, table);
+
+                //Dice extraction failed
+                if (dice == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
+
+                int[] coord = getCoordinates(player);
+
+                //TODO: find a way to allow just one placement per turn: player can't place dice after using tool 9
+                //Placement of the extracted dice: if it fails the dice is putted in the reserve
+                if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
+                    table.putDiceInReserve(dice);
+                    return false; }
+
+                return true;
+            }),
+
+            //TOOL 10
+            ((Player player, Table table) -> {
+                boolean canExtract = table.getCanExtract();
+                table.setCanExtract(true);
+                Dice dice = extractFromReserve(player, table);
+
+                //Dice extraction failed
+                if (dice == null) {
+                    table.setCanExtract(canExtract);
+                    return false; }
+
+                dice.turnDice();
+                table.putDiceInReserve(dice);
+                return true;
+            }),
+
+            //TOOL 11
+            ((Player player, Table table) -> {
+                boolean canExtract = table.getCanExtract();
+                table.setCanExtract(true);
+                putDiceInBag(player, table);
+                Dice dice = table.pickDiceFromBag();
+                System.out.println("Dice extracted: " + dice);
+
+                //If inserted value is not allowed the method returns false
+                if (!modifyDiceValue(this.cardID, player, dice)) {
+                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                    table.putDiceInReserve(dice);
+                    table.setCanExtract(canExtract);
+                    return false; }
+
+                int[] coord = getCoordinates(player);
+
+                //TODO: find a way to allow just one placement per turn: player can't place dice after using tool 11
+                //Placement of the extracted dice: if it fails the dice is putted in the reserve
+                if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
+                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                    table.putDiceInReserve(dice); }
+
+                return true;
+            }),
+
+            //TOOL 12
+            ((Player player, Table table) -> {
+                Dice dice = chooseFromRoundtrack(this.cardID, player, table);
+
+                //Dice extraction failed
+                if (dice == null)
+                    return false;
+
+                return (!twoDiceMovement(this.cardID, player, dice.getColor()));
+            })
+
+    };
+
+    /**
+     * Receives a player and the table as parameters and calls useEffects[] methods
      *
      * @param player: the player who wants to use the tool card
      * @param table: the instance of table (useful for certain tool cards)
      * @return true if the card is correctly used, otherwise false
      * @author Riccardo
      */
-    public boolean useEffect(Player player, Table table){
+    public boolean toolEffect(Player player, Table table){
         //If player doesn't have enough tokens the tool card can't be used
         if ((player.getTokens() == 1 && this.tokens > 0) || player.getTokens() == 0){
             System.out.println("You don't have enough tokens!");
             return false; }
 
-        Dice dice1;
-        Dice dice2;
-        int[] coordOLD;
-        int[] coordNEW;
-        boolean canExtract = table.getCanExtract();
+        int equals = this.cardID-1;
 
-        switch (this.cardID) {
-            case 1:
-                table.setCanExtract(true);
-                dice1 = extractFromReserve(player, table);
-                //Dice extraction failed
-                if (dice1 == null) {
-                    table.setCanExtract(canExtract);
-                    return false; }
+        //Tool cards 2 and 3 are grouped together
+        if (this.cardID >= 3)
+            equals--;
 
-                //If inserted value is not allowed the method returns false
-                if (!modifyDiceValue(this.cardID, player, dice1)) {
-                    table.putDiceInReserve(dice1);
-                    return false; }
-
-                table.putDiceInReserve(dice1);
-                break;
-
-            case 2: case 3: case 9:
-                coordOLD = getCoordinates(player);
-
-                //Dice extraction failed
-                if (!extractDice(player, coordOLD))
-                    return false;
-
-                coordNEW = getCoordinates(player);
-
-                //If placement fails the dice is reinserted into the previous box
-                if (!moveDice(this.cardID, player, coordNEW)) {
-                    player.getOwnScheme().placeDice(coordOLD[0], coordOLD[1], player.getDiceInHand());
-                    return false; }
-                break;
-
-            case 4:
-                if (!twoDiceMovement(this.cardID, player, null))
-                    return false;
-                break;
-
-            case 5:
-                table.setCanExtract(true);
-                dice1 = extractFromReserve(player, table);
-                //Dice extraction failed
-                if (dice1 == null) {
-                    table.setCanExtract(canExtract);
-                    return false; }
-
-                dice2 = chooseFromRoundtrack(this.cardID, player, table);
-                //Dice extraction failed: the first dice is reinserted in the reserve
-                if (dice2 == null){
-                    table.putDiceInReserve(dice1);
-                    return false; }
-
-                table.putDiceInRoundtrack(dice1);
-                table.putDiceInReserve(dice2);
-                break;
-
-            case 6:
-                table.setCanExtract(true);
-                dice1 = extractFromReserve(player, table);
-                //Dice extraction failed
-                if (dice1 == null) {
-                    table.setCanExtract(canExtract);
-                    return false; }
-
-                dice1.rollDice();
-                if (isPlaceable(dice1, player) == null) {
-                    System.out.println("You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
-                    table.putDiceInReserve(dice1);
-                } else
-                    System.out.println(isPlaceable(dice1, player));
-                break;
-
-            case 7:
-                if (table.getRealTurn() < table.getActivePlayers().size())
-                    return false;
-
-                table.rerollReserve();
-                break;
-
-            case 8:
-                //NOTE: This tool card will affect the controller turn logic
-                if (table.getRealTurn() > table.getActivePlayers().size())
-                    return false;
-
-                player.addTurn();
-                break;
-
-            case 10:
-                table.setCanExtract(true);
-                dice1 = extractFromReserve(player, table);
-                //Dice extraction failed
-                if (dice1 == null) {
-                    table.setCanExtract(canExtract);
-                    return false; }
-
-                dice1.turnDice();
-                table.putDiceInReserve(dice1);
-                break;
-
-            case 11:
-                table.setCanExtract(true);
-                putDiceInBag(player, table);
-                dice1 = table.pickDiceFromBag();
-                System.out.println("Dice extracted: " + dice1);
-
-                //If inserted value is not allowed the method returns false
-                if (!modifyDiceValue(this.cardID, player, dice1)) {
-                    System.out.println("Placement not allowed, " + dice1 + " is now in the reserve");
-                    table.putDiceInReserve(dice1);
-                    table.setCanExtract(canExtract);
-                    return false; }
-
-                coordNEW = getCoordinates(player);
-
-                //Placement of the extracted dice: if it fails the dice is putted in the reserve
-                if (!player.getOwnScheme().placeDice(coordNEW[0], coordNEW[1], dice1)) {
-                    System.out.println("Placement not allowed, " + dice1 + " is now in the reserve");
-                    table.putDiceInReserve(dice1); }
-                break;
-
-            case 12:
-                dice1 = chooseFromRoundtrack(this.cardID, player, table);
-                //Dice extraction failed
-                if (dice1 == null)
-                    return false;
-
-                if (!twoDiceMovement(this.cardID, player, dice1.getColor()))
-                    return false;
-                break;
-
-            default:
-                return false;
-        }
+        boolean correctlyUsed = useEffects[equals].use(player, table);
 
         //Incrementing tool card's tokens and decrementing player's tokens
-        incrementTokens(player);
-        return true;
+        if (correctlyUsed)
+            incrementTokens(player);
+        return correctlyUsed;
     }
 
     /**
@@ -308,6 +389,8 @@ public class ToolCard {
         if (!moveDice(this.cardID, player, coord1NEW)){
             player.getOwnScheme().placeDice(coord1OLD[0], coord1OLD[1], player.getDiceInHand());
             return false; }
+
+        //TODO: Let the player choose if move another dice or not (tool 12); return true if he wants to stop
 
         coord2OLD = getCoordinates(player);
 
@@ -399,11 +482,9 @@ public class ToolCard {
      */
     private boolean modifyDiceValue(int index, Player player, Dice dice){
         //NOTE: for the tool card 1 it MUST be +/-1, for the tool card 11 it MUST be a dice value (1 to 6)
-        Boolean restricted;
+        Boolean restricted = false;
         if (this.cardID == 1)
             restricted = true;
-        else    //index == 11
-            restricted = false;
 
         int value = ToolHandler.getDiceValue(restricted, player);
 

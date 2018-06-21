@@ -118,7 +118,7 @@ public class ClientMain {
                     System.out.println("You are the first player of the lobby!");
                     int delay = 0;
                     while(delay < 15 || delay > 60){
-                        System.out.println("Please set a timer (min 15 s, max 60s)");
+                        System.out.println("Please set a timer (min 15s, max 60s)");
                         delay = Integer.parseInt(scanner.nextLine());
                     }
                     server.setDelay(delay);
@@ -171,7 +171,7 @@ public class ClientMain {
                     int delay = 0;
                     String delayString = null;
                     while (delay < 15 || delay > 60){
-                        System.out.println("Please set a timer (min 15 s, max 60s)");
+                        System.out.println("Please set a timer (min 15s, max 60s)");
                         delayString = scanner.nextLine();
                         delay = Integer.parseInt(delayString);
                     }
