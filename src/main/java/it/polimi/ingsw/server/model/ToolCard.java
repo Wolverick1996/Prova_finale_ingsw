@@ -32,6 +32,7 @@ public class ToolCard {
         for (int i=0; i<(cardID-1)*3; i++)
             scan.nextLine();
 
+        scan.nextLine();
         this.name = scan.nextLine();
         this.description = scan.nextLine();
         this.tokens = 0;
@@ -133,7 +134,7 @@ public class ToolCard {
             }),
 
             //TOOL 4
-            (Player player, Table table) -> !twoDiceMovement(this.cardID, player, null),
+            (Player player, Table table) -> twoDiceMovement(this.cardID, player, null),
 
             //TOOL 5
             ((Player player, Table table) -> {
@@ -291,7 +292,7 @@ public class ToolCard {
                 if (dice == null)
                     return false;
 
-                return (!twoDiceMovement(this.cardID, player, dice.getColor()));
+                return (twoDiceMovement(this.cardID, player, dice.getColor()));
             })
 
     };
@@ -390,7 +391,11 @@ public class ToolCard {
             player.getOwnScheme().placeDice(coord1OLD[0], coord1OLD[1], player.getDiceInHand());
             return false; }
 
-        //TODO: Let the player choose if move another dice or not (tool 12); return true if he wants to stop
+        //TOOL 12: player can choose if place another dice or not
+        if (index == 12){
+            ToolHandler.notify(player,"Do you want to move another dice?");
+            if (!ToolHandler.getYesOrNo(player))
+                return true; }
 
         coord2OLD = getCoordinates(player);
 

@@ -127,6 +127,22 @@ public class ToolHandler {
     }
 
     /**
+     * Calls the IOhandler to ask a char (y/n) and returns true if char inserted is 'y', false if is 'n'
+     *
+     * @param player: the player who is using the tool card
+     * @return true if the char inserted is 'y', false if is 'n'
+     * @author Matteo
+     */
+    static boolean getYesOrNo(Player player){
+        try {
+            return currentIO.yesOrNo(player.getUsername());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
      * Calls the IOhandler to send it messages to print out
      *
      * @param player: the player who is using the tool card

@@ -52,7 +52,7 @@ public class IOhandler implements Observer{
         }
     }
 
-    public String getStandardAction(String player){
+    String getStandardAction(String player){
         try {
             boolean send = false;
             String answer;
@@ -72,7 +72,14 @@ public class IOhandler implements Observer{
                     notify(player, "Invalid input!");
                 }
             }
-        } catch (RemoteException e){
+        } catch (IllegalArgumentException e){
+            try {
+                notify(player, "What did you write, sorry?");
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+            return getStandardAction(player);
+        }catch (RemoteException e){
             System.err.println("GETSTDACTION ERROR: " +e.getMessage());
         }
         return null;
@@ -80,15 +87,27 @@ public class IOhandler implements Observer{
 
     public int getDiceFromReserve(String player){
         int answer;
-        try {
-            notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
-            notify(player, table.printReserve());
-            answer = Integer.parseInt(getInput(player));
-            return answer-1;
-        } catch (RemoteException e){
-            System.err.println("GETDICE ERROR: " +e.getMessage());
-        }
-       //TODO: CHECK THIS INPUT!
+        boolean check = true;
+        do {
+            try {
+                if (!check){
+                    notify(player, "Try again: ");
+                }
+                notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
+                notify(player, table.printReserve());
+                answer = Integer.parseInt(getInput(player));
+                return answer-1;
+            } catch (IllegalArgumentException i){
+                try {
+                    notify(player, "You don't know what you just said");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            } catch (RemoteException e){
+                e.printStackTrace();
+            }
+            check = false;
+        } while (!check);
         return -1;
     }
 
@@ -98,10 +117,15 @@ public class IOhandler implements Observer{
             notify(player,"Choose a dice from round track [from 1 to N]");
             notify(player, table.printRoundtrack());
             answer = Integer.parseInt(getInput(player));
-            //TODO: CHECK THE INPUT!
             return answer-1;
-        } catch (RemoteException e){
-            System.err.println("GETDICE ERROR: " + e.getMessage());
+        } catch (IllegalArgumentException e){
+            try {
+                notify(player,"I do not understand. Am I the only one here?");
+            } catch (RemoteException e1) {
+                e1.printStackTrace();
+            }
+        }catch (RemoteException e){
+            System.err.println("GETDICE: " + e.getMessage());
         }
         return -1;
     }
@@ -111,21 +135,20 @@ public class IOhandler implements Observer{
         try {
             notify(player,"Insert coordinate " + coor + " of the dice");
             answer = Integer.parseInt(getInput(player));
-            //TODO: CHECK THE INPUT!
             return answer-1;
+        } catch (IllegalArgumentException i){
+            try {
+                notify(player, "What did you mean? I have no idea");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } catch (RemoteException e){
             System.err.println("GETCOORDINATE: " +e.getMessage());
         }
         return -1;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        if (o == ov)
-            System.out.println(ov);
-    }
-
-    public int chooseScheme(int s1, int s2, int s3, int s4, String player){
+    int chooseScheme(int s1, int s2, int s3, int s4, String player){
         int answer = -1;
         boolean isValid = false;
 
@@ -152,19 +175,30 @@ public class IOhandler implements Observer{
             }
             return schemes.get(answer-1);
         } catch (RemoteException e){
-            System.err.println("CHOOSESCHEME ERROR: " +e.getMessage());
+            System.err.println("CHOOSESCHEME: " +e.getMessage());
         }
         return -1;
     }
 
-    public int getTool(String player){
+    int getTool(String player){
         int answer;
         try {
             notify(player,"\nChoose a tool card [1, 2, 3] or type '0' if you want to go back");
             answer = Integer.parseInt(getInput(player));
-            //TODO: CHECK THE INPUT!
             return answer-1;
-        } catch (RemoteException e){
+        } catch (NumberFormatException n) {
+            try {
+                notify(player, "I may be a computer, but I don't think that is a number");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } catch (IllegalArgumentException i) {
+            try {
+                notify(player, "I DON'T UNDERSTAAAAND");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } catch (RemoteException e) {
             System.err.println("GETTOOL: " + e.getMessage());
         }
         return -1;
@@ -178,10 +212,21 @@ public class IOhandler implements Observer{
             else
                 notify(player,"Insert the new value [1-6]");
             answer = Integer.parseInt(getInput(player));
-            //TODO: CHECK THE INPUT!
             return answer;
-        } catch (RemoteException e){
-            System.err.println("GETTOOL: " + e.getMessage());
+        } catch (NumberFormatException n) {
+            try {
+                notify(player, "That is no number, not even in Wakanda");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } catch (IllegalArgumentException i) {
+            try {
+                notify(player, "Sorry, what?");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } catch (RemoteException e) {
+            System.err.println("CHOOSEDICEVALUE: " + e.getMessage());
         }
         return -1;
     }
@@ -203,6 +248,29 @@ public class IOhandler implements Observer{
         }
     }
 
+    public boolean yesOrNo(String player) throws RemoteException{
+        boolean check = true;
+        String answer;
+        do {
+            if (!check){
+                notify(player,"I don't know what you mean");
+            }
+            try {
+                notify(player, "Insert y/n");
+                answer = getInput(player).toLowerCase();
+                if (answer.equals("y")){
+                    return true;
+                } else if (answer.equals("n")){
+                    return false;
+                }
+            } catch (IllegalArgumentException e) {
+                notify(player, "Strange thing you wrote there...");
+            }
+            check = false;
+        } while (!check);
+        return false;
+    }
+
     private String getInput(String player) throws RemoteException {
         for (int i = 0; i<usersRMI.size(); i++){
             if (usersRMI.get(i).getName().equals(player)){
@@ -211,5 +279,11 @@ public class IOhandler implements Observer{
         }
         System.err.println("COULD NOT FIND PLAYER FOR THE INPUT");
         return "INVALID";
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o == ov)
+            System.out.println(ov);
     }
 }
