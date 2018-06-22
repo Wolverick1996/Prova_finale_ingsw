@@ -29,7 +29,7 @@ public class ToolCard {
         InputStream inputFile = PublicOC.class.getResourceAsStream("/cards/ToolCards.txt");
         Scanner scan = new Scanner(inputFile);
 
-        for (int i=0; i<(cardID-1)*2; i++)
+        for (int i=0; i<(cardID-1)*3; i++)
             scan.nextLine();
 
         this.name = scan.nextLine();
