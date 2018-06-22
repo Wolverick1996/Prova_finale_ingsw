@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.Enum;
 import java.rmi.RemoteException;
 import java.util.*;
 
-class Game {
+public class Game {
 
     //***************************//
     //        Attributes         //
@@ -209,8 +209,7 @@ class Game {
         Controller.getMyIO(this).broadcast("Dice correctly placed!");
     }
 
-    private void useTool8(){
-
+    public void useTool8(){
         Controller.getMyIO(this).broadcast("Player" + this.players.get(active).getUsername() + " is using Tool 8");
         if (this.table.getCanExtract()){
             putDiceStandard();

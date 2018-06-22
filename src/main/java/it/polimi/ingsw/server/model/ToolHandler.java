@@ -147,7 +147,7 @@ public class ToolHandler {
      * @author Riccardo
      */
     static void tool8(){
-        //Controller.getMyGame(currentIO).useTool8();
+        Controller.getMyGame(currentIO).useTool8();
     }
 
     /**

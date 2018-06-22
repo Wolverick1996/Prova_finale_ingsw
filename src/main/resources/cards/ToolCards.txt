@@ -1,36 +1,36 @@
-[1]
-Pinza Sgrossatrice
-Dopo aver scelto un dado, aumenta o dimuinuisci il valore del dado scelto di 1. Non puoi cambiare un 6 in 1 o un 1 in 6
+﻿[1]
+Grozing Pliers
+After drafting, increase or decrease the value of the drafted die by 1. 1 may not change to 6, or 6 to 1
 [2]
-Pennello per Eglomise
-Muovi un qualsiasi dado nella tua vetrata ignorando le restrizioni di colore. Devi rispettare tutte le altre restrizioni di piazzamento
+Eglomise Brush
+Move any one die in your window ignoring the color restrictions. You must obey all the other placement restrictions
 [3]
-Alesatore per lamina di rame
-Muovi un qualsiasi dado nella tua vetrata ignorando le restrizioni di valore. Devi rispettare tutte le altre restrizioni di piazzamento
+Copper Foil Burnisher
+Move any one die in your window ignoring shade restrictions. You must obey all the other placement restrictions
 [4]
 Lathekin
-Muovi esattamente due dadi, rispettando tutte le restrizioni di piazzamento
+Move exactly two dice, obeying all placement restrictions
 [5]
-Taglierina circolare
-Dopo aver scelto un dado, scambia quel dado con un dado sul Tracciato dei Round
+Lens Cutter
+After drafting, swap the drafted die with a die from the Round Track
 [6]
-Pennello per Pasta Salda
-Dopo avere scelto un dado, tira nuovamente quel dado. Se non puoi piazzarlo, riponilo nella Riserva
+Flux Brush
+After drafting, re-roll the drafted die. If it cannot be placed, return it to the Draft Pool
 [7]
-Martelletto
-Tira nuovamente tutti i dadi nella Riserva. Questa carta può essere usata solo durante il tuo secondo turno, prima di scegliere il secondo dado
+Glazing Hammer
+Re-roll all dice in the Draft Pool. This may only be used on your second turn before drafting
 [8]
-Tenaglia a Rotelle
-Dopo il tuo primo turno scegli immediatamente un altro dado. Salta il tuo secondo turno in questo round
+Running Pliers
+After your first turn, immediately draft a die. Skip your next turn this round
 [9]
-Riga in Sughero
-Dopo aver scelto un dado, piazzalo in una casella che non sia adiacente a un altro dado. Devi rispettare tutte le restrizioni di piazzamento
+Cork-backed Straightedge
+After drafting, place the die in a spot that is not adjacent to another die. You must obey all other placement restrictions
 [10]
-Tampone Diamantato
-Dopo aver scelto un dado, giralo sulla faccia opposta. 6 diventa 1, 5 diventa 2, 4 diventa 3 ecc.
+Grinding Stone
+After drafting, flip the die to its opposite side. 6 flips to 1, 5 to 2, 4 to 3, etc.
 [11]
-Diluente per Pasta Salda
-Dopo aver scelto un dado, riponilo nel Sacchetto, poi pescane uno dal Sacchetto. Scegli il valore del nuovo dado e piazzalo, rispettando tutte le restrizioni di piazzamento
+Flux Remover
+After drafting, return the die to the Dice Bag and pull 1 die from the bag. Choose a value and place the new die, obeying all placement restrictions, or return it to the Draft Pool
 [12]
-Taglierina Manuale
-Muovi fino a due dadi dello stesso colore di un solo dado sul Tracciato dei Round. Devi rispettare tutte le restrizioni di piazzamento
+Tap Wheel
+Move up to two dice of the same color that match the color of a die on the Round Track. You must obey all placement restrictions
