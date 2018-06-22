@@ -20,7 +20,6 @@ class Game {
     private int count = 0;
     private boolean clockwise = true;
     private boolean toolUsed = false;
-    private boolean dicePlaced = false;
 
     Game(List<Player> users, Table board){
         this.players = users;
@@ -68,8 +67,13 @@ class Game {
             Controller.getMyIO(this).broadcast("Game has ended! Closing..."); //TODO: implement end of game
             System.exit(0);
         } else {
-            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
             Boolean end = false;
+            if(this.players.get(active).getTool8()){
+                end = true;
+                Controller.getMyIO(this).broadcast("Used tool 8, so is passing the turn...");
+                this.players.get(active).setTool8(false);
+            }
+            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
             while (!end){
                 String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
                 switch (action){
@@ -81,7 +85,6 @@ class Game {
                         Controller.getMyIO(this).broadcast("Turn passed");
                         end = true;
                         toolUsed = false;
-                        dicePlaced = false;
                         break;
                     case "t":
                         Controller.getMyIO(this).broadcast("Is using a tool...");
@@ -170,18 +173,17 @@ class Game {
     }
 
     private void putDiceStandard(){
-        if (dicePlaced){
+        if (table.getCanExtract()){
             Controller.getMyIO(this).broadcast("Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T");
             return; }
 
-        dicePlaced = true;
-        Dice dice = null;
+                Dice dice = null;
         boolean check = false;
         while (!check){
             try {
                 int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
-                    dicePlaced = false;
+                    table.setCanExtract(false);
                     Controller.getMyIO(this).broadcast("Nope, nothing done");
                     return; }
 
@@ -205,6 +207,22 @@ class Game {
 
         }
         Controller.getMyIO(this).broadcast("Dice correctly placed!");
+    }
+
+    private void useTool8(){
+
+        Controller.getMyIO(this).broadcast("Player" + this.players.get(active).getUsername() + " is using Tool 8");
+        if (this.table.getCanExtract()){
+            putDiceStandard();
+        }
+        this.table.setCanExtract(true);
+        try {
+            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Place the second dice: ");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        putDiceStandard();
+        this.players.get(active).setTool8(true);
     }
 
 }
