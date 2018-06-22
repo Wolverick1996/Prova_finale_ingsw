@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 /**
@@ -22,36 +21,25 @@ public class ToolCard {
      * @throws IllegalArgumentException if ID passed as a parameter is not valid
      * @author Riccardo
      */
-    public ToolCard(int cardID) {
+    public ToolCard(int cardID){
         if (cardID < 1 || cardID > ToolHandler.NUM_TOOLS)
             throw new IllegalArgumentException("Not valid ID: " + cardID);
 
         this.cardID = cardID;
-        String s;
-        File inputFile = new File("src/main/resources/cards/ToolCards.txt");
-        Scanner scan = null;
+        InputStream inputFile = PublicOC.class.getResourceAsStream("/cards/ToolCards.txt");
+        Scanner scan = new Scanner(inputFile);
+
+        for (int i=0; i<(cardID-1)*2; i++)
+            scan.nextLine();
+
+        this.name = scan.nextLine();
+        this.description = scan.nextLine();
+        this.tokens = 0;
 
         try {
-            scan = new Scanner(inputFile);
-
-            s = scan.nextLine();
-            while (!s.equals("["+this.cardID+"]"))
-                s = scan.nextLine();
-
-            this.name = scan.nextLine();
-            this.description = scan.nextLine();
-            this.tokens = 0;
-
-        } catch (IOException e) {
-            System.err.println("Error");
-        } finally {
-            if (scan != null) {
-                try {
-                    scan.close();
-                } catch (Exception e1) {
-                    System.err.println("Error");
-                }
-            }
+            scan.close();
+        } catch (Exception e1) {
+            System.err.println("Error closing scan (ToolCard)");
         }
     }
 
