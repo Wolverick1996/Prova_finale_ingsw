@@ -9,7 +9,7 @@ import java.io.*;
  * @author Andrea
  * @author Riccardo
  */
-public class Scheme {
+public class Scheme extends Observable{
 
     //***************************//
     //        Attributes         //
@@ -112,7 +112,7 @@ public class Scheme {
             return true;
         else {
             if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
-                System.err.println("You can't place the first dice out of border");
+                notifyObservers("You can't place the first dice out of border");
             return false;
         }
     }
@@ -132,7 +132,7 @@ public class Scheme {
             return true;
         else {
             if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
-                System.err.println("You can't place the first dice out of border");
+                notifyObservers("You can't place the first dice out of border");
             return false;
         }
     }
@@ -167,7 +167,7 @@ public class Scheme {
         int j;
 
         if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)){
-            System.err.println("This box doesn't exists");
+            notifyObservers("This box doesn't exists");
             return false; }
 
         //If first dice check if it respects first-dice-placement-rule
@@ -193,7 +193,7 @@ public class Scheme {
         }
 
         if (!diceNear) {
-            System.err.println("You can't place the dice in a box not adjacent to another full one");
+            notifyObservers("You can't place the dice in a box not adjacent to another full one");
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
@@ -203,7 +203,7 @@ public class Scheme {
                 return true;
         }
 
-        System.err.println("There is another dice near with the same value!");
+        notifyObservers("There is another dice near with the same value!");
         return false;
     }
 
@@ -224,7 +224,7 @@ public class Scheme {
         int j;
 
         if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)){
-            System.err.println("This box doesn't exists");
+            notifyObservers("This box doesn't exists");
             return false; }
 
         //If first dice check if it respects first-dice-placement-rule
@@ -250,7 +250,7 @@ public class Scheme {
         }
 
         if (!diceNear) {
-            System.err.println("You can't place the dice in a box not adjacent to another full one");
+            notifyObservers("You can't place the dice in a box not adjacent to another full one");
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
@@ -260,7 +260,7 @@ public class Scheme {
                 return true;
         }
 
-        System.err.println("There is another dice near with the same color!");
+        notifyObservers("There is another dice near with the same color!");
         return false;
     }
 
@@ -281,7 +281,7 @@ public class Scheme {
         int j;
 
         if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)) {
-            System.err.println("This box doesn't exists");
+            notifyObservers("This box doesn't exists");
             return false; }
 
         //If first dice check if it respects first-dice-placement-rule
@@ -308,8 +308,7 @@ public class Scheme {
         }
 
         if (diceNear) {
-            System.err.println
-                    ("You can't place the dice in a box adjacent to another full one using this tool card");
+            notifyObservers("You can't place the dice in a box adjacent to another full one using this tool card");
             return false;
         } else if (placeable && !diceNear) {
             //Check if dice respects box restrictions
@@ -451,4 +450,21 @@ public class Scheme {
                 "\nDifficulty: " + Enum.Color.RESET + this.difficulty + "\n" + s;
     }
 
+    @Override
+    public synchronized void addObserver(Observer o) {
+        super.addObserver(o);
+        for (Box[] B: grid){
+            for (Box b: B){
+                b.addObserver(o);
+            }
+        }
+    }
+
+    @Override
+    public void notifyObservers(Object arg) {
+        if (arg.getClass().equals(String.class)){
+            setChanged();
+        }
+        super.notifyObservers(arg);
+    }
 }

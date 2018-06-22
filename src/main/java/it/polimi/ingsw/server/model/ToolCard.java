@@ -171,11 +171,11 @@ public class ToolCard {
 
                 dice.rollDice();
                 if (isPlaceable(dice, player) == null) {
-                    System.out.println("You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
+                    ToolHandler.notify(player,"You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
                     table.putDiceInReserve(dice);
                     table.setCanExtract(canExtract);
                 } else {
-                    System.out.println(isPlaceable(dice, player));
+                    ToolHandler.notify(player, isPlaceable(dice, player));
 
                     int[] coord = getCoordinates(player);
 
@@ -228,7 +228,7 @@ public class ToolCard {
 
                 //Placement of the extracted dice: if it fails the dice is putted in the reserve
                 if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
-                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                    ToolHandler.notify(player,"Placement not allowed, " + dice + " is now in the reserve");
                     table.putDiceInReserve(dice);
                     return false;
                 } else
@@ -259,11 +259,11 @@ public class ToolCard {
                 table.setCanExtract(true);
                 putDiceInBag(player, table);
                 Dice dice = table.pickDiceFromBag();
-                System.out.println("Dice extracted: " + dice);
+                ToolHandler.notify(player,"Dice extracted: " + dice);
 
                 //If inserted value is not allowed the method returns true because there was a change in the game
                 if (!modifyDiceValue(this.cardID, player, dice)) {
-                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                    ToolHandler.notify(player,"Placement not allowed, " + dice + " is now in the reserve");
                     table.putDiceInReserve(dice);
                     table.setCanExtract(canExtract);
                     return true; }
@@ -274,7 +274,7 @@ public class ToolCard {
                     //Placement of the extracted dice: if it fails the dice is putted in the reserve
                     //NOTE: if the placement fails the method should not return false because there was a change in the game
                     if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
-                        System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                        ToolHandler.notify(player,"Placement not allowed, " + dice + " is now in the reserve");
                         table.putDiceInReserve(dice);
                     } else
                         table.setCanExtract(false);
@@ -307,7 +307,7 @@ public class ToolCard {
     public boolean toolEffect(Player player, Table table){
         //If player doesn't have enough tokens the tool card can't be used
         if ((player.getTokens() == 1 && this.tokens > 0) || player.getTokens() == 0){
-            System.out.println("You don't have enough tokens!");
+            ToolHandler.notify(player,"You don't have enough tokens!");
             return false; }
 
         int equals = this.cardID-1;
@@ -376,7 +376,7 @@ public class ToolCard {
         //If extraction fails the method returns false
         if (index == 12){
             while (player.getDiceInHand().getColor() != color) {
-                System.out.println("You have to choose a dice with the same color of the one chosen from round track");
+                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track");
 
                 if (!extractDice(player, coord1OLD))
                     return false;
@@ -405,7 +405,7 @@ public class ToolCard {
         //If extraction fails the first dice placed is removed and reinserted into the previous box and the method returns false
         if (index == 12){
             while (player.getDiceInHand().getColor() != color) {
-                System.out.println("You have to choose a dice with the same color of the one chosen from round track");
+                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track");
 
                 if (!extractDice(player, coord2OLD)){
                     dice = player.getOwnScheme().removeDice(coord1NEW[0], coord1NEW[1]);
@@ -496,7 +496,7 @@ public class ToolCard {
 
         if (index == 1) {
             if ((dice.getValue() == 1 && value == -1) || (dice.getValue() == 6 && value == +1)) {
-                System.out.println("Operation not allowed!");
+                ToolHandler.notify(player,"Operation not allowed!");
                 return false;
             } else
                 dice.assignValue(dice.getValue() + value);

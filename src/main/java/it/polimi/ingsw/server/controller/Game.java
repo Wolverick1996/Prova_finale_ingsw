@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.Enum;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class Game {
+public class Game implements Observer{
 
     //***************************//
     //        Attributes         //
@@ -56,9 +56,10 @@ public class Game {
             p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+12,j+12, p.getUsername())));
         }
 
-        this.active = 0; //TODO: add algorithm to define starting player
+        this.active = 0;
         Controller.getMyIO(this).broadcast(STATUS);
         Controller.getMyIO(this).broadcast("Game is starting!\n");
+        setObservables();
         this.next();
     }
 
@@ -173,14 +174,16 @@ public class Game {
     }
 
     private void putDiceStandard(){
-        if (table.getCanExtract()){
+        if (!table.getCanExtract()){
             Controller.getMyIO(this).broadcast("Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T");
-            return; }
+            return;
+        }
 
-                Dice dice = null;
+        Dice dice = null;
         boolean check = false;
         while (!check){
             try {
+                dice = null;
                 int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
                     table.setCanExtract(false);
@@ -224,4 +227,19 @@ public class Game {
         this.players.get(active).setTool8(true);
     }
 
+    private void setObservables(){
+        //set the observables
+        for (Player p: this.players){
+            p.addObserver(this);
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        try {
+            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), arg.toString());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 }
