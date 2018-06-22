@@ -90,7 +90,7 @@ public class ToolCard {
      *
      * @author Riccardo
      */
-    interface useEffect {
+    interface UseEffect {
 
         /**
          * Function to be override and executed in the tool effects array using lambda expressions
@@ -104,7 +104,7 @@ public class ToolCard {
 
     }
 
-    private useEffect[] useEffects = new useEffect[] {
+    private UseEffect[] useEffects = new UseEffect[] {
 
             //TOOL 1
             ((Player player, Table table) -> {
@@ -126,7 +126,7 @@ public class ToolCard {
                 return true;
             }),
 
-            //TOOL 2 & 3 (& 9)
+            //TOOL 2 & 3
             ((Player player, Table table) -> {
                 int[] coordOLD = getCoordinates(player);
 
@@ -220,6 +220,7 @@ public class ToolCard {
                 return true;
             }),
 
+            //TOOL 9
             ((Player player, Table table) -> {
                 boolean canExtract = table.getCanExtract();
                 table.setCanExtract(true);
@@ -297,7 +298,7 @@ public class ToolCard {
     };
 
     /**
-     * Receives a player and the table as parameters and calls useEffects[] methods
+     * Receives a player and the table as parameters and calls UseEffects[] methods
      *
      * @param player: the player who wants to use the tool card
      * @param table: the instance of table (useful for certain tool cards)

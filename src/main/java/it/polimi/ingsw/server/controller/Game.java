@@ -149,8 +149,13 @@ class Game {
             if (index == -1){
                 toolUsed = false;
                 Controller.getMyIO(this).broadcast("Nope, nothing done :(");
-                return; }
-
+                return;
+            }
+            try {
+                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Insert number from 1 to 3");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             index = Controller.getMyIO(this).getTool(this.players.get(active).getUsername());
         }
 
