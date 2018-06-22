@@ -1,17 +1,18 @@
 package it.polimi.ingsw.server.model;
 
+import java.util.Observable;
 /**
  * Box represents a single cell in the window pattern grid
  *
  * @author Andrea
  */
-public class Box extends Enum {
+public class Box extends Observable {
 
     //***************************//
     //        Attributes         //
     //***************************//
 
-    private Color restrictionCol;
+    private Enum.Color restrictionCol;
     private int restrictionNum;
     private boolean isFull;
     private Dice diceInside = null;
@@ -33,7 +34,7 @@ public class Box extends Enum {
      * @param restrictionCol: color restriction
      * @author Andrea
      */
-    public Box(Color restrictionCol){
+    public Box(Enum.Color restrictionCol){
         this.restrictionCol = restrictionCol;
         this.restrictionNum = 0;
         this.isFull = false;
@@ -67,9 +68,9 @@ public class Box extends Enum {
             return true;
         else {
             if (this.restrictionNum != 0 && dice.getValue() != this.restrictionNum)
-                System.out.println("You can't place the dice here cause of value restrictions");
+                notifyObservers("You can't place the dice here cause of value restrictions");
             else
-                System.out.println("Box is full");
+                notifyObservers("Box is full");
             return false;
         }
     }
@@ -86,9 +87,9 @@ public class Box extends Enum {
             return true;
         else {
             if (this.restrictionCol != null && dice.getColor() != this.restrictionCol)
-                System.out.println("You can't place the dice here cause of color restrictions");
+                notifyObservers("You can't place the dice here cause of color restrictions");
             else
-                System.out.println("Box is full");
+                notifyObservers("Box is full");
             return false;
         }
     }
@@ -146,7 +147,7 @@ public class Box extends Enum {
      * @return the color restriction of the box (null if the box has not color restrictions)
      * @author Andrea
      */
-    public Color getRestrictionCol (){
+    public Enum.Color getRestrictionCol (){
         return this.restrictionCol;
     }
 
@@ -184,11 +185,18 @@ public class Box extends Enum {
                 return "[ ]\t";
             else if(this.restrictionCol != null) {
                 escape = this.restrictionCol.escape();
-                return escape+"["+this.restrictionCol.toString().substring(0,1)+"]\t"+Color.RESET;
+                return escape+"["+this.restrictionCol.toString().substring(0,1)+"]\t"+Enum.Color.RESET;
             } else
                 return "["+this.restrictionNum+"]\t";
         } else
             return "["+this.diceInside+"]\t";
     }
 
+    @Override
+    public void notifyObservers(Object arg) {
+        if (arg.getClass().equals(String.class)){
+            setChanged();
+        }
+        super.notifyObservers(arg);
+    }
 }

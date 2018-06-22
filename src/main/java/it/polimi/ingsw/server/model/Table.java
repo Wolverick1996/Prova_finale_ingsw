@@ -94,14 +94,14 @@ public class Table {
     private void nextRound(){
         //set RoundTrack
         //set Reserve
-        if (round>9){ System.out.println("WARNING nextRound called, round is already 10"); return; }
+        if (round>9){ System.err.println("WARNING nextRound called, round is already 10"); return; }
 
         if (!reserve.isEmpty()){
             for (Dice d:reserve)
                 roundTrack.add(d);
 
             reserve.clear();
-        } else if (round != -1) { System.out.println("WARNING reserve is empty"); return; }
+        } else if (round != -1) { System.err.println("WARNING reserve is empty"); return; }
 
         for (int i=0;i<numPlayers*2+1;i++){ reserve.add(pickDiceFromBag()); }
 
@@ -124,7 +124,7 @@ public class Table {
     public Dice pickDiceFromBag(){
         boolean isAVB = false;
         Enum.Color color = Enum.Color.getRandomColor();
-        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){System.out.println("Bag is empty");
+        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){System.err.println("Bag is empty");
         return null;}
         while(!isAVB){
             color = Enum.Color.getRandomColor();
