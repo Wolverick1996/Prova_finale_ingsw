@@ -64,4 +64,14 @@ public class Controller {
         }
     }
 
+    public static Game getMyGame (Object caller){
+        if (caller.getClass() == Lobby.class){
+            return games.get(lobbies.indexOf(caller));
+        } else if (caller.getClass() == IOhandler.class){
+            return games.get(speakers.indexOf(caller));
+        } else {
+            return null;
+        }
+    }
+
 }

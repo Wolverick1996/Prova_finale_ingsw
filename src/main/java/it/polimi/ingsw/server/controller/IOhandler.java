@@ -23,8 +23,8 @@ public class IOhandler implements Observer{
     private static final String DIVISOR = "\n\n---------------------------------------------\n\n";
 
     IOhandler(List<Player> users, Table board){
-        this.players = users;
-        this.table = board;
+        players = users;
+        table = board;
     }
 
     //***************************//
@@ -82,7 +82,7 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
-            notify(player, this.table.printReserve());
+            notify(player, table.printReserve());
             answer = Integer.parseInt(getInput(player));
             return answer-1;
         } catch (RemoteException e){
@@ -96,7 +96,7 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player,"Choose a dice from round track [from 1 to N]");
-            notify(player, this.table.printRoundtrack());
+            notify(player, table.printRoundtrack());
             answer = Integer.parseInt(getInput(player));
             //TODO: CHECK THE INPUT!
             return answer-1;

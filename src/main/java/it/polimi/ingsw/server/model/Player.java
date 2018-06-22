@@ -16,6 +16,7 @@ public class Player {
     private int tokens;
     private Dice diceInHand = null;
     private Scheme ownScheme;
+    private boolean tool8 = false;
     private int IDplayer;
     private int turns;
 
@@ -199,6 +200,14 @@ public class Player {
      * @author Riccardo
      */
     public void resetTurns() { this.turns = 0; }
+
+    public void setTool8(boolean bool){
+        this.tool8 = bool;
+    }
+
+    public boolean getTool8() {
+        return this.tool8;
+    }
 
     /**
      * Used to print a player
