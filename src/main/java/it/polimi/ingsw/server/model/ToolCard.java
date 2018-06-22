@@ -185,17 +185,20 @@ public class ToolCard {
                 if (isPlaceable(dice, player) == null) {
                     System.out.println("You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
                     table.putDiceInReserve(dice);
+                    table.setCanExtract(canExtract);
                 } else {
                     System.out.println(isPlaceable(dice, player));
 
                     int[] coord = getCoordinates(player);
 
-                    //TODO: find a way to allow just one placement per turn: player can't place dice after using tool 6
-                    //Placement of the extracted dice: if it fails the dice is putted in the reserve
-                    if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice))
-                        table.putDiceInReserve(dice);
-
-                    //NOTE: if the placement fails the method should not return false because the dice roll affects the game
+                    if (canExtract) {
+                        //Placement of the extracted dice: if it fails the dice is putted in the reserve
+                        //NOTE: if the placement fails the method should not return false because the dice roll affects the game
+                        if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice))
+                            table.putDiceInReserve(dice);
+                        else
+                            table.setCanExtract(false);
+                    }
                 }
 
                 return true;
@@ -216,28 +219,32 @@ public class ToolCard {
                 if (table.getRealTurn() > table.getActivePlayers().size())
                     return false;
 
-                player.addTurn();
+                ToolHandler.tool8();
                 return true;
             }),
 
             //TOOL 9
             ((Player player, Table table) -> {
                 boolean canExtract = table.getCanExtract();
-                table.setCanExtract(true);
+                //If player has already placed in this turn tool 9 can't be used
+                if (!canExtract)
+                    return false;
+
                 Dice dice = extractFromReserve(player, table);
 
                 //Dice extraction failed
-                if (dice == null) {
-                    table.setCanExtract(canExtract);
-                    return false; }
+                if (dice == null)
+                    return false;
 
                 int[] coord = getCoordinates(player);
 
-                //TODO: find a way to allow just one placement per turn: player can't place dice after using tool 9
                 //Placement of the extracted dice: if it fails the dice is putted in the reserve
                 if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
+                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
                     table.putDiceInReserve(dice);
-                    return false; }
+                    return false;
+                } else
+                    table.setCanExtract(false);
 
                 return true;
             }),
@@ -266,20 +273,24 @@ public class ToolCard {
                 Dice dice = table.pickDiceFromBag();
                 System.out.println("Dice extracted: " + dice);
 
-                //If inserted value is not allowed the method returns false
+                //If inserted value is not allowed the method returns true because there was a change in the game
                 if (!modifyDiceValue(this.cardID, player, dice)) {
                     System.out.println("Placement not allowed, " + dice + " is now in the reserve");
                     table.putDiceInReserve(dice);
                     table.setCanExtract(canExtract);
-                    return false; }
+                    return true; }
 
                 int[] coord = getCoordinates(player);
 
-                //TODO: find a way to allow just one placement per turn: player can't place dice after using tool 11
-                //Placement of the extracted dice: if it fails the dice is putted in the reserve
-                if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
-                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
-                    table.putDiceInReserve(dice); }
+                if (canExtract) {
+                    //Placement of the extracted dice: if it fails the dice is putted in the reserve
+                    //NOTE: if the placement fails the method should not return false because there was a change in the game
+                    if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
+                        System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                        table.putDiceInReserve(dice);
+                    } else
+                        table.setCanExtract(false);
+                }
 
                 return true;
             }),

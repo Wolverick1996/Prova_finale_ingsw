@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.controller.IOhandler;
 
 import java.rmi.RemoteException;
@@ -31,7 +32,7 @@ public class ToolHandler {
      * @throws NullPointerException if there are problems to set tool cards
      * @author Riccardo
      */
-    public static void setTools(){
+    static void setTools(){
         Random rand = new Random ();
         int[] numOnTable = new int[3];
 
@@ -75,7 +76,7 @@ public class ToolHandler {
      * @return ToolCard toolEffect method result (true if the card is correctly used, otherwise false)
      * @author Riccardo
      */
-    public static boolean useTool(int index, Player player, Table table, IOhandler out){
+    static boolean useTool(int index, Player player, Table table, IOhandler out){
         currentIO = out;
         return activeID.get(index).toolEffect(player, table);
     }
@@ -88,7 +89,7 @@ public class ToolHandler {
      * @return the coordinate asked (integer)
      * @author Matteo
      */
-    public static int getCoordinates(String coord, Player player){
+    static int getCoordinates(String coord, Player player){
         return currentIO.getCoordinate(coord, player.getUsername());
     }
 
@@ -99,7 +100,7 @@ public class ToolHandler {
      * @return the dice position asked (integer)
      * @author Matteo
      */
-    public static int getFromRoundtrack(Player player){
+    static int getFromRoundtrack(Player player){
         return currentIO.getDiceFromRoundtrack(player.getUsername());
     }
 
@@ -110,7 +111,7 @@ public class ToolHandler {
      * @return the dice position asked (integer)
      * @author Matteo
      */
-    public static int getFromReserve(Player player){
+    static int getFromReserve(Player player){
         return currentIO.getDiceFromReserve(player.getUsername());
     }
 
@@ -121,7 +122,7 @@ public class ToolHandler {
      * @return the value asked
      * @author Matteo
      */
-    public static int getDiceValue(Boolean restricted, Player player){
+    static int getDiceValue(Boolean restricted, Player player){
         return currentIO.chooseDiceValue(player.getUsername(), restricted);
     }
 
@@ -138,6 +139,15 @@ public class ToolHandler {
         } catch (RemoteException e) {
             System.err.println("ERROR IN TOOLHANDLER NOTIFY()" + e.getMessage());
         }
+    }
+
+    /**
+     * Calls tool card 8 method in controller
+     *
+     * @author Riccardo
+     */
+    static void tool8(){
+        //Controller.getMyGame(currentIO).useTool8();
     }
 
     /**
