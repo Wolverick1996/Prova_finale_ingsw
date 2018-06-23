@@ -88,11 +88,13 @@ public class ServerImplementationSocket implements Runnable {
                     for (String s : this.lobby.getPlayers())
                         if (s.equals(string))
                             sameUsername = true;
-                    if (sameUsername){
+                    if (this.lobby.hasStarted()){
+                        out.println("started");
+                        out.flush();
+                    } else if (sameUsername){
                         out.println("same");
                         out.flush();
-                    }
-                    else {
+                    } else {
                         out.println("max");
                         out.flush();
                     }

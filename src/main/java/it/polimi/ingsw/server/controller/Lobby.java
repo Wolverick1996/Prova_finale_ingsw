@@ -28,14 +28,14 @@ public class Lobby /*extends Observer*/ {
     //         Methods           //
     //***************************//
 
-    public void startGame(){
+    public synchronized void startGame(){
         Controller.startGame(players, this, this.server);
         Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
         hasStarted = true;
         Controller.switchContext(this);
     }
 
-    public boolean addPlayer(String username){
+    public synchronized boolean addPlayer(String username){
         canIGo();
         if (this.players.size()<= MAX_PLAYERS){
 

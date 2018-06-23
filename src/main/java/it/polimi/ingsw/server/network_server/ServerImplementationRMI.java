@@ -31,6 +31,11 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
             return false;
         }
 
+        if (lobby.hasStarted()){
+            a.notify("The game started without you :(\n\n\nGet better friends dude");
+            return false;
+        }
+
         if (!lobby.addPlayer(a.getName()))
             return false;
         else {
