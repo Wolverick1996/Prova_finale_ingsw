@@ -17,7 +17,7 @@ public class Game implements Observer{
     private int active = -1;
     private int turn = 1;
     private static final String STATUS = "STATUS";
-    private final int MAX_TURNS = 10;
+    private final int MAX_ROUNDS = 3;
     private int count = 0;
     private boolean clockwise = true;
     private boolean toolUsed = false;
@@ -65,8 +65,11 @@ public class Game implements Observer{
     }
 
     private void next(){
-        if (this.turn > this.players.size()*2*MAX_TURNS){
+
+        if (this.turn > this.players.size()*2* MAX_ROUNDS){
+            //End Game
             gameEnding();
+
         } else {
             Boolean end = false;
             if(this.players.get(active).getTool8()){
@@ -273,7 +276,7 @@ public class Game implements Observer{
     }
 
     private Player lastCheck(List<Player> winners) {
-        int firstPlLastTurn = MAX_TURNS % this.players.size();
+        int firstPlLastTurn = MAX_ROUNDS % this.players.size();
         int lastPlLastTurn;
         if (firstPlLastTurn == 0) {
             firstPlLastTurn = this.players.size() - 1;
