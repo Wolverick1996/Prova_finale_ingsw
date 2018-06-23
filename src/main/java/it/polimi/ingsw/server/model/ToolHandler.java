@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.controller.Controller;
-import it.polimi.ingsw.server.controller.IOhandler;
+import it.polimi.ingsw.server.controller.*;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -147,7 +146,7 @@ public class ToolHandler {
      * @author Riccardo
      */
     static void tool8(){
-        //Controller.getMyGame(currentIO).useTool8();
+        Controller.getMyGame(currentIO).useTool8();
     }
 
     /**
