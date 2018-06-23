@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 /**
@@ -22,36 +21,26 @@ public class ToolCard {
      * @throws IllegalArgumentException if ID passed as a parameter is not valid
      * @author Riccardo
      */
-    public ToolCard(int cardID) {
+    public ToolCard(int cardID){
         if (cardID < 1 || cardID > ToolHandler.NUM_TOOLS)
             throw new IllegalArgumentException("Not valid ID: " + cardID);
 
         this.cardID = cardID;
-        String s;
-        File inputFile = new File("src/main/resources/cards/ToolCards.txt");
-        Scanner scan = null;
+        InputStream inputFile = PublicOC.class.getResourceAsStream("/cards/ToolCards.txt");
+        Scanner scan = new Scanner(inputFile);
+
+        for (int i=0; i<(cardID-1)*3; i++)
+            scan.nextLine();
+
+        scan.nextLine();
+        this.name = scan.nextLine();
+        this.description = scan.nextLine();
+        this.tokens = 0;
 
         try {
-            scan = new Scanner(inputFile);
-
-            s = scan.nextLine();
-            while (!s.equals("["+this.cardID+"]"))
-                s = scan.nextLine();
-
-            this.name = scan.nextLine();
-            this.description = scan.nextLine();
-            this.tokens = 0;
-
-        } catch (IOException e) {
-            System.err.println("Error");
-        } finally {
-            if (scan != null) {
-                try {
-                    scan.close();
-                } catch (Exception e1) {
-                    System.err.println("Error");
-                }
-            }
+            scan.close();
+        } catch (Exception e1) {
+            System.err.println("Error closing scan (ToolCard)");
         }
     }
 
@@ -145,7 +134,7 @@ public class ToolCard {
             }),
 
             //TOOL 4
-            (Player player, Table table) -> !twoDiceMovement(this.cardID, player, null),
+            (Player player, Table table) -> twoDiceMovement(this.cardID, player, null),
 
             //TOOL 5
             ((Player player, Table table) -> {
@@ -183,11 +172,11 @@ public class ToolCard {
 
                 dice.rollDice();
                 if (isPlaceable(dice, player) == null) {
-                    System.out.println("You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
+                    ToolHandler.notify(player,"You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
                     table.putDiceInReserve(dice);
                     table.setCanExtract(canExtract);
                 } else {
-                    System.out.println(isPlaceable(dice, player));
+                    ToolHandler.notify(player, isPlaceable(dice, player));
 
                     int[] coord = getCoordinates(player);
 
@@ -240,7 +229,7 @@ public class ToolCard {
 
                 //Placement of the extracted dice: if it fails the dice is putted in the reserve
                 if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
-                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                    ToolHandler.notify(player,"Placement not allowed, " + dice + " is now in the reserve");
                     table.putDiceInReserve(dice);
                     return false;
                 } else
@@ -271,11 +260,11 @@ public class ToolCard {
                 table.setCanExtract(true);
                 putDiceInBag(player, table);
                 Dice dice = table.pickDiceFromBag();
-                System.out.println("Dice extracted: " + dice);
+                ToolHandler.notify(player,"Dice extracted: " + dice);
 
                 //If inserted value is not allowed the method returns true because there was a change in the game
                 if (!modifyDiceValue(this.cardID, player, dice)) {
-                    System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                    ToolHandler.notify(player,"Placement not allowed, " + dice + " is now in the reserve");
                     table.putDiceInReserve(dice);
                     table.setCanExtract(canExtract);
                     return true; }
@@ -286,7 +275,7 @@ public class ToolCard {
                     //Placement of the extracted dice: if it fails the dice is putted in the reserve
                     //NOTE: if the placement fails the method should not return false because there was a change in the game
                     if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
-                        System.out.println("Placement not allowed, " + dice + " is now in the reserve");
+                        ToolHandler.notify(player,"Placement not allowed, " + dice + " is now in the reserve");
                         table.putDiceInReserve(dice);
                     } else
                         table.setCanExtract(false);
@@ -303,7 +292,7 @@ public class ToolCard {
                 if (dice == null)
                     return false;
 
-                return (!twoDiceMovement(this.cardID, player, dice.getColor()));
+                return (twoDiceMovement(this.cardID, player, dice.getColor()));
             })
 
     };
@@ -319,7 +308,7 @@ public class ToolCard {
     public boolean toolEffect(Player player, Table table){
         //If player doesn't have enough tokens the tool card can't be used
         if ((player.getTokens() == 1 && this.tokens > 0) || player.getTokens() == 0){
-            System.out.println("You don't have enough tokens!");
+            ToolHandler.notify(player,"You don't have enough tokens!");
             return false; }
 
         int equals = this.cardID-1;
@@ -388,7 +377,7 @@ public class ToolCard {
         //If extraction fails the method returns false
         if (index == 12){
             while (player.getDiceInHand().getColor() != color) {
-                System.out.println("You have to choose a dice with the same color of the one chosen from round track");
+                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track");
 
                 if (!extractDice(player, coord1OLD))
                     return false;
@@ -402,7 +391,11 @@ public class ToolCard {
             player.getOwnScheme().placeDice(coord1OLD[0], coord1OLD[1], player.getDiceInHand());
             return false; }
 
-        //TODO: Let the player choose if move another dice or not (tool 12); return true if he wants to stop
+        //TOOL 12: player can choose if place another dice or not
+        if (index == 12){
+            ToolHandler.notify(player,"Do you want to move another dice?");
+            if (!ToolHandler.getYesOrNo(player))
+                return true; }
 
         coord2OLD = getCoordinates(player);
 
@@ -417,7 +410,7 @@ public class ToolCard {
         //If extraction fails the first dice placed is removed and reinserted into the previous box and the method returns false
         if (index == 12){
             while (player.getDiceInHand().getColor() != color) {
-                System.out.println("You have to choose a dice with the same color of the one chosen from round track");
+                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track");
 
                 if (!extractDice(player, coord2OLD)){
                     dice = player.getOwnScheme().removeDice(coord1NEW[0], coord1NEW[1]);
@@ -508,7 +501,7 @@ public class ToolCard {
 
         if (index == 1) {
             if ((dice.getValue() == 1 && value == -1) || (dice.getValue() == 6 && value == +1)) {
-                System.out.println("Operation not allowed!");
+                ToolHandler.notify(player,"Operation not allowed!");
                 return false;
             } else
                 dice.assignValue(dice.getValue() + value);

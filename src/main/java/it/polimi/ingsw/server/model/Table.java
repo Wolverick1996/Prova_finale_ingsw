@@ -94,14 +94,14 @@ public class Table {
     private void nextRound(){
         //set RoundTrack
         //set Reserve
-        if (round>9){ System.out.println("WARNING nextRound called, round is already 10"); return; }
+        if (round>9){ System.err.println("WARNING nextRound called, round is already 10"); return; }
 
         if (!reserve.isEmpty()){
             for (Dice d:reserve)
                 roundTrack.add(d);
 
             reserve.clear();
-        } else if (round != -1) { System.out.println("WARNING reserve is empty"); return; }
+        } else if (round != -1) { System.err.println("WARNING reserve is empty"); return; }
 
         for (int i=0;i<numPlayers*2+1;i++){ reserve.add(pickDiceFromBag()); }
 
@@ -124,7 +124,7 @@ public class Table {
     public Dice pickDiceFromBag(){
         boolean isAVB = false;
         Enum.Color color = Enum.Color.getRandomColor();
-        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){System.out.println("Bag is empty");
+        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){System.err.println("Bag is empty");
         return null;}
         while(!isAVB){
             color = Enum.Color.getRandomColor();
@@ -149,7 +149,7 @@ public class Table {
      * @author Matteo
      */
     public Dice pickDiceFromReserve(int dicePos){
-        if (dicePos >= reserve.size()) { return null; }
+        if (dicePos >= reserve.size() || dicePos<0) { return null; }
         if (canExtract){
             Dice temp = reserve.get(dicePos);
             reserve.remove(dicePos);
@@ -169,7 +169,7 @@ public class Table {
      * @author Matteo
      */
     public Dice pickDiceFromRoundtrack(int dicePos){
-        if (dicePos >= roundTrack.size()) { return null; }
+        if (dicePos >= roundTrack.size() || dicePos<0) { return null; }
         Dice temp = roundTrack.get(dicePos);
         roundTrack.remove(dicePos);
         return temp;
@@ -332,7 +332,7 @@ public class Table {
      * @author Riccardo
      */
     public String printRoundtrack(){
-        return Enum.Color.PURPLE.escape() + "\nRoundtrack: " + Enum.Color.RESET + roundTrack.toString();
+        return Enum.Color.PURPLE.escape() + "Roundtrack: " + Enum.Color.RESET + roundTrack.toString();
     }
 
     /**
@@ -348,7 +348,7 @@ public class Table {
             s += Enum.Color.RED.escape() + PubObjHandler.getName(i) + Enum.Color.RESET + "\n";
             s += PubObjHandler.getDescription(i) + "\n";
         }
-        return "Table: \n" + printReserve() + printRoundtrack() + Enum.Color.PURPLE.escape() + "\nTurn: " +
+        return "Table: \n" + printReserve() + "\n" + printRoundtrack() + Enum.Color.PURPLE.escape() + "\nTurn: " +
                 Enum.Color.RESET + realTurn + Enum.Color.PURPLE.escape() + "\nRound: " + Enum.Color.RESET + (round+1) +
                 Enum.Color.PURPLE.escape() + "\nPublic Objective cards: " + Enum.Color.RESET + s;
     }

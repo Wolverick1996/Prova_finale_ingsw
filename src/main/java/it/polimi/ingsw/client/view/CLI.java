@@ -66,7 +66,7 @@ public class CLI {
             }
         }
 
-        if (!check) output("INPUT CONTAINS ILLEGAL CHARACTERS");
+        if (!check) output("INPUT CONTAINS ILLEGAL CHARACTERS: please give another input");
         return check;
     }
 

@@ -2,10 +2,7 @@ package it.polimi.ingsw;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.PrivObjHandler;
-import it.polimi.ingsw.server.model.PubObjHandler;
-import it.polimi.ingsw.server.model.Table;
+import it.polimi.ingsw.server.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -20,11 +17,10 @@ import java.util.List;
 class TableTest {
 
     /**
-     * Tests the table constructor and the fact that the public objective cards created are 3 and different one from each other
+     * Tests the table constructor and the fact that the public objective cards and tool cards created are 3 and different one from each other
      *
      * @author Riccardo
      */
-    //SHOULD BE COMPLETED WHEN TOOL CARDS WILL BE IMPLEMENTED
     @Test
     void initializeTest(){
         int numP = (int)(Math.random()*3 + 2);
@@ -34,6 +30,11 @@ class TableTest {
         assertNotNull(PubObjHandler.getName(1));
         assertNotNull(PubObjHandler.getName(2));
         assertNotEquals(PubObjHandler.getName(0), PubObjHandler.getName(1), PubObjHandler.getName(2));
+
+        assertNotNull(ToolHandler.getName(0));
+        assertNotNull(ToolHandler.getName(1));
+        assertNotNull(ToolHandler.getName(2));
+        assertNotEquals(ToolHandler.getName(0),ToolHandler.getName(1), ToolHandler.getName(2));
     }
 
     /**

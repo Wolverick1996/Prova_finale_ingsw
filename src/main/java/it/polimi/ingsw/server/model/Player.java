@@ -1,11 +1,14 @@
 package it.polimi.ingsw.server.model;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  * Player class contains methods related to player's actions in the game
  *
  * @author Andrea
  */
-public class Player {
+public class Player extends Observable {
 
     //***************************//
     //        Attributes         //
@@ -230,4 +233,17 @@ public class Player {
         return this.nickname+ "\n Tokens available: "+this.tokens+Enum.Color.BLUE.escape()+"\nActive scheme:\n"+this.ownScheme;
     }
 
+    @Override
+    public synchronized void addObserver(Observer o) {
+        super.addObserver(o);
+        this.ownScheme.addObserver(o);
+    }
+
+    @Override
+    public void notifyObservers(Object arg) {
+        if (arg.getClass().equals(String.class)){
+            setChanged();
+        }
+        super.notifyObservers(arg);
+    }
 }

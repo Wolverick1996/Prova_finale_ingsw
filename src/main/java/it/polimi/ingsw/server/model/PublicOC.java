@@ -38,7 +38,7 @@ public class PublicOC implements ObjectiveCard {
         try {
             scan.close();
         } catch (Exception e1) {
-            System.err.println("Error closing scan (publicOC)");
+            System.err.println("Error closing scan (PublicOC)");
         }
     }
 
