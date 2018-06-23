@@ -117,6 +117,16 @@ public class Player extends Observable {
     }
 
     /**
+     * Returns points done with private objective cards
+     *
+     * @return points done with private objective cards
+     * @author Andrea
+     */
+    public int pointsInPrivObj (){
+        return PrivObjHandler.countPoints(this);
+    }
+
+    /**
      * Gets the own window pattern made up of name, degree of difficulty and current grid situation
      *
      * @return the window pattern at the time the method is called
