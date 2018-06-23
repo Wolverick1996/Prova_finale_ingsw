@@ -63,13 +63,17 @@ public class ServerImplementationSocket implements Runnable {
         }
     }
 
-    private void login() throws IOException{
+    private synchronized void login() throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
         boolean loginSuccess = false;
 
         while (!loginSuccess) {
-            out.println(this.lobby.getPlayers().size());
+            if (this.lobby.hasStarted()){
+                out.println(999); //Game has started
+            }else{
+                out.println(this.lobby.getPlayers().size());
+            }
             out.flush();
             String string = in.readLine();
             if (!string.equals("*")){
@@ -97,7 +101,7 @@ public class ServerImplementationSocket implements Runnable {
         }
     }
 
-    private void logout() throws IOException{
+    private synchronized void logout() throws IOException{
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
         if(this.lobby.removePlayer(this.playerConnected)){
             out.println("ok");

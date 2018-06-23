@@ -18,6 +18,7 @@ public class Lobby /*extends Observer*/ {
     private int delay = 20000;
     private List<String> players = new ArrayList<>();
     private Boolean streetlight;
+    private Boolean hasStarted = false;
     private Timer timer;
 
     public Lobby(){
@@ -30,6 +31,7 @@ public class Lobby /*extends Observer*/ {
     public void startGame(){
         Controller.startGame(players, this, this.server);
         Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
+        hasStarted = true;
         Controller.switchContext(this);
     }
 
@@ -111,6 +113,8 @@ public class Lobby /*extends Observer*/ {
     public List<String> getPlayers() {
         return players;
     }
+
+    public boolean hasStarted(){ return hasStarted; }
 
     @Override
     public String toString() {
