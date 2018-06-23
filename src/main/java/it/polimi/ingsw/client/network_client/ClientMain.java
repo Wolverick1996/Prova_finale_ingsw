@@ -129,12 +129,8 @@ public class ClientMain {
                 int num = 0;
                 while (active) {
 
-                    if (server.hasStarted()){
-                        Thread.currentThread().interrupt();
-                    } else {
-                        server.confirmConnections();
-                    }
-                    if (num != server.playersInLobby()){
+                    server.confirmConnections();
+                    if (num != server.playersInLobby() && !server.hasStarted()){
                         System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                         num = server.playersInLobby();
                     }
@@ -180,15 +176,18 @@ public class ClientMain {
                 success = true;
                 System.out.println("Waiting for other players...\n");
                 int num = 0;
+                boolean hasStarted = false;
                 while (success){
                     //SERVER SENDS 999 if game has started
-                    int i = Integer.parseInt(in.readLine());
-                    if (i == 999){
-                        Thread.currentThread().interrupt();
-                    }
-                    if (num != i){
-                        System.out.println("[Players in the lobby: " + activePlayers + "]");
-                        num = i;
+                    if (!hasStarted){
+                        int i = Integer.parseInt(in.readLine());
+                        if (num != i){
+                            System.out.println("[Players in the lobby: " + activePlayers + "]");
+                            num = i;
+                        }
+                        if (i == 999){
+                            hasStarted = true;
+                        }
                     }
                 }
             }while (!success);
