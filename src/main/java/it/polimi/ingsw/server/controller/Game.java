@@ -184,6 +184,8 @@ public class Game implements Observer{
         while (!check){
             try {
                 dice = null;
+                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Type '0' if you " +
+                        "want to go back");
                 int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
                     table.setCanExtract(false);

@@ -93,7 +93,7 @@ public class IOhandler implements Observer{
                 if (!check){
                     notify(player, "Try again: ");
                 }
-                notify(player, "Insert the place of the dice in the reserve or type '0' if you want to go back");
+                notify(player, "Insert the place of the dice in the reserve");
                 notify(player, table.printReserve());
                 answer = Integer.parseInt(getInput(player));
                 return answer-1;

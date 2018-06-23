@@ -149,7 +149,7 @@ public class Table {
      * @author Matteo
      */
     public Dice pickDiceFromReserve(int dicePos){
-        if (dicePos >= reserve.size()) { return null; }
+        if (dicePos >= reserve.size() || dicePos<0) { return null; }
         if (canExtract){
             Dice temp = reserve.get(dicePos);
             reserve.remove(dicePos);
@@ -169,7 +169,7 @@ public class Table {
      * @author Matteo
      */
     public Dice pickDiceFromRoundtrack(int dicePos){
-        if (dicePos >= roundTrack.size()) { return null; }
+        if (dicePos >= roundTrack.size() || dicePos<0) { return null; }
         Dice temp = roundTrack.get(dicePos);
         roundTrack.remove(dicePos);
         return temp;
@@ -332,7 +332,7 @@ public class Table {
      * @author Riccardo
      */
     public String printRoundtrack(){
-        return Enum.Color.PURPLE.escape() + "\nRoundtrack: " + Enum.Color.RESET + roundTrack.toString();
+        return Enum.Color.PURPLE.escape() + "Roundtrack: " + Enum.Color.RESET + roundTrack.toString();
     }
 
     /**
@@ -348,7 +348,7 @@ public class Table {
             s += Enum.Color.RED.escape() + PubObjHandler.getName(i) + Enum.Color.RESET + "\n";
             s += PubObjHandler.getDescription(i) + "\n";
         }
-        return "Table: \n" + printReserve() + printRoundtrack() + Enum.Color.PURPLE.escape() + "\nTurn: " +
+        return "Table: \n" + printReserve() + "\n" + printRoundtrack() + Enum.Color.PURPLE.escape() + "\nTurn: " +
                 Enum.Color.RESET + realTurn + Enum.Color.PURPLE.escape() + "\nRound: " + Enum.Color.RESET + (round+1) +
                 Enum.Color.PURPLE.escape() + "\nPublic Objective cards: " + Enum.Color.RESET + s;
     }
