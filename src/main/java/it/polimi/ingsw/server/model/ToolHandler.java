@@ -101,14 +101,13 @@ public class ToolHandler {
     /**
      * Calls the IOhandler to ask coordinates from input
      *
-     * @param coord: the coordinate to ask (x or y)
      * @param player: the player who is using the tool card
      * @return the coordinate asked (integer)
      * @author Matteo
      */
-    static int getCoordinates(String coord, Player player){
+    static int getCoordinates(Player player){
         if (simulatedInput1 == null)
-            return currentIO.getCoordinate(coord, player.getUsername());
+            return currentIO.getCoordinate(player.getUsername());
 
         /* TEST SECTION ONLY */
 
@@ -270,7 +269,7 @@ public class ToolHandler {
     }
 
     //***************************//
-    //       Test Methods        //
+    //       Test methods        //
     //***************************//
 
     public static void simulateInput1(String message){ simulatedInput1 = message; }

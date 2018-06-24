@@ -60,17 +60,21 @@ public class Box extends Observable {
      * Checks if box can be occupied by a certain dice checking ONLY value restrictions
      *
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the method should print errors to the player or not
      * @return true if the dice can be placed, otherwise false
      * @author Andrea
      */
-    public boolean isEmployableNoCol(Dice dice){
+    public boolean isEmployableNoCol(Dice dice, boolean print){
         if(((this.restrictionNum == 0) || dice.getValue() == this.restrictionNum) && !isFull)
             return true;
         else {
-            if (this.restrictionNum != 0 && dice.getValue() != this.restrictionNum)
-                notifyObservers("You can't place the dice here cause of value restrictions");
-            else
-                notifyObservers("Box is full");
+            if (this.restrictionNum != 0 && dice.getValue() != this.restrictionNum) {
+                if (print)
+                    notifyObservers("You can't place the dice here cause of value restrictions");
+            } else {
+                if (print)
+                    notifyObservers("Box is full");
+            }
             return false;
         }
     }
@@ -79,17 +83,21 @@ public class Box extends Observable {
      * Checks if box can be occupied by a certain dice checking ONLY color restrictions
      *
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the method should print errors to the player or not
      * @return true if the dice can be placed, otherwise false
      * @author Andrea
      */
-    public boolean isEmployableNoNum(Dice dice){
+    public boolean isEmployableNoNum(Dice dice, boolean print){
         if(((this.restrictionCol == null) || dice.getColor() == this.restrictionCol) && !isFull)
             return true;
         else {
-            if (this.restrictionCol != null && dice.getColor() != this.restrictionCol)
-                notifyObservers("You can't place the dice here cause of color restrictions");
-            else
-                notifyObservers("Box is full");
+            if (this.restrictionCol != null && dice.getColor() != this.restrictionCol) {
+                if (print)
+                    notifyObservers("You can't place the dice here cause of color restrictions");
+            } else {
+                if (print)
+                    notifyObservers("Box is full");
+            }
             return false;
         }
     }

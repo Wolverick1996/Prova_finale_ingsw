@@ -17,7 +17,7 @@ public class Game implements Observer{
     private int active = -1;
     private int turn = 1;
     private static final String STATUS = "STATUS";
-    private final int MAX_ROUNDS = 10;
+    private static final int MAX_ROUNDS = 10;
     private int count = 0;
     private boolean clockwise = true;
     private boolean toolUsed = false;
@@ -72,7 +72,7 @@ public class Game implements Observer{
 
         } else {
             Boolean end = false;
-            if(this.players.get(active).getTool8()){
+            if (this.players.get(active).getTool8()){
                 end = true;
                 Controller.getMyIO(this).broadcast("Used tool 8, so is passing the turn...");
                 this.players.get(active).setTool8(false);
@@ -140,7 +140,7 @@ public class Game implements Observer{
 
         int index = -2;
         toolUsed = true;
-        //Table temp = table;
+
         try {
             Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "\nTool Cards on table:\n");
             for (int i = 0; i<3; i++) {
@@ -172,23 +172,21 @@ public class Game implements Observer{
         } else {
             toolUsed = false;
             Controller.getMyIO(this).broadcast("Something went wrong... :(");
-            //table = temp;
         }
     }
 
     private void putDiceStandard(){
         if (!table.getCanExtract()){
             Controller.getMyIO(this).broadcast("Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T");
-            return;
-        }
+            return; }
 
         Dice dice = null;
         boolean check = false;
         while (!check){
             try {
                 dice = null;
-                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Type '0' if you " +
-                        "want to go back");
+                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), players.get(active).getOwnScheme().toString());
+                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Type '0' if you want to go back");
                 int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
                     table.setCanExtract(true);
@@ -196,19 +194,20 @@ public class Game implements Observer{
                     return; }
 
                 dice = this.table.checkDiceFromReserve(index);
-                check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate("x", this.players.get(active).getUsername()),
-                        Controller.getMyIO(this).getCoordinate("y", this.players.get(active).getUsername()),
+
+                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Insert the coordinates of the dice to be placed, one at a time (x, y)");
+                check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate(this.players.get(active).getUsername()),
+                        Controller.getMyIO(this).getCoordinate(this.players.get(active).getUsername()),
                         this.table, index);
 
                 if (!check){
-                    Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
-                    if (dice!= null && dice != this.table.checkDiceFromReserve(index)) this.table.putDiceInReserve(dice);
-                    Controller.getMyIO(this).notify(this.players.get(active).getUsername(), this.table.toString());
-                    Controller.getMyIO(this).notify(this.players.get(active).getUsername(), this.players.get(active).getOwnScheme().toString());
+                    Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again\n");
+                    if (dice!= null && dice != this.table.checkDiceFromReserve(index))
+                        this.table.putDiceInReserve(dice);
                 }
 
             } catch (Exception e){
-                Controller.getMyIO(this).broadcast("EXCEPTION CAUGHT! Player " + this.players.get(active).getUsername() + " didn't do it right, try again");
+                Controller.getMyIO(this).broadcast("EXCEPTION CAUGHT! Player " + this.players.get(active).getUsername() + " didn't do it right, try again\n");
                 Controller.getMyIO(this).broadcast(e.getMessage());
                 if (dice!= null) this.table.putDiceInReserve(dice);
             }
@@ -219,9 +218,9 @@ public class Game implements Observer{
 
     public void useTool8(){
         Controller.getMyIO(this).broadcast("Player" + this.players.get(active).getUsername() + " is using Tool 8");
-        if (this.table.getCanExtract()){
+        if (this.table.getCanExtract())
             putDiceStandard();
-        }
+
         this.table.setCanExtract(true);
         try {
             Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Place the second dice: ");
@@ -255,7 +254,7 @@ public class Game implements Observer{
 
                     if (p.getTokens() == highestNumOfTokens)
                         winners.add(p);
-                    else{
+                    else {
                         winners.clear();
                         winners.add(p);
                     }
@@ -264,15 +263,14 @@ public class Game implements Observer{
         }
 
         Player winner;
-        if (winners.size() > 1){
+        if (winners.size() > 1)
            winner = lastCheck(winners);
-        }else
+        else
             winner = winners.get(0);
 
-        Controller.getMyIO(this).broadcast("Congratulations " + winner.getUsername() + " you won the game!!");
+        Controller.getMyIO(this).broadcast("Congratulations " + winner.getUsername() + " you won the game!");
 
         System.exit(0);
-
     }
 
     private Player lastCheck(List<Player> winners) {

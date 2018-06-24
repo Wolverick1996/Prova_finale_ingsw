@@ -103,15 +103,16 @@ public class Scheme extends Observable{
      * @param x: identifier of the row number
      * @param y: identifier of the column number
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the method should print errors to the player or not
      * @return true if the placement is allowed, otherwise false
      * @author Riccardo
      */
-    private boolean firstDiceNoNum(int x, int y, Dice dice){
-        if (grid[x][y].isEmployableNoNum(dice)
+    private boolean firstDiceNoNum(int x, int y, Dice dice, boolean print){
+        if (grid[x][y].isEmployableNoNum(dice, print)
                 && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
             return true;
         else {
-            if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+            if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)) && print)
                 notifyObservers("You can't place the first dice out of border");
             return false;
         }
@@ -123,15 +124,16 @@ public class Scheme extends Observable{
      * @param x: identifier of the row number
      * @param y: identifier of the column number
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the method should print errors to the player or not
      * @return true if the placement is allowed, otherwise false
      * @author Riccardo
      */
-    private boolean firstDiceNoCol(int x, int y, Dice dice){
-        if (grid[x][y].isEmployableNoCol(dice)
+    private boolean firstDiceNoCol(int x, int y, Dice dice, boolean print){
+        if (grid[x][y].isEmployableNoCol(dice, print)
                 && ((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
             return true;
         else {
-            if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)))
+            if (!((x == 0) || (y == 0) || (x == MAX_ROW - 1) || (y == MAX_COL - 1)) && print)
                 notifyObservers("You can't place the first dice out of border");
             return false;
         }
@@ -143,11 +145,12 @@ public class Scheme extends Observable{
      * @param x: identifier of the row number
      * @param y: identifier of the column number
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the methods called should print errors to the player or not
      * @return true if the placement is allowed, otherwise false
      * @author Andrea
      */
-    private boolean firstDice(int x, int y, Dice dice){
-        return (firstDiceNoCol(x, y, dice) && firstDiceNoNum(x, y, dice));
+    private boolean firstDice(int x, int y, Dice dice, boolean print){
+        return (firstDiceNoCol(x, y, dice, print) && firstDiceNoNum(x, y, dice, print));
     }
 
     /**
@@ -157,10 +160,11 @@ public class Scheme extends Observable{
      * @param x: identifier of the row number
      * @param y: identifier of the column number
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the method and methods called should print errors to the player or not
      * @return true if the placement is allowed, otherwise false
      * @author Andrea
      */
-    private boolean checkValueRestr(int x, int y, Dice dice){
+    private boolean checkValueRestr(int x, int y, Dice dice, boolean print){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
@@ -172,16 +176,15 @@ public class Scheme extends Observable{
 
         //If first dice check if it respects first-dice-placement-rule
         if (isGridEmpty())
-            return firstDiceNoCol(x, y, dice);
+            return firstDiceNoCol(x, y, dice, print);
 
         //Algorithm to find if the dice respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
             if (i >= 0 && i < MAX_ROW){
                 for (j = y - 1; j <= y + 1; j++) {
                     if (!(i == x && j == y) && j >= 0 && j < MAX_COL){
-                        if (grid[i][j].isFull()) {
+                        if (grid[i][j].isFull())
                             diceNear = true;
-                        }
                         if ((j == y || i == x) && grid[i][j].isFull()) {
                             if (grid[i][j].getDice().getValue() == dice.getValue()) {
                                 placeable = false;
@@ -193,14 +196,16 @@ public class Scheme extends Observable{
         }
 
         if (!diceNear) {
-            notifyObservers("You can't place the dice in a box not adjacent to another full one");
+            if (print)
+                notifyObservers("You can't place the dice in a box not adjacent to another full one");
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
-            return grid[x][y].isEmployableNoCol(dice);
+            return grid[x][y].isEmployableNoCol(dice, print);
         }
 
-        notifyObservers("There is another dice near with the same value!");
+        if (print)
+            notifyObservers("There is another dice near with the same value!");
         return false;
     }
 
@@ -211,10 +216,11 @@ public class Scheme extends Observable{
      * @param x: identifier of the row number
      * @param y: identifier of the column number
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the method and methods called should print errors to the player or not
      * @return true if the placement is allowed, otherwise false
      * @author Andrea
      */
-    private boolean checkColorRestr(int x, int y, Dice dice){
+    private boolean checkColorRestr(int x, int y, Dice dice, boolean print){
         boolean placeable = true;
         boolean diceNear = false;
         int i;
@@ -226,16 +232,15 @@ public class Scheme extends Observable{
 
         //If first dice check if it respects first-dice-placement-rule
         if (isGridEmpty())
-            return firstDiceNoNum(x, y, dice);
+            return firstDiceNoNum(x, y, dice, print);
 
         //Algorithm to find if the dice respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
             if (i >= 0 && i < MAX_ROW){
                 for (j = y - 1; j <= y + 1; j++) {
                     if (!(i == x && j == y) && j >= 0 && j < MAX_COL) {
-                        if (grid[i][j].isFull()) {
-                                diceNear = true;
-                            }
+                        if (grid[i][j].isFull())
+                            diceNear = true;
                         if ((j == y || i == x) && grid[i][j].isFull()) {
                             if (grid[i][j].getDice().getColor() == dice.getColor()) {
                                 placeable = false;
@@ -247,14 +252,16 @@ public class Scheme extends Observable{
         }
 
         if (!diceNear) {
-            notifyObservers("You can't place the dice in a box not adjacent to another full one");
+            if (print)
+                notifyObservers("You can't place the dice in a box not adjacent to another full one");
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
-            return grid[x][y].isEmployableNoNum(dice);
+            return grid[x][y].isEmployableNoNum(dice, print);
         }
 
-        notifyObservers("There is another dice near with the same color!");
+        if (print)
+            notifyObservers("There is another dice near with the same color!");
         return false;
     }
 
@@ -280,16 +287,15 @@ public class Scheme extends Observable{
 
         //If first dice check if it respects first-dice-placement-rule
         if (isGridEmpty())
-            return firstDice(x, y, dice);
+            return firstDice(x, y, dice, true);
 
         //Algorithm to find if the dice respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
             if (i >= 0 && i < MAX_ROW){
                 for (j = y - 1; j <= y + 1; j++) {
                     if (!(i == x && j == y) && j >= 0 && j < MAX_COL) {
-                        if (grid[i][j].isFull()) {
+                        if (grid[i][j].isFull())
                             diceNear = true;
-                        }
                         if ((j == y || i == x) && grid[i][j].isFull()) {
                             if ((grid[i][j].getDice().getValue() == dice.getValue()) ||
                                     grid[i][j].getDice().getColor() == dice.getColor()) {
@@ -306,7 +312,7 @@ public class Scheme extends Observable{
             return false;
         } else if (placeable && !diceNear) {
             //Check if dice respects box restrictions
-            return (grid[x][y].isEmployableNoNum(dice) || !grid[x][y].isEmployableNoCol(dice));
+            return !(!grid[x][y].isEmployableNoNum(dice, true) || !grid[x][y].isEmployableNoCol(dice, true));
         }
 
         return true;
@@ -325,10 +331,10 @@ public class Scheme extends Observable{
     public boolean placeFromTool(int x, int y, int id, Dice dice){
 
         if (id == 2) {
-            if (!(checkValueRestr(x, y, dice)))
+            if (!(checkValueRestr(x, y, dice, true)))
                 return false;
         } else if (id == 3) {
-            if (!(checkColorRestr(x, y, dice)))
+            if (!(checkColorRestr(x, y, dice, true)))
                 return false;
         } else if (id == 9) {
             if (!(isPlaceableNoDiceNear(x, y, dice)))
@@ -344,10 +350,13 @@ public class Scheme extends Observable{
      * @param x: identifier of the row number
      * @param y: identifier of the column number
      * @param dice: the dice to be placed in the box
+     * @param print: specifies if the methods called should print errors to the player or not
      * @return false if the dice is not placeable cause of value or color restrictions, otherwise true
      * @author Riccardo
      */
-    boolean isPlaceable(int x, int y, Dice dice){ return !(!checkValueRestr(x, y, dice) || !checkColorRestr(x, y, dice)); }
+    boolean isPlaceable(int x, int y, Dice dice, boolean print){
+        return !(!checkValueRestr(x, y, dice, print) || !checkColorRestr(x, y, dice, print));
+    }
 
     /**
      * Standard placement of a dice in a specific box (normal move of the game, without using tool cards)
@@ -359,7 +368,7 @@ public class Scheme extends Observable{
      * @author Andrea
      */
     public boolean placeDice(int x, int y, Dice dice){
-        if (!isPlaceable(x, y, dice))
+        if (!isPlaceable(x, y, dice, true))
             return false;
 
         return grid[x][y].setDice(dice);
