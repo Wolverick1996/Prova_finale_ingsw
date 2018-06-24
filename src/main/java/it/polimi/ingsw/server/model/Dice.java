@@ -15,6 +15,7 @@ public class Dice extends Enum {
 
     private int value;
     private Color color;
+
     /**
      * Specific constructor for the dice: it creates a dice with predetermined color and value
      *
@@ -70,7 +71,7 @@ public class Dice extends Enum {
      *
      * @author Riccardo
      */
-    public void rollDice(){
+    void rollDice(){
         Random rand = new Random();
         this.value = rand.nextInt(6)+1;
     }
@@ -122,7 +123,7 @@ public class Dice extends Enum {
     @Override
     public String toString(){
         String escape = this.color.escape();
-        return escape+"["+ this.value +"]"+Color.RESET;
+        return escape+this.value+Color.RESET;
     }
 
 }
