@@ -3,6 +3,7 @@ package it.polimi.ingsw;
 import static org.junit.jupiter.api.Assertions.*;
 
 import it.polimi.ingsw.server.model.*;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -252,7 +253,7 @@ class TableTest {
             flag3 = -1;
 
         if (flag1 == -1 && flag2 == -1 && flag3 == -1)
-            assertTrue(false);
+            Assert.fail();
         else
             assertTrue(true);
     }

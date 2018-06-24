@@ -197,10 +197,7 @@ public class Scheme extends Observable{
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
-            if (!grid[x][y].isEmployableNoCol(dice))
-                return false;
-            else
-                return true;
+            return grid[x][y].isEmployableNoCol(dice);
         }
 
         notifyObservers("There is another dice near with the same value!");
@@ -254,10 +251,7 @@ public class Scheme extends Observable{
             return false;
         } else if (placeable && diceNear) {
             //Check if dice respects box restrictions
-            if (!grid[x][y].isEmployableNoNum(dice))
-                return false;
-            else
-                return true;
+            return grid[x][y].isEmployableNoNum(dice);
         }
 
         notifyObservers("There is another dice near with the same color!");
@@ -312,8 +306,7 @@ public class Scheme extends Observable{
             return false;
         } else if (placeable && !diceNear) {
             //Check if dice respects box restrictions
-            if (!grid[x][y].isEmployableNoNum(dice) || !grid[x][y].isEmployableNoCol(dice))
-                return false;
+            return (grid[x][y].isEmployableNoNum(dice) || !grid[x][y].isEmployableNoCol(dice));
         }
 
         return true;
@@ -354,7 +347,7 @@ public class Scheme extends Observable{
      * @return false if the dice is not placeable cause of value or color restrictions, otherwise true
      * @author Riccardo
      */
-    public boolean isPlaceable(int x, int y, Dice dice){ return !(!checkValueRestr(x, y, dice) || !checkColorRestr(x, y, dice)); }
+    boolean isPlaceable(int x, int y, Dice dice){ return !(!checkValueRestr(x, y, dice) || !checkColorRestr(x, y, dice)); }
 
     /**
      * Standard placement of a dice in a specific box (normal move of the game, without using tool cards)

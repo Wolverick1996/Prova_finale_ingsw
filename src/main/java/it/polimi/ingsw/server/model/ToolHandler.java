@@ -23,6 +23,24 @@ public class ToolHandler {
     private static IOhandler currentIO;
 
     //***************************//
+    //      Test attributes      //
+    //***************************//
+
+    private static String simulatedInput1 = null;
+    private static String simulatedInput2 = null;
+    private static String simulatedInput3 = null;
+    private static String simulatedInput4 = null;
+    private static String simulatedInput5 = null;
+    private static String simulatedInput6 = null;
+    private static String simulatedInput7 = null;
+    private static String simulatedInput8 = null;
+    private static String simulatedInput9 = null;
+    private static String simulatedInput10 = null;
+    private static String simulatedInput11 = null;
+    private static boolean simulatedInput12;
+    public static int testCounter = 1;
+
+    //***************************//
     //         Methods           //
     //***************************//
 
@@ -90,7 +108,24 @@ public class ToolHandler {
      * @author Matteo
      */
     static int getCoordinates(String coord, Player player){
-        return currentIO.getCoordinate(coord, player.getUsername());
+        if (simulatedInput1 == null)
+            return currentIO.getCoordinate(coord, player.getUsername());
+
+        /* TEST SECTION ONLY */
+
+        switch (testCounter){
+            case 1: testCounter++; return Integer.parseInt(simulatedInput1);
+            case 2: testCounter++; return Integer.parseInt(simulatedInput2);
+            case 3: testCounter++; return Integer.parseInt(simulatedInput3);
+            case 4: testCounter++; return Integer.parseInt(simulatedInput4);
+            case 5: testCounter++; return Integer.parseInt(simulatedInput5);
+            case 6: testCounter++; return Integer.parseInt(simulatedInput6);
+            case 7: testCounter++; return Integer.parseInt(simulatedInput7);
+            case 8: testCounter++; return Integer.parseInt(simulatedInput8);
+            default: System.err.println("Error");
+        }
+
+        return 0;
     }
 
     /**
@@ -101,7 +136,11 @@ public class ToolHandler {
      * @author Matteo
      */
     static int getFromRoundtrack(Player player){
-        return currentIO.getDiceFromRoundtrack(player.getUsername());
+        if (simulatedInput11 == null)
+            return currentIO.getDiceFromRoundtrack(player.getUsername());
+
+        /* TEST SECTION ONLY */
+        return Integer.parseInt(simulatedInput11);
     }
 
     /**
@@ -112,7 +151,11 @@ public class ToolHandler {
      * @author Matteo
      */
     static int getFromReserve(Player player){
-        return currentIO.getDiceFromReserve(player.getUsername());
+        if (simulatedInput9 == null)
+            return currentIO.getDiceFromReserve(player.getUsername());
+
+        /* TEST SECTION ONLY */
+        return Integer.parseInt(simulatedInput9);
     }
 
     /**
@@ -123,7 +166,11 @@ public class ToolHandler {
      * @author Matteo
      */
     static int getDiceValue(Boolean restricted, Player player){
-        return currentIO.chooseDiceValue(player.getUsername(), restricted);
+        if (simulatedInput10 == null)
+            return currentIO.chooseDiceValue(player.getUsername(), restricted);
+
+        /* TEST SECTION ONLY */
+        return Integer.parseInt(simulatedInput10);
     }
 
     /**
@@ -134,12 +181,17 @@ public class ToolHandler {
      * @author Matteo
      */
     static boolean getYesOrNo(Player player){
-        try {
-            return currentIO.yesOrNo(player.getUsername());
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        if (simulatedInput1 == null){
+            try {
+                return currentIO.yesOrNo(player.getUsername());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            return false;
         }
-        return false;
+
+        /* TEST SECTION ONLY */
+        return simulatedInput12;
     }
 
     /**
@@ -149,12 +201,19 @@ public class ToolHandler {
      * @param string: the string to print
      * @author Matteo
      */
-    public static void notify(Player player, String string){
-        try {
-            currentIO.notify(player.getUsername(), string);
-        } catch (RemoteException e) {
-            System.err.println("ERROR IN TOOLHANDLER NOTIFY()" + e.getMessage());
+    static void notify(Player player, String string){
+        if (simulatedInput1 == null && simulatedInput2 == null && simulatedInput3 == null && simulatedInput4 == null && simulatedInput5 == null
+                && simulatedInput6 == null && simulatedInput7 == null && simulatedInput8 == null && simulatedInput9 == null &&
+                simulatedInput10 == null && simulatedInput11 == null){
+            try {
+                currentIO.notify(player.getUsername(), string);
+            } catch (RemoteException e) {
+                System.err.println("ERROR IN TOOLHANDLER NOTIFY()" + e.getMessage());
+            }
         }
+
+        /* TEST SECTION ONLY */
+        System.out.println(string);
     }
 
     /**
@@ -163,7 +222,10 @@ public class ToolHandler {
      * @author Riccardo
      */
     static void tool8(){
-        Controller.getMyGame(currentIO).useTool8();
+        if (simulatedInput1 == null)
+            Controller.getMyGame(currentIO).useTool8();
+
+        /* TEST SECTION ONLY */
     }
 
     /**
@@ -207,5 +269,22 @@ public class ToolHandler {
             s = s + t.toString() + "\n";
         return s;
     }
+
+    //***************************//
+    //       Test Methods        //
+    //***************************//
+
+    public static void simulateInput1(String message){ simulatedInput1 = message; }
+    public static void simulateInput2(String message){ simulatedInput2 = message; }
+    public static void simulateInput3(String message){ simulatedInput3 = message; }
+    public static void simulateInput4(String message){ simulatedInput4 = message; }
+    public static void simulateInput5(String message){ simulatedInput5 = message; }
+    public static void simulateInput6(String message){ simulatedInput6 = message; }
+    public static void simulateInput7(String message){ simulatedInput7 = message; }
+    public static void simulateInput8(String message){ simulatedInput8 = message; }
+    public static void simulateInput9(String message){ simulatedInput9 = message; }
+    public static void simulateInput10(String message){ simulatedInput10 = message; }
+    public static void simulateInput11(String message){ simulatedInput11 = message; }
+    public static void simulateInput12(boolean message){ simulatedInput12 = message; }
 
 }
