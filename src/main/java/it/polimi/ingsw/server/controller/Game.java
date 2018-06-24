@@ -17,7 +17,7 @@ public class Game implements Observer{
     private int active = -1;
     private int turn = 1;
     private static final String STATUS = "STATUS";
-    private final int MAX_ROUNDS = 10;
+    private static final int MAX_ROUNDS = 10;
     private int count = 0;
     private boolean clockwise = true;
     private boolean toolUsed = false;
@@ -39,7 +39,6 @@ public class Game implements Observer{
             schemes[k] = k+1;
 
         Collections.shuffle(Arrays.asList(schemes));
-        //TODO: PLACE CORRECTLY SCHEMES IN FILE
         for (Player p:this.players){
             try {
                 Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card:\n" +
@@ -78,6 +77,7 @@ public class Game implements Observer{
                 this.players.get(active).setTool8(false);
             }
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
+
             while (!end){
                 String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
                 switch (action){
@@ -100,7 +100,10 @@ public class Game implements Observer{
                 }
             }
         }
+        endTurn();
+    }
 
+    private void endTurn(){
         //This is made to keep track of the active player
         if (this.count == this.players.size() - 1 && this.clockwise){
             this.clockwise = false;
@@ -127,6 +130,11 @@ public class Game implements Observer{
             this.count--;
         }
 
+        if (this.players.get(active).isDisconnected()){
+            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + " is disconnected and misses is turn -.-");
+            endTurn();
+        }
+
         this.turn++;
         this.table.nextTurn();
         Controller.getMyIO(this).broadcast(STATUS);
@@ -140,7 +148,6 @@ public class Game implements Observer{
 
         int index = -2;
         toolUsed = true;
-        //Table temp = table;
         try {
             Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "\nTool Cards on table:\n");
             for (int i = 0; i<3; i++) {
@@ -172,7 +179,6 @@ public class Game implements Observer{
         } else {
             toolUsed = false;
             Controller.getMyIO(this).broadcast("Something went wrong... :(");
-            //table = temp;
         }
     }
 

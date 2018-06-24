@@ -440,9 +440,17 @@ public class Scheme extends Observable{
     @Override
     public String toString(){
         String s = "";
-        for (int i = 0; i < MAX_ROW; i++) {
-            for (int j = 0; j < MAX_COL; j++)
-                s = s+grid[i][j];
+        for (int i = 0; i <= MAX_ROW; i++) {
+            for (int j = 0; j <= MAX_COL; j++){
+                if (i == 0 && j == 0)
+                    s = s + "\t";
+                else if (i == 0)
+                    s = s + " "+j+"\t";
+                else if (j == 0)
+                    s = s + " "+i+"\t";
+                else
+                    s = s+grid[i-1][j-1];
+            }
 
             s = s+"\n";
         }
