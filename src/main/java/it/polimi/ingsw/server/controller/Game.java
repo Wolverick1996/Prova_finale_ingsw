@@ -17,6 +17,7 @@ public class Game implements Observer{
     private int active = -1;
     private int turn = 1;
     private static final String STATUS = "STATUS";
+    private final int MAX_ROUNDS = 10;
     private int count = 0;
     private boolean clockwise = true;
     private boolean toolUsed = false;
@@ -64,9 +65,11 @@ public class Game implements Observer{
     }
 
     private void next(){
-        if (this.turn > this.players.size()*2*10){
-            Controller.getMyIO(this).broadcast("Game has ended! Closing..."); //TODO: implement end of game
-            System.exit(0);
+
+        if (this.turn > this.players.size()*2* MAX_ROUNDS){
+            //End Game
+            gameEnding();
+
         } else {
             Boolean end = false;
             if(this.players.get(active).getTool8()){
@@ -188,7 +191,7 @@ public class Game implements Observer{
                         "want to go back");
                 int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
                 if (index == -1){
-                    table.setCanExtract(false);
+                    table.setCanExtract(true);
                     Controller.getMyIO(this).broadcast("Nope, nothing done");
                     return; }
 
@@ -227,6 +230,86 @@ public class Game implements Observer{
         }
         putDiceStandard();
         this.players.get(active).setTool8(true);
+    }
+
+    private void gameEnding(){
+        Controller.getMyIO(this).broadcast("Game ended, calculating points...\n");
+
+        int highestMade = 0;
+        for (Player p : this.players){
+            p.countPoints();
+            if(p.getPoints() > highestMade)
+                highestMade = p.getPoints();
+            Controller.getMyIO(this).broadcast(p.getUsername() + ":" + p.getPoints());
+        }
+
+        ArrayList<Player> winners = new ArrayList<>();
+        int highestWithPrivOC = 0;
+        int highestNumOfTokens = 0;
+        for (Player p : this.players){
+            if(p.getPoints() == highestMade && p.pointsInPrivObj() >= highestWithPrivOC){
+                highestWithPrivOC = p.pointsInPrivObj();
+
+                if (p.pointsInPrivObj() == highestWithPrivOC && p.getTokens() >= highestNumOfTokens){
+                    highestNumOfTokens = p.getTokens();
+
+                    if (p.getTokens() == highestNumOfTokens)
+                        winners.add(p);
+                    else{
+                        winners.clear();
+                        winners.add(p);
+                    }
+                }
+            }
+        }
+
+        Player winner;
+        if (winners.size() > 1){
+           winner = lastCheck(winners);
+        }else
+            winner = winners.get(0);
+
+        Controller.getMyIO(this).broadcast("Congratulations " + winner.getUsername() + " you won the game!!");
+
+        System.exit(0);
+
+    }
+
+    private Player lastCheck(List<Player> winners) {
+        int firstPlLastTurn = MAX_ROUNDS % this.players.size();
+        int lastPlLastTurn;
+        if (firstPlLastTurn == 0) {
+            firstPlLastTurn = this.players.size() - 1;
+            lastPlLastTurn = firstPlLastTurn - 1;
+        } else {
+            firstPlLastTurn--;
+            if (firstPlLastTurn == 0)
+                lastPlLastTurn = this.players.size() - 1;
+            else
+                lastPlLastTurn = firstPlLastTurn - 1;
+        }
+
+        int[] orderFinalRound = new int[this.players.size()];
+        for (int i = 0; i < this.players.size(); i++) {
+            if (lastPlLastTurn == 0) {
+                orderFinalRound[i] = lastPlLastTurn;
+                lastPlLastTurn = this.players.size() - 1;
+            } else {
+                orderFinalRound[i] = lastPlLastTurn;
+                lastPlLastTurn--;
+            }
+        }
+
+        for (int i = 0; i < this.players.size(); i++) {
+            for (Player w : winners) {
+                if (orderFinalRound[i] == this.players.indexOf(w)) {
+                    winners.clear();
+                    winners.add(w);
+                }
+            }
+        }
+
+        return winners.get(0);
     }
 
     private void setObservables(){

@@ -38,6 +38,8 @@ class ClientImplementationSocket {
                     else{
                         if (result.equals("same"))
                             System.out.println("Login failed, this userID is already used");
+                        else if (result.equals("started"))
+                            System.out.println("Your friends started without you :(\n\nGet better friends");
                         else
                             System.out.println("Retry later...");
                     }

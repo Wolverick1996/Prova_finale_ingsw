@@ -55,14 +55,16 @@ public class ClientMain {
                             System.err.println("Nothing to read " + e.getMessage());
                         }
                     }
+                    break;
                 }
+                break;
 
             }
             if (!check){
                 System.out.println("Invalid name. Type rmi or socket");
             }
         }
-        scanner.close();
+        //scanner.close();
     }
 
     private void startClientRMI() throws MalformedURLException, RemoteException{
@@ -124,25 +126,23 @@ public class ClientMain {
                     server.setDelay(delay);
                 }
                 boolean active = true;
-                System.out.println("Waiting for other players...\n" +
-                        "If you want to disconnect type 'e' or type any other character to refresh and check how many players there are in the lobby");
+                System.out.println("Waiting for other players...\n");
 
+                int num = 0;
                 while (active) {
 
-                    /*String text = scanner.nextLine();
-                    if (text.equals("e")) {
-                        server.logout(validRemoteRef);
-                        active = false;
-                    } else {
-                        server.confirmConnections();
+                    server.confirmConnections();
+                    if (num != server.playersInLobby() && !server.hasStarted()){
                         System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
-                        if (server.playersInLobby() == Lobby.MAX_PLAYERS)
-                            System.out.println("The game is starting...");
-                    }*/
+                        num = server.playersInLobby();
+                    } else if (server.hasStarted()){
+                        break;
+                    }
 
                 }
-                if (!on)
-                    scanner.close();
+                break;
+                //if (!on)
+                //    scanner.close();
             } while (on);
 
         } catch (NotBoundException e) {
@@ -179,20 +179,20 @@ public class ClientMain {
                     out.flush();
                 }
                 success = true;
+                System.out.println("Waiting for other players...\n");
+                int num = 0;
+                boolean hasStarted = false;
                 while (success){
-                    System.out.println("Waiting for other players...\n" +
-                            "If you want to disconnect type 'e' or type any other character to refresh and check how many players there are in the lobby");
-
-                    String string = scanner.nextLine();
-                    out.println(string);
-                    out.flush();
-                    if (string.equals("e")){
-                        clientImplementationSocket.logout();
-                        success = false;
-                    }
-                    else {
-                        activePlayers = Integer.parseInt(in.readLine());
-                        System.out.println("[Players in the lobby: " + activePlayers + "]");
+                    //SERVER SENDS 999 if game has started
+                    if (!hasStarted){
+                        int i = Integer.parseInt(in.readLine());
+                        if (num != i){
+                            System.out.println("[Players in the lobby: " + activePlayers + "]");
+                            num = i;
+                        }
+                        if (i == 999){
+                            hasStarted = true;
+                        }
                     }
                 }
             }while (!success);

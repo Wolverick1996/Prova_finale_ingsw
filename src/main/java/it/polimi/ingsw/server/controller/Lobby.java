@@ -18,6 +18,7 @@ public class Lobby /*extends Observer*/ {
     private int delay = 20000;
     private List<String> players = new ArrayList<>();
     private Boolean streetlight;
+    private Boolean hasStarted = false;
     private Timer timer;
 
     public Lobby(){
@@ -27,13 +28,14 @@ public class Lobby /*extends Observer*/ {
     //         Methods           //
     //***************************//
 
-    public void startGame(){
+    public synchronized void startGame(){
         Controller.startGame(players, this, this.server);
         Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
+        hasStarted = true;
         Controller.switchContext(this);
     }
 
-    public boolean addPlayer(String username){
+    public synchronized boolean addPlayer(String username){
         canIGo();
         if (this.players.size()<= MAX_PLAYERS){
 
@@ -111,6 +113,8 @@ public class Lobby /*extends Observer*/ {
     public List<String> getPlayers() {
         return players;
     }
+
+    public boolean hasStarted(){ return hasStarted; }
 
     @Override
     public String toString() {

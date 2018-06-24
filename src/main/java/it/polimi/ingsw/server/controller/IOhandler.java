@@ -174,10 +174,22 @@ public class IOhandler implements Observer{
                 }
             }
             return schemes.get(answer-1);
-        } catch (RemoteException e){
+        } catch (NumberFormatException n){
+            try {
+                notify(player, "In my town, we do not call that a number");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        } catch (IllegalArgumentException i) {
+            try {
+                notify(player, "What is that character? Just write a number, is it that hard?");
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }catch (RemoteException e){
             System.err.println("CHOOSESCHEME: " +e.getMessage());
         }
-        return -1;
+        return chooseScheme(s1, s2, s3, s4, player);
     }
 
     int getTool(String player){

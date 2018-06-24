@@ -21,13 +21,18 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         this.lobby.setServerRMI(this);
     }
 
-    public boolean login(ClientIntRMI a) throws RemoteException{
+    public synchronized boolean login(ClientIntRMI a) throws RemoteException{
 
         confirmConnections();
 
         if (lobby.getPlayers().size() >= Lobby.MAX_PLAYERS){
             System.out.println("Max number of players reached!");
             a.notify("The lobby is full!");
+            return false;
+        }
+
+        if (lobby.hasStarted()){
+            a.notify("The game started without you :(\n\n\nGet better friends dude");
             return false;
         }
 
@@ -42,7 +47,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         }
     }
 
-    public void logout(ClientIntRMI a) throws RemoteException{
+    public synchronized void logout(ClientIntRMI a) throws RemoteException{
 
         confirmConnections();
 
@@ -54,7 +59,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
     }
 
 
-    public void confirmConnections() throws RemoteException{
+    public synchronized void confirmConnections() throws RemoteException{
         Iterator<ClientIntRMI> clientIterator = clients.iterator();
         int i = 0;
         while(clientIterator.hasNext()){
@@ -107,6 +112,10 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
 
     public int playersInLobby() throws RemoteException{
         return this.lobby.getPlayers().size();
+    }
+
+    public boolean hasStarted() {
+        return this.lobby.hasStarted();
     }
 
     public void setDelay(int delay) throws RemoteException{
