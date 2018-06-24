@@ -39,7 +39,6 @@ public class Game implements Observer{
             schemes[k] = k+1;
 
         Collections.shuffle(Arrays.asList(schemes));
-        //TODO: PLACE CORRECTLY SCHEMES IN FILE
         for (Player p:this.players){
             try {
                 Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card:\n" +
@@ -65,11 +64,9 @@ public class Game implements Observer{
     }
 
     private void next(){
-
         if (this.turn > this.players.size()*2* MAX_ROUNDS){
             //End Game
             gameEnding();
-
         } else {
             Boolean end = false;
             if (this.players.get(active).getTool8()){
@@ -78,6 +75,7 @@ public class Game implements Observer{
                 this.players.get(active).setTool8(false);
             }
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
+
             while (!end){
                 String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
                 switch (action){
@@ -100,7 +98,10 @@ public class Game implements Observer{
                 }
             }
         }
+        endTurn();
+    }
 
+    private void endTurn(){
         //This is made to keep track of the active player
         if (this.count == this.players.size() - 1 && this.clockwise){
             this.clockwise = false;
@@ -126,6 +127,10 @@ public class Game implements Observer{
             }
             this.count--;
         }
+
+        if (this.players.get(active).isDisconnected()){
+            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + " is disconnected and misses his turn -.-");
+            endTurn(); }
 
         this.turn++;
         this.table.nextTurn();
@@ -206,7 +211,7 @@ public class Game implements Observer{
                         this.table.putDiceInReserve(dice);
                 }
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 Controller.getMyIO(this).broadcast("EXCEPTION CAUGHT! Player " + this.players.get(active).getUsername() + " didn't do it right, try again\n");
                 Controller.getMyIO(this).broadcast(e.getMessage());
                 if (dice!= null) this.table.putDiceInReserve(dice);
@@ -237,7 +242,7 @@ public class Game implements Observer{
         int highestMade = 0;
         for (Player p : this.players){
             p.countPoints();
-            if(p.getPoints() > highestMade)
+            if (p.getPoints() > highestMade)
                 highestMade = p.getPoints();
             Controller.getMyIO(this).broadcast(p.getUsername() + ":" + p.getPoints());
         }
@@ -246,7 +251,7 @@ public class Game implements Observer{
         int highestWithPrivOC = 0;
         int highestNumOfTokens = 0;
         for (Player p : this.players){
-            if(p.getPoints() == highestMade && p.pointsInPrivObj() >= highestWithPrivOC){
+            if (p.getPoints() == highestMade && p.pointsInPrivObj() >= highestWithPrivOC){
                 highestWithPrivOC = p.pointsInPrivObj();
 
                 if (p.pointsInPrivObj() == highestWithPrivOC && p.getTokens() >= highestNumOfTokens){
