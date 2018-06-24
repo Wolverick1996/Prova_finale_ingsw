@@ -40,7 +40,6 @@ public class Table {
     public Table(int numP){
         ToolHandler.setTools();
         PubObjHandler.setPubOC();
-        //TODO: numPlayers = controller.getNumPlayers(); //Request must be sent to right controller
         this.numPlayers = numP;
         nextRound();
     }
@@ -68,7 +67,6 @@ public class Table {
      */
     public void nextTurn(){
         canExtract = true;
-        //TODO: call controller to active nextPlayer;
         if (clockwise){
             if (turn == numPlayers-1){
                 clockwise = false;
@@ -97,11 +95,10 @@ public class Table {
         if (round>9){ System.err.println("WARNING nextRound called, round is already 10"); return; }
 
         if (!reserve.isEmpty()){
-            for (Dice d:reserve)
-                roundTrack.add(d);
+            roundTrack.addAll(reserve);
 
             reserve.clear();
-        } else if (round != -1) { System.err.println("WARNING reserve is empty"); return; }
+        } else if (round != -1){ System.err.println("WARNING reserve is empty"); return; }
 
         for (int i=0;i<numPlayers*2+1;i++){ reserve.add(pickDiceFromBag()); }
 
@@ -112,7 +109,7 @@ public class Table {
         this.realTurn = 0;
 
         //Resetting turns of players
-        for (Player p : activePlayers) { p.resetTurns(); }
+        for (Player p : activePlayers){ p.resetTurns(); }
     }
 
     /**
@@ -124,17 +121,17 @@ public class Table {
     public Dice pickDiceFromBag(){
         boolean isAVB = false;
         Enum.Color color = Enum.Color.getRandomColor();
-        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){System.err.println("Bag is empty");
-        return null;}
+        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){
+            System.err.println("Bag is empty");
+            return null; }
         while(!isAVB){
             color = Enum.Color.getRandomColor();
             switch (color){
-                case RED: { if (redExt < 18) { isAVB = true; redExt++;} break; }
-                case PURPLE: { if (purpleExt < 18) { isAVB = true; purpleExt++;} break; }
-                case BLUE: { if (bluExt < 18) { isAVB = true; bluExt++;} break; }
-                case GREEN: { if (greenExt < 18) { isAVB = true; greenExt++;} break; }
-                case YELLOW: { if (yellowExt < 18) { isAVB = true; yellowExt++;} break; }
-                //default: throw new Exception();
+                case RED: if (redExt < 18) { isAVB = true; redExt++;} break;
+                case PURPLE: if (purpleExt < 18) { isAVB = true; purpleExt++;} break;
+                case BLUE: if (bluExt < 18) { isAVB = true; bluExt++;} break;
+                case GREEN: if (greenExt < 18) { isAVB = true; greenExt++;} break;
+                case YELLOW: if (yellowExt < 18) { isAVB = true; yellowExt++;} break;
             }
         }
         return new Dice(color);
@@ -149,7 +146,7 @@ public class Table {
      * @author Matteo
      */
     public Dice pickDiceFromReserve(int dicePos){
-        if (dicePos >= reserve.size() || dicePos<0) { return null; }
+        if (dicePos >= reserve.size() || dicePos < 0) { return null; }
         if (canExtract){
             Dice temp = reserve.get(dicePos);
             reserve.remove(dicePos);
@@ -169,7 +166,7 @@ public class Table {
      * @author Matteo
      */
     public Dice pickDiceFromRoundtrack(int dicePos){
-        if (dicePos >= roundTrack.size() || dicePos<0) { return null; }
+        if (dicePos >= roundTrack.size() || dicePos < 0) { return null; }
         Dice temp = roundTrack.get(dicePos);
         roundTrack.remove(dicePos);
         return temp;
@@ -179,20 +176,23 @@ public class Table {
      * Picks a dice from reserve and puts it in the bag (tool card 11)
      *
      * @param dicePos: the dice position on the reserve
+     * @return true if dice movement from reserve to bag was made correctly, otherwise false
      * @author Matteo
      */
-    public void putDiceInBag(int dicePos){
+    public boolean putDiceInBag(int dicePos){
+        if (dicePos >= reserve.size() || dicePos < 0) { return false; }
         Enum.Color color = reserve.get(dicePos).getColor();
         switch (color){
-            //TODO: colorExt must never be <0
             case RED: redExt--; break;
             case PURPLE: purpleExt--; break;
             case BLUE: bluExt--; break;
             case GREEN: greenExt--; break;
             case YELLOW: yellowExt--; break;
-            //default: throw new Exception();
         }
+        if (redExt < 0 || purpleExt < 0 || bluExt < 0 || greenExt < 0 || yellowExt < 0)
+            System.err.println("colorExt < 0: something strange happened");
         reserve.remove(dicePos);
+        return true;
     }
 
     /**
@@ -218,7 +218,7 @@ public class Table {
      * @author Matteo
      */
     public Dice checkDiceFromReserve(int dicePos){
-        if(dicePos<reserve.size())
+        if(dicePos >= 0 && dicePos < reserve.size())
             return reserve.get(dicePos);
         return null;
     }
@@ -231,7 +231,7 @@ public class Table {
      * @author Matteo
      */
     public Dice checkDiceFromRoundtrack(int dicePos){
-        if(dicePos<roundTrack.size())
+        if(dicePos >= 0 && dicePos < roundTrack.size())
             return roundTrack.get(dicePos);
         return null;
     }
@@ -253,7 +253,7 @@ public class Table {
      * @param d: the dice to place
      * @author Matteo
      */
-    public void putDiceInRoundtrack(Dice d){roundTrack.add(d);}
+    public void putDiceInRoundtrack(Dice d){ roundTrack.add(d); }
 
     /**
      * This method is called by controller when the player decides to use a tool card
@@ -262,7 +262,7 @@ public class Table {
      * @param activePlayer: the player who decides to use the tool card
      * @return true if the tool card is correctly used, otherwise false
      */
-    public boolean useToolCard(int indexToolCard, Player activePlayer, IOhandler out) {
+    public boolean useToolCard(int indexToolCard, Player activePlayer, IOhandler out){
         return ToolHandler.useTool(indexToolCard, activePlayer, this, out);
     }
 
