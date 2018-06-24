@@ -55,14 +55,16 @@ public class ClientMain {
                             System.err.println("Nothing to read " + e.getMessage());
                         }
                     }
+                    break;
                 }
+                break;
 
             }
             if (!check){
                 System.out.println("Invalid name. Type rmi or socket");
             }
         }
-        scanner.close();
+        //scanner.close();
     }
 
     private void startClientRMI() throws MalformedURLException, RemoteException{
@@ -133,11 +135,14 @@ public class ClientMain {
                     if (num != server.playersInLobby() && !server.hasStarted()){
                         System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                         num = server.playersInLobby();
+                    } else if (server.hasStarted()){
+                        break;
                     }
 
                 }
-                if (!on)
-                    scanner.close();
+                break;
+                //if (!on)
+                //    scanner.close();
             } while (on);
 
         } catch (NotBoundException e) {
