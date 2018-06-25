@@ -48,12 +48,10 @@ public class SocketMessengerClient{
         this.out.println(NAME + D_LEFT + this.username + D_RIGHT);
         this.out.flush();
 
-        this.handler.send("MUEVE LA COLITTA");
         do {
             request = this.in.readLine();
         } while (!request.equals(OK));
 
-        this.handler.send("PORCODDDIO SI SBOCCIA DON PERO");
         game();
     }
 

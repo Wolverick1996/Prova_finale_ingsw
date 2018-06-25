@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.network_client.ClientIntRMI;
-import it.polimi.ingsw.client.view.SocketMessengerClient;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.server.model.Table;
@@ -20,37 +19,58 @@ public class IOhandler implements Observer{
 
     private List<ClientIntRMI> usersRMI = new ArrayList<>();
     private List<SocketUser> socketUserList = new ArrayList<>(); //this is the list of socket BY socketUser->name
-    private static List<Player> players = new ArrayList<>();
+    private List<Player> players;
     private Observable ov = null;
     private Table table;
     private static final String STATUS = "STATUS";
     private static final String DIVISOR = "\n\n---------------------------------------------\n\n";
 
     IOhandler(List<Player> users, Table board){
-        players = users;
-        table = board;
+        this.players = users;
+        this.table = board;
     }
 
     //***************************//
     //         Methods           //
     //***************************//
 
+    //*********SETUP***************
+
+    void setServer(ServerIntRMI server) {
+        try {
+            usersRMI = server.getConnected();
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
+    }
+
+    void setSockets(List<Socket> sockets){
+        for(Socket s: sockets){
+            String name = SocketMessengerServer.getToKnow(s);
+            if (!name.equals(""))
+                socketUserList.add(new SocketUser(name, s));
+            else
+                sockets.remove(s);
+        }
+    }
+
+
     public void broadcast(Object message){
         try {
             System.out.println(message);
             if (message.equals(STATUS)){
                 System.out.println(DIVISOR);
-                for (Player p: players) this.notify(p.getUsername(), DIVISOR);
+                for (Player p: this.players) this.notify(p.getUsername(), DIVISOR);
                 System.out.println(table);
-                for (Player p: players) this.notify(p.getUsername(), table.toString());
-                for (Player p: players){
+                for (Player p: this.players) this.notify(p.getUsername(), table.toString());
+                for (Player p: this.players){
                     System.out.println(p);
-                    for (Player pl: players) this.notify(pl.getUsername(), p.toString());
+                    for (Player pl: this.players) this.notify(pl.getUsername(), p.toString());
                 }
                 System.out.println(DIVISOR);
-                for (Player p: players) this.notify(p.getUsername(), DIVISOR);
+                for (Player p: this.players) this.notify(p.getUsername(), DIVISOR);
             } else
-                for (Player p: players) this.notify(p.getUsername(), message.toString());
+                for (Player p: this.players) this.notify(p.getUsername(), message.toString());
         } catch (RemoteException e){
             System.err.println("ERROR BROADCAST: "+e.getMessage());
         }
@@ -242,25 +262,6 @@ public class IOhandler implements Observer{
             System.err.println("CHOOSEDICEVALUE: " + e.getMessage());
         }
         return -1;
-    }
-
-    void setServer(ServerIntRMI server) {
-        try {
-            usersRMI = server.getConnected();
-        } catch (RemoteException e){
-            e.printStackTrace();
-        }
-    }
-
-    //THIS IS THE PART WHERE THE SOCKET ARE SET//////////////////////////////////////////
-    void setSockets(List<Socket> sockets){
-        for(Socket s: sockets){
-            String name = SocketMessengerServer.getToKnow(s);
-            if (!name.equals(""))
-                socketUserList.add(new SocketUser(name, s));
-            else
-                sockets.remove(s);
-        }
     }
 
     private class SocketUser{
