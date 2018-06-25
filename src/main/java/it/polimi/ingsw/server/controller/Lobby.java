@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
 
+import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -17,6 +18,7 @@ public class Lobby /*extends Observer*/ {
     private static final int ONE_SEC = 1000;
     private int delay = 20000;
     private List<String> players = new ArrayList<>();
+    private List<Socket> sockets = new ArrayList<>();
     private Boolean streetlight;
     private Boolean hasStarted = false;
     private Timer timer;
@@ -28,10 +30,10 @@ public class Lobby /*extends Observer*/ {
     //         Methods           //
     //***************************//
 
-    public synchronized void startGame(){
-        Controller.startGame(players, this, this.server);
-        Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
+    public void startGame(){
         hasStarted = true;
+        Controller.startGame(players, this, this.server, sockets);
+        Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
         Controller.switchContext(this);
     }
 
@@ -77,6 +79,10 @@ public class Lobby /*extends Observer*/ {
         }
         this.streetlight = true;
         return false;
+    }
+
+    public synchronized void addSocket(Socket s){
+        sockets.add(s);
     }
 
     public boolean removePlayer(String username){

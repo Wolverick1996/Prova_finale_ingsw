@@ -1,11 +1,14 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.network_client.ClientIntRMI;
+import it.polimi.ingsw.client.view.SocketMessengerClient;
 import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.server.model.Table;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
+import it.polimi.ingsw.server.network_server.SocketMessengerServer;
 
+import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -16,7 +19,8 @@ public class IOhandler implements Observer{
     //***************************//
 
     private List<ClientIntRMI> usersRMI = new ArrayList<>();
-    private List<Player> players;
+    private List<SocketUser> socketUserList = new ArrayList<>(); //this is the list of socket BY socketUser->name
+    private static List<Player> players = new ArrayList<>();
     private Observable ov = null;
     private Table table;
     private static final String STATUS = "STATUS";
@@ -240,13 +244,37 @@ public class IOhandler implements Observer{
         return -1;
     }
 
-    public void setServer(ServerIntRMI server) {
+    void setServer(ServerIntRMI server) {
         try {
             usersRMI = server.getConnected();
         } catch (RemoteException e){
             e.printStackTrace();
         }
     }
+
+    //THIS IS THE PART WHERE THE SOCKET ARE SET//////////////////////////////////////////
+    void setSockets(List<Socket> sockets){
+        for(Socket s: sockets){
+            String name = SocketMessengerServer.getToKnow(s);
+            if (!name.equals(""))
+                socketUserList.add(new SocketUser(name, s));
+            else
+                sockets.remove(s);
+        }
+    }
+
+    private class SocketUser{
+        //NEVER MODIFY SINGLE ATTRIBUTES OF THIS SUB CLASS
+        private String name;
+        private Socket socket;
+
+        //To call only when USERNAME has been read by the SocketMessenger system
+        SocketUser(String username, Socket s) {
+            this.name = username;
+            this.socket = s;
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
 
     public void notify(String player, String message) throws RemoteException {
         for (int i = 0; i<usersRMI.size(); i++){

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.network_client;
 
+import it.polimi.ingsw.client.view.SocketMessengerClient;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,15 +13,16 @@ import java.util.Scanner;
 class ClientImplementationSocket {
 
     private Socket socket;
+
     ClientImplementationSocket (Socket socket){
         this.socket = socket;
     }
 
-    void login() throws IOException {
+    String login() throws IOException {
         boolean success = false;
         int playersInLobby;
         Scanner scanner = new Scanner(System.in);
-        String string;
+        String string = "";
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             PrintWriter out = new PrintWriter(this.socket.getOutputStream());
@@ -48,6 +51,7 @@ class ClientImplementationSocket {
         }catch (NoSuchElementException e){
             System.err.println("ERROR "+e.getMessage());
         }
+        return string;
     }
 
     void logout() throws IOException{
