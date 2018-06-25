@@ -21,6 +21,7 @@ public class SocketMessengerClient{
     private static final String GAMESTART = "gameStarts";
     private static final String NAME = "name";
     private static final String OK = "ok";
+    private static final String FINISH = "finish";
 
     public SocketMessengerClient(Socket s, String n) {
         try{
@@ -56,7 +57,29 @@ public class SocketMessengerClient{
     }
 
     private void game() throws IOException{
-        this.scanner.nextLine();
+        String input = null;
+        String request = null;
+        do{
+            input = this.in.readLine();
+            request = getRequest(input);
+            switch (request){
+                case FINISH:
+                    break;
+                default:
+                    unexpectedMessageFromServer();
+                    break;
+            }
+
+        }while (!request.equals(FINISH));
+
+        //CountPoints here
+
+        close();
+    }
+
+    private String getRequest (String input){
+        String[] splittedInput = input.split(D_LEFT);
+        return splittedInput[0];
     }
 
     private void unexpectedMessageFromServer() throws IOException{
