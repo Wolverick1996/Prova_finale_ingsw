@@ -57,12 +57,13 @@ public class ServerMain {
             System.out.println("[Socket Server]\tServer is ready...");
             boolean on = true;
             while (on) {
+                if (!lobby.hasStarted())
                 try {
                     Socket socket = serverSocket.accept();
                     executor.submit(new ServerImplementationSocket(socket, lobby));
                 } catch(IOException e) {
                     System.err.println(e.getMessage());
-                    on = false;
+                    //on = false;
                 }
             }
             executor.shutdown();

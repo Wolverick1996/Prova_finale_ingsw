@@ -34,25 +34,32 @@ public class ServerImplementationSocket implements Runnable {
                     this.lobby.setDelay(Integer.parseInt(in.readLine()));
                 }
                 gameCanStart = true;
-                while (gameCanStart){
-                    string = in.readLine();
+                while (gameCanStart && !this.lobby.hasStarted()){
+                    out.println(this.lobby.getPlayers().size());
+                    out.flush();
+                    //Here old and deprecated code is commented for future investigation
+                    /*string = in.readLine();
                     if (string.equals("e")){
                         logout();
                         gameCanStart = false;
                     }else{
                         out.println(this.lobby.getPlayers().size());
                         out.flush();
-                    }
+                    }*/
                 }
+                out.println(999);
+                out.flush();
+                System.out.println("HERE I CLOSE THE SOCKET IMPLEMENTATION THREAD :\t" + Thread.currentThread().getName());
             }while (!gameCanStart);
 
+            //DOES NOTHING
             while (!gameCanStart){
                 Scanner s = new Scanner(System.in);
                 String t = s.nextLine();
             }
-            in.close();
-            out.close();
-            this.socket.close();
+            //in.close();
+            //out.close();
+            //this.socket.close();
         }catch (IOException e){
             System.err.println("Connection lost from a client");
             if (this.playerConnected != null){
@@ -69,15 +76,12 @@ public class ServerImplementationSocket implements Runnable {
         boolean loginSuccess = false;
 
         while (!loginSuccess) {
-            if (this.lobby.hasStarted()){
-                out.println(999); //Game has started
-            }else{
-                out.println(this.lobby.getPlayers().size());
-            }
+            out.println(this.lobby.getPlayers().size());
             out.flush();
             String string = in.readLine();
             if (!string.equals("*")){
                 if (this.lobby.addPlayer(string)){
+                    this.lobby.addSocket(this.socket);
                     loginSuccess = true;
                     System.out.println("[Socket Server]\t" +string+ "  got connected....");
                     this.playerConnected = string;

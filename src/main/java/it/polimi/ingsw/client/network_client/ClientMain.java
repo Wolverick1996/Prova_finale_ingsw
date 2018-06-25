@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.network_client;
 
+import it.polimi.ingsw.client.view.SocketMessengerClient;
 import it.polimi.ingsw.server.controller.Lobby;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
 
@@ -71,79 +72,73 @@ public class ClientMain {
         ServerIntRMI server;
         boolean on = true;
         try {
+
+            boolean loginSuccess = false;
+            boolean idTaken = false;
+            boolean fullLobby = false;
+            server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
             do {
-                boolean loginSuccess = false;
-                boolean idTaken = false;
-                boolean fullLobby = false;
-                ClientIntRMI validRemoteRef = null;
-                server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
-                do {
-                    if (fullLobby) {
-                        System.out.println("Retry later...");
-                        fullLobby = false;
-                    }
+                if (fullLobby) {
+                    System.out.println("Retry later...");
+                    fullLobby = false;
+                }
 
-                    if (idTaken) {
-                        System.out.println("Login failed, this userID is already used");
-                        idTaken = false;
-                    }
-
-                    Scanner scanner = new Scanner(System.in);
-                    System.out.println("Connection established");
-                    System.out.println("[Players in the lobby: " + server.playersInLobby() + "]\n" +
-                            "Login:\t\t(to refresh the page type '*')");
-                    String text = scanner.nextLine();
-
-                    if (text.equals("")){
-                        System.out.println("Invalid name, your ID should be an alphanumeric of at least 1 character");
-                        text = "*";
-                    }
-                    if (!text.equals("*")) {
-                        ClientImplementationRMI client = new ClientImplementationRMI(text);
-
-                        ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
-                        validRemoteRef = remoteRef;
-
-                        if (server.login(remoteRef))
-                            loginSuccess = true;
-                        else {
-                            if (server.getConnected().size() >= Lobby.MAX_PLAYERS)
-                                fullLobby = true;
-                            else
-                                idTaken = true;
-                        }
-                    }
-                } while (!loginSuccess);
+                if (idTaken) {
+                    System.out.println("Login failed, this userID is already used");
+                    idTaken = false;
+                }
 
                 Scanner scanner = new Scanner(System.in);
-                if (server.playersInLobby() == 1){
-                    System.out.println("You are the first player of the lobby!");
-                    int delay = 0;
-                    while(delay < 15 || delay > 60){
-                        System.out.println("Please set a timer (min 15s, max 60s)");
-                        delay = Integer.parseInt(scanner.nextLine());
-                    }
-                    server.setDelay(delay);
+                System.out.println("Connection established");
+                System.out.println("[Players in the lobby: " + server.playersInLobby() + "]\n" +
+                        "Login:\t\t(to refresh the page type '*')");
+                String text = scanner.nextLine();
+
+                if (text.equals("")){
+                    System.out.println("Invalid name, your ID should be an alphanumeric of at least 1 character");
+                    text = "*";
                 }
-                boolean active = true;
-                System.out.println("Waiting for other players...\n");
+                if (!text.equals("*")) {
+                    ClientImplementationRMI client = new ClientImplementationRMI(text);
 
-                int num = 0;
-                while (active) {
+                    ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 
-                    server.confirmConnections();
-                    if (num != server.playersInLobby() && !server.hasStarted()){
-                        System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
-                        num = server.playersInLobby();
-                    } else if (server.hasStarted()){
-                        break;
+                    if (server.login(remoteRef))
+                        loginSuccess = true;
+                    else {
+                        if (server.getConnected().size() >= Lobby.MAX_PLAYERS)
+                            fullLobby = true;
+                        else
+                            idTaken = true;
                     }
-
                 }
-                break;
-                //if (!on)
-                //    scanner.close();
-            } while (on);
+            } while (!loginSuccess);
+
+            Scanner scanner = new Scanner(System.in);
+            if (server.playersInLobby() == 1){
+                System.out.println("You are the first player of the lobby!");
+                int delay = 0;
+                while(delay < 15 || delay > 60){
+                    System.out.println("Please set a timer (min 15s, max 60s)");
+                    delay = Integer.parseInt(scanner.nextLine());
+                }
+                server.setDelay(delay);
+            }
+            boolean active = true;
+            System.out.println("Waiting for other players...\n");
+
+            int num = 0;
+            while (active) {
+
+                server.confirmConnections();
+                if (num != server.playersInLobby() && !server.hasStarted()){
+                    System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
+                    num = server.playersInLobby();
+                } else if (server.hasStarted()){
+                    break;
+                }
+
+            }
 
         } catch (NotBoundException e) {
             System.err.println("This reference is not connected!");
@@ -156,6 +151,7 @@ public class ClientMain {
         Socket socket = null;
         int activePlayers;
         boolean success;
+        String name = "";
         try {
             socket = new Socket(ip, PORT);
             Scanner scanner = new Scanner(System.in);
@@ -164,7 +160,7 @@ public class ClientMain {
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             do {
-                clientImplementationSocket.login();
+                name = clientImplementationSocket.login();
                 activePlayers = Integer.parseInt(in.readLine());
                 if (activePlayers == 1){
                     System.out.println("You are the first player of the lobby!");
@@ -181,27 +177,34 @@ public class ClientMain {
                 success = true;
                 System.out.println("Waiting for other players...\n");
                 int num = 0;
-                boolean hasStarted = false;
+                int i;
                 while (success){
-                    //SERVER SENDS 999 if game has started
-                    if (!hasStarted){
-                        int i = Integer.parseInt(in.readLine());
-                        if (num != i){
-                            System.out.println("[Players in the lobby: " + activePlayers + "]");
-                            num = i;
-                        }
-                        if (i == 999){
-                            hasStarted = true;
-                        }
+                    //HERE WE SHOULD WAIT FOR THE "GAME STARTED" SIGNAL
+                    try {
+                        i = Integer.parseInt(in.readLine());
+                    } catch (NumberFormatException n) {
+                        i = num;
                     }
+                    if (num != i){
+                        if (i == 999){
+                            SocketMessengerClient messenger = new SocketMessengerClient(socket, name);
+                            messenger.close();
+                        }
+                        System.out.println("[Players in the lobby: " + i + "]");
+                        num = i;
+                    }
+                    //TODO: SOLVE THIS WHILE(TRUE)
+                    //MOVE ALL THE METHODS TO CLIENT IMPLEMENTATION SOCKET, THE TO MESSENGER
                 }
             }while (!success);
 
+            //DOES NOTHING
             while (!success){
                 Scanner s = new Scanner(System.in);
                 String t = s.nextLine();
                 System.err.println(t);
             }
+
             scanner.close();
             in.close();
             out.close();

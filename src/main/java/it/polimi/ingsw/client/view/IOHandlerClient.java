@@ -8,9 +8,9 @@ public class IOHandlerClient implements Observer {
 
     //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
 
-    String name;
-    Interface outputInt;
-    CLI commandLine;
+    private String name;
+    private Interface outputInt;
+    private CLI commandLine;
     //GUI graphicInt;
 
     public IOHandlerClient (String username, Interface type) {
@@ -32,7 +32,7 @@ public class IOHandlerClient implements Observer {
         if(this.outputInt == cli){
             return commandLine.input();
         } /* else {
-            sendGUI(message);
+            requestGUI(message);
         }*/
         return "-1";
     }

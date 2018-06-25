@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.view.IOHandlerClient;
 
 import java.rmi.RemoteException;
 import java.util.Observable;
-import java.util.Scanner;
 
 import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
 
