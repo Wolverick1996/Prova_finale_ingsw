@@ -31,9 +31,9 @@ class BoxTest {
 
         //box should be employable just the first time
         //test setDice method
-        assertTrue(box.isEmployableNoCol(dice));
+        assertTrue(box.isEmployableNoCol(dice, true));
         box.setDice(dice);
-        assertFalse(box.isEmployableNoCol(dice));
+        assertFalse(box.isEmployableNoCol(dice, true));
 
         //test free method
         assertNotNull(box.free());
@@ -42,7 +42,7 @@ class BoxTest {
 
         //box should be employable because dice respects the number restriction
         box = new Box(dice.getValue());
-        assertTrue(box.isEmployableNoCol(dice));
+        assertTrue(box.isEmployableNoCol(dice, true));
         box.free();
 
         //box should NOT be employable because dice's second assignment DOESN'T respects the number restriction
@@ -52,7 +52,7 @@ class BoxTest {
             otherValue = rand.nextInt(6) + 1;
         } while (otherValue == dice.getValue());
         dice.assignValue(otherValue);
-        assertFalse(box.isEmployableNoCol(dice));
+        assertFalse(box.isEmployableNoCol(dice, true));
     }
 
     /**
@@ -68,14 +68,14 @@ class BoxTest {
         Enum.Color otherColor;
 
         //box should be employable just the first time
-        assertTrue(box.isEmployableNoNum(dice));
+        assertTrue(box.isEmployableNoNum(dice, true));
         box.setDice(dice);
-        assertFalse(box.isEmployableNoNum(dice));
+        assertFalse(box.isEmployableNoNum(dice, true));
         box.free();
 
         //box should be employable because dice respects the color restriction
         box = new Box(dice.getColor());
-        assertTrue(box.isEmployableNoNum(dice));
+        assertTrue(box.isEmployableNoNum(dice, true));
         box.free();
 
         //box should NOT be employable because dice's second assignment DOESN'T respects the color restriction
@@ -85,7 +85,7 @@ class BoxTest {
             otherColor = Enum.Color.getRandomColor();
         } while (otherColor == dice.getColor());
         dice = new Dice(otherColor);
-        assertFalse(box.isEmployableNoNum(dice));
+        assertFalse(box.isEmployableNoNum(dice, true));
     }
 
     /**

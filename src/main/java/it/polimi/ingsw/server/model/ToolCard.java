@@ -117,17 +117,20 @@ public class ToolCard {
 
             //TOOL 2 & 3
             ((Player player, Table table) -> {
+                ToolHandler.notify(player, player.getOwnScheme().toString());
+                ToolHandler.notify(player,"Insert the OLD coordinates of the dice to be moved, one at a time (x, y)");
                 int[] coordOLD = getCoordinates(player);
 
                 //Dice extraction failed
                 if (!extractDice(player, coordOLD))
                     return false;
 
+                ToolHandler.notify(player,"Insert the NEW coordinates of the dice to be moved, one at a time (x, y)");
                 int[] coordNEW = getCoordinates(player);
 
                 //If placement fails the dice is reinserted into the previous box
                 if (!moveDice(this.cardID, player, coordNEW)) {
-                    player.getOwnScheme().placeDice(coordOLD[0], coordOLD[1], player.getDiceInHand());
+                    player.getOwnScheme().placeFromTool(coordOLD[0], coordOLD[1], this.cardID, player.getDiceInHand());
                     return false; }
 
                 return true;
@@ -177,7 +180,8 @@ public class ToolCard {
                     table.setCanExtract(canExtract);
                 } else {
                     ToolHandler.notify(player, isPlaceable(dice, player));
-
+                    ToolHandler.notify(player, player.getOwnScheme().toString());
+                    ToolHandler.notify(player,"Insert the coordinates of the dice to be placed, one at a time (x, y)");
                     int[] coord = getCoordinates(player);
 
                     if (canExtract) {
@@ -187,7 +191,8 @@ public class ToolCard {
                             table.putDiceInReserve(dice);
                         else
                             table.setCanExtract(false);
-                    }
+                    } else
+                        table.putDiceInReserve(dice);
                 }
 
                 return true;
@@ -205,7 +210,7 @@ public class ToolCard {
             //TOOL 8
             ((Player player, Table table) -> {
                 //NOTE: This tool card will affect the controller turn logic
-                if (table.getRealTurn() > table.getActivePlayers().size())
+                if (table.getRealTurn() >= table.getActivePlayers().size())
                     return false;
 
                 ToolHandler.tool8();
@@ -225,10 +230,12 @@ public class ToolCard {
                 if (dice == null)
                     return false;
 
+                ToolHandler.notify(player, player.getOwnScheme().toString());
+                ToolHandler.notify(player,"Insert the coordinates of the dice to be placed, one at a time (x, y)");
                 int[] coord = getCoordinates(player);
 
                 //Placement of the extracted dice: if it fails the dice is putted in the reserve
-                if (!player.getOwnScheme().placeDice(coord[0], coord[1], dice)) {
+                if (!player.getOwnScheme().placeFromTool(coord[0], coord[1], this.cardID, dice)) {
                     ToolHandler.notify(player,"Placement not allowed, " + dice + " is now in the reserve");
                     table.putDiceInReserve(dice);
                     return false;
@@ -251,6 +258,7 @@ public class ToolCard {
 
                 dice.turnDice();
                 table.putDiceInReserve(dice);
+                table.setCanExtract(canExtract);
                 return true;
             }),
 
@@ -258,9 +266,13 @@ public class ToolCard {
             ((Player player, Table table) -> {
                 boolean canExtract = table.getCanExtract();
                 table.setCanExtract(true);
-                putDiceInBag(player, table);
+
+                if (!putDiceInBag(player, table)) {
+                    table.setCanExtract(canExtract);
+                    return false; }
+
                 Dice dice = table.pickDiceFromBag();
-                ToolHandler.notify(player,"Dice extracted: " + dice);
+                ToolHandler.notify(player,"Dice extracted from the bag: " + dice);
 
                 //If inserted value is not allowed the method returns true because there was a change in the game
                 if (!modifyDiceValue(this.cardID, player, dice)) {
@@ -269,6 +281,8 @@ public class ToolCard {
                     table.setCanExtract(canExtract);
                     return true; }
 
+                ToolHandler.notify(player, player.getOwnScheme().toString());
+                ToolHandler.notify(player,"Insert the coordinates of the dice to be placed, one at a time (x, y)");
                 int[] coord = getCoordinates(player);
 
                 if (canExtract) {
@@ -279,7 +293,8 @@ public class ToolCard {
                         table.putDiceInReserve(dice);
                     } else
                         table.setCanExtract(false);
-                }
+                } else
+                    table.putDiceInReserve(dice);
 
                 return true;
             }),
@@ -288,11 +303,11 @@ public class ToolCard {
             ((Player player, Table table) -> {
                 Dice dice = chooseFromRoundtrack(this.cardID, player, table);
 
-                //Dice extraction failed
+                //Dice choice failed
                 if (dice == null)
                     return false;
 
-                return (twoDiceMovement(this.cardID, player, dice.getColor()));
+                return twoDiceMovement(this.cardID, player, dice.getColor());
             })
 
     };
@@ -338,8 +353,8 @@ public class ToolCard {
         int y;
 
         do {
-            x = ToolHandler.getCoordinates("x", player);
-            y = ToolHandler.getCoordinates("y", player);
+            x = ToolHandler.getCoordinates(player);
+            y = ToolHandler.getCoordinates(player);
         } while (!(0 <= x && x <= Scheme.MAX_ROW-1) || !(0 <= y && y <= Scheme.MAX_COL-1));
         coordinates[0] = x;
         coordinates[1] = y;
@@ -366,6 +381,8 @@ public class ToolCard {
         int[] coord2OLD;
         int[] coord2NEW;
 
+        ToolHandler.notify(player, player.getOwnScheme().toString());
+        ToolHandler.notify(player,"Insert the OLD coordinates of the FIRST dice to be moved, one at a time (x, y)");
         coord1OLD = getCoordinates(player);
 
         //First dice extraction failed
@@ -377,18 +394,21 @@ public class ToolCard {
         //If extraction fails the method returns false
         if (index == 12){
             while (player.getDiceInHand().getColor() != color) {
-                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track");
+                player.getOwnScheme().placeFromTool(coord1OLD[0], coord1OLD[1], this.cardID, player.getDiceInHand());
+                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track\nPlease reinsert coordinates");
+                coord1OLD = getCoordinates(player);
 
                 if (!extractDice(player, coord1OLD))
                     return false;
             }
         }
 
+        ToolHandler.notify(player,"Insert the NEW coordinates of the FIRST dice to be moved, one at a time (x, y)");
         coord1NEW = getCoordinates(player);
 
         //If first placement fails the dice is reinserted into the previous box and the method returns false
         if (!moveDice(this.cardID, player, coord1NEW)){
-            player.getOwnScheme().placeDice(coord1OLD[0], coord1OLD[1], player.getDiceInHand());
+            player.getOwnScheme().placeFromTool(coord1OLD[0], coord1OLD[1], index, player.getDiceInHand());
             return false; }
 
         //TOOL 12: player can choose if place another dice or not
@@ -397,12 +417,14 @@ public class ToolCard {
             if (!ToolHandler.getYesOrNo(player))
                 return true; }
 
+        ToolHandler.notify(player, player.getOwnScheme().toString());
+        ToolHandler.notify(player,"Insert the OLD coordinates of the SECOND dice to be moved, one at a time (x, y)");
         coord2OLD = getCoordinates(player);
 
         //Second dice extraction failed: the first dice placed is removed and reinserted into the previous box
         if (!extractDice(player, coord2OLD)){
             dice = player.getOwnScheme().removeDice(coord1NEW[0], coord1NEW[1]);
-            player.getOwnScheme().placeDice(coord1OLD[0], coord1OLD[1], dice);
+            player.getOwnScheme().placeFromTool(coord1OLD[0], coord1OLD[1], index, dice);
             return false; }
 
         //Dice should have the same color of the one chosen from round track
@@ -410,23 +432,26 @@ public class ToolCard {
         //If extraction fails the first dice placed is removed and reinserted into the previous box and the method returns false
         if (index == 12){
             while (player.getDiceInHand().getColor() != color) {
-                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track");
+                player.getOwnScheme().placeFromTool(coord2OLD[0], coord2OLD[1], this.cardID, player.getDiceInHand());
+                ToolHandler.notify(player,"You have to choose a dice with the same color of the one chosen from round track\nPlease reinsert coordinates");
+                coord2OLD = getCoordinates(player);
 
                 if (!extractDice(player, coord2OLD)){
                     dice = player.getOwnScheme().removeDice(coord1NEW[0], coord1NEW[1]);
-                    player.getOwnScheme().placeDice(coord1OLD[0], coord1OLD[1], dice);
+                    player.getOwnScheme().placeFromTool(coord1OLD[0], coord1OLD[1], index, dice);
                     return false; }
             }
         }
 
+        ToolHandler.notify(player,"Insert the NEW coordinates of the SECOND dice to be moved, one at a time (x, y)");
         coord2NEW = getCoordinates(player);
 
         //If second placement fails the dice is reinserted into the previous box and the method returns false
         //The first dice placed is also removed and reinserted into the previous box
         if (!moveDice(this.cardID, player, coord2NEW)){
-            player.getOwnScheme().placeDice(coord2OLD[0], coord2OLD[1], player.getDiceInHand());
+            player.getOwnScheme().placeFromTool(coord2OLD[0], coord2OLD[1], index, player.getDiceInHand());
             dice = player.getOwnScheme().removeDice(coord1NEW[0], coord1NEW[1]);
-            player.getOwnScheme().placeDice(coord1OLD[0], coord1OLD[1], dice);
+            player.getOwnScheme().placeFromTool(coord1OLD[0], coord1OLD[1], index, dice);
             return false; }
 
         return true;
@@ -542,8 +567,8 @@ public class ToolCard {
 
         for (int i = 0; i < Scheme.MAX_ROW; i++) {
             for (int j = 0; j < Scheme.MAX_COL; j++) {
-                if (player.getOwnScheme().isPlaceable(i, j, dice)) {
-                    s = s + "[" + i+1 + ", " + j+1 + "]\t";
+                if (player.getOwnScheme().isPlaceable(i, j, dice, false)) {
+                    s = s + "[" + (i+1) + ", " + (j+1) + "]\t";
                     flag = 1;
                 }
             }
@@ -560,12 +585,13 @@ public class ToolCard {
      *
      * @param player: the player who wants to use the tool card
      * @param table: the instance of table
+     * @return true if dice movement from reserve to bag was made correctly, otherwise false
      * @author Riccardo
      */
-    private void putDiceInBag(Player player, Table table){
+    private boolean putDiceInBag(Player player, Table table){
         int dicePos = ToolHandler.getFromReserve(player);
 
-        table.putDiceInBag(dicePos);
+        return table.putDiceInBag(dicePos);
     }
 
     /**

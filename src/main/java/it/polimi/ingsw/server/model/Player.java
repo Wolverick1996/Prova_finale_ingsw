@@ -21,6 +21,7 @@ public class Player extends Observable {
     private Scheme ownScheme;
     private boolean tool8 = false;
     private int IDplayer;
+    private boolean disconnected = false;
     private int turns;
 
     /**
@@ -213,6 +214,26 @@ public class Player extends Observable {
      * @author Riccardo
      */
     public void resetTurns() { this.turns = 0; }
+
+    /**
+     * Set attribute disconnected
+     *
+     * @param disconnected: change status of attribute disconnected
+     * @author Andrea
+     */
+    public void setDisconnected(boolean disconnected) {
+        this.disconnected = disconnected;
+    }
+
+    /**
+     * Get the current status of attribute disconnected
+     *
+     * @return the status of attribute disconnected
+     * @author Andrea
+     */
+    public boolean isDisconnected() {
+        return disconnected;
+    }
 
     public void setTool8(boolean bool){
         this.tool8 = bool;

@@ -25,7 +25,7 @@ class PublicOCTest {
      * @return the player, with his completely filled window pattern
      * @author Riccardo
      */
-    protected static Player createPlayerScheme(){
+    static Player createPlayerScheme(){
         Player p = new Player("ingconti", 0);
         Scheme scheme = Scheme.initialize(1);
         p.chooseScheme(scheme);
@@ -66,7 +66,7 @@ class PublicOCTest {
      * @return the player, with his modified window pattern
      * @author Riccardo
      */
-    protected static Player editPlayerScheme(Player p){
+    static Player editPlayerScheme(Player p){
         Scheme scheme = p.getOwnScheme();
 
         scheme.removeDice(1, 2);
