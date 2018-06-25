@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.Enum;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class Game implements Observer{
+public class Game implements Observer {
 
     //***************************//
     //        Attributes         //
@@ -34,7 +34,7 @@ public class Game implements Observer{
     void begin(){
         int i;
         int j;
-        Integer[] schemes = new Integer[12];
+        Integer[] schemes = new Integer[table.getNumSchemes()/2];
         for (int k = 0; k < schemes.length; k++)
             schemes[k] = k+1;
 

@@ -9,6 +9,11 @@ import java.util.Scanner;
  * @author Riccardo
  */
 public class ToolCard {
+
+    //***************************//
+    //        Attributes         //
+    //***************************//
+
     private String name;
     private String description;
     private int tokens;
@@ -44,13 +49,17 @@ public class ToolCard {
         }
     }
 
+    //***************************//
+    //         Methods           //
+    //***************************//
+
     /**
      * Returns the tool card's name
      *
      * @return tool card's name
      * @author Riccardo
      */
-    public String getName() {
+    public String getName(){
         return this.name;
     }
 
@@ -60,7 +69,7 @@ public class ToolCard {
      * @return tool card's description
      * @author Riccardo
      */
-    public String getDescription() {
+    public String getDescription(){
         return this.description;
     }
 
@@ -70,7 +79,7 @@ public class ToolCard {
      * @return the number of tokens currently on the tool card
      * @author Riccardo
      */
-    public int getTokens() {
+    public int getTokens(){
         return this.tokens;
     }
 
@@ -79,7 +88,7 @@ public class ToolCard {
      *
      * @author Riccardo
      */
-    interface UseEffect {
+    interface UseEffect{
 
         /**
          * Function to be override and executed in the tool effects array using lambda expressions
@@ -93,7 +102,7 @@ public class ToolCard {
 
     }
 
-    private UseEffect[] useEffects = new UseEffect[] {
+    private UseEffect[] useEffects = new UseEffect[]{
 
             //TOOL 1
             ((Player player, Table table) -> {

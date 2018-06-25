@@ -10,6 +10,11 @@ import java.util.Scanner;
  * @author Andrea
  */
 public class PrivateOC implements ObjectiveCard {
+
+    //***************************//
+    //        Attributes         //
+    //***************************//
+
     private String name;
     private String description;
     private Enum.Color color;
@@ -38,6 +43,10 @@ public class PrivateOC implements ObjectiveCard {
             System.err.println("Error closing scan (privateOC)");
         }
     }
+
+    //***************************//
+    //         Methods           //
+    //***************************//
 
     /**
      * Returns the private objective card's name

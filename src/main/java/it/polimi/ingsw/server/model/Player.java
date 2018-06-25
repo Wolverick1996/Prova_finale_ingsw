@@ -22,7 +22,6 @@ public class Player extends Observable {
     private boolean tool8 = false;
     private int IDplayer;
     private boolean disconnected = false;
-    private int turns;
 
     /**
      * Constructor for the player which receives from controller nickname and ID
@@ -35,7 +34,6 @@ public class Player extends Observable {
         this.nickname = nick;
         this.points = 0;
         this.IDplayer = ID;
-        this.turns = 0;
     }
 
     //***************************//
@@ -65,8 +63,7 @@ public class Player extends Observable {
         if (ownScheme.checkBox(x, y) != null){
             this.diceInHand = ownScheme.removeDice(x, y);
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -143,7 +140,7 @@ public class Player extends Observable {
      * @return own ID player
      * @author Andrea
      */
-    public int getIDplayer() {
+    int getIDplayer() {
         return this.IDplayer;
     }
 
@@ -183,7 +180,7 @@ public class Player extends Observable {
      * @param used: an integer that represents the number of tokens already on the tool card used
      * @author Riccardo
      */
-    public void decrementTokens(int used){
+    void decrementTokens(int used){
         if (used == 0)
             this.tokens--;
         else
@@ -201,22 +198,7 @@ public class Player extends Observable {
     }
 
     /**
-     * Update the turns variable when the player end a turn in a round
-     * Turns can go from 0 to 2 in a round, then it will be reset
-     *
-     * @author Riccardo
-     */
-    public void addTurn() { this.turns++; }
-
-    /**
-     * Reset the turns variable when the round ends
-     *
-     * @author Riccardo
-     */
-    public void resetTurns() { this.turns = 0; }
-
-    /**
-     * Set attribute disconnected
+     * Sets attribute disconnected
      *
      * @param disconnected: change status of attribute disconnected
      * @author Andrea
@@ -226,7 +208,7 @@ public class Player extends Observable {
     }
 
     /**
-     * Get the current status of attribute disconnected
+     * Gets the current status of attribute disconnected
      *
      * @return the status of attribute disconnected
      * @author Andrea
@@ -235,10 +217,22 @@ public class Player extends Observable {
         return disconnected;
     }
 
+    /**
+     * Sets the usage of tool card 8
+     *
+     * @param bool: flag representing the usage of tool card 8: if it's true tool 8 will be used, otherwise not
+     * @author Matteo
+     */
     public void setTool8(boolean bool){
         this.tool8 = bool;
     }
 
+    /**
+     * Gets the boolean flag representing the usage of tool card 8
+     *
+     * @return true if tool card 8 is used, otherwise false
+     * @author Matteo
+     */
     public boolean getTool8() {
         return this.tool8;
     }
@@ -267,4 +261,5 @@ public class Player extends Observable {
         }
         super.notifyObservers(arg);
     }
+
 }

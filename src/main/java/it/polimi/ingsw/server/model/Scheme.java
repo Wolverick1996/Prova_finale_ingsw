@@ -9,7 +9,7 @@ import java.io.*;
  * @author Andrea
  * @author Riccardo
  */
-public class Scheme extends Observable{
+public class Scheme extends Observable {
 
     //***************************//
     //        Attributes         //
@@ -19,7 +19,6 @@ public class Scheme extends Observable{
     private int difficulty;
     static final int MAX_COL = 5;
     static final int MAX_ROW = 4;
-
     private Box[][] grid = new Box[MAX_ROW][MAX_COL];
 
     /**
@@ -29,20 +28,32 @@ public class Scheme extends Observable{
      * @author Riccardo
      */
     protected Scheme (int id){
-        InputStream inputFile = Scheme.class.getResourceAsStream("/schemes/Schemes.txt");
+        if (id > 24 && !Table.custom)
+            System.err.println("Not valid ID: " + id);
+
+        InputStream inputFile;
+        if (id <= 24)
+            inputFile = Scheme.class.getResourceAsStream("/schemes/Schemes.txt");
+        else
+            inputFile = Scheme.class.getResourceAsStream("/schemes/CustomSchemes.txt");
 
         String s;
         char [][] c = new char[MAX_ROW][MAX_COL];
 
         Scanner scan = new Scanner(inputFile);
 
-        for (int i=0; i<(id-1)*6; i++)
-            scan.nextLine();
+        if (id <= 24) {
+            for (int i = 0; i < (id - 1) * 6; i++)
+                scan.nextLine();
+        } else {
+            for (int i = 0; i < (id - 25) * 6; i++)
+                scan.nextLine();
+        }
 
         this.name = scan.nextLine();
         this.difficulty = Integer.parseInt(scan.nextLine());
 
-        for (int i=0; i<MAX_ROW; i++) {
+        for (int i=0; i<MAX_ROW; i++){
             s = scan.nextLine();
             c[i] = s.toCharArray();
         }
@@ -64,7 +75,7 @@ public class Scheme extends Observable{
         try {
             scan.close();
         } catch (Exception e1) {
-            System.err.println("Error closing scan (schemes)");
+            System.err.println("Error closing scan (Scheme)");
         }
     }
 
@@ -80,8 +91,8 @@ public class Scheme extends Observable{
      * @author Riccardo
      */
     public static Scheme initialize(int id){
-        if (id < 1 || id >24){
-            System.err.println("ID not valid!");
+        if (id < 1 || id > Table.NUM_SCHEMES) {
+            System.err.println("Not valid ID: " + id);
             return null;
         } else
             return new Scheme(id);
@@ -170,7 +181,7 @@ public class Scheme extends Observable{
         int i;
         int j;
 
-        if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)){
+        if ((x < 0 || x >= MAX_ROW) || (y < 0 || y >= MAX_COL)) {
             notifyObservers("This box doesn't exists");
             return false; }
 
@@ -180,9 +191,9 @@ public class Scheme extends Observable{
 
         //Algorithm to find if the dice respects placement restrictions
         for (i = x - 1; i <= x + 1 && placeable; i++) {
-            if (i >= 0 && i < MAX_ROW){
+            if (i >= 0 && i < MAX_ROW) {
                 for (j = y - 1; j <= y + 1; j++) {
-                    if (!(i == x && j == y) && j >= 0 && j < MAX_COL){
+                    if (!(i == x && j == y) && j >= 0 && j < MAX_COL) {
                         if (grid[i][j].isFull())
                             diceNear = true;
                         if ((j == y || i == x) && grid[i][j].isFull()) {
@@ -429,7 +440,7 @@ public class Scheme extends Observable{
      * @return the grid at the time the method is called
      * @author Andrea
      */
-    Box[][] getGrid() {
+    Box[][] getGrid(){
         return grid;
     }
 
@@ -477,4 +488,5 @@ public class Scheme extends Observable{
         }
         super.notifyObservers(arg);
     }
+
 }

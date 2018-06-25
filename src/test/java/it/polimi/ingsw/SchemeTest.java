@@ -3,6 +3,7 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.server.model.Dice;
 import it.polimi.ingsw.server.model.Enum;
 import it.polimi.ingsw.server.model.Scheme;
+import it.polimi.ingsw.server.model.Table;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -30,7 +31,7 @@ class SchemeTest {
         assertNull(scheme);
 
         id = (rand.nextInt(24)+1);
-        assertNotNull(scheme.initialize(id));
+        assertNotNull(Scheme.initialize(id));
     }
 
     /**
@@ -278,6 +279,30 @@ class SchemeTest {
         assertFalse(scheme.placeFromTool(3, 3, 9, dice));
         //placement should not be possible cause of value restrictions
         assertFalse(scheme.placeFromTool(1, 4, 9, dice));
+    }
+
+    /**
+     * Tests the advanced functionality of custom window patterns
+     *
+     * @author Riccardo
+     */
+    @Test
+    void customSchemesTest() {
+        Scheme scheme = Scheme.initialize(25);
+
+        //scheme should be null because custom flag is false (player chose not to integrate custom schemes)
+        assertNull(scheme);
+
+        Table.setCustom();
+
+        //custom schemes should not be loaded
+        assertNotNull(scheme = Scheme.initialize(25));
+        System.out.println(scheme);
+        assertNotNull(scheme = Scheme.initialize(28));
+        System.out.println(scheme);
+
+        //not valid ID (neither in CustomSchemes.txt file)
+        assertNull(Scheme.initialize(29));
     }
 
 }

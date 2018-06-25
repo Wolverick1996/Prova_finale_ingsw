@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.controller.IOhandler;
 
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -30,6 +31,8 @@ public class Table {
     private int turn = 0;
     private int numPlayers; //must receive data
     private int realTurn = 1;
+    static int NUM_SCHEMES = 24;
+    static boolean custom = false;
 
     /**
      * Constructor of the table which sets tool cards and public objective cards of the game and starts the first round
@@ -107,9 +110,6 @@ public class Table {
         //At the beginning of each round turns restart from 1
         //It will be incremented to 1 at the end of the nextTurn method
         this.realTurn = 0;
-
-        //Resetting turns of players
-        for (Player p : activePlayers){ p.resetTurns(); }
     }
 
     /**
@@ -296,7 +296,7 @@ public class Table {
      * @return the current turn
      * @author Matteo
      */
-    public int getRealTurn(){ return this.realTurn; }
+    int getRealTurn(){ return this.realTurn; }
 
     /**
      * Gets the current round
@@ -333,6 +333,45 @@ public class Table {
      */
     public String printRoundtrack(){
         return Enum.Color.PURPLE.escape() + "Roundtrack: " + Enum.Color.RESET + roundTrack.toString();
+    }
+
+    /**
+     * Sets the custom flag true in order to use custom window patterns (advanced functionality)
+     * NOTE: The method checks just if number of lines is multiple of 6 or not, but there are no checks on the correctness of lines (and therefore of window patterns)
+     *
+     * @author Riccardo
+     */
+    public static void setCustom(){
+        int lines = 0;
+        InputStream inputFile = Scheme.class.getResourceAsStream("/schemes/CustomSchemes.txt");
+        Scanner scan = new Scanner(inputFile);
+
+        while (scan.hasNextLine()){
+            scan.nextLine();
+            lines++; }
+
+        try {
+            scan.close();
+        } catch (Exception e1) {
+            System.err.println("Error closing scan (CustomSchemes)");
+        }
+
+        if (lines%6 != 0) {
+            System.err.println("CustomSchemes.txt file is not correctly written!");
+            return; }
+
+        custom = true;
+        NUM_SCHEMES = NUM_SCHEMES + (lines/6);
+    }
+
+    /**
+     * Gets the current value of NUM_SCHEMES variable
+     *
+     * @return the current value of NUM_SCHEMES
+     * @author Riccardo
+     */
+    public int getNumSchemes(){
+        return NUM_SCHEMES;
     }
 
     /**

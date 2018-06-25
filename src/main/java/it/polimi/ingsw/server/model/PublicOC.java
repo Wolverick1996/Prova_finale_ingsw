@@ -10,6 +10,11 @@ import java.util.Scanner;
  * @author Andrea
  */
 public class PublicOC implements ObjectiveCard {
+
+    //***************************//
+    //        Attributes         //
+    //***************************//
+
     private String name;
     private String description;
     private int cardID;
@@ -41,6 +46,10 @@ public class PublicOC implements ObjectiveCard {
             System.err.println("Error closing scan (PublicOC)");
         }
     }
+
+    //***************************//
+    //         Methods           //
+    //***************************//
 
     /**
      * Returns the public objective card's name
