@@ -471,6 +471,12 @@ public class Scheme extends Observable {
                 "\nDifficulty: " + Enum.Color.RESET + this.difficulty + "\n" + s;
     }
 
+    /**
+     * Adds an observer to the current observable object
+     *
+     * @param o: object that implements observer
+     * @author Matteo
+     */
     @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
@@ -481,6 +487,13 @@ public class Scheme extends Observable {
         }
     }
 
+    /**
+     * Calls update method on observers
+     * Overrides notifyObservers method but if argument is a string bypasses setChanged algorithm
+     *
+     * @param arg: argument passed to the update method
+     * @author Matteo
+     */
     @Override
     public void notifyObservers(Object arg) {
         if (arg.getClass().equals(String.class)){

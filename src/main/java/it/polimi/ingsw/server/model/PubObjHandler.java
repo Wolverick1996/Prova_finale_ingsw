@@ -53,7 +53,7 @@ public class PubObjHandler {
                     default: throw new NullPointerException();
                 }
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             //Unhandled Exception
             System.err.println("Failed setPubOC");
             System.exit(-1);

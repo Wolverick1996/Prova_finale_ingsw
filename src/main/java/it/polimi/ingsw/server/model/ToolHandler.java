@@ -77,7 +77,7 @@ public class ToolHandler {
                     default: throw new NullPointerException();
                 }
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             //Unhandled Exception
             System.err.println("Failed setTools");
             System.exit(-1);
@@ -252,7 +252,9 @@ public class ToolHandler {
      * @return tool card's tokens
      * @author Riccardo
      */
-    public static int getTokens(int index) { return activeID.get(index).getTokens(); }
+    public static int getTokens(int index){
+        return activeID.get(index).getTokens();
+    }
 
     /**
      * Used to print all the tool cards in play

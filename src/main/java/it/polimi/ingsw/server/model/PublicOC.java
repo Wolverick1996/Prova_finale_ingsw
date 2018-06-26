@@ -133,7 +133,9 @@ public class PublicOC implements ObjectiveCard {
                 try {
                     if (checkColor.isEmpty() || !checkColor.contains(grid[i][j].getDice().getColor()))
                         checkColor.add(grid[i][j].getDice().getColor());
-                } catch (NullPointerException e){}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
             if(checkColor.size() == 5)
                 points += 6;
@@ -160,7 +162,9 @@ public class PublicOC implements ObjectiveCard {
                 try {
                     if (checkColor.isEmpty() || !checkColor.contains(grid[i][j].getDice().getColor()))
                         checkColor.add(grid[i][j].getDice().getColor());
-                } catch (NullPointerException e){}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
             if(checkColor.size() == 4)
                 points += 5;
@@ -187,7 +191,9 @@ public class PublicOC implements ObjectiveCard {
                 try {
                     if (checkValue.isEmpty() || !checkValue.contains(grid[i][j].getDice().getValue()))
                         checkValue.add(grid[i][j].getDice().getValue());
-                } catch (NullPointerException e){}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
             if(checkValue.size() == 5)
                 points += 5;
@@ -214,7 +220,9 @@ public class PublicOC implements ObjectiveCard {
                 try {
                     if (checkValue.isEmpty() || !checkValue.contains(grid[i][j].getDice().getValue()))
                         checkValue.add(grid[i][j].getDice().getValue());
-                } catch (NullPointerException e){}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
             if(checkValue.size() == 4)
                 points += 4;
@@ -257,7 +265,9 @@ public class PublicOC implements ObjectiveCard {
                         firsts++;
                     else if (grid[i][j].getDice().getValue() == secondValue)
                         seconds++;
-                } catch (NullPointerException e) {}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -298,7 +308,9 @@ public class PublicOC implements ObjectiveCard {
                             checkValue.add(grid[i][j].getDice().getValue());
                             flag[i][j] = true;
                         }
-                    } catch (NullPointerException e) { }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
 
                     if (checkValue.size() == 6)
                         points += 5;
@@ -351,7 +363,9 @@ public class PublicOC implements ObjectiveCard {
                             }
                         }
                     }
-                } catch (NullPointerException e){}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
                 try {
                     if ((i+1 < Scheme.MAX_ROW) && (j-1 >= 0)) {
                         if (grid[i][j].getDice().getColor() == grid[i + 1][j - 1].getDice().getColor()) {
@@ -380,7 +394,9 @@ public class PublicOC implements ObjectiveCard {
                             }
                         }
                     }
-                } catch (NullPointerException e){}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return points;
@@ -411,7 +427,9 @@ public class PublicOC implements ObjectiveCard {
                             checkColor.add(grid[i][j].getDice().getColor());
                             flag[i][j] = true;
                         }
-                    } catch (NullPointerException e) { }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
 
                     if (checkColor.size() == 5)
                         points += 4;
