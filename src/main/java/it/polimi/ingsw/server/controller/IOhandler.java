@@ -5,8 +5,8 @@ import it.polimi.ingsw.server.model.Player;
 import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.server.model.Table;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
-import it.polimi.ingsw.server.network_server.SocketMessengerServer;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.*;
@@ -44,18 +44,38 @@ public class IOhandler implements Observer{
         }
     }
 
-    void setSockets(List<Socket> sockets){
+    synchronized void setSockets(List<Socket> sockets){
         for(Socket s: sockets){
-            String name = SocketMessengerServer.getToKnow(s);
+            String name = null;
+            try {
+                name = SocketMessengerServer.getToKnow(s);
+            } catch (IOException e) {
+                //TODO: DISCONNECTION/ERROR
+                e.printStackTrace();
+                sockets.remove(s);
+            }
             if (!name.equals(""))
                 socketUserList.add(new SocketUser(name, s));
             else
                 sockets.remove(s);
         }
     }
+    /////////////////////////////////////////////////////////////////////////////////////
+    private class SocketUser{
+        //NEVER MODIFY SINGLE ATTRIBUTES OF THIS SUB CLASS
+        private String name;
+        private Socket socket;
+
+        //To call only when USERNAME has been read by the SocketMessenger system
+        SocketUser(String username, Socket s) {
+            this.name = username;
+            this.socket = s;
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////////
 
 
-    public void broadcast(Object message){
+    void broadcast(Object message){
         try {
             System.out.println(message);
             if (message.equals(STATUS)){
@@ -264,24 +284,23 @@ public class IOhandler implements Observer{
         return -1;
     }
 
-    private class SocketUser{
-        //NEVER MODIFY SINGLE ATTRIBUTES OF THIS SUB CLASS
-        private String name;
-        private Socket socket;
-
-        //To call only when USERNAME has been read by the SocketMessenger system
-        SocketUser(String username, Socket s) {
-            this.name = username;
-            this.socket = s;
+    public synchronized void notify(String player, String message) throws RemoteException {
+        for (ClientIntRMI r: usersRMI){
+            if (r.getName().equals(player)){
+                r.notify(message);
+                return;
+            }
         }
-    }
-    /////////////////////////////////////////////////////////////////////////////////////
-
-    public void notify(String player, String message) throws RemoteException {
-        for (int i = 0; i<usersRMI.size(); i++){
-            if (usersRMI.get(i).getName().equals(player)){
-                usersRMI.get(i).notify(message);
-                break;
+        for (SocketUser u: socketUserList){
+            if (u.name.equals(player)){
+                try {
+                    SocketMessengerServer.write(u.socket, message);
+                    return;
+                } catch (IOException e) {
+                    //TODO: SOMETHING WRONG
+                    e.printStackTrace();
+                    return;
+                }
             }
         }
     }
@@ -309,10 +328,21 @@ public class IOhandler implements Observer{
         return false;
     }
 
-    private String getInput(String player) throws RemoteException {
-        for (int i = 0; i<usersRMI.size(); i++){
-            if (usersRMI.get(i).getName().equals(player)){
-                return usersRMI.get(i).getInput();
+    private synchronized String getInput(String player) throws RemoteException {
+        for (ClientIntRMI r: usersRMI){
+            if (r.getName().equals(player)){
+                return r.getInput();
+            }
+        }
+        for (SocketUser u: socketUserList){
+            if (u.name.equals(player)){
+                try {
+                    return SocketMessengerServer.get(u.socket);
+                } catch (IOException e) {
+                    //TODO: SOMETHING WRONG
+                    e.printStackTrace();
+                    return "";
+                }
             }
         }
         System.err.println("COULD NOT FIND PLAYER FOR THE INPUT");
