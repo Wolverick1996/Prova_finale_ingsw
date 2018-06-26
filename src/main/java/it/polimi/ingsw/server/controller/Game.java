@@ -51,6 +51,15 @@ public class Game implements Observer {
     void begin(){
         int i;
         int j;
+
+        try {
+            Controller.getMyIO(this).notify(this.players.get(0).getUsername(), "Do you want to use custom window patterns?");
+            if (Controller.getMyIO(this).yesOrNo(this.players.get(0).getUsername()))
+                this.table.setCustom();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
         Integer[] schemes = new Integer[table.getNumSchemes()/2];
         for (int k = 0; k < schemes.length; k++)
             schemes[k] = k+1;
@@ -70,7 +79,8 @@ public class Game implements Observer {
             i = schemes[this.players.indexOf(p)];
             j = schemes[this.players.indexOf(p) + 4];
 
-            p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+12,j+12, p.getUsername())));
+            p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+(this.table.getNumSchemes()/2),j+(this.table.getNumSchemes()/2), p.getUsername()),
+                    this.table.getCustom(), this.table.getNumSchemes()));
         }
 
         this.active = 0;
@@ -322,7 +332,7 @@ public class Game implements Observer {
 
         Controller.getMyIO(this).broadcast("Congratulations " + winner.getUsername() + ", you won the game!");
 
-        System.exit(0);
+        Controller.getMyIO(this).finishGameSocket();
     }
 
     /**

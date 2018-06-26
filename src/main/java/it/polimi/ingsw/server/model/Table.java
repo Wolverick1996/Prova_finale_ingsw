@@ -31,8 +31,8 @@ public class Table {
     private int turn = 0;
     private int numPlayers; //must receive data
     private int realTurn = 1;
-    static int NUM_SCHEMES = 24;
-    static boolean custom = false;
+    private int numSchemes = 24;
+    private boolean custom = false;
 
     /**
      * Constructor of the table which sets tool cards and public objective cards of the game and starts the first round
@@ -341,7 +341,7 @@ public class Table {
      *
      * @author Riccardo
      */
-    public static void setCustom(){
+    public void setCustom(){
         int lines = 0;
         InputStream inputFile = Scheme.class.getResourceAsStream("/schemes/CustomSchemes.txt");
         Scanner scan = new Scanner(inputFile);
@@ -360,18 +360,28 @@ public class Table {
             System.err.println("CustomSchemes.txt file is not correctly written!");
             return; }
 
-        custom = true;
-        NUM_SCHEMES = NUM_SCHEMES + (lines/6);
+        this.custom = true;
+        this.numSchemes = this.numSchemes + (lines/6);
     }
 
     /**
-     * Gets the current value of NUM_SCHEMES variable
+     * Gets the current value of custom flag
      *
-     * @return the current value of NUM_SCHEMES
+     * @return true if custom window pattern advanced functionality is on, otherwise false
+     * @author Andrea
+     */
+    public boolean getCustom(){
+        return this.custom;
+    }
+
+    /**
+     * Gets the current value of numSchemes variable
+     *
+     * @return the current value of numSchemes
      * @author Riccardo
      */
     public int getNumSchemes(){
-        return NUM_SCHEMES;
+        return numSchemes;
     }
 
     /**

@@ -27,7 +27,7 @@ class PublicOCTest {
      */
     static Player createPlayerScheme(){
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p.chooseScheme(scheme);
 
         scheme.placeDice(0, 0, new Dice(Enum.Color.YELLOW, 6));
