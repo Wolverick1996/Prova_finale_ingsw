@@ -21,6 +21,10 @@ class SocketMessengerServer {
     private static final String REQUEST = "requestData";
     private static final String NEWLINE = "%%%nnn%%%";
 
+    private SocketMessengerServer(){
+        super();
+    }
+
     static synchronized String getToKnow(Socket socket) throws IOException{
         String name = "";
         try{

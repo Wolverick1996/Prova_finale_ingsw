@@ -6,6 +6,11 @@ import it.polimi.ingsw.server.network_server.ServerIntRMI;
 import java.net.Socket;
 import java.util.*;
 
+/**
+ * Manages other controller classes and allows them to communicate
+ *
+ * @author Matteo
+ */
 public class Controller {
 
     private static List<Lobby> lobbies = new ArrayList<>();
@@ -13,7 +18,16 @@ public class Controller {
     private static List<IOhandler> speakers = new ArrayList<>();
     /* These attributes only serve as controller's addresses */
 
-    public static void startGame(List<String> nicknames, Lobby lobby, ServerIntRMI server, List<Socket> sockets){
+    /**
+     * Initializes Game and IOhandler at the request of Lobby and combines classes
+     *
+     * @param nicknames: list of players nicknames
+     * @param lobby: Lobby object which called startGame method and acts as index for the classes combination
+     * @param server: reference to RMI server containing all users connected with RMI
+     * @param sockets: list of users connected with socket
+     * @author Matteo
+     */
+    static void startGame(List<String> nicknames, Lobby lobby, ServerIntRMI server, List<Socket> sockets){
 
         try {
             lobbies.add(lobby);
@@ -42,7 +56,13 @@ public class Controller {
 
     }
 
-    public static void switchContext(Lobby lobby){
+    /**
+     * Allows all clients to communicate with Game class combined with the Lobby one: game starts
+     *
+     * @param lobby: Lobby object which called switchContext method and acts as index for the classes combination
+     * @author Matteo
+     */
+    static void switchContext(Lobby lobby){
         try {
             games.get(lobbies.indexOf(lobby)).begin();
         } catch (NullPointerException n){
@@ -55,7 +75,14 @@ public class Controller {
 
     }
 
-    public static IOhandler getMyIO (Object caller){
+    /**
+     * Returns the right IOhandler to the caller
+     *
+     * @param caller: method caller
+     * @return the IOhandler combined with the caller
+     * @author Matteo
+     */
+    static IOhandler getMyIO (Object caller){
         if (caller.getClass() == Lobby.class){
             return speakers.get(lobbies.indexOf(caller));
         } else if (caller.getClass() == Game.class){
@@ -65,6 +92,13 @@ public class Controller {
         }
     }
 
+    /**
+     * Returns the right Game to the caller
+     *
+     * @param caller: method caller
+     * @return the Game combined with the caller
+     * @author Matteo
+     */
     public static Game getMyGame (Object caller){
         if (caller.getClass() == Lobby.class){
             return games.get(lobbies.indexOf(caller));
@@ -74,4 +108,5 @@ public class Controller {
             return null;
         }
     }
+
 }

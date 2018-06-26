@@ -6,6 +6,11 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.*;
 
+/**
+ * Lobby is the class in which are saved players that will play the current match
+ *
+ * @author Matteo
+ */
 public class Lobby /*extends Observer*/ {
 
     //***************************//
@@ -23,20 +28,39 @@ public class Lobby /*extends Observer*/ {
     private Boolean hasStarted = false;
     private Timer timer;
 
+    /**
+     * Constructor of the Lobby class
+     *
+     * @author Matteo
+     */
     public Lobby(){
         streetlight = true;
     }
+
     //***************************//
     //         Methods           //
     //***************************//
 
-    public void startGame(){
+    /**
+     * Communicates to the controller that timer expired and the match should starts
+     *
+     * @author Matteo
+     */
+    void startGame(){
         hasStarted = true;
         Controller.startGame(players, this, this.server, sockets);
         Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
         Controller.switchContext(this);
     }
 
+    /**
+     * Adds the player to the lobby
+     * After each player except the first joins the lobby, a timer starts
+     *
+     * @param username: username of the player to be added
+     * @return true if the player can be added to the lobby, otherwise false
+     * @author Matteo
+     */
     public synchronized boolean addPlayer(String username){
         canIGo();
         if (this.players.size()<= MAX_PLAYERS){
@@ -77,14 +101,28 @@ public class Lobby /*extends Observer*/ {
             this.streetlight = true;
             return true;
         }
+
         this.streetlight = true;
         return false;
     }
 
+    /**
+     * Adds a socket to sockets array to be passed to the controller
+     *
+     * @param s: the socket to be added
+     * @author Matteo
+     */
     public synchronized void addSocket(Socket s){
         sockets.add(s);
     }
 
+    /**
+     * Removes the player from the lobby
+     *
+     * @param username: username of the player to be removed
+     * @return true if the player can be removed to the lobby, otherwise false
+     * @author Matteo
+     */
     public boolean removePlayer(String username){
         canIGo();
         for (String s : this.players){
@@ -101,6 +139,11 @@ public class Lobby /*extends Observer*/ {
         return false;
     }
 
+    /**
+     * Used as a lock (to be sure resources are not accessed at the same time)
+     *
+     * @author Matteo
+     */
     private void canIGo(){
         while (!this.streetlight){
             assert true;
@@ -108,26 +151,57 @@ public class Lobby /*extends Observer*/ {
         this.streetlight = false;
     }
 
+    /**
+     * Sets the RMI stub
+     *
+     * @param server: the server to be set up
+     * @author Andrea
+     */
     public void setServerRMI(ServerIntRMI server){
         this.server = server;
     }
 
-    public void setDelay(int delay) {
+    /**
+     * Sets a delay for the lobby timer
+     *
+     * @param delay: value (seconds) that will be timer's delay
+     * @author Andrea
+     */
+    public void setDelay(int delay){
         this.delay = delay*ONE_SEC;
     }
 
-    public List<String> getPlayers() {
+    /**
+     * Returns the list of players usernames
+     *
+     * @return the list of players usernames
+     * @author Matteo
+     */
+    public List<String> getPlayers(){
         return players;
     }
 
+    /**
+     * Returns hasStarted boolean flag, which is set up true when game starts
+     *
+     * @return true if game already started, otherwise false
+     * @author Matteo
+     */
     public boolean hasStarted(){ return hasStarted; }
 
+    /**
+     * Used to print active players in the lobby
+     *
+     * @return the string that represents the list of players
+     * @author Matteo
+     */
     @Override
-    public String toString() {
+    public String toString(){
         String string = "";
         for (int i = 1; i <= players.size(); i++){
             string += "Player " +i+ ":\t" +players.get(i - 1) + "\n";
         }
         return string;
     }
+
 }

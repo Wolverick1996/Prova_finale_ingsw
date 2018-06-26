@@ -11,6 +11,11 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.*;
 
+/**
+ * Manages communications between the controller and all clients
+ *
+ * @author Matteo
+ */
 public class IOhandler implements Observer{
 
     //***************************//
@@ -25,7 +30,14 @@ public class IOhandler implements Observer{
     private static final String STATUS = "STATUS";
     private static final String DIVISOR = "\n\n---------------------------------------------\n\n";
 
-    IOhandler(List<Player> users, Table board){
+    /**
+     * IOhandler constructor: combines the list of players of the game and the game table
+     *
+     * @param users: list of players
+     * @param board: game table
+     * @author Matteo
+     */
+    IOhandler (List<Player> users, Table board){
         this.players = users;
         this.table = board;
     }
@@ -34,9 +46,15 @@ public class IOhandler implements Observer{
     //         Methods           //
     //***************************//
 
-    //*********SETUP***************
+    //**********SETUP**********//
 
-    void setServer(ServerIntRMI server) {
+    /**
+     * Extracts RMI users from RMI server
+     *
+     * @param server: RMI server
+     * @author Matteo
+     */
+    void setServer(ServerIntRMI server){
         try {
             usersRMI = server.getConnected();
         } catch (RemoteException e){
@@ -44,9 +62,15 @@ public class IOhandler implements Observer{
         }
     }
 
+    /**
+     * Matches every socket received from the constructor with the correct username
+     *
+     * @param sockets: list of sockets
+     * @author Matteo
+     */
     synchronized void setSockets(List<Socket> sockets){
         for(Socket s: sockets){
-            String name = null;
+            String name;
             try {
                 name = SocketMessengerServer.getToKnow(s);
             } catch (IOException e) {
@@ -61,21 +85,41 @@ public class IOhandler implements Observer{
                 sockets.remove(s);
         }
     }
+
     /////////////////////////////////////////////////////////////////////////////////////
-    private class SocketUser{
+
+    /**
+     * Subclass which allows to combine all sockets with usernames
+     *
+     * @author Matteo
+     */
+    private class SocketUser {
         //NEVER MODIFY SINGLE ATTRIBUTES OF THIS SUB CLASS
         private String name;
         private Socket socket;
 
-        //To call only when USERNAME has been read by the SocketMessenger system
-        SocketUser(String username, Socket s) {
+        /**
+         * Constructor of SocketUser objects
+         * NOTE: To call only when USERNAME has been read by the SocketMessenger system
+         *
+         * @param username: socket's username
+         * @param s: socket with which IOhandler should communicates
+         */
+        SocketUser (String username, Socket s){
             this.name = username;
             this.socket = s;
         }
+
     }
+
     /////////////////////////////////////////////////////////////////////////////////////
 
-
+    /**
+     * Sends notifies to all clients combined with IOhandler
+     *
+     * @param message: the message to be printed to all users
+     * @author Matteo
+     */
     void broadcast(Object message){
         try {
             System.out.println(message);
@@ -97,6 +141,13 @@ public class IOhandler implements Observer{
         }
     }
 
+    /**
+     * Requires a specific input for the standard turn phase (input accepted: "d", "t", "q")
+     *
+     * @param player: username of the player who is playing the current turn
+     * @return the action chosen
+     * @author Matteo
+     */
     String getStandardAction(String player){
         try {
             boolean send = false;
@@ -128,6 +179,13 @@ public class IOhandler implements Observer{
         return null;
     }
 
+    /**
+     * Asks the player to choose a dice from the reserve
+     *
+     * @param player: the player who has to choose the dice
+     * @return dice position in the reserve (-1 if extraction failed)
+     * @author Matteo
+     */
     public int getDiceFromReserve(String player){
         int answer;
         boolean check = true;
@@ -151,9 +209,17 @@ public class IOhandler implements Observer{
             }
             check = false;
         } while (!check);
+
         return -1;
     }
 
+    /**
+     * Asks the player to choose a dice from the round track
+     *
+     * @param player: the player who has to choose the dice
+     * @return dice position in the round track (-1 if extraction failed)
+     * @author Matteo
+     */
     public int getDiceFromRoundtrack(String player){
         int answer;
         try {
@@ -170,9 +236,17 @@ public class IOhandler implements Observer{
         } catch (RemoteException e){
             System.err.println("GETDICE: " + e.getMessage());
         }
+
         return -1;
     }
 
+    /**
+     * Asks the player to choose a coordinate
+     *
+     * @param player: the player who has to choose the dice
+     * @return the coordinate chosen (-1 if it not exists)
+     * @author Matteo
+     */
     public int getCoordinate(String player){
         int answer;
         try {
@@ -187,9 +261,21 @@ public class IOhandler implements Observer{
         } catch (RemoteException e){
             System.err.println("GETCOORDINATE: " +e.getMessage());
         }
+
         return -1;
     }
 
+    /**
+     * Asks the player to choose a window pattern between the four purposed before the game starting
+     *
+     * @param s1: first window pattern purposed
+     * @param s2: second window pattern purposed
+     * @param s3: third window pattern purposed
+     * @param s4: fourth window pattern purposed
+     * @param player: the player who has to choose the window pattern
+     * @return the window pattern chosen
+     * @author Matteo
+     */
     int chooseScheme(int s1, int s2, int s3, int s4, String player){
         int answer = -1;
         boolean isValid = false;
@@ -231,9 +317,17 @@ public class IOhandler implements Observer{
         } catch (RemoteException e){
             System.err.println("CHOOSESCHEME: " +e.getMessage());
         }
+
         return chooseScheme(s1, s2, s3, s4, player);
     }
 
+    /**
+     * Asks the player to choose a tool card to be used
+     *
+     * @param player: the player who has to choose the tool card
+     * @return the index position of the tool card to be used
+     * @author Matteo
+     */
     int getTool(String player){
         int answer;
         try {
@@ -258,6 +352,14 @@ public class IOhandler implements Observer{
         return -1;
     }
 
+    /**
+     * Asks the player to choose a dice value (useful for tool cards 1 and 11)
+     *
+     * @param player: the player who has to choose the dice value
+     * @param restricted: boolean flag useful to understand which action should be performed (true = tool 1; false = tool 11)
+     * @return the dice value chosen (-1 if values are not allowed)
+     * @author Matteo
+     */
     public int chooseDiceValue(String player, boolean restricted){
         int answer;
         try {
@@ -285,6 +387,14 @@ public class IOhandler implements Observer{
         return -1;
     }
 
+    /**
+     * Sends the message to be printed to a specific player
+     *
+     * @param player: the player whom message needs to be sent to
+     * @param message: the message to be printed
+     * @throws RemoteException when client RMI disconnected
+     * @author Matteo
+     */
     public synchronized void notify(String player, String message) throws RemoteException {
         for (ClientIntRMI r: usersRMI){
             if (r.getName().equals(player)){
@@ -297,7 +407,7 @@ public class IOhandler implements Observer{
                 try {
                     SocketMessengerServer.write(u.socket, message);
                     return;
-                } catch (IOException e) {
+                } catch (IOException e){
                     //TODO: SOMETHING WRONG
                     e.printStackTrace();
                     return;
@@ -306,6 +416,14 @@ public class IOhandler implements Observer{
         }
     }
 
+    /**
+     * Asks a boolean decision to the player (just "y" or "n" are allowed)
+     *
+     * @param player: the player who has to choose
+     * @return a boolean value (true for yes, false for no)
+     * @throws RemoteException when client RMI disconnected
+     * @author Matteo
+     */
     public boolean yesOrNo(String player) throws RemoteException{
         boolean check = true;
         String answer;
@@ -329,7 +447,15 @@ public class IOhandler implements Observer{
         return false;
     }
 
-    private synchronized String getInput(String player) throws RemoteException {
+    /**
+     * Asks for a generic input from a specific player
+     *
+     * @param player: the player who has to insert an input
+     * @return the inserted input
+     * @throws RemoteException when client RMI disconnected
+     * @author Matteo
+     */
+    private synchronized String getInput(String player) throws RemoteException{
         for (ClientIntRMI r: usersRMI){
             if (r.getName().equals(player)){
                 return r.getInput();
@@ -339,7 +465,7 @@ public class IOhandler implements Observer{
             if (u.name.equals(player)){
                 try {
                     return SocketMessengerServer.get(u.socket);
-                } catch (IOException e) {
+                } catch (IOException e){
                     //TODO: SOMETHING WRONG
                     e.printStackTrace();
                     return "";
@@ -350,9 +476,11 @@ public class IOhandler implements Observer{
         return "INVALID";
     }
 
+    //TODO: Realize JavaDoc comment when GUI will be implemented
     @Override
     public void update(Observable o, Object arg) {
         if (o == ov)
             System.out.println(ov);
     }
+
 }
