@@ -17,6 +17,7 @@ public class GUI_Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/FXML/GUI.fxml"));
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 1900, 968));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

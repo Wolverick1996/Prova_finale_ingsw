@@ -1,58 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="968.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/8">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="968.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="280.0" prefWidth="1750.0" spacing="50.0">
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="250.0" prefWidth="180.0" text="ToolCard1">
+                  <Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="ToolCard1">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin>
                      <font>
                         <Font size="25.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="250.0" prefWidth="180.0" text="ToolCard2">
+                  <Button alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="ToolCard2">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                      <font>
                         <Font size="25.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="250.0" prefWidth="180.0" text="ToolCard3">
+                  <Button alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="ToolCard3">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                      <font>
                         <Font size="25.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+                     </graphic>
                   </Button>
                   <Region prefHeight="260.0" prefWidth="203.0" HBox.hgrow="ALWAYS" />
-                  <Button alignment="CENTER" layoutX="1010.0" layoutY="10.0" mnemonicParsing="false" prefHeight="250.0" prefWidth="180.0" text="PublicOC1">
+                  <Button alignment="CENTER" layoutX="1010.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PublicOC1">
                      <font>
                         <Font size="25.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="610.0" layoutY="10.0" mnemonicParsing="false" prefHeight="250.0" prefWidth="180.0" text="PublicOC2">
+                  <Button alignment="CENTER" layoutX="610.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PublicOC2">
                      <font>
                         <Font size="25.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="810.0" layoutY="10.0" mnemonicParsing="false" prefHeight="250.0" prefWidth="180.0" text="PublicOC3">
+                  <Button alignment="CENTER" layoutX="810.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PublicOC3">
                      <HBox.margin>
                         <Insets right="50.0" />
                      </HBox.margin>
                      <font>
                         <Font size="25.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+                     </graphic>
                   </Button>
                </children>
             </HBox>
@@ -83,6 +103,18 @@
                     <rowConstraints>
                         <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
                     </rowConstraints>
+                     <children>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
+                     </children>
                   </GridPane>
                   <Region HBox.hgrow="ALWAYS" />
                </children>
@@ -115,6 +147,17 @@
                      <rowConstraints>
                         <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
                      </rowConstraints>
+                     <children>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
+                     </children>
                   </GridPane>
                   <Region HBox.hgrow="ALWAYS" />
                </children>
@@ -178,15 +221,40 @@
                <HBox.margin>
                   <Insets bottom="20.0" top="10.0" />
                </HBox.margin>
+               <children>
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+               </children>
             </GridPane>
             <Region prefHeight="350.0" prefWidth="110.0" />
-            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="250.0" prefWidth="180.0" text="PrivateOC">
+            <Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PrivateOC">
                <font>
                   <Font size="25.0" />
                </font>
                <HBox.margin>
                   <Insets top="50.0" />
                </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+               </graphic>
             </Button>
             <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
          </children>
