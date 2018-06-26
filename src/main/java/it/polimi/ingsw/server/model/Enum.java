@@ -16,6 +16,7 @@ public class Enum {
      * @author Riccardo
      */
     public enum Color {
+
         RED("\u001B[31m"),
         GREEN("\u001B[32m"),
         YELLOW("\u001B[33m"),
@@ -55,6 +56,7 @@ public class Enum {
             Random random = new Random();
             return values()[random.nextInt(values().length)];
         }
+
     }
 
 }

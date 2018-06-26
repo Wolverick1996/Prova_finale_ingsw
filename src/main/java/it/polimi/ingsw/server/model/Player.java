@@ -248,12 +248,25 @@ public class Player extends Observable {
         return this.nickname+ "\n Tokens available: "+this.tokens+Enum.Color.BLUE.escape()+"\nActive scheme:\n"+this.ownScheme;
     }
 
+    /**
+     * Adds an observer to the current observable object
+     *
+     * @param o: object that implements observer
+     * @author Matteo
+     */
     @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
         this.ownScheme.addObserver(o);
     }
 
+    /**
+     * Calls update method on observers
+     * Overrides notifyObservers method but if argument is a string bypasses setChanged algorithm
+     *
+     * @param arg: argument passed to the update method
+     * @author Matteo
+     */
     @Override
     public void notifyObservers(Object arg) {
         if (arg.getClass().equals(String.class)){

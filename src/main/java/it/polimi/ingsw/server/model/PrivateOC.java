@@ -40,7 +40,7 @@ public class PrivateOC implements ObjectiveCard {
         try {
             scan.close();
         } catch (Exception e1) {
-            System.err.println("Error closing scan (privateOC)");
+            System.err.println("Error closing scan (PrivateOC)");
         }
     }
 
@@ -87,7 +87,9 @@ public class PrivateOC implements ObjectiveCard {
                 try {
                     if(grid[i][j].getDice().getColor() == this.color)
                         points += grid[i][j].getDice().getValue();
-                } catch (NullPointerException e){}
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

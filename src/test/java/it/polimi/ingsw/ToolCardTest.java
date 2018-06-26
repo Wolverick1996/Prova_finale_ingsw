@@ -301,9 +301,6 @@ class ToolCardTest {
     @Test
     void tool7Test() {
         Player p1 = new Player("ingconti", 0);
-        Player p2 = new Player("n1zzo", 1);
-        Player p3 = new Player("michele-bertoni", 2);
-        Player p4 = new Player("valerio-castelli", 3);
         List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
 
         Table instance = new Table(4);
@@ -340,9 +337,6 @@ class ToolCardTest {
     void tool8Test() {
         ToolHandler.simulateInput1("Something to use test methods");
         Player p1 = new Player("ingconti", 0);
-        Player p2 = new Player("n1zzo", 1);
-        Player p3 = new Player("michele-bertoni", 2);
-        Player p4 = new Player("valerio-castelli", 3);
         List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
 
         Table instance = new Table(4);

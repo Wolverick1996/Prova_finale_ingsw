@@ -200,6 +200,13 @@ public class Box extends Observable {
             return "["+this.diceInside+"]\t";
     }
 
+    /**
+     * Calls update method on observers
+     * Overrides notifyObservers method but if argument is a string bypasses setChanged algorithm
+     *
+     * @param arg: argument passed to the update method
+     * @author Matteo
+     */
     @Override
     public void notifyObservers(Object arg) {
         if (arg.getClass().equals(String.class)){
