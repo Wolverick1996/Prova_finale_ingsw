@@ -39,7 +39,6 @@ public class CLI {
             exc = false;
             try {
                 input = reader.readLine();
-                output(input);
             } catch (IOException e) {
                 exc = true;
             }

@@ -24,6 +24,7 @@ public class SocketMessengerClient{
     private static final String FINISH = "finish";
     private static final String PRINT = "print";
     private static final String REQUEST = "requestData";
+    private static final String NEWLINE = "%%%nnn%%%";
 
     public SocketMessengerClient(Socket s, String n) {
         try{
@@ -45,8 +46,6 @@ public class SocketMessengerClient{
         do {
             request = this.in.readLine();
         } while (!request.equals(GAMESTART));
-        this.handler.send(request);
-        this.handler.send("Trying to send: " + NAME + D_LEFT + this.username + D_RIGHT);
         this.out.println(NAME + D_LEFT + this.username + D_RIGHT);
         this.out.flush();
         this.askIfReceived();
@@ -59,11 +58,8 @@ public class SocketMessengerClient{
         String input;
         String request;
         do{
-            this.handler.send("LISTENING THE SERVER");
             input = this.in.readLine();
             request = this.getRequest(input);
-            this.handler.send("HEARD THE SERVER");
-            this.handler.send(request + "\n" + input);
             switch (request){
                 case PRINT:
                     this.send(input);
@@ -111,7 +107,7 @@ public class SocketMessengerClient{
 
     private void send(String input){
         String message = this.getFirstParameter(input);
-        message = message.replaceAll("%%%nnn%%%", "\n");
+        message = message.replaceAll(NEWLINE, "\n");
         this.handler.send(message);
     }
 
@@ -123,11 +119,8 @@ public class SocketMessengerClient{
 
     private void askIfReceived() throws IOException {
         String request;
-        this.handler.send("I'm checking if the server got my answer");
         request = this.in.readLine();
-        this.handler.send("I read " + request);
         if (request.equals(OK)){
-            this.handler.send("He got it!");
             return;
         } else {
             this.unexpectedMessageFromServer();

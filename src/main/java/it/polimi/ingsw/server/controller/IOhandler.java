@@ -53,6 +53,7 @@ public class IOhandler implements Observer{
                 //TODO: DISCONNECTION/ERROR
                 e.printStackTrace();
                 sockets.remove(s);
+                continue;
             }
             if (!name.equals(""))
                 socketUserList.add(new SocketUser(name, s));

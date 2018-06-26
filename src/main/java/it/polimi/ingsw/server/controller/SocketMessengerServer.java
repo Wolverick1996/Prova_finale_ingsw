@@ -19,6 +19,7 @@ class SocketMessengerServer {
     private static final String FINISH = "finish";
     private static final String PRINT = "print";
     private static final String REQUEST = "requestData";
+    private static final String NEWLINE = "%%%nnn%%%";
 
     static synchronized String getToKnow(Socket socket) throws IOException{
         String name = "";
@@ -85,7 +86,7 @@ class SocketMessengerServer {
     }
 
     private static synchronized String cleanString(String s){
-        return s.replaceAll("\\n", "%%%nnn%%%");
+        return s.replaceAll("\\n", NEWLINE);
     }
 
 }
