@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
+   <children>
+      <VBox prefHeight="800.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Region prefHeight="200.0" prefWidth="900.0" />
+            <HBox prefHeight="30.0" prefWidth="900.0" stylesheets="@../CSS/sagrada.css">
+               <children>
+                  <Region prefHeight="100.0" prefWidth="60.0" />
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want to connect using socket or RMI?">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <Region prefHeight="20.0" prefWidth="900.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="60.0" />
+                  <RadioButton mnemonicParsing="false" text="Socket" textFill="WHITE">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="network_group" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <Region prefHeight="200.0" prefWidth="200.0" />
+                  <RadioButton mnemonicParsing="false" text="RMI" textFill="WHITE" toggleGroup="$network_group">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </RadioButton>
+               </children>
+            </HBox>
+            <HBox prefHeight="30.0" prefWidth="900.0">
+               <children>
+                  <Region prefHeight="100.0" prefWidth="60.0" />
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert the IP address of the server:">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+                  <Region prefHeight="30.0" prefWidth="80.0" />
+                  <TextField opacity="0.8" text="192.168.0.1">
+                     <font>
+                        <Font name="Century Gothic" size="18.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </HBox>
+            <Region prefHeight="100.0" prefWidth="900.0" />
+            <HBox prefHeight="30.0" prefWidth="900.0">
+               <children>
+                  <Region prefHeight="100.0" prefWidth="60.0" />
+                  <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert your username:">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+                  <Region prefHeight="35.0" prefWidth="80.0" />
+                  <TextField opacity="0.8" prefHeight="35.0" prefWidth="375.0" text="username_example">
+                     <font>
+                        <Font name="Century Gothic" size="18.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </HBox>
+            <Region prefHeight="175.0" prefWidth="900.0" />
+            <Button mnemonicParsing="false" onAction="#loadThird" stylesheets="@../CSS/sagrada.css" text="Next &gt;">
+               <VBox.margin>
+                  <Insets left="750.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Century Gothic" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

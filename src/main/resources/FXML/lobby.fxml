@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
+   <children>
+      <VBox prefHeight="800.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Region prefHeight="90.0" prefWidth="900.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="60.0" />
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations! You have connected successfully!">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="35.0" prefWidth="900.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="60.0" />
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="You are the first player of the lobby!">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="900.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="60.0" />
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Please set a timer (min 15s, max 60s):">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+                  <Region prefHeight="100.0" prefWidth="80.0" />
+                  <TextField opacity="0.8" text="15">
+                     <font>
+                        <Font name="Century Gothic" size="18.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </HBox>
+            <Region prefHeight="35.0" prefWidth="900.0" />
+            <HBox prefHeight="35.0" prefWidth="900.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="60.0" />
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Players in the lobby:">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+                  <Region prefHeight="35.0" prefWidth="100.0" />
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <Region prefHeight="145.0" prefWidth="900.0" />
+            <HBox prefHeight="30.0" prefWidth="900.0">
+               <children>
+                  <Region prefHeight="100.0" prefWidth="60.0" />
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want to use custom window patterns?">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <Region prefHeight="20.0" prefWidth="200.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="60.0" />
+                  <RadioButton mnemonicParsing="false" text="Yes" textFill="WHITE">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="yesOrNo_group" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <Region prefHeight="200.0" prefWidth="200.0" />
+                  <RadioButton mnemonicParsing="false" text="No" textFill="WHITE" toggleGroup="$yesOrNo_group">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </RadioButton>
+               </children>
+            </HBox>
+            <Region prefHeight="65.0" prefWidth="900.0" />
+            <Button mnemonicParsing="false" stylesheets="@../CSS/sagrada.css" text="Next &gt;">
+               <font>
+                  <Font name="Century Gothic" size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="750.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

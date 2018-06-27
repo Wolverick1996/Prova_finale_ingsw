@@ -14,10 +14,10 @@ public class GUI_Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/FXML/GUI.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 1900, 968));
-        primaryStage.setMaximized(true);
+        Parent root = FXMLLoader.load(getClass().getResource("/FXML/firstWindow.fxml"));
+        primaryStage.setTitle("Sagrada");
+        primaryStage.setScene(new Scene(root, 900, 800));
+        //primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

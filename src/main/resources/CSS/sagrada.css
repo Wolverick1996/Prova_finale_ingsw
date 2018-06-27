@@ -1,0 +1,15 @@
+.firstScene {
+    -fx-background-image:url('/images/first_background.jpg');
+    -fx-background-size: 100% 100%;
+}
+
+.button {
+    -fx-background-color: white;
+    -fx-border-color: black;
+    -fx-font-family: "Century Gothic";
+    -fx-font-size: 18;
+}
+
+.text-field {
+    fx-background-color: white;
+}

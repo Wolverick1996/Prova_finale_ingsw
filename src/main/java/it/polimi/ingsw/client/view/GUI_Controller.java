@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class First_Controller implements Initializable {
+public class GUI_Controller implements Initializable {
 
     @FXML
     private AnchorPane rootPane;
@@ -20,9 +20,7 @@ public class First_Controller implements Initializable {
     private AnchorPane pane2;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("View is now loaded!");
-    }
+    public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
 
     @FXML
     private void loadSecond(ActionEvent event) throws IOException {
@@ -36,6 +34,5 @@ public class First_Controller implements Initializable {
         pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
         pane1.getChildren().setAll(pane2);
     }
-
 
 }
