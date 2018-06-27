@@ -80,7 +80,11 @@ public class ServerImplementationSocket implements Runnable {
             out.flush();
             String string = in.readLine();
             if (!string.equals("*")){
-                if (this.lobby.addPlayer(string)){
+                if (string.equals("")){
+                    out.println("invalid");
+                    out.flush();
+                }
+                else if (this.lobby.addPlayer(string)){
                     this.lobby.addSocket(this.socket);
                     loginSuccess = true;
                     System.out.println("[Socket Server]\t" +string+ "  got connected....");

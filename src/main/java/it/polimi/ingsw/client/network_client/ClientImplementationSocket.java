@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.network_client;
 
-import it.polimi.ingsw.client.view.SocketMessengerClient;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,6 +32,8 @@ class ClientImplementationSocket {
                 out.flush();
                 if (!string.equals("*")){
                     String result = in.readLine();
+                    if (result.equals("invalid"))
+                        System.out.println("Invalid name, your ID should be an alphanumeric of at least 1 character");
                     if (result.equals("true")){
                         System.out.println("Welcome " +string+ ".\nYou have connected successfully.");
                         success = true;
@@ -43,7 +43,7 @@ class ClientImplementationSocket {
                             System.out.println("Login failed, this userID is already used");
                         else if (result.equals("started"))
                             System.out.println("Your friends started without you :(\n\nGet better friends");
-                        else
+                        else if (result.equals("max"))
                             System.out.println("Retry later...");
                     }
                 }

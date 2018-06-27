@@ -8,8 +8,6 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
 public class SocketMessengerClient{
 
     private String username;
-    private Socket socket;
-    private Scanner scanner = new Scanner(System.in);
     private PrintWriter out;
     private BufferedReader in;
     private IOHandlerClient handler;
@@ -30,9 +28,9 @@ public class SocketMessengerClient{
         try{
             this.username = n;
             this.handler = new IOHandlerClient(this.username, cli);
-            this.socket = s;
-            this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-            this.out = new PrintWriter(this.socket.getOutputStream());
+            this.handler.startInterface();
+            this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            this.out = new PrintWriter(s.getOutputStream());
             this.waitStart();
         } catch (IOException e) {
             this.handler.send("Server is down, I repeat, server is down!");
