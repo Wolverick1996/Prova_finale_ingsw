@@ -120,7 +120,11 @@ public class ClientMain {
                 int delay = 0;
                 while(delay < 15 || delay > 60){
                     System.out.println("Please set a timer (min 15s, max 60s)");
-                    delay = Integer.parseInt(scanner.nextLine());
+                    try {
+                        delay = Integer.parseInt(scanner.nextLine());
+                    }catch (NumberFormatException e){
+                        delay = -1;
+                    }
                 }
                 server.setDelay(delay);
             }
@@ -169,7 +173,11 @@ public class ClientMain {
                     while (delay < 15 || delay > 60){
                         System.out.println("Please set a timer (min 15s, max 60s)");
                         delayString = scanner.nextLine();
-                        delay = Integer.parseInt(delayString);
+                        try{
+                            delay = Integer.parseInt(delayString);
+                        }catch (NumberFormatException e){
+                            delay = -1;
+                        }
                     }
                     out.println(delayString);
                     out.flush();

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.network_client.ClientIntRMI;
 import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.PrivObjHandler;
 import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.server.model.Table;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
@@ -57,6 +58,10 @@ public class IOhandler implements Observer{
     void setServer(ServerIntRMI server){
         try {
             usersRMI = server.getConnected();
+
+            for (ClientIntRMI c : usersRMI){
+                c.startIterface();
+            }
         } catch (RemoteException e){
             e.printStackTrace();
         }
@@ -143,7 +148,10 @@ public class IOhandler implements Observer{
                 System.out.println(DIVISOR);
                 for (Player p: this.players) this.notify(p.getUsername(), DIVISOR);
                 System.out.println(table);
-                for (Player p: this.players) this.notify(p.getUsername(), table.toString());
+                for (Player p: this.players) {
+                    this.notify(p.getUsername(), table.toString());
+                    this.notify(p.getUsername(), PrivObjHandler.getCard(p));
+                }
                 for (Player p: this.players){
                     System.out.println(p);
                     for (Player pl: this.players) this.notify(pl.getUsername(), p.toString());

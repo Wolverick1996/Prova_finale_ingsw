@@ -18,7 +18,13 @@ public class ClientImplementationRMI extends Observable implements ClientIntRMI 
     }
 
     public void notify(String message) throws RemoteException {
-        this.handler.send(message);
+        try {
+            this.handler.send(message);
+        }catch (NullPointerException e){
+            //The cli or the GUI is not active yet
+            System.out.println(message);
+        }
+
     }
 
     public String getName() throws RemoteException{
@@ -31,6 +37,10 @@ public class ClientImplementationRMI extends Observable implements ClientIntRMI 
 
     public void confirmConnection() throws RemoteException{
         //used to ping and check connection
+    }
+
+    public void startIterface() throws RemoteException{
+        this.handler.startInterface();
     }
 }
 

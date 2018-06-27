@@ -16,8 +16,11 @@ public class IOHandlerClient implements Observer {
     public IOHandlerClient (String username, Interface type) {
         this.name = username;
         this.outputInt = type;
-        if (type == cli) commandLine = new CLI();
-        //else graphicInt = new GUI();
+    }
+
+    public void startInterface(){
+        if (this.outputInt == cli)
+            this.commandLine = new CLI();
     }
 
     public void send(String message){

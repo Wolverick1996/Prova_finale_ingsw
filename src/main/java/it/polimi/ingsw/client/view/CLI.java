@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 public class CLI {
 
-    private final String SAGRADA = "                    ____                            _       \n" +
+    private static final String SAGRADA = "                    ____                            _       \n" +
             "                   / ___|  __ _  __ _ _ __ __ _  __| | __ _ \n" +
             "                   \\___ \\ / _` |/ _` | '__/ _` |/ _` |/ _` |\n" +
             "                    ___) | (_| | (_| | | | (_| | (_| | (_| |\n" +
@@ -15,16 +15,13 @@ public class CLI {
 
     private static final InputStreamReader stream = new InputStreamReader(System.in);
     private static final BufferedReader reader = new BufferedReader(stream);
-    private static final int MAX = 50000;
-    private char[] dump = new char[MAX];
 
-    public CLI(){
+    CLI(){
         output(SAGRADA);
     }
 
     public String input(){
 
-        //TODO:RESOLVE FALSE INPUT
         String input = "???";
         boolean exc;
 
@@ -54,9 +51,8 @@ public class CLI {
         int unicode;
 
         if (s.isEmpty()){
-            check = false;
-            return check;
-        }
+            return false;
+    }
 
         for(int i=0; i<s.length(); i++) {
             unicode = s.codePointAt(i);
