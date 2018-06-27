@@ -19,20 +19,22 @@ public class Scheme extends Observable {
     private int difficulty;
     static final int MAX_COL = 5;
     static final int MAX_ROW = 4;
+    private static final int STD_NUM_SCHEMES = 24;
     private Box[][] grid = new Box[MAX_ROW][MAX_COL];
 
     /**
      * Constructor for the window pattern which reads from file the specific grid to create
      *
      * @param id: identification number of the window pattern to be created (id range 1-24)
+     * @param custom: flag useful for custom window pattern advanced functionality (true if player wants to use custom window pattern, otherwise false)
      * @author Riccardo
      */
-    protected Scheme (int id){
-        if (id > 24 && !Table.custom)
+    protected Scheme (int id, boolean custom){
+        if (id > STD_NUM_SCHEMES && !custom)
             System.err.println("Not valid ID: " + id);
 
         InputStream inputFile;
-        if (id <= 24)
+        if (id <= STD_NUM_SCHEMES)
             inputFile = Scheme.class.getResourceAsStream("/schemes/Schemes.txt");
         else
             inputFile = Scheme.class.getResourceAsStream("/schemes/CustomSchemes.txt");
@@ -42,7 +44,7 @@ public class Scheme extends Observable {
 
         Scanner scan = new Scanner(inputFile);
 
-        if (id <= 24) {
+        if (id <= STD_NUM_SCHEMES) {
             for (int i = 0; i < (id - 1) * 6; i++)
                 scan.nextLine();
         } else {
@@ -87,15 +89,17 @@ public class Scheme extends Observable {
      * Calls the constructor and gives it the ID to create a window pattern if it's a correct one
      *
      * @param id: identification number of the window pattern to be created
+     * @param custom: flag useful for custom window pattern advanced functionality (true if player wants to use custom window pattern, otherwise false)
+     * @param numSchemes: number of window pattern to be used (>24 just if player decides to use custom window patterns)
      * @return the specific window pattern required if it exists, otherwise null
      * @author Riccardo
      */
-    public static Scheme initialize(int id){
-        if (id < 1 || id > Table.NUM_SCHEMES) {
+    public static Scheme initialize(int id, boolean custom, int numSchemes){
+        if (id < 1 || id > numSchemes) {
             System.err.println("Not valid ID: " + id);
             return null;
         } else
-            return new Scheme(id);
+            return new Scheme(id, custom);
     }
 
     /**

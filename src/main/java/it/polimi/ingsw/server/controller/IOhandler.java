@@ -115,6 +115,22 @@ public class IOhandler implements Observer{
     /////////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Sends a specific message to notify client (Socket) the game has ended
+     *
+     * @author Andrea
+     */
+    void finishGameSocket(){
+        for (SocketUser s : this.socketUserList){
+            try {
+                SocketMessengerServer.sendFinish(s.socket);
+                s.socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Sends notifies to all clients combined with IOhandler
      *
      * @param message: the message to be printed to all users
@@ -288,7 +304,7 @@ public class IOhandler implements Observer{
         try {
             for (Integer i:schemes){
                 notify(player, "Scheme " + (schemes.indexOf(i)+1));
-                notify(player, Scheme.initialize(i).toString());
+                notify(player, Scheme.initialize(i, this.table.getCustom(), this.table.getNumSchemes()).toString());
             }
 
             while (!isValid){

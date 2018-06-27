@@ -72,6 +72,8 @@ public class SocketMessengerClient{
                     this.askIfReceived();
                     break;
                 case FINISH:
+                    this.out.println(OK);
+                    this.out.flush();
                     break;
                 default:
                     this.unexpectedMessageFromServer();
@@ -79,8 +81,6 @@ public class SocketMessengerClient{
             }
 
         }while (!request.equals(FINISH));
-
-        //CountPoints here
 
         this.close();
     }

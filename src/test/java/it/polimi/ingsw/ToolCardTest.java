@@ -48,7 +48,7 @@ class ToolCardTest {
         Table instance = new Table(2);
 
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p.chooseScheme(scheme);
 
         int value = instance.checkDiceFromReserve(0).getValue();
@@ -207,7 +207,7 @@ class ToolCardTest {
         Table instance = new Table(2);
 
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p.chooseScheme(scheme);
 
         //Putting a dice in round track
@@ -250,7 +250,7 @@ class ToolCardTest {
         Table instance = new Table(2);
 
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(4);
+        Scheme scheme = Scheme.initialize(4, false, 24);
         p.chooseScheme(scheme);
 
         ToolCard tool = new ToolCard(6);
@@ -306,7 +306,7 @@ class ToolCardTest {
         Table instance = new Table(4);
         instance.setPlayers(nicknames);
 
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p1.chooseScheme(scheme);
 
         ToolCard tool = new ToolCard(7);
@@ -342,7 +342,7 @@ class ToolCardTest {
         Table instance = new Table(4);
         instance.setPlayers(nicknames);
 
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p1.chooseScheme(scheme);
 
         ToolCard tool = new ToolCard(8);
@@ -370,7 +370,7 @@ class ToolCardTest {
         Table instance = new Table(2);
 
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p.chooseScheme(scheme);
 
         ToolCard tool = new ToolCard(9);
@@ -417,7 +417,7 @@ class ToolCardTest {
         Table instance = new Table(2);
 
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p.chooseScheme(scheme);
 
         ToolCard tool = new ToolCard(10);
@@ -445,7 +445,7 @@ class ToolCardTest {
         Table instance = new Table(2);
 
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(4);
+        Scheme scheme = Scheme.initialize(4, false, 24);
         p.chooseScheme(scheme);
 
         ToolCard tool = new ToolCard(11);

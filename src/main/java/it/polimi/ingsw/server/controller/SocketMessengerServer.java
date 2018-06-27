@@ -60,6 +60,15 @@ class SocketMessengerServer {
         askIfReceived(socket);
     }
 
+    static synchronized void sendFinish(Socket socket) throws IOException{
+        PrintWriter out = new PrintWriter(socket.getOutputStream());
+        String output = FINISH;
+        System.out.println("I'm sending this message: " + output + " to " + socket);
+        out.println(output);
+        out.flush();
+        askIfReceived(socket);
+    }
+
     static synchronized String get(Socket socket) throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream());

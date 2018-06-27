@@ -23,7 +23,7 @@ class PlayerTest {
     void chooseSchemeTest() {
         Random rand = new Random();
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(rand.nextInt(24)+1);
+        Scheme scheme = Scheme.initialize(rand.nextInt(24)+1, false, 24);
         p.chooseScheme(scheme);
 
         assertEquals(p.getTokens(), scheme.getDifficulty());
@@ -39,7 +39,7 @@ class PlayerTest {
     @Test
     void placeDiceTest() {
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p.chooseScheme(scheme);
         int numP = (int)(Math.random()*3 + 2);
         Table instance = new Table(numP);
@@ -72,7 +72,7 @@ class PlayerTest {
     @Test
     void extractDiceTest() {
         Player p = new Player("ingconti", 0);
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         p.chooseScheme(scheme);
         int numP = (int)(Math.random()*3 + 2);
         Table instance = new Table(numP);
@@ -96,7 +96,7 @@ class PlayerTest {
         Player p1 = PublicOCTest.createPlayerScheme();
 
         Player p2 = new Player("n1zzo", 1);
-        Scheme scheme = Scheme.initialize(2);
+        Scheme scheme = Scheme.initialize(2, false, 24);
         p2.chooseScheme(scheme);
 
         PrivObjHandler.setPrivOC(2);

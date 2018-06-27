@@ -27,11 +27,11 @@ class SchemeTest {
         Random rand = new Random();
         int id = -1;
 
-        Scheme scheme = Scheme.initialize(id);
+        Scheme scheme = Scheme.initialize(id, false, 24);
         assertNull(scheme);
 
         id = (rand.nextInt(24)+1);
-        assertNotNull(Scheme.initialize(id));
+        assertNotNull(Scheme.initialize(id, false, 24));
     }
 
     /**
@@ -42,7 +42,7 @@ class SchemeTest {
      */
     @Test
     void empty_removeTest() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         Dice dice = new Dice(Enum.Color.YELLOW, 3);
 
         assertTrue(scheme.isGridEmpty());
@@ -66,7 +66,7 @@ class SchemeTest {
      */
     @Test
     void wrongBoxesTest() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         Dice dice = new Dice(Enum.Color.YELLOW, 3);
 
         //checking not existing boxes
@@ -83,7 +83,7 @@ class SchemeTest {
      */
     @Test
     void firstDiceTest() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         System.out.println(scheme);
         Dice dice = new Dice(Enum.Color.YELLOW, 3);
 
@@ -107,7 +107,7 @@ class SchemeTest {
      */
     @Test
     void isPlaceableNoAdjTest() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         System.out.println(scheme);
         Dice dice = new Dice(Enum.Color.YELLOW, 3);
 
@@ -145,7 +145,7 @@ class SchemeTest {
      */
     @Test
     void valueAdjacencesTest() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         System.out.println(scheme);
         Dice dice = new Dice(Enum.Color.YELLOW, 3);
 
@@ -168,7 +168,7 @@ class SchemeTest {
      */
     @Test
     void colorAdjacencesTest() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         System.out.println(scheme);
         Dice dice = new Dice(Enum.Color.YELLOW, 3);
 
@@ -192,7 +192,7 @@ class SchemeTest {
      */
     @Test
     void placementTool2Test() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         System.out.println(scheme);
         Dice dice = new Dice(Enum.Color.GREEN, 3);
 
@@ -226,7 +226,7 @@ class SchemeTest {
      */
     @Test
     void placementTool3Test() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         System.out.println(scheme);
         Dice dice = new Dice(Enum.Color.GREEN, 3);
 
@@ -260,7 +260,7 @@ class SchemeTest {
      */
     @Test
     void placementTool9Test() {
-        Scheme scheme = Scheme.initialize(1);
+        Scheme scheme = Scheme.initialize(1, false, 24);
         System.out.println(scheme);
         Dice dice = new Dice(Enum.Color.GREEN, 3);
 
@@ -288,21 +288,22 @@ class SchemeTest {
      */
     @Test
     void customSchemesTest() {
-        Scheme scheme = Scheme.initialize(25);
+        Table instance = new Table(2);
+        Scheme scheme = Scheme.initialize(25, instance.getCustom(), instance.getNumSchemes());
 
         //scheme should be null because custom flag is false (player chose not to integrate custom schemes)
         assertNull(scheme);
 
-        Table.setCustom();
+        instance.setCustom();
 
         //custom schemes should not be loaded
-        assertNotNull(scheme = Scheme.initialize(25));
+        assertNotNull(scheme = Scheme.initialize(25, instance.getCustom(), instance.getNumSchemes()));
         System.out.println(scheme);
-        assertNotNull(scheme = Scheme.initialize(28));
+        assertNotNull(scheme = Scheme.initialize(28, instance.getCustom(), instance.getNumSchemes()));
         System.out.println(scheme);
 
         //not valid ID (neither in CustomSchemes.txt file)
-        assertNull(Scheme.initialize(29));
+        assertNull(Scheme.initialize(29, instance.getCustom(), instance.getNumSchemes()));
     }
 
 }
