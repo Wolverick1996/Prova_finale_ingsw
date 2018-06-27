@@ -56,14 +56,13 @@ public class Game implements Observer {
             return;
 
         try {
-            Controller.getMyIO(this).broadcast(this.players.get(0).getUsername() + " is choosing between standard" +
-                    " window patterns or custom ones\n");
+            Controller.getMyIO(this).broadcast(this.players.get(0).getUsername() + " is deciding whether to add custom window patterns or not");
             Controller.getMyIO(this).notify(this.players.get(0).getUsername(), "Do you want to use custom window patterns?");
             if (Controller.getMyIO(this).yesOrNo(this.players.get(0).getUsername())){
                 this.table.setCustom();
-                Controller.getMyIO(this).broadcast("Custom window patterns enabled!\n");
-            }else
-                Controller.getMyIO(this).broadcast("Old school, only standard window patterns!\n");
+                Controller.getMyIO(this).broadcast("Custom window patterns enabled!");
+            } else
+                Controller.getMyIO(this).broadcast("Old school, only standard window patterns!");
         } catch (RemoteException e) {
             e.printStackTrace();
         }

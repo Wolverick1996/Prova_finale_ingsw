@@ -128,10 +128,18 @@ public class PrivObjHandler {
         return activeID.get(player.getIDplayer()).getColor();
     }
 
+    /**
+     * Gets the player's private objective card
+     *
+     * @param player: the player owner of the private objective card
+     * @return the string that represents the private objective card
+     * @author Andrea
+     */
     public static String getCard(Player player){
         return Enum.Color.PURPLE.escape() + "Private Objective card: \n" + Enum.Color.RESET +
                 getColor(player).escape() + getName(player) + Enum.Color.RESET + "\n" + getDescription(player) + "\n";
     }
+
     /**
      * Used to print all the private objective cards in play
      *

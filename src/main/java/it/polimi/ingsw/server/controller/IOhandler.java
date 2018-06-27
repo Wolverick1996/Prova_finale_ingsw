@@ -58,10 +58,8 @@ public class IOhandler implements Observer{
     void setServer(ServerIntRMI server){
         try {
             usersRMI = server.getConnected();
-
-            for (ClientIntRMI c : usersRMI){
+            for (ClientIntRMI c : usersRMI)
                 c.startIterface();
-            }
         } catch (RemoteException e){
             e.printStackTrace();
         }
@@ -148,7 +146,7 @@ public class IOhandler implements Observer{
                 System.out.println(DIVISOR);
                 for (Player p: this.players) this.notify(p.getUsername(), DIVISOR);
                 System.out.println(table);
-                for (Player p: this.players) {
+                for (Player p: this.players){
                     this.notify(p.getUsername(), table.toString());
                     this.notify(p.getUsername(), PrivObjHandler.getCard(p));
                 }
