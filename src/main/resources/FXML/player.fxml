@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
@@ -147,7 +148,7 @@
                      <graphic>
                         <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/anticlockwise-rotation.png" />
+                              <Image url="@../images/back.png" />
                            </image>
                         </ImageView>
                      </graphic>

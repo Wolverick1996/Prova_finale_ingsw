@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -216,7 +217,7 @@
                            <graphic>
                               <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/passTurn.png" />
+                                    <Image url="@../images/pass_turn.png" />
                                  </image>
                               </ImageView>
                            </graphic>
