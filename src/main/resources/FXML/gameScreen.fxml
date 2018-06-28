@@ -6,145 +6,125 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="968.0" prefWidth="1900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="pane4" prefHeight="800.0" prefWidth="1280.0" styleClass="background" stylesheets="@../CSS/1280x800.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="370.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="280.0" prefWidth="1750.0" spacing="50.0">
+            <HBox prefHeight="220.0" prefWidth="200.0">
                <children>
-                  <Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="ToolCard1">
-                     <HBox.margin>
-                        <Insets left="50.0" />
-                     </HBox.margin>
+                  <Region prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" prefHeight="220.0" prefWidth="150.0" text="Tool Card 1" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="20.0" />
                      </font>
-                     <graphic>
-                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
-                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="ToolCard2">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
+                  <Region layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" prefHeight="220.0" prefWidth="150.0" text="Tool Card 2" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="20.0" />
                      </font>
-                     <graphic>
-                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
-                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="ToolCard3">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
+                  <Region layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <Button layoutX="473.0" layoutY="10.0" mnemonicParsing="false" prefHeight="220.0" prefWidth="150.0" text="Tool Card 3" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="20.0" />
                      </font>
-                     <graphic>
-                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
-                     </graphic>
                   </Button>
-                  <Region prefHeight="260.0" prefWidth="203.0" HBox.hgrow="ALWAYS" />
-                  <Button alignment="CENTER" layoutX="1010.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PublicOC1">
+                  <Region layoutX="273.0" layoutY="10.0" prefHeight="200.0" prefWidth="50.0" HBox.hgrow="ALWAYS" />
+                  <Region prefHeight="200.0" prefWidth="50.0" />
+                  <Button layoutX="210.0" layoutY="10.0" mnemonicParsing="false" prefHeight="220.0" prefWidth="150.0" text="PubOC 1" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="20.0" />
                      </font>
-                     <graphic>
-                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
-                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="610.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PublicOC2">
+                  <Region layoutX="536.0" layoutY="10.0" prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <Button layoutX="736.0" layoutY="10.0" mnemonicParsing="false" prefHeight="220.0" prefWidth="150.0" text="PubOC 2" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="20.0" />
                      </font>
-                     <graphic>
-                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
-                     </graphic>
                   </Button>
-                  <Button alignment="CENTER" layoutX="810.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PublicOC3">
-                     <HBox.margin>
-                        <Insets right="50.0" />
-                     </HBox.margin>
+                  <Region layoutX="799.0" layoutY="10.0" prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <Button layoutX="999.0" layoutY="10.0" mnemonicParsing="false" prefHeight="220.0" prefWidth="150.0" text="PubOC 3" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font size="20.0" />
                      </font>
-                     <graphic>
-                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
-                     </graphic>
                   </Button>
+                  <Region prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <HBox>
+            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <HBox prefHeight="60.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reserve" wrappingWidth="94.21599960327148">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reserve" wrappingWidth="94.21599960327148" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font name="Century Gothic" size="24.0" />
                      </font>
                      <HBox.margin>
                         <Insets bottom="25.0" right="10.0" top="25.0" />
                      </HBox.margin>
                   </Text>
+                  <Region prefHeight="73.0" prefWidth="200.0" />
                   <GridPane gridLinesVisible="true" HBox.hgrow="NEVER">
                     <columnConstraints>
                         <ColumnConstraints />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
                      </children>
                   </GridPane>
                   <Region HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <HBox prefHeight="30.0" prefWidth="200.0" />
-            <HBox>
+            <Region prefHeight="15.0" prefWidth="200.0" />
+            <HBox prefHeight="60.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Round Track">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Round Track" HBox.hgrow="ALWAYS">
                      <font>
-                        <Font size="25.0" />
+                        <Font name="Century Gothic" size="24.0" />
                      </font>
                      <HBox.margin>
                         <Insets bottom="25.0" right="10.0" top="25.0" />
                      </HBox.margin>
                   </Text>
+                  <Region prefHeight="73.0" prefWidth="150.0" />
                   <GridPane gridLinesVisible="true" HBox.hgrow="NEVER">
                      <columnConstraints>
                         <ColumnConstraints />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
@@ -164,132 +144,199 @@
                   <Insets />
                </VBox.margin>
             </HBox>
+            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </center>
-   <bottom>
-      <HBox BorderPane.alignment="CENTER">
-         <children>
-            <Region HBox.hgrow="ALWAYS" />
-            <VBox>
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Round:">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="80.0" />
-                     </VBox.margin>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turn:">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tokens:">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="50.0" />
-                     </VBox.margin>
-                  </Text>
-               </children>
-               <HBox.margin>
-                  <Insets left="150.0" right="30.0" />
-               </HBox.margin>
-            </VBox>
-            <Region prefHeight="350.0" prefWidth="110.0" />
-            <GridPane alignment="CENTER" gridLinesVisible="true">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="80.0" prefWidth="80.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="80.0" prefHeight="80.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <HBox.margin>
-                  <Insets bottom="20.0" top="10.0" />
-               </HBox.margin>
-               <children>
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-               </children>
-            </GridPane>
-            <Region prefHeight="350.0" prefWidth="110.0" />
-            <Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="250.0" prefWidth="178.0" text="PrivateOC">
-               <font>
-                  <Font size="25.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="50.0" />
-               </HBox.margin>
-               <graphic>
-                  <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
-               </graphic>
-            </Button>
-            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-         </children>
-      </HBox>
-   </bottom>
    <top>
-      <Pane prefHeight="110.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="75.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="759.0" layoutY="15.0" mnemonicParsing="false" text="Click to see Player1 window pattern">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
+            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <HBox prefHeight="60.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#loadPlayer" text="P1" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
          </children>
-      </Pane>
+      </VBox>
    </top>
    <left>
-      <Pane prefHeight="540.0" prefWidth="110.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="100.0" prefWidth="75.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="-145.0" layoutY="233.0" mnemonicParsing="false" rotate="90.0" text="Click to see Player2 window pattern">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
+            <Region prefHeight="200.0" prefWidth="15.0" HBox.hgrow="ALWAYS" />
+            <VBox prefHeight="200.0" prefWidth="60.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#loadPlayer" rotate="90.0" text="P2" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
          </children>
-      </Pane>
+      </HBox>
    </left>
    <right>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="100.0" prefWidth="75.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="-55.0" layoutY="233.0" mnemonicParsing="false" rotate="-90.0" text="Click to see Player3 window pattern">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Button>
+            <VBox prefHeight="200.0" prefWidth="60.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#loadPlayer" rotate="270.0" text="P3" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Region prefHeight="200.0" prefWidth="15.0" HBox.hgrow="ALWAYS" />
          </children>
-      </Pane>
+      </HBox>
    </right>
+   <bottom>
+      <VBox prefHeight="300.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <Button fx:id="passTurn" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="75.0" prefWidth="75.0">
+                           <graphic>
+                              <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/passTurn.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <Region prefWidth="50.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Active player: ">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="P1">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Round: ">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Turn: ">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tokens: ">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                                 <font>
+                                    <Font name="Century Gothic" size="20.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <GridPane alignment="CENTER" gridLinesVisible="true" HBox.hgrow="NEVER">
+                     <children>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="220.0" prefWidth="150.0" text="PrivOC" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="250.0" pickOnBounds="true" preserveRatio="true" translateX="-18.0" />
+                     </graphic>
+                  </Button>
+                  <Region HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </bottom>
 </BorderPane>

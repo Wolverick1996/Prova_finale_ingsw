@@ -95,7 +95,7 @@
                </children>
             </HBox>
             <Region prefHeight="65.0" prefWidth="900.0" />
-            <Button mnemonicParsing="false" stylesheets="@../CSS/sagrada.css" text="Next &gt;">
+            <Button mnemonicParsing="false" onAction="#loadSchemes" stylesheets="@../CSS/900x800.css" text="Next &gt;">
                <font>
                   <Font name="Century Gothic" size="18.0" />
                </font>

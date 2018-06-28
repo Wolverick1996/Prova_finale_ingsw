@@ -10,7 +10,7 @@
       <VBox prefHeight="800.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Region prefHeight="200.0" prefWidth="900.0" />
-            <HBox prefHeight="30.0" prefWidth="900.0" stylesheets="@../CSS/sagrada.css">
+            <HBox prefHeight="30.0" prefWidth="900.0" stylesheets="@../CSS/900x800.css">
                <children>
                   <Region prefHeight="100.0" prefWidth="60.0" />
                   <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want to connect using socket or RMI?">
@@ -74,7 +74,7 @@
                </children>
             </HBox>
             <Region prefHeight="175.0" prefWidth="900.0" />
-            <Button mnemonicParsing="false" onAction="#loadThird" stylesheets="@../CSS/sagrada.css" text="Next &gt;">
+            <Button mnemonicParsing="false" onAction="#loadThird" stylesheets="@../CSS/900x800.css" text="Next &gt;">
                <VBox.margin>
                   <Insets left="750.0" />
                </VBox.margin>

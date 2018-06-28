@@ -4,7 +4,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -18,6 +23,12 @@ public class GUI_Controller implements Initializable {
     private AnchorPane pane1;
     @FXML
     private AnchorPane pane2;
+    @FXML
+    private AnchorPane pane3;
+    @FXML
+    private BorderPane pane4;
+    @FXML
+    private AnchorPane pane5;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
@@ -33,6 +44,39 @@ public class GUI_Controller implements Initializable {
     private void loadThird(ActionEvent event) throws IOException {
         pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
         pane1.getChildren().setAll(pane2);
+    }
+
+    @FXML
+    private void loadSchemes(ActionEvent event) throws IOException {
+        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/chooseSchemes.fxml"));
+        Scene scene = new Scene(blah);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(true);
+        appStage.setFullScreen(true);
+        appStage.show();
+    }
+
+    @FXML
+    private void loadGame(ActionEvent event) throws IOException {
+        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/gameScreen.fxml"));
+        Scene scene = new Scene(blah);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(true);
+        appStage.setFullScreen(true);
+        appStage.show();
+    }
+
+    @FXML
+    private void loadPlayer(ActionEvent event) throws IOException {
+        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/player.fxml"));
+        Scene scene = new Scene(blah);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(true);
+        appStage.setFullScreen(true);
+        appStage.show();
     }
 
 }
