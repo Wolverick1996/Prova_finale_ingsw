@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,6 +13,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,10 +45,28 @@ public class GUI_Controller implements Initializable {
     @FXML
     private TextField username, ip;
     @FXML
-    private RadioButton socket, rmi;
+    private RadioButton socketButton, rmiButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
+
+    private static void popup(String error) {
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Something happened...");
+        Label label1 = new Label("WAIT!\n");
+        Label label2 = new Label("The following error occured:\n");
+        Text text = new Text();
+        text.setText(error);
+        Button button = new Button("Ok");
+        button.setOnAction(e -> popup.close());
+        VBox layout = new VBox(40);
+        layout.getChildren().addAll(label1, label2, text, button);
+        layout.setAlignment(Pos.CENTER);
+        Scene popupScene = new Scene(layout, 400, 350);
+        popup.setScene(popupScene);
+        popup.showAndWait();
+    }
 
     @FXML
     private void loadSecond(ActionEvent event) throws IOException {
@@ -63,37 +87,37 @@ public class GUI_Controller implements Initializable {
 
     @FXML
     private String checkConnection(ActionEvent event) {
-        if (rmi.isSelected()) return RMI;
+        if (rmiButton.isSelected()) return RMI;
         else return SOCKET;
     }
 
     @FXML
-    private boolean trySetup(ActionEvent event){
-        String name = setUsername(event);
-        String ip = setIP(event);
-        String connection = checkConnection(event);
-        System.out.println( name + " is trying to connect using GUI... \n" + connection + " " + ip);
-        ClientMain clientMain = ClientMain.instance(ip);
-        try {
-            if (connection.equals(RMI)){
-                
-            } else {
-
+    private void trySetup(ActionEvent event){
+        boolean check = false;
+        while (!check) {
+            String name = setUsername(event);
+            String ip = setIP(event);
+            String connection = checkConnection(event);
+            System.out.println( name + " is trying to connect using GUI... \n" + connection + " " + ip);
+            ClientMain clientMain = ClientMain.instance(ip);
+            try {
+                if (connection.equals(RMI)){
+                    clientMain.startClientRMI();
+                } else {
+                    clientMain.startClientSocket();
+                }
+            } catch (MalformedURLException m){
+                popup("Sei un culetto MalformedURL");
+            } catch (IOException e){
+                popup("Perdirindina, IO");
             }
-        } catch (IOException e){
-            return false;
-        } catch (MalformedURLException m){
-            return false;
         }
 
-        return false;
     }
 
     @FXML
     private void loadThird(ActionEvent event) throws IOException {
-        if (!trySetup(event)){
-            loadSecond(event);
-        }
+        trySetup(event);
         pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
         pane1.getChildren().setAll(pane2);
     }

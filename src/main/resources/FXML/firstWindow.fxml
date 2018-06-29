@@ -24,17 +24,12 @@
             <Region prefHeight="175.0" prefWidth="900.0" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Region prefHeight="200.0" prefWidth="200.0" />
-                  <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="240.0" text="Play using CLI">
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#loadSecond" prefHeight="70.0" prefWidth="240.0" text="Play!">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font></Button>
-                  <Region prefHeight="200.0" prefWidth="200.0" />
-                  <Button mnemonicParsing="false" onAction="#loadSecond" prefHeight="70.0" prefWidth="240.0" text="Continue with GUI">
-                     <font>
-                        <Font name="Century Gothic" size="18.0" />
-                     </font></Button>
-                  <Region prefHeight="200.0" prefWidth="200.0" />
+                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>

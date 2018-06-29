@@ -25,7 +25,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="60.0" />
-                  <RadioButton fx:id="socket" mnemonicParsing="false" text="Socket" textFill="WHITE">
+                  <RadioButton fx:id="socketButton" mnemonicParsing="false" text="Socket" textFill="WHITE">
                      <font>
                         <Font name="Century Gothic" size="25.0" />
                      </font>
@@ -34,7 +34,7 @@
                      </toggleGroup>
                   </RadioButton>
                   <Region prefHeight="200.0" prefWidth="200.0" />
-                  <RadioButton fx:id="rmi" mnemonicParsing="false" selected="true" text="RMI" textFill="WHITE" toggleGroup="$network_group">
+                  <RadioButton fx:id="rmiButton" mnemonicParsing="false" selected="true" text="RMI" textFill="WHITE" toggleGroup="$network_group">
                      <font>
                         <Font name="Century Gothic" size="25.0" />
                      </font>
