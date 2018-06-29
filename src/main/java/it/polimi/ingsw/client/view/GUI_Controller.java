@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -54,6 +57,25 @@ public class GUI_Controller implements Initializable {
         layout.setAlignment(Pos.CENTER);
         Scene popupScene = new Scene(layout, 400, 350);
         popup.setScene(popupScene);
+        popup.setResizable(false);
+        popup.setIconified(false);
+        popup.showAndWait();
+    }
+
+    private static void waiting(int timer) {
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Waiting...");
+        Label label = new Label("Waiting...");
+        VBox layout = new VBox(40);
+        layout.getChildren().addAll(label);
+        layout.setAlignment(Pos.CENTER);
+        Scene popupScene = new Scene(layout, 250, 150);
+        popup.setScene(popupScene);
+        PauseTransition delay = new PauseTransition(Duration.seconds(timer));
+        delay.setOnFinished(event -> popup.close());
+        delay.play();
+        popup.initStyle(StageStyle.UNDECORATED);
         popup.showAndWait();
     }
 
