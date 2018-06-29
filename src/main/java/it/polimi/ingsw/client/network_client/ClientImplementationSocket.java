@@ -54,6 +54,10 @@ class ClientImplementationSocket {
         return string;
     }
 
+    String loginGUI(String name) throws IOException{
+        return "";
+    }
+
     void logout() throws IOException{
         String result;
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));

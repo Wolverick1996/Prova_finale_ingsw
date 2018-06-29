@@ -204,6 +204,7 @@ public class ClientMain {
         finally {
             if (socket != null)
                 socket.close();
+            return "";
         }
     }
 
