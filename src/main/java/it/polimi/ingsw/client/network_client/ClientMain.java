@@ -22,6 +22,7 @@ public class ClientMain {
 
     private String ip;
     private static final int PORT = 1337;
+    private static final int MAX_PLAYERS = 4;
 
     private ClientMain(String ip){
         this.ip = ip;
@@ -55,35 +56,49 @@ public class ClientMain {
                     if (string.equals("rmi")) {
                         try {
                             clientMain.startClientRMI();
-                            ipOK = true; //unreachable
+                            ipOK = true;
                         } catch (MalformedURLException | RemoteException e){
                             System.out.println("IP not correct");
                         }
                     } else {
                         try {
                             clientMain.startClientSocket();
-                            ipOK = true; //unreachable
+                            ipOK = true;
                         } catch (IOException e) {
                             System.out.println("IP not correct");
                         } catch (NoSuchElementException e) {
                             System.err.println("Nothing to read " + e.getMessage());
                         }
                     }
-                    break;
                 }
                 break;
-
-            }
-            if (!check){
+            } else {
                 System.out.println("Invalid name. Type rmi or socket");
             }
         }
-        //scanner.close();
     }
 
-    public void startClientRMI() throws MalformedURLException, RemoteException{
+    public String startGUIRMI(String text) throws MalformedURLException, RemoteException, NotBoundException{
         ServerIntRMI server;
-        boolean on = true;
+        server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
+
+        ClientImplementationRMI client = new ClientImplementationRMI(text);
+
+        ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
+
+        if (server.login(remoteRef)) {
+            return "OK";
+        }
+        else {
+            if (server.getConnected().size() >= MAX_PLAYERS)
+                return "Lobby is full!";
+            else
+                return "ID already taken!";
+        }
+    }
+
+    private void startClientRMI() throws MalformedURLException, RemoteException{
+        ServerIntRMI server;
         try {
 
             boolean loginSuccess = false;
@@ -119,7 +134,7 @@ public class ClientMain {
                     if (server.login(remoteRef))
                         loginSuccess = true;
                     else {
-                        if (server.getConnected().size() >= Lobby.MAX_PLAYERS)
+                        if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
                         else
                             idTaken = true;
@@ -164,7 +179,35 @@ public class ClientMain {
         }
     }
 
-    public void startClientSocket() throws IOException{
+    public String startGUISocket(String name) throws IOException{
+        Socket socket = null;
+        int activePlayers;
+        boolean success;
+        try {
+            socket = new Socket(ip, PORT);
+            Scanner scanner = new Scanner(System.in);
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            System.out.println("Connection established");
+            ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
+
+            //name = clientImplementationSocket.login();
+            String issue = clientImplementationSocket.loginGUI(name);
+            activePlayers = Integer.parseInt(in.readLine());
+
+            scanner.close();
+            in.close();
+            out.close();
+        }catch (NoSuchElementException e){
+            System.err.println("NOTHING TO READ "+e.getMessage());
+        }
+        finally {
+            if (socket != null)
+                socket.close();
+        }
+    }
+
+    private void startClientSocket() throws IOException{
         Socket socket = null;
         int activePlayers;
         boolean success;

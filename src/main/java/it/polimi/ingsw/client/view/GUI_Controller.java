@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.util.ResourceBundle;
 
 public class GUI_Controller implements Initializable {
@@ -92,34 +93,49 @@ public class GUI_Controller implements Initializable {
     }
 
     @FXML
-    private void trySetup(ActionEvent event){
-        boolean check = false;
-        while (!check) {
-            String name = setUsername(event);
-            String ip = setIP(event);
-            String connection = checkConnection(event);
-            System.out.println( name + " is trying to connect using GUI... \n" + connection + " " + ip);
-            ClientMain clientMain = ClientMain.instance(ip);
-            try {
-                if (connection.equals(RMI)){
-                    clientMain.startClientRMI();
-                } else {
-                    clientMain.startClientSocket();
-                }
-            } catch (MalformedURLException m){
-                popup("Sei un culetto MalformedURL");
-            } catch (IOException e){
-                popup("Perdirindina, IO");
-            }
+    private boolean trySetup(ActionEvent event){
+        String name = setUsername(event);
+        String address = setIP(event);
+        String connection = checkConnection(event);
+        if (name.equals("") || name.equals("*")){
+            popup("Invalid name, your ID should be at least 1 character (not *)");
+            return false;
         }
-
+        System.out.println( name + " is trying to connect using GUI... \n" + connection + " " + address);
+        ClientMain clientMain = ClientMain.instance(address);
+        try {
+            if (connection.equals(RMI)){
+                String message = clientMain.startGUIRMI(name);
+                if (message.equals("OK")){
+                    System.out.println("Hello " + name + ", my world");
+                    return true;
+                }
+                else
+                    popup(message);
+                return false;
+            } else {
+                clientMain.startGUISocket(name);
+                popup("Socket doesn't work, sorry");
+                return false;
+            }
+        } catch (MalformedURLException m){
+            popup("Sei un culetto MalformedURL");
+            return false;
+        } catch (NotBoundException n) {
+            popup("Quell'errore che pensavamo non esistesse, NotBound");
+            return false;
+        } catch (IOException e){
+            popup("Perdirindina, IO");
+            return false;
+        }
     }
 
     @FXML
     private void loadThird(ActionEvent event) throws IOException {
-        trySetup(event);
-        pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
-        pane1.getChildren().setAll(pane2);
+        if (trySetup(event)){
+            pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
+            pane1.getChildren().setAll(pane2);
+        }
     }
 
     @FXML
