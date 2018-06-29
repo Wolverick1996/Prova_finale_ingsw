@@ -5,11 +5,11 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
+<AnchorPane fx:id="pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
    <children>
-      <VBox prefHeight="800.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="720.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Region prefHeight="90.0" prefWidth="900.0" />
+            <Region prefHeight="50.0" prefWidth="900.0" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="60.0" />
@@ -95,7 +95,7 @@
                </children>
             </HBox>
             <Region prefHeight="65.0" prefWidth="900.0" />
-            <Button mnemonicParsing="false" onAction="#loadSchemes" stylesheets="@../CSS/900x800.css" text="Next &gt;">
+            <Button mnemonicParsing="false" onAction="#loadSchemes" stylesheets="@../CSS/900x720.css" text="Next &gt;">
                <font>
                   <Font name="Century Gothic" size="18.0" />
                </font>

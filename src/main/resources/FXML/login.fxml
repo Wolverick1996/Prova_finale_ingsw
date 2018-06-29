@@ -5,12 +5,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="pane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
+<AnchorPane fx:id="pane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
    <children>
-      <VBox prefHeight="800.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="720.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Region prefHeight="200.0" prefWidth="900.0" />
-            <HBox prefHeight="30.0" prefWidth="900.0" stylesheets="@../CSS/900x800.css">
+            <Region prefHeight="150.0" prefWidth="900.0" />
+            <HBox prefHeight="30.0" prefWidth="900.0" stylesheets="@../CSS/900x720.css">
                <children>
                   <Region prefHeight="100.0" prefWidth="60.0" />
                   <Text fill="WHITE" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="Do you want to connect using socket or RMI?">
@@ -73,8 +73,8 @@
                   </TextField>
                </children>
             </HBox>
-            <Region prefHeight="175.0" prefWidth="900.0" />
-            <Button mnemonicParsing="false" onAction="#loadThird" stylesheets="@../CSS/900x800.css" text="Next &gt;">
+            <Region prefHeight="185.0" prefWidth="900.0" />
+            <Button mnemonicParsing="false" onAction="#loadThird" stylesheets="@../CSS/900x720.css" text="Next &gt;">
                <VBox.margin>
                   <Insets left="750.0" />
                </VBox.margin>

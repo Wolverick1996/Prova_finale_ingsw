@@ -5,11 +5,11 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="pane3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="background" stylesheets="@../CSS/1280x800.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
+<AnchorPane fx:id="pane3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@../CSS/1280x720.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
    <children>
-      <VBox prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Region prefHeight="30.0" />
+            <Region minHeight="-Infinity" prefHeight="20.0" />
             <HBox prefHeight="30.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
@@ -325,19 +325,19 @@
                   </VBox>
                </children>
             </GridPane>
-            <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
+            <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
             <HBox prefHeight="50.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" onAction="#loadGame" stylesheets="@../CSS/900x800.css" text="Next &gt;">
+                  <Button mnemonicParsing="false" onAction="#loadGame" stylesheets="@../CSS/900x720.css" text="Next &gt;">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font>
                   </Button>
-                  <Region prefHeight="200.0" prefWidth="200.0" />
+                  <Region prefHeight="200.0" prefWidth="150.0" />
                </children>
             </HBox>
-            <Region prefHeight="20.0" />
+            <Region minHeight="-Infinity" prefHeight="20.0" />
          </children>
       </VBox>
    </children>

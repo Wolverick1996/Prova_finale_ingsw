@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="pane5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" styleClass="background" stylesheets="@../CSS/1280x800.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
+<AnchorPane fx:id="pane5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@../CSS/1280x720.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
    <children>
-      <VBox prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Region prefHeight="150.0" VBox.vgrow="ALWAYS" />
+            <Region prefHeight="130.0" VBox.vgrow="ALWAYS" />
             <HBox prefHeight="60.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
@@ -56,7 +55,7 @@
                   <Region HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <Region prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <Region prefHeight="80.0" VBox.vgrow="ALWAYS" />
             <HBox prefHeight="50.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
@@ -144,7 +143,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="back" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadGame" prefHeight="75.0" prefWidth="75.0" stylesheets="@../CSS/1280x800.css" HBox.hgrow="ALWAYS">
+                  <Button fx:id="back" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadGame" prefHeight="75.0" prefWidth="75.0" stylesheets="@../CSS/1280x720.css" HBox.hgrow="ALWAYS">
                      <graphic>
                         <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>

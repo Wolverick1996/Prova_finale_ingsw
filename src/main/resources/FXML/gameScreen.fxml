@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="pane4" prefHeight="800.0" prefWidth="1280.0" styleClass="background" stylesheets="@../CSS/1280x800.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
+<BorderPane fx:id="pane4" prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@../CSS/1280x720.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.view.GUI_Controller">
    <center>
       <VBox prefHeight="370.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -53,8 +52,8 @@
                   <Region prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-            <HBox prefHeight="60.0">
+            <Region prefHeight="15.0" VBox.vgrow="ALWAYS" />
+            <HBox minHeight="-Infinity" prefHeight="60.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reserve" wrappingWidth="94.21599960327148" HBox.hgrow="ALWAYS">
@@ -83,11 +82,6 @@
                         <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" />
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" />
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" />
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" />
@@ -99,7 +93,7 @@
                </children>
             </HBox>
             <Region prefHeight="15.0" prefWidth="200.0" />
-            <HBox prefHeight="60.0">
+            <HBox minHeight="-Infinity" prefHeight="60.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Round Track" HBox.hgrow="ALWAYS">
@@ -204,9 +198,8 @@
       </HBox>
    </right>
    <bottom>
-      <VBox prefHeight="300.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="260.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region HBox.hgrow="ALWAYS" />
@@ -336,7 +329,7 @@
                   <Region HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <Region prefHeight="15.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <Region prefHeight="10.0" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </bottom>
