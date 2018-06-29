@@ -62,15 +62,16 @@ public class GUI_Controller implements Initializable {
         popup.showAndWait();
     }
 
-    private static void waiting(int timer) {
+    private static void waiting(int timer, int numP) {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Waiting...");
-        Label label = new Label("Waiting...");
+        Label label1 = new Label("Waiting...\n");
+        Label label2 = new Label("Players in the lobby:\t" + numP);
         VBox layout = new VBox(40);
-        layout.getChildren().addAll(label);
+        layout.getChildren().addAll(label1, label2);
         layout.setAlignment(Pos.CENTER);
-        Scene popupScene = new Scene(layout, 250, 150);
+        Scene popupScene = new Scene(layout, 250, 200);
         popup.setScene(popupScene);
         PauseTransition delay = new PauseTransition(Duration.seconds(timer));
         delay.setOnFinished(event -> popup.close());
@@ -88,12 +89,17 @@ public class GUI_Controller implements Initializable {
 
     @FXML
     private void loadThird(ActionEvent event) throws IOException {
+        //if (numP == 1) {
         pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
         pane1.getChildren().setAll(pane2);
+        //} else
+        //loadSchemes(event);
     }
 
     @FXML
     private void loadSchemes(ActionEvent event) throws IOException {
+        //waiting should get the timer from input and the number of players from the controller
+        //waiting(15, 3);
         Parent blah = FXMLLoader.load(getClass().getResource("/FXML/chooseSchemes.fxml"));
         Scene scene = new Scene(blah);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
