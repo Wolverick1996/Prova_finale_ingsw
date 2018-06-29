@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -24,7 +25,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="60.0" />
-                  <RadioButton mnemonicParsing="false" text="Socket" textFill="WHITE">
+                  <RadioButton fx:id="socket" mnemonicParsing="false" text="Socket" textFill="WHITE">
                      <font>
                         <Font name="Century Gothic" size="25.0" />
                      </font>
@@ -33,7 +34,7 @@
                      </toggleGroup>
                   </RadioButton>
                   <Region prefHeight="200.0" prefWidth="200.0" />
-                  <RadioButton mnemonicParsing="false" text="RMI" textFill="WHITE" toggleGroup="$network_group">
+                  <RadioButton fx:id="rmi" mnemonicParsing="false" selected="true" text="RMI" textFill="WHITE" toggleGroup="$network_group">
                      <font>
                         <Font name="Century Gothic" size="25.0" />
                      </font>
@@ -49,7 +50,7 @@
                      </font>
                   </Text>
                   <Region prefHeight="30.0" prefWidth="80.0" />
-                  <TextField opacity="0.8" text="192.168.0.1">
+                  <TextField fx:id="ip" opacity="0.8" text="192.168.0.1">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font>
@@ -66,7 +67,7 @@
                      </font>
                   </Text>
                   <Region prefHeight="35.0" prefWidth="80.0" />
-                  <TextField opacity="0.8" prefHeight="35.0" prefWidth="375.0" text="username_example">
+                  <TextField fx:id="username" opacity="0.8" prefHeight="35.0" prefWidth="375.0" text="username_example">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font>

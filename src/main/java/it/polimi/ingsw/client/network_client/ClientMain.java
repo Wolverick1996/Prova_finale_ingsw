@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.network_client;
 
+import it.polimi.ingsw.client.view.GUI_Main;
 import it.polimi.ingsw.client.view.SocketMessengerClient;
 import it.polimi.ingsw.server.controller.Lobby;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
@@ -26,7 +27,19 @@ public class ClientMain {
         this.ip = ip;
     }
 
+    public static ClientMain instance(String ip){
+        return new ClientMain(ip);
+    }
+
     public static void main(String[] args) {
+        String check_UI = "GUI";
+
+        if (check_UI.equals("GUI")){
+            GUI_Main.main(args);
+            System.out.println("bye bye :)");
+            System.exit(0);
+        }
+        //ONLY CLI
         System.out.println("Which kind of connection do you want to use? [RMI or socket]");
         Scanner scanner = new Scanner(System.in);
         String string;
@@ -68,7 +81,7 @@ public class ClientMain {
         //scanner.close();
     }
 
-    private void startClientRMI() throws MalformedURLException, RemoteException{
+    public void startClientRMI() throws MalformedURLException, RemoteException{
         ServerIntRMI server;
         boolean on = true;
         try {
@@ -151,7 +164,7 @@ public class ClientMain {
         }
     }
 
-    private void startClientSocket() throws IOException{
+    public void startClientSocket() throws IOException{
         Socket socket = null;
         int activePlayers;
         boolean success;
@@ -224,6 +237,7 @@ public class ClientMain {
                 socket.close();
         }
     }
+
 
     private static String askIP(){
         Scanner scanner = new Scanner(System.in);
