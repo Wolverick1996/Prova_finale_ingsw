@@ -181,27 +181,22 @@ public class ClientMain {
 
     public String startGUISocket(String name) throws IOException{
         Socket socket = null;
-        int activePlayers;
-        boolean success;
+        //int activePlayers;
         try {
             socket = new Socket(ip, PORT);
-            Scanner scanner = new Scanner(System.in);
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
 
-            //name = clientImplementationSocket.login();
             String issue = clientImplementationSocket.loginGUI(name);
-            activePlayers = Integer.parseInt(in.readLine());
-
-            scanner.close();
             in.close();
             out.close();
+
+            return issue;
         }catch (NoSuchElementException e){
             System.err.println("NOTHING TO READ "+e.getMessage());
-        }
-        finally {
+        } finally {
             if (socket != null)
                 socket.close();
             return "";

@@ -55,7 +55,25 @@ class ClientImplementationSocket {
     }
 
     String loginGUI(String name) throws IOException{
-        return "";
+        int dump;
+        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        PrintWriter out = new PrintWriter(this.socket.getOutputStream());
+        dump = Integer.parseInt(in.readLine()); //Here we dump the number of players (sent by the Server)
+        out.println(name);
+        out.flush();
+        String result = in.readLine();
+        System.out.println("I'm waiting the response from the server");
+        if (result.equals("same"))
+            return "Login failed, this userID is already used";
+        else if (result.equals("started"))
+            return "Your friends started without you :(\n\nGet better friends";
+        else if (result.equals("max"))
+            return "Retry later...";
+        else if (result.equals("invalid"))
+            return "Invalid name, your ID should be an alphanumeric of at least 1 character";
+        else if (result.equals("true"))
+            return "OK";
+        return "SOMETHING WENT HORRIBLY WRONG";
     }
 
     void logout() throws IOException{

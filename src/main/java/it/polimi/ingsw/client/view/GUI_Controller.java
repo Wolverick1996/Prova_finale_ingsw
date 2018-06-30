@@ -136,8 +136,13 @@ public class GUI_Controller implements Initializable {
                     popup(message);
                 return false;
             } else {
-                clientMain.startGUISocket(name);
-                popup("Socket doesn't work, sorry");
+                String message = clientMain.startGUISocket(name);
+                if (message.equals("OK")){
+                    System.out.println("Hello " + name + ", my world");
+                    return true;
+                }
+                else
+                    popup(message);
                 return false;
             }
         } catch (MalformedURLException m){
