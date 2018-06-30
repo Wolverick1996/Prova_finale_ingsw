@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.network_client;
 
+import it.polimi.ingsw.client.view.GUI_Controller;
+import it.polimi.ingsw.client.view.GUI_Main;
+import it.polimi.ingsw.client.view.IOHandlerClient;
 import it.polimi.ingsw.client.view.SocketMessengerClient;
 import it.polimi.ingsw.server.controller.Lobby;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
@@ -21,12 +24,25 @@ public class ClientMain {
 
     private String ip;
     private static final int PORT = 1337;
+    private static final int MAX_PLAYERS = 4;
 
     private ClientMain(String ip){
         this.ip = ip;
     }
 
+    public static ClientMain instance(String ip){
+        return new ClientMain(ip);
+    }
+
     public static void main(String[] args) {
+        String check_UI = "GUI";
+
+        if (check_UI.equals("GUI")){
+            GUI_Main.main(args);
+            System.out.println("bye bye :)");
+            System.exit(0);
+        }
+        //ONLY CLI
         System.out.println("Which kind of connection do you want to use? [RMI or socket]");
         Scanner scanner = new Scanner(System.in);
         String string;
@@ -42,35 +58,49 @@ public class ClientMain {
                     if (string.equals("rmi")) {
                         try {
                             clientMain.startClientRMI();
-                            ipOK = true; //unreachable
+                            ipOK = true;
                         } catch (MalformedURLException | RemoteException e){
                             System.out.println("IP not correct");
                         }
                     } else {
                         try {
                             clientMain.startClientSocket();
-                            ipOK = true; //unreachable
+                            ipOK = true;
                         } catch (IOException e) {
                             System.out.println("IP not correct");
                         } catch (NoSuchElementException e) {
                             System.err.println("Nothing to read " + e.getMessage());
                         }
                     }
-                    break;
                 }
                 break;
-
-            }
-            if (!check){
+            } else {
                 System.out.println("Invalid name. Type rmi or socket");
             }
         }
-        //scanner.close();
+    }
+
+    public String startGUIRMI(String text) throws MalformedURLException, RemoteException, NotBoundException{
+        ServerIntRMI server;
+        server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
+
+        ClientImplementationRMI client = new ClientImplementationRMI(text);
+
+        ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
+
+        if (server.login(remoteRef)) {
+            return "OK";
+        }
+        else {
+            if (server.getConnected().size() >= MAX_PLAYERS)
+                return "Lobby is full!";
+            else
+                return "ID already taken!";
+        }
     }
 
     private void startClientRMI() throws MalformedURLException, RemoteException{
         ServerIntRMI server;
-        boolean on = true;
         try {
 
             boolean loginSuccess = false;
@@ -106,7 +136,7 @@ public class ClientMain {
                     if (server.login(remoteRef))
                         loginSuccess = true;
                     else {
-                        if (server.getConnected().size() >= Lobby.MAX_PLAYERS)
+                        if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
                         else
                             idTaken = true;
@@ -149,6 +179,29 @@ public class ClientMain {
         } catch (NoSuchElementException e) {
             System.err.println("NOTHING TO READ " +e.getMessage());
         }
+    }
+
+    public String startGUISocket(String name) throws IOException{
+        Socket socket = null;
+        String feedback = "";
+        try {
+            socket = new Socket(ip, PORT);
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            System.out.println("Connection established");
+            ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
+            feedback = clientImplementationSocket.loginGUI(name);
+            if (Integer.parseInt(in.readLine()) == 1) {
+                out.println("20");
+                out.flush();
+            }
+        }catch (NoSuchElementException e){
+            System.err.println("NOTHING TO READ "+e.getMessage());
+        } finally {
+            SocketMessengerClient s = new SocketMessengerClient(this.ip, PORT, socket, name, IOHandlerClient.Interface.gui);
+            GUI_Controller.setMessenger(s);
+        }
+        return feedback;
     }
 
     private void startClientSocket() throws IOException{
@@ -195,7 +248,8 @@ public class ClientMain {
                     }
                     if (num != i){
                         if (i == 999){
-                            SocketMessengerClient messenger = new SocketMessengerClient(socket, name);
+                            SocketMessengerClient messenger = new SocketMessengerClient(this.ip, PORT, socket, name,
+                                    IOHandlerClient.Interface.cli);
                             messenger.close();
                         }
                         System.out.println("[Players in the lobby: " + i + "]");
@@ -224,6 +278,7 @@ public class ClientMain {
                 socket.close();
         }
     }
+
 
     private static String askIP(){
         Scanner scanner = new Scanner(System.in);

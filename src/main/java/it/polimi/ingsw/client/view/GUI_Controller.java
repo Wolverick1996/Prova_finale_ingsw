@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.server.model.Scheme;
+import it.polimi.ingsw.client.network_client.ClientMain;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,10 +11,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -22,10 +25,17 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.NotBoundException;
 import java.util.ResourceBundle;
 
 public class GUI_Controller implements Initializable {
+
+    static final String RMI = "rmi";
+    static final String SOCKET = "socket";
+
+    private static SocketMessengerClient messenger;
 
     @FXML
     private AnchorPane rootPane;
@@ -39,6 +49,10 @@ public class GUI_Controller implements Initializable {
     private BorderPane pane4;
     @FXML
     private AnchorPane pane5;
+    @FXML
+    private TextField username, ip;
+    @FXML
+    private RadioButton socketButton, rmiButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
@@ -89,12 +103,70 @@ public class GUI_Controller implements Initializable {
     }
 
     @FXML
+    private String setUsername(ActionEvent event) {
+        return username.getText();
+    }
+
+    @FXML
+    private String setIP(ActionEvent event) {
+        return ip.getText();
+    }
+
+    @FXML
+    private String checkConnection(ActionEvent event) {
+        if (rmiButton.isSelected()) return RMI;
+        else return SOCKET;
+    }
+
+    @FXML
+    private boolean trySetup(ActionEvent event){
+        String name = setUsername(event);
+        String address = setIP(event);
+        String connection = checkConnection(event);
+        if (name.equals("") || name.equals("*")){
+            popup("Invalid name, your ID should be at least 1 character (not *)");
+            return false;
+        }
+        System.out.println( name + " is trying to connect using GUI... \n" + connection + " " + address);
+        ClientMain clientMain = ClientMain.instance(address);
+        try {
+            if (connection.equals(RMI)){
+                String message = clientMain.startGUIRMI(name);
+                if (message.equals("OK")){
+                    return true;
+                }
+                else
+                    popup(message);
+                return false;
+            } else {
+                String message = clientMain.startGUISocket(name);
+                if (message.equals("OK")){
+                    new Thread(messenger).start();
+                    System.out.println("Hello " + name + ". I'm you're GUI :)");
+                    return true;
+                }
+                else
+                    popup(message);
+                return false;
+            }
+        } catch (MalformedURLException m){
+            popup("Malformed URL");
+            return false;
+        } catch (NotBoundException n) {
+            popup("Not Bound!");
+            return false;
+        } catch (IOException e){
+            popup("IOException");
+            return false;
+        }
+    }
+
+    @FXML
     private void loadThird(ActionEvent event) throws IOException {
-        //if (numP == 1) {
-        pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
-        pane1.getChildren().setAll(pane2);
-        //} else
-        //loadSchemes(event);
+        if (trySetup(event)){
+            pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
+            pane1.getChildren().setAll(pane2);
+        }
     }
 
     @FXML
@@ -139,6 +211,10 @@ public class GUI_Controller implements Initializable {
         appStage.setResizable(true);
         appStage.setFullScreen(true);
         appStage.show();
+    }
+
+    public static void setMessenger(SocketMessengerClient sm) {
+        messenger = sm;
     }
 
 }

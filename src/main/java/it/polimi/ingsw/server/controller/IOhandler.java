@@ -478,6 +478,7 @@ public class IOhandler implements Observer{
      * @author Matteo
      */
     private synchronized String getInput(String player) throws RemoteException{
+
         for (ClientIntRMI r: usersRMI){
             if (r.getName().equals(player)){
                 return r.getInput();
