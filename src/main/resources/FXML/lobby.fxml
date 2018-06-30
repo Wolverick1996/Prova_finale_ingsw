@@ -10,10 +10,20 @@
       <VBox prefHeight="720.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Region prefHeight="50.0" prefWidth="900.0" />
+            <HBox prefHeight="35.0" prefWidth="200.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="60.0" />
+                  <Text fx:id="welcome" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome">
+                     <font>
+                        <Font name="Century Gothic" size="25.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="60.0" />
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Congratulations! You have connected successfully!">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="You have connected successfully">
                      <font>
                         <Font name="Century Gothic" size="25.0" />
                      </font>
