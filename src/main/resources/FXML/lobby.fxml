@@ -81,7 +81,7 @@
                      </toggleGroup>
                   </RadioButton>
                   <Region prefHeight="200.0" prefWidth="200.0" />
-                  <RadioButton mnemonicParsing="false" text="No" textFill="WHITE" toggleGroup="$yesOrNo_group">
+                  <RadioButton mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$yesOrNo_group">
                      <font>
                         <Font name="Century Gothic" size="25.0" />
                      </font>

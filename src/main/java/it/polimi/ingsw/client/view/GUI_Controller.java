@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.server.model.Scheme;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -100,8 +101,17 @@ public class GUI_Controller implements Initializable {
     private void loadSchemes(ActionEvent event) throws IOException {
         //waiting should get the timer from input and the number of players from the controller
         //waiting(15, 3);
-        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/chooseSchemes.fxml"));
-        Scene scene = new Scene(blah);
+        Scheme s1 = Scheme.initialize(1, false, 24);
+        Scheme s2 = Scheme.initialize(2, false, 24);
+        Scheme s3 = Scheme.initialize(3, false, 24);
+        Scheme s4 = Scheme.initialize(4, false, 24);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/chooseSchemes.fxml"));
+        Parent root = loader.load();
+        SchemesController controller = loader.getController();
+        controller.setSchemes(s1.toString(), s2.toString(), s3.toString(), s4.toString());
+
+        Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.setScene(scene);
         appStage.setResizable(true);

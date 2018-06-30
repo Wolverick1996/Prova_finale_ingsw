@@ -49,7 +49,7 @@
                      </font>
                   </Text>
                   <Region prefHeight="30.0" prefWidth="80.0" />
-                  <TextField opacity="0.8" text="192.168.0.1">
+                  <TextField opacity="0.8" text="localhost">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font>
