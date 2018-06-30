@@ -2,15 +2,17 @@ package it.polimi.ingsw.client.view;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
 
-public class SocketMessengerClient{
+public class SocketMessengerClient implements Runnable{
 
     private String username;
     private PrintWriter out;
     private BufferedReader in;
     private IOHandlerClient handler;
+    private Socket socket;
+    private String ip;
+    private int port;
 
     //DICTIONARY:
     private static final String FAILED = "";
@@ -24,13 +26,32 @@ public class SocketMessengerClient{
     private static final String REQUEST = "requestData";
     private static final String NEWLINE = "%%%nnn%%%";
 
-    public SocketMessengerClient(Socket s, String n) {
+    public SocketMessengerClient(String ip, int port, Socket s, String n, IOHandlerClient.Interface ui) {
         try{
+            this.ip = ip;
+            this.port = port;
+            this.socket = s;
             this.username = n;
-            this.handler = new IOHandlerClient(this.username, cli);
-            this.handler.startInterface();
             this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             this.out = new PrintWriter(s.getOutputStream());
+            if (ui == cli){
+                this.handler = new IOHandlerClient(this.username, cli);
+                this.handler.startInterface();
+                this.waitStart();
+            } else {
+                //GUI
+                this.handler = new IOHandlerClient(this.username, cli);
+                this.handler.startInterface();
+            }
+        } catch (IOException e) {
+            this.handler.send("Server is down, I repeat, server is down!");
+            this.handler.send(e.getMessage());
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
             this.waitStart();
         } catch (IOException e) {
             this.handler.send("Server is down, I repeat, server is down!");
@@ -41,11 +62,14 @@ public class SocketMessengerClient{
     private void waitStart() throws IOException{
         String request;
         //this method waits until the server gives a "GAMESTART" signal
+        this.handler.send("I'm wating for the server to tell me that I can start...");
+
         do {
             request = this.in.readLine();
         } while (!request.equals(GAMESTART));
         this.out.println(NAME + D_LEFT + this.username + D_RIGHT);
         this.out.flush();
+
         this.askIfReceived();
         this.game();
     }
@@ -117,7 +141,9 @@ public class SocketMessengerClient{
 
     private void askIfReceived() throws IOException {
         String request;
+        this.handler.send("I'm waiting to know if the server understood...");
         request = this.in.readLine();
+        this.handler.send("I read : " + request);
         if (request.equals(OK)){
             return;
         } else {
@@ -125,8 +151,10 @@ public class SocketMessengerClient{
         }
     }
 
-    public void close() {
+    public void close() throws IOException {
         if(this.handler!=null)
         this.handler.send("Bye bye <3");
+
+        this.socket.close();
     }
 }

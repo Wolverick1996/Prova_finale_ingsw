@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.network_client;
 
+import it.polimi.ingsw.client.view.GUI_Controller;
 import it.polimi.ingsw.client.view.GUI_Main;
+import it.polimi.ingsw.client.view.IOHandlerClient;
 import it.polimi.ingsw.client.view.SocketMessengerClient;
 import it.polimi.ingsw.server.controller.Lobby;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
@@ -181,26 +183,25 @@ public class ClientMain {
 
     public String startGUISocket(String name) throws IOException{
         Socket socket = null;
-        //int activePlayers;
+        String feedback = "";
         try {
             socket = new Socket(ip, PORT);
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
-
-            String issue = clientImplementationSocket.loginGUI(name);
-            in.close();
-            out.close();
-
-            return issue;
+            feedback = clientImplementationSocket.loginGUI(name);
+            if (Integer.parseInt(in.readLine()) == 1) {
+                out.println("20");
+                out.flush();
+            }
         }catch (NoSuchElementException e){
             System.err.println("NOTHING TO READ "+e.getMessage());
         } finally {
-            if (socket != null)
-                socket.close();
-            return "";
+            SocketMessengerClient s = new SocketMessengerClient(this.ip, PORT, socket, name, IOHandlerClient.Interface.gui);
+            GUI_Controller.setMessenger(s);
         }
+        return feedback;
     }
 
     private void startClientSocket() throws IOException{
@@ -247,7 +248,8 @@ public class ClientMain {
                     }
                     if (num != i){
                         if (i == 999){
-                            SocketMessengerClient messenger = new SocketMessengerClient(socket, name);
+                            SocketMessengerClient messenger = new SocketMessengerClient(this.ip, PORT, socket, name,
+                                    IOHandlerClient.Interface.cli);
                             messenger.close();
                         }
                         System.out.println("[Players in the lobby: " + i + "]");

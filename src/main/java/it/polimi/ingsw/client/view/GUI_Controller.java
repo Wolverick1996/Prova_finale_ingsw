@@ -34,6 +34,8 @@ public class GUI_Controller implements Initializable {
     final static String RMI = "rmi";
     final static String SOCKET = "socket";
 
+    private static SocketMessengerClient messenger;
+
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -130,7 +132,6 @@ public class GUI_Controller implements Initializable {
             if (connection.equals(RMI)){
                 String message = clientMain.startGUIRMI(name);
                 if (message.equals("OK")){
-                    System.out.println("Hello " + name + ", my world");
                     return true;
                 }
                 else
@@ -139,7 +140,8 @@ public class GUI_Controller implements Initializable {
             } else {
                 String message = clientMain.startGUISocket(name);
                 if (message.equals("OK")){
-                    System.out.println("Hello " + name + ", my world");
+                    new Thread(messenger).start();
+                    System.out.println("Hello " + name + ". I'm you're GUI :)");
                     return true;
                 }
                 else
@@ -147,13 +149,13 @@ public class GUI_Controller implements Initializable {
                 return false;
             }
         } catch (MalformedURLException m){
-            popup("Sei un culetto MalformedURL");
+            popup("Malformed URL");
             return false;
         } catch (NotBoundException n) {
-            popup("Quell'errore che pensavamo non esistesse, NotBound");
+            popup("Not Bound!");
             return false;
         } catch (IOException e){
-            popup("Perdirindina, IO");
+            popup("IOException");
             return false;
         }
     }
@@ -164,11 +166,6 @@ public class GUI_Controller implements Initializable {
             pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
             pane1.getChildren().setAll(pane2);
         }
-        //if (numP == 1) {
-        pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
-        pane1.getChildren().setAll(pane2);
-        //} else
-        //loadSchemes(event);
     }
 
     @FXML
@@ -206,4 +203,7 @@ public class GUI_Controller implements Initializable {
         appStage.show();
     }
 
+    public static void setMessenger(SocketMessengerClient sm) {
+        messenger = sm;
+    }
 }
