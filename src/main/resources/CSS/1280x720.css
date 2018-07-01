@@ -13,3 +13,45 @@
 .text-field {
     fx-background-color: white;
 }
+
+#tool1:hover {
+    -fx-scale-x: 1.45;
+    -fx-scale-y: 1.45;
+    -fx-scale-z: 1.45;
+}
+
+#tool2:hover {
+    -fx-scale-x: 1.45;
+    -fx-scale-y: 1.45;
+    -fx-scale-z: 1.45;
+}
+
+#tool3:hover {
+    -fx-scale-x: 1.45;
+    -fx-scale-y: 1.45;
+    -fx-scale-z: 1.45;
+}
+
+#pubOC1:hover {
+    -fx-scale-x: 1.45;
+    -fx-scale-y: 1.45;
+    -fx-scale-z: 1.45;
+}
+
+#pubOC2:hover {
+    -fx-scale-x: 1.45;
+    -fx-scale-y: 1.45;
+    -fx-scale-z: 1.45;
+}
+
+#pubOC3:hover {
+    -fx-scale-x: 1.45;
+    -fx-scale-y: 1.45;
+    -fx-scale-z: 1.45;
+}
+
+#privOC:hover {
+    -fx-scale-x: 1.45;
+    -fx-scale-y: 1.45;
+    -fx-scale-z: 1.45;
+}

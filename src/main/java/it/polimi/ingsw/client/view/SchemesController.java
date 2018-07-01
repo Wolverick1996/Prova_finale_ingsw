@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.server.model.Table;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -182,7 +183,6 @@ public class SchemesController {
 
     @FXML
     private void loadGame(ActionEvent event) throws IOException {
-        //Need to get reserve, tool cards, public objective cards and private objective card from controller
         ArrayList<ImageView> ownRestrictions = new ArrayList<>();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameScreen.fxml"));
@@ -200,7 +200,13 @@ public class SchemesController {
         else
             for (int i = 0; i < MAX_COL*MAX_ROW; i++)
                 ownRestrictions.add(restrictions.get(60+i));
-        controller.loadGame(ownRestrictions);
+
+        //CONTROLLER CALL to communicate the window pattern chosen
+        //CONTROLLER REQUEST to get numPlayers, reserve, tool cards, public objective cards and private objective card
+        int numP = (int)(Math.random()*3 + 2);
+        Table table = new Table(numP);
+
+        controller.loadGame(ownRestrictions, numP, table.printReserve());
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

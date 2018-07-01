@@ -264,7 +264,7 @@ public class ToolHandler {
      */
     @Override
     public String toString() {
-        String s = "These are the active PublicOCs:\n";
+        String s = "These are the active Tool Cards:\n";
         for(ToolCard t:activeID)
             s = s + t.toString() + "\n";
         return s;
