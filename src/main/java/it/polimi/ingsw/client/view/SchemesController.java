@@ -1,11 +1,18 @@
 package it.polimi.ingsw.client.view;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SchemesController {
@@ -139,6 +146,17 @@ public class SchemesController {
             }
         }
 
+    }
+
+    @FXML
+    private void loadGame(ActionEvent event) throws IOException {
+        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/gameScreen.fxml"));
+        Scene scene = new Scene(blah);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(true);
+        appStage.setFullScreen(true);
+        appStage.show();
     }
 
 }

@@ -143,14 +143,10 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="back" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#loadGame" prefHeight="75.0" prefWidth="75.0" stylesheets="@../CSS/1280x720.css" HBox.hgrow="ALWAYS">
-                     <graphic>
-                        <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/back.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
+                  <Button mnemonicParsing="false" text="&lt; Back">
+                     <font>
+                        <Font name="Century Gothic" size="18.0" />
+                     </font>
                   </Button>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                </children>

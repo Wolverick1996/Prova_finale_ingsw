@@ -240,7 +240,7 @@
             <HBox prefHeight="50.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" stylesheets="@../CSS/900x720.css" text="Next &gt;">
+                  <Button mnemonicParsing="false" onAction="#loadGame" stylesheets="@../CSS/900x720.css" text="Next &gt;">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font>

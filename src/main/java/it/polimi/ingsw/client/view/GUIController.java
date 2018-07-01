@@ -134,9 +134,8 @@ public class GUIController implements Initializable {
         try {
             if (connection.equals(RMI)){
                 String message = clientMain.startGUIRMI(name);
-                if (message.equals("OK")){
+                if (message.equals("OK"))
                     return true;
-                }
                 else
                     popup(message);
                 return false;
@@ -144,7 +143,7 @@ public class GUIController implements Initializable {
                 String message = clientMain.startGUISocket(name);
                 if (message.equals("OK")){
                     new Thread(messenger).start();
-                    System.out.println("Hello " + name + ". I'm you're GUI :)");
+                    System.out.println("Hello " + name + ". I'm your GUI :)");
                     return true;
                 }
                 else
@@ -186,17 +185,6 @@ public class GUIController implements Initializable {
         controller.setSchemes(s1.toString(), s2.toString(), s3.toString(), s4.toString());
 
         Scene scene = new Scene(root);
-        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        appStage.setScene(scene);
-        appStage.setResizable(true);
-        appStage.setFullScreen(true);
-        appStage.show();
-    }
-
-    @FXML
-    private void loadGame(ActionEvent event) throws IOException {
-        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/gameScreen.fxml"));
-        Scene scene = new Scene(blah);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.setScene(scene);
         appStage.setResizable(true);

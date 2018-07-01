@@ -206,15 +206,7 @@
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="passTurn" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="75.0" prefWidth="75.0">
-                           <graphic>
-                              <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/pass_turn.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
+                        <Button mnemonicParsing="false" text="End turn" />
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
