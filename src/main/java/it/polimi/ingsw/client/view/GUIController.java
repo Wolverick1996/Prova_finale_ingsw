@@ -30,10 +30,10 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.util.ResourceBundle;
 
-public class GUI_Controller implements Initializable {
+public class GUIController implements Initializable {
 
-    static final String RMI = "rmi";
-    static final String SOCKET = "socket";
+    private static final String RMI = "rmi";
+    private static final String SOCKET = "socket";
 
     private static SocketMessengerClient messenger;
 
@@ -50,9 +50,11 @@ public class GUI_Controller implements Initializable {
     @FXML
     private AnchorPane pane5;
     @FXML
-    private TextField username, ip;
+    private TextField username;
     @FXML
-    private RadioButton socketButton, rmiButton;
+    private TextField ip;
+    @FXML
+    private RadioButton rmiButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
