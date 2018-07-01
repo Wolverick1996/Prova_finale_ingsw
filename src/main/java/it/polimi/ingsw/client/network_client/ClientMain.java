@@ -1,10 +1,9 @@
 package it.polimi.ingsw.client.network_client;
 
-import it.polimi.ingsw.client.view.GUI_Controller;
-import it.polimi.ingsw.client.view.GUI_Main;
+import it.polimi.ingsw.client.view.GUIController;
+import it.polimi.ingsw.client.view.GUIMain;
 import it.polimi.ingsw.client.view.IOHandlerClient;
 import it.polimi.ingsw.client.view.SocketMessengerClient;
-import it.polimi.ingsw.server.controller.Lobby;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
 
 import java.io.BufferedReader;
@@ -38,7 +37,7 @@ public class ClientMain {
         String check_UI = "GUI";
 
         if (check_UI.equals("GUI")){
-            GUI_Main.main(args);
+            GUIMain.main(args);
             System.out.println("bye bye :)");
             System.exit(0);
         }
@@ -199,7 +198,7 @@ public class ClientMain {
             System.err.println("NOTHING TO READ "+e.getMessage());
         } finally {
             SocketMessengerClient s = new SocketMessengerClient(this.ip, PORT, socket, name, IOHandlerClient.Interface.gui);
-            GUI_Controller.setMessenger(s);
+            GUIController.setMessenger(s);
         }
         return feedback;
     }
