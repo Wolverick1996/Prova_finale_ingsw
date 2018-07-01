@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -22,6 +23,7 @@ public class SchemesController {
     private static final String DIVISOR = ": ";
     private static final int MAX_ROW = 4;
     private static final int MAX_COL = 5;
+    private ArrayList<ImageView> restrictions = new ArrayList<>();
 
     @FXML
     private Text name1;
@@ -47,8 +49,14 @@ public class SchemesController {
     private GridPane grid3;
     @FXML
     private GridPane grid4;
+    @FXML
+    private RadioButton grid1Button;
+    @FXML
+    private RadioButton grid2Button;
+    @FXML
+    private RadioButton grid3Button;
 
-    private void imageFactory(String restriction, int pane_index, int row, int col){
+    private void imageFactory(String restriction, int paneIndex, int row, int col){
         ArrayList<GridPane> panes = new ArrayList<>();
         panes.add(grid1);
         panes.add(grid2);
@@ -57,52 +65,76 @@ public class SchemesController {
 
         switch (restriction) {
             case "R":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_red.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/color_red.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/color_red.jpeg",
+                        60, 60, false, false)));
                 break;
             case "G":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_green.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/color_green.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/color_green.jpeg",
+                        60, 60, false, false)));
                 break;
             case "Y":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_yellow.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/color_yellow.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/color_yellow.jpeg",
+                        60, 60, false, false)));
                 break;
             case "B":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_blue.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/color_blue.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/color_blue.jpeg",
+                        60, 60, false, false)));
                 break;
             case "P":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_purple.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/color_purple.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/color_purple.jpeg",
+                        60, 60, false, false)));
                 break;
             case "1":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_1.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/value_1.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/value_1.jpeg",
+                        60, 60, false, false)));
                 break;
             case "2":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_2.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/value_2.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/value_2.jpeg",
+                        60, 60, false, false)));
                 break;
             case "3":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_3.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/value_3.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/value_3.jpeg",
+                        60, 60, false, false)));
                 break;
             case "4":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_4.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/value_4.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/value_4.jpeg",
+                        60, 60, false, false)));
                 break;
             case "5":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_5.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/value_5.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/value_5.jpeg",
+                        60, 60, false, false)));
                 break;
             case "6":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_6.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/value_6.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/value_6.jpeg",
+                        60, 60, false, false)));
                 break;
             default:
-                panes.get(pane_index).add(new ImageView(new Image("/images/no_restr.jpeg",
+                panes.get(paneIndex).add(new ImageView(new Image("/images/no_restr.jpeg",
                         60, 60, false, false)), col, row);
+                restrictions.add(new ImageView(new Image("/images/no_restr.jpeg",
+                        60, 60, false, false)));
                 break;
         }
     }
@@ -150,8 +182,27 @@ public class SchemesController {
 
     @FXML
     private void loadGame(ActionEvent event) throws IOException {
-        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/gameScreen.fxml"));
-        Scene scene = new Scene(blah);
+        //Need to get reserve, tool cards, public objective cards and private objective card from controller
+        ArrayList<ImageView> ownRestrictions = new ArrayList<>();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameScreen.fxml"));
+        Parent root = loader.load();
+        GameController controller = loader.getController();
+        if (grid1Button.isSelected())
+            for (int i = 0; i < MAX_COL*MAX_ROW; i++)
+                ownRestrictions.add(restrictions.get(i));
+        else if (grid2Button.isSelected())
+            for (int i = 0; i < MAX_COL*MAX_ROW; i++)
+                ownRestrictions.add(restrictions.get(20+i));
+        else if (grid3Button.isSelected())
+            for (int i = 0; i < MAX_COL*MAX_ROW; i++)
+                ownRestrictions.add(restrictions.get(40+i));
+        else
+            for (int i = 0; i < MAX_COL*MAX_ROW; i++)
+                ownRestrictions.add(restrictions.get(60+i));
+        controller.loadGame(ownRestrictions);
+
+        Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.setScene(scene);
         appStage.setResizable(true);

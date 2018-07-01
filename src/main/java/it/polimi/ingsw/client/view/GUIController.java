@@ -192,17 +192,6 @@ public class GUIController implements Initializable {
         appStage.show();
     }
 
-    @FXML
-    private void loadPlayer(ActionEvent event) throws IOException {
-        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/player.fxml"));
-        Scene scene = new Scene(blah);
-        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        appStage.setScene(scene);
-        appStage.setResizable(true);
-        appStage.setFullScreen(true);
-        appStage.show();
-    }
-
     public static void setMessenger(SocketMessengerClient sm) {
         messenger = sm;
     }
