@@ -50,50 +50,52 @@ public class SchemesController {
 
         switch (restriction) {
             case "R":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_red.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/color_red.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "G":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_green.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/color_green.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "Y":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_yellow.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/color_yellow.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "B":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_blue.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/color_blue.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "P":
-                panes.get(pane_index).add(new ImageView(new Image("/images/color_purple.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/color_purple.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "1":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_1.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/value_1.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "2":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_2.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/value_2.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "3":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_3.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/value_3.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "4":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_4.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/value_4.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "5":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_5.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/value_5.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             case "6":
-                panes.get(pane_index).add(new ImageView(new Image("/images/value_6.png",
+                panes.get(pane_index).add(new ImageView(new Image("/images/value_6.jpeg",
                         60, 60, false, false)), col, row);
                 break;
             default:
+                panes.get(pane_index).add(new ImageView(new Image("/images/no_restr.jpeg",
+                        60, 60, false, false)), col, row);
                 break;
         }
     }
