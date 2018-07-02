@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.network_client;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import it.polimi.ingsw.client.view.GUIController;
 import it.polimi.ingsw.client.view.GUIMain;
 import it.polimi.ingsw.client.view.IOHandlerClient;
@@ -18,6 +19,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientMain {
 
@@ -34,7 +37,7 @@ public class ClientMain {
     }
 
     public static void main(String[] args) {
-        String check_UI = "GUI";
+        String check_UI = "CLI";
 
         if (check_UI.equals("GUI")){
             GUIMain.main(args);
@@ -203,11 +206,50 @@ public class ClientMain {
         return feedback;
     }
 
+    class InputDelay implements Runnable {
+
+        PrintWriter out;
+
+        InputDelay (PrintWriter out) {
+            this.out = out;
+        }
+        @Override
+        public void run() {
+            try{
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                int delay = 0;
+                String delayString = null;
+                do {
+                    System.out.println("Please set a timer (min 15s, max 60s)");
+                    try {
+                        // wait until we have data to complete a readLine()
+                        while (!in.ready()) {
+                            Thread.sleep(200);
+                        }
+                        delayString = in.readLine();
+                        delay = Integer.parseInt(delayString);
+                    } catch (InterruptedException e) {
+                        System.out.println("Never mind... you were too slow");
+                        return;
+                    } catch (NumberFormatException n) {
+                        delay = -1;
+                    }
+                } while ("".equals(delay) || delay < 15 || delay > 60);
+                this.out.println(delayString);
+                this.out.flush();
+            } catch (IOException e){
+                System.out.println("IOEXCEPTION IN INPUTDELAY");
+            }
+        }
+    }
+
     private void startClientSocket() throws IOException{
         Socket socket = null;
         int activePlayers;
         boolean success;
         String name = "";
+        ExecutorService executorService = Executors.newCachedThreadPool();
+
         try {
             socket = new Socket(ip, PORT);
             Scanner scanner = new Scanner(System.in);
@@ -218,24 +260,14 @@ public class ClientMain {
             do {
                 name = clientImplementationSocket.login();
                 activePlayers = Integer.parseInt(in.readLine());
+                success = true;
                 if (activePlayers == 1){
                     System.out.println("You are the first player of the lobby!");
-                    int delay = 0;
-                    String delayString = null;
-                    while (delay < 15 || delay > 60){
-                        System.out.println("Please set a timer (min 15s, max 60s)");
-                        delayString = scanner.nextLine();
-                        try{
-                            delay = Integer.parseInt(delayString);
-                        }catch (NumberFormatException e){
-                            delay = -1;
-                        }
-                    }
-                    out.println(delayString);
-                    out.flush();
+                    InputDelay doWait = new InputDelay(out);
+                    executorService.submit(doWait);
+                } else {
+                    System.out.println("Waiting for other players...\n");
                 }
-                success = true;
-                System.out.println("Waiting for other players...\n");
                 int num = 0;
                 int i;
                 while (success){
@@ -247,6 +279,7 @@ public class ClientMain {
                     }
                     if (num != i){
                         if (i == 999){
+                            executorService.shutdownNow();
                             SocketMessengerClient messenger = new SocketMessengerClient(this.ip, PORT, socket, name,
                                     IOHandlerClient.Interface.cli);
                             messenger.close();

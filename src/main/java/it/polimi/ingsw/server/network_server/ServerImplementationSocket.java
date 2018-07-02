@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerImplementationSocket implements Runnable {
     private Socket socket;
@@ -18,20 +20,48 @@ public class ServerImplementationSocket implements Runnable {
         this.socket = socket;
         this.lobby = lobby;
     }
+
+    class waitForDelay implements Runnable {
+
+        waitForDelay() {
+//TRY AND USE EXECUTORSERVICE HERE
+        }
+        @Override
+        public void run() {
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                while (!in.ready()){
+                    Thread.sleep(200);
+                }
+                lobby.setDelay(Integer.parseInt(in.readLine()));
+                System.out.println("GOT IT!");
+            } catch (IOException e) {
+                System.err.println("Connection lost from a client");
+                if (playerConnected != null){
+                    System.out.println("[Socket Server]\t" +playerConnected+ "  disconnected....");
+                    lobby.removePlayer(playerConnected);
+                    playerConnected = null;
+                }
+            } catch (InterruptedException i) {
+                System.out.println("WAITFORDELAY WAS INTERRUPTED");
+            }
+        }
+    }
+
     public void run() {
         try {
-            BufferedReader in;
+            //BufferedReader in;
             PrintWriter out;
-            String string;
             boolean gameCanStart;
             do{
                 login();
-                in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+                //in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
                 out = new PrintWriter(this.socket.getOutputStream());
                 out.println(this.lobby.getPlayers().size());
                 out.flush();
+                Thread waitForInput = new Thread(new waitForDelay());
                 if (this.lobby.getPlayers().size() == 1){
-                    this.lobby.setDelay(Integer.parseInt(in.readLine()));
+                    waitForInput.start();
                 }
                 gameCanStart = true;
                 while (gameCanStart && !this.lobby.hasStarted()){
@@ -47,6 +77,8 @@ public class ServerImplementationSocket implements Runnable {
                         out.flush();
                     }*/
                 }
+                if (!waitForInput.isInterrupted())
+                    waitForInput.interrupt();
                 out.println(999);
                 out.flush();
                 System.out.println("HERE I CLOSE THE SOCKET IMPLEMENTATION THREAD :\t" + Thread.currentThread().getName());
