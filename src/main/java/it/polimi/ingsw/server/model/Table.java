@@ -399,7 +399,7 @@ public class Table {
         }
         return "Table: \n" + printReserve() + "\n" + printRoundtrack() + Enum.Color.PURPLE.escape() + "\nTurn: " +
                 Enum.Color.RESET + realTurn + Enum.Color.PURPLE.escape() + "\nRound: " + Enum.Color.RESET + (round+1) +
-                Enum.Color.PURPLE.escape() + "\nPublic Objective cards: " + Enum.Color.RESET + s;
+                Enum.Color.PURPLE.escape() + "\nPublic Objective Cards: " + Enum.Color.RESET + s;
     }
 
 }

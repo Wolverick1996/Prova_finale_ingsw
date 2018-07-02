@@ -15,43 +15,71 @@
 }
 
 #tool1:hover {
-    -fx-scale-x: 1.45;
-    -fx-scale-y: 1.45;
-    -fx-scale-z: 1.45;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-scale-z: 1.8;
+}
+
+#tool1 {
+    -fx-background-size: cover;
 }
 
 #tool2:hover {
-    -fx-scale-x: 1.45;
-    -fx-scale-y: 1.45;
-    -fx-scale-z: 1.45;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-scale-z: 1.8;
+}
+
+#tool2 {
+    -fx-background-size: cover;
 }
 
 #tool3:hover {
-    -fx-scale-x: 1.45;
-    -fx-scale-y: 1.45;
-    -fx-scale-z: 1.45;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-scale-z: 1.8;
+}
+
+#tool3 {
+    -fx-background-size: cover;
 }
 
 #pubOC1:hover {
-    -fx-scale-x: 1.45;
-    -fx-scale-y: 1.45;
-    -fx-scale-z: 1.45;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-scale-z: 1.8;
+}
+
+#pubOC1 {
+    -fx-background-size: cover;
 }
 
 #pubOC2:hover {
-    -fx-scale-x: 1.45;
-    -fx-scale-y: 1.45;
-    -fx-scale-z: 1.45;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-scale-z: 1.8;
+}
+
+#pubOC2 {
+    -fx-background-size: cover;
 }
 
 #pubOC3:hover {
-    -fx-scale-x: 1.45;
-    -fx-scale-y: 1.45;
-    -fx-scale-z: 1.45;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-scale-z: 1.8;
+}
+
+#pubOC3 {
+    -fx-background-size: cover;
 }
 
 #privOC:hover {
-    -fx-scale-x: 1.45;
-    -fx-scale-y: 1.45;
-    -fx-scale-z: 1.45;
+    -fx-scale-x: 1.8;
+    -fx-scale-y: 1.8;
+    -fx-scale-z: 1.8;
+}
+
+#privOC {
+    -fx-background-size: cover;
 }

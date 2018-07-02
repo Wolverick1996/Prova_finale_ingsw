@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.Table;
+import it.polimi.ingsw.server.model.*;
+import it.polimi.ingsw.server.model.Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SchemesController {
 
@@ -203,10 +206,23 @@ public class SchemesController {
 
         //CONTROLLER CALL to communicate the window pattern chosen
         //CONTROLLER REQUEST to get numPlayers, reserve, tool cards, public objective cards and private objective card
+
         int numP = (int)(Math.random()*3 + 2);
         Table table = new Table(numP);
+        Player p = new Player("ingconti", 0);
+        List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
+        table.setPlayers(nicknames);
 
-        controller.loadGame(ownRestrictions, numP, table.printReserve());
+        String privOC = "This is your Private Objective Card:\n" +
+                PrivObjHandler.getColor(p).escape() + PrivObjHandler.getName(p) + "\n" + Enum.Color.RESET +
+                PrivObjHandler.getDescription(p) + "\n";
+
+        String tools = "\nTool Cards on table:\n";
+        for (int i = 0; i < 3; i++)
+        tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET + ToolHandler.getDescription(i) +
+                Enum.Color.YELLOW.escape() + "\n Tokens on: " + Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
+
+        controller.loadGame(ownRestrictions, numP, table.printReserve(), privOC, table.toString(), tools);
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
