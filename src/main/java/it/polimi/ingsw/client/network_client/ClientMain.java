@@ -18,6 +18,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientMain {
 
@@ -34,7 +36,7 @@ public class ClientMain {
     }
 
     public static void main(String[] args) {
-        String check_UI = "GUI";
+        String check_UI = "CLI";
 
         if (check_UI.equals("GUI")){
             GUIMain.main(args);
@@ -100,6 +102,7 @@ public class ClientMain {
 
     private void startClientRMI() throws MalformedURLException, RemoteException{
         ServerIntRMI server;
+        ExecutorService executorService = Executors.newCachedThreadPool();
         try {
 
             boolean loginSuccess = false;
@@ -137,25 +140,21 @@ public class ClientMain {
                     else {
                         if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
+                        else if (server.hasStarted()){
+                            fullLobby = false;
+                            idTaken = false;
+                        }
                         else
                             idTaken = true;
                     }
                 }
             } while (!loginSuccess);
 
-            Scanner scanner = new Scanner(System.in);
             if (server.playersInLobby() == 1){
                 System.out.println("You are the first player of the lobby!");
-                int delay = 0;
-                while(delay < 15 || delay > 60){
-                    System.out.println("Please set a timer (min 15s, max 60s)");
-                    try {
-                        delay = Integer.parseInt(scanner.nextLine());
-                    }catch (NumberFormatException e){
-                        delay = -1;
-                    }
-                }
-                server.setDelay(delay);
+                InputDelay doWait = new InputDelay(new PrintWriter(System.out), false);
+                executorService.submit(doWait);
+                server.setDelay(doWait.getResult());
             }
             boolean active = true;
             System.out.println("Waiting for other players...\n");
@@ -168,6 +167,7 @@ public class ClientMain {
                     System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                     num = server.playersInLobby();
                 } else if (server.hasStarted()){
+                    executorService.shutdownNow();
                     break;
                 }
 
@@ -203,11 +203,73 @@ public class ClientMain {
         return feedback;
     }
 
+    class InputDelay implements Runnable {
+
+        PrintWriter out;
+        boolean isRmi;
+        boolean finished;
+        int result = 20;
+
+        InputDelay (PrintWriter out, boolean isRmi) {
+            this.out = out;
+            this.isRmi = isRmi;
+            this.finished = false;
+        }
+        @Override
+        public void run() {
+            try{
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                int delay = 0;
+                String delayString = null;
+                do {
+                    System.out.println("Please set a timer (min 15s, max 60s)");
+                    try {
+                        // wait until we have data to complete a readLine()
+                        while (!in.ready()) {
+                            Thread.sleep(200);
+                        }
+                        delayString = in.readLine();
+                        delay = Integer.parseInt(delayString);
+                    } catch (InterruptedException e) {
+                        System.out.println("Never mind... you were too slow");
+                        this.finished = false;
+                        return;
+                    } catch (NumberFormatException n) {
+                        delay = -1;
+                    }
+                } while ("".equals(delayString) || delay < 15 || delay > 60);
+                if (isRmi){
+                    this.result = delay;
+                    this.finished = true;
+                }
+                else{
+                    this.out.println(delayString);
+                    this.out.flush();
+                }
+            } catch (IOException e){
+                System.out.println("IOEXCEPTION IN INPUTDELAY");
+            }
+        }
+
+        int getResult() {
+            while (!finished){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    System.out.println("GETRESULT INTERRUPTED");
+                }
+            }
+            return this.result;
+        }
+    }
+
     private void startClientSocket() throws IOException{
         Socket socket = null;
         int activePlayers;
         boolean success;
         String name = "";
+        ExecutorService executorService = Executors.newCachedThreadPool();
+
         try {
             socket = new Socket(ip, PORT);
             Scanner scanner = new Scanner(System.in);
@@ -218,24 +280,14 @@ public class ClientMain {
             do {
                 name = clientImplementationSocket.login();
                 activePlayers = Integer.parseInt(in.readLine());
+                success = true;
                 if (activePlayers == 1){
                     System.out.println("You are the first player of the lobby!");
-                    int delay = 0;
-                    String delayString = null;
-                    while (delay < 15 || delay > 60){
-                        System.out.println("Please set a timer (min 15s, max 60s)");
-                        delayString = scanner.nextLine();
-                        try{
-                            delay = Integer.parseInt(delayString);
-                        }catch (NumberFormatException e){
-                            delay = -1;
-                        }
-                    }
-                    out.println(delayString);
-                    out.flush();
+                    InputDelay doWait = new InputDelay(out, false);
+                    executorService.submit(doWait);
+                } else {
+                    System.out.println("Waiting for other players...\n");
                 }
-                success = true;
-                System.out.println("Waiting for other players...\n");
                 int num = 0;
                 int i;
                 while (success){
@@ -247,6 +299,7 @@ public class ClientMain {
                     }
                     if (num != i){
                         if (i == 999){
+                            executorService.shutdownNow();
                             SocketMessengerClient messenger = new SocketMessengerClient(this.ip, PORT, socket, name,
                                     IOHandlerClient.Interface.cli);
                             messenger.close();
