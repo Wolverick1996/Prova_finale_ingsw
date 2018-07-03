@@ -32,8 +32,16 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         }
 
         if (lobby.hasStarted()){
-            a.notify("The game started without you :(\n\n\nGet better friends dude");
-            return false;
+            if (lobby.addPlayer(a.getName())){
+                clients.add(a);
+                usernames.add(a.getName());
+                System.out.println("[RMI Server]\t" +a.getName()+ "  got connected again....");
+                a.notify("Welcome back " +a.getName()+ ".\nYou have connected successfully.");
+                return true;
+            }else{
+                a.notify("The game started without you :(\n\nGet better friends dude");
+                return false;
+            }
         }
 
         if (!lobby.addPlayer(a.getName()))
@@ -99,7 +107,6 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         String s = null;
         for (ClientIntRMI c : clients){
             if(c.getName().equals(username)){
-                //c.freeScanner();
                 s = c.getInput();
             }
         }
