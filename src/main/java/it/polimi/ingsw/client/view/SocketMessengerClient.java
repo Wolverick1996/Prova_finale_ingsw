@@ -6,6 +6,7 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
 
 public class SocketMessengerClient implements Runnable{
 
+    private Boolean debug = true;
     private String username;
     private PrintWriter out;
     private BufferedReader in;
@@ -62,7 +63,7 @@ public class SocketMessengerClient implements Runnable{
     private void waitStart() throws IOException{
         String request;
         //this method waits until the server gives a "GAMESTART" signal
-        this.handler.send("I'm wating for the server to tell me that I can start...");
+        if (debug) this.handler.send("I'm wating for the server to tell me that I can start...");
 
         do {
             request = this.in.readLine();
@@ -141,9 +142,9 @@ public class SocketMessengerClient implements Runnable{
 
     private void askIfReceived() throws IOException {
         String request;
-        this.handler.send("I'm waiting to know if the server understood...");
+        if (debug) this.handler.send("I'm waiting to know if the server understood...");
         request = this.in.readLine();
-        this.handler.send("I read : " + request);
+        if (debug) this.handler.send("I read : " + request);
         if (request.equals(OK)){
             return;
         } else {
@@ -156,5 +157,12 @@ public class SocketMessengerClient implements Runnable{
         this.handler.send("Bye bye <3");
 
         this.socket.close();
+    }
+
+    public void GUIsetTimer(int delay) {
+        if (delay>=15 && delay <=60) {
+            this.out.println(delay);
+            this.out.flush();
+        }
     }
 }

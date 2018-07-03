@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.network_client;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import it.polimi.ingsw.client.view.GUIController;
 import it.polimi.ingsw.client.view.GUIMain;
 import it.polimi.ingsw.client.view.IOHandlerClient;
@@ -23,6 +22,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ClientMain {
+
+    private static ServerIntRMI serverRMI;
 
     private String ip;
     private static final int PORT = 1337;
@@ -85,7 +86,7 @@ public class ClientMain {
     public String startGUIRMI(String text) throws MalformedURLException, RemoteException, NotBoundException{
         ServerIntRMI server;
         server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
-
+        serverRMI = server;
         ClientImplementationRMI client = new ClientImplementationRMI(text);
 
         ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
@@ -98,6 +99,12 @@ public class ClientMain {
                 return "Lobby is full!";
             else
                 return "ID already taken!";
+        }
+    }
+
+    public static void setGUIlobbyDelay(int delay) throws RemoteException{
+        if (delay>=15 && delay<=60) {
+            serverRMI.setDelay(delay);
         }
     }
 
@@ -194,7 +201,7 @@ public class ClientMain {
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             feedback = clientImplementationSocket.loginGUI(name);
             if (Integer.parseInt(in.readLine()) == 1) {
-                out.println("20");
+                out.println("15");
                 out.flush();
             }
         }catch (NoSuchElementException e){

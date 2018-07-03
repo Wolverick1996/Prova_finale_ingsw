@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.view;
 import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.client.network_client.ClientMain;
 import javafx.animation.PauseTransition;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,14 +29,20 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
 
     private static final String RMI = "rmi";
     private static final String SOCKET = "socket";
-
     private static SocketMessengerClient messenger;
+
+    private int lobbyDelay = 20;
+    private int numPlayers = 0;
+    private boolean hasStarted = false;
+    private boolean isRMI = false;
+    private boolean customSchemes = false;
 
     @FXML
     private AnchorPane rootPane;
@@ -55,6 +62,10 @@ public class GUIController implements Initializable {
     private TextField ip;
     @FXML
     private RadioButton rmiButton;
+    @FXML
+    private RadioButton customSchemesButtonNo;
+    @FXML
+    private TextField delayTextField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
@@ -120,6 +131,10 @@ public class GUIController implements Initializable {
         else return SOCKET;
     }
 
+    //***************************//
+    //       LOGIN PHASE         //
+    //***************************//
+
     @FXML
     private boolean trySetup(ActionEvent event){
         String name = setUsername(event);
@@ -134,8 +149,10 @@ public class GUIController implements Initializable {
         try {
             if (connection.equals(RMI)){
                 String message = clientMain.startGUIRMI(name);
-                if (message.equals("OK"))
+                if (message.equals("OK")) {
+                    isRMI = true;
                     return true;
+                }
                 else
                     popup(message);
                 return false;
@@ -167,6 +184,32 @@ public class GUIController implements Initializable {
         if (trySetup(event)){
             pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
             pane1.getChildren().setAll(pane2);
+        }
+    }
+
+    //***************************//
+    //       SETUP PHASE         //
+    //***************************//
+
+    private void setup(ActionEvent event) {
+        if (!customSchemesButtonNo.isSelected()) customSchemes = true;
+        try {
+            lobbyDelay = Integer.parseInt(delayTextField.getText());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid delay, was set to 20");
+        }
+        setDelay(lobbyDelay);
+    }
+
+    private void setDelay(int delay) {
+        if (isRMI) {
+            try {
+                ClientMain.setGUIlobbyDelay(delay);
+            } catch (RemoteException e) {
+                System.out.println("FATAL ERROR ON SERVER :(");
+            }
+        } else {
+            messenger.GUIsetTimer(delay);
         }
     }
 
