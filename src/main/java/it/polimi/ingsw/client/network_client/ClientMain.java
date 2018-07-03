@@ -38,9 +38,9 @@ public class ClientMain {
     }
 
     public static void main(String[] args) {
-        String check_UI = "CLI";
-
-        if (check_UI.equals("GUI")){
+        //String check_UI = args[0];
+        String check_UI = "gui";
+        if (check_UI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
             System.exit(0);
@@ -110,6 +110,7 @@ public class ClientMain {
 
     private void startClientRMI() throws MalformedURLException, RemoteException{
         ServerIntRMI server;
+        ExecutorService executorService = Executors.newCachedThreadPool();
         try {
 
             boolean loginSuccess = false;
@@ -147,25 +148,21 @@ public class ClientMain {
                     else {
                         if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
+                        else if (server.hasStarted()){
+                            fullLobby = false;
+                            idTaken = false;
+                        }
                         else
                             idTaken = true;
                     }
                 }
             } while (!loginSuccess);
 
-            Scanner scanner = new Scanner(System.in);
             if (server.playersInLobby() == 1){
                 System.out.println("You are the first player of the lobby!");
-                int delay = 0;
-                while(delay < 15 || delay > 60){
-                    System.out.println("Please set a timer (min 15s, max 60s)");
-                    try {
-                        delay = Integer.parseInt(scanner.nextLine());
-                    }catch (NumberFormatException e){
-                        delay = -1;
-                    }
-                }
-                server.setDelay(delay);
+                InputDelay doWait = new InputDelay(new PrintWriter(System.out), true);
+                executorService.submit(doWait);
+                server.setDelay(doWait.getResult());
             }
             boolean active = true;
             System.out.println("Waiting for other players...\n");
@@ -178,6 +175,7 @@ public class ClientMain {
                     System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                     num = server.playersInLobby();
                 } else if (server.hasStarted()){
+                    executorService.shutdownNow();
                     break;
                 }
 
@@ -216,9 +214,14 @@ public class ClientMain {
     class InputDelay implements Runnable {
 
         PrintWriter out;
+        boolean isRmi;
+        boolean finished;
+        int result = 20;
 
-        InputDelay (PrintWriter out) {
+        InputDelay (PrintWriter out, boolean isRmi) {
             this.out = out;
+            this.isRmi = isRmi;
+            this.finished = false;
         }
         @Override
         public void run() {
@@ -237,16 +240,35 @@ public class ClientMain {
                         delay = Integer.parseInt(delayString);
                     } catch (InterruptedException e) {
                         System.out.println("Never mind... you were too slow");
+                        this.finished = false;
                         return;
                     } catch (NumberFormatException n) {
                         delay = -1;
                     }
-                } while ("".equals(delay) || delay < 15 || delay > 60);
-                this.out.println(delayString);
-                this.out.flush();
+                } while ("".equals(delayString) || delay < 15 || delay > 60);
+                if (isRmi){
+                    this.result = delay;
+                    this.finished = true;
+                }
+                else{
+                    this.out.println(delayString);
+                    this.out.flush();
+                    System.out.println("Delay setted!");
+                }
             } catch (IOException e){
                 System.out.println("IOEXCEPTION IN INPUTDELAY");
             }
+        }
+
+        int getResult() {
+            while (!finished){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    System.out.println("GETRESULT INTERRUPTED");
+                }
+            }
+            return this.result;
         }
     }
 
@@ -270,7 +292,7 @@ public class ClientMain {
                 success = true;
                 if (activePlayers == 1){
                     System.out.println("You are the first player of the lobby!");
-                    InputDelay doWait = new InputDelay(out);
+                    InputDelay doWait = new InputDelay(out, false);
                     executorService.submit(doWait);
                 } else {
                     System.out.println("Waiting for other players...\n");
@@ -317,7 +339,6 @@ public class ClientMain {
                 socket.close();
         }
     }
-
 
     private static String askIP(){
         Scanner scanner = new Scanner(System.in);

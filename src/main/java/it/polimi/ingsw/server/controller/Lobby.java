@@ -47,7 +47,7 @@ public class Lobby /*extends Observer*/ {
      * @author Matteo
      */
     void startGame(){
-        hasStarted = true;
+        this.hasStarted = true;
         Controller.startGame(players, this, this.server, sockets);
         Controller.getMyIO(this).broadcast("\n\tSwitching from lobby to Game ... \n\n");
         Controller.switchContext(this);
@@ -63,6 +63,12 @@ public class Lobby /*extends Observer*/ {
      */
     public synchronized boolean addPlayer(String username){
         canIGo();
+
+        if(this.hasStarted){
+            this.streetlight = true;
+            return checkReConnection(username);
+        }
+
         if (this.players.size()<= MAX_PLAYERS){
 
             for (String s : this.players){
@@ -107,6 +113,27 @@ public class Lobby /*extends Observer*/ {
     }
 
     /**
+     * Check if there is a disconnected player in the current game, if the answer is positive he joins the match
+     *
+     * @param username: the username to be checked
+     * @return true if there is a disconnectd player in the game otherwise false
+     * @author Andrea
+     */
+    private boolean checkReConnection(String username){
+        boolean wasConnected = false;
+        for (String p : players){
+            if (p.equals(username))
+                wasConnected = true;
+        }
+
+        if(wasConnected && Controller.getMyGame(this).getPlayer(username).isDisconnected()){
+            Controller.getMyGame(this).getPlayer(username).setDisconnected(false);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Adds a socket to sockets array to be passed to the controller
      *
      * @param s: the socket to be added
@@ -117,14 +144,19 @@ public class Lobby /*extends Observer*/ {
     }
 
     /**
-     * Removes the player from the lobby
+     * Removes the player from the lobby or setDisconnected a player during the match
      *
      * @param username: username of the player to be removed
      * @return true if the player can be removed to the lobby, otherwise false
-     * @author Matteo
+     * @author Andrea
      */
     public boolean removePlayer(String username){
         canIGo();
+        if (hasStarted){
+            Controller.getMyGame(this).getPlayer(username).setDisconnected(true);
+            this.streetlight = true;
+            return true;
+        }
         for (String s : this.players){
             if (s.equals(username)){
                 this.players.remove(s);

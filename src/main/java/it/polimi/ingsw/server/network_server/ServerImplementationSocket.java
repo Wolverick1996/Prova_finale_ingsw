@@ -8,8 +8,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ServerImplementationSocket implements Runnable {
     private Socket socket;
@@ -21,9 +19,9 @@ public class ServerImplementationSocket implements Runnable {
         this.lobby = lobby;
     }
 
-    class waitForDelay implements Runnable {
+    class WaitForDelay implements Runnable {
 
-        waitForDelay() {
+        WaitForDelay() {
 //TRY AND USE EXECUTORSERVICE HERE
         }
         @Override
@@ -59,7 +57,7 @@ public class ServerImplementationSocket implements Runnable {
                 out = new PrintWriter(this.socket.getOutputStream());
                 out.println(this.lobby.getPlayers().size());
                 out.flush();
-                Thread waitForInput = new Thread(new waitForDelay());
+                Thread waitForInput = new Thread(new WaitForDelay());
                 if (this.lobby.getPlayers().size() == 1){
                     waitForInput.start();
                 }

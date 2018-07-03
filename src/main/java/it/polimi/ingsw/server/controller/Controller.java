@@ -19,6 +19,13 @@ public class Controller {
     /* These attributes only serve as controller's addresses */
 
     /**
+     * Private constructor
+     */
+    private Controller(){
+        super();
+    }
+
+    /**
      * Initializes Game and IOhandler at the request of Lobby and combines classes
      *
      * @param nicknames: list of players nicknames

@@ -103,18 +103,21 @@ public class Game implements Observer {
      * @author Matteo
      */
     private void next(){
-        if (this.turn > this.players.size()*2* MAX_ROUNDS){
+        if (this.turn > this.players.size()*2* MAX_ROUNDS || howManyActivePlayers() <= 1){
             //End Game
             gameEnding();
         } else {
             Boolean end = false;
+            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
             if (this.players.get(active).getTool8()){
                 end = true;
                 Controller.getMyIO(this).broadcast("Used tool 8, so is passing the turn...");
                 this.players.get(active).setTool8(false);
             }
-            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
-
+            if (this.players.get(active).isDisconnected()){
+                end = true;
+                Controller.getMyIO(this).broadcast(players.get(active).getUsername() + " it's disconnected, so is passing the turn...");
+            }
             while (!end){
                 String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
                 switch (action){
@@ -303,43 +306,55 @@ public class Game implements Observer {
     private void gameEnding(){
         Controller.getMyIO(this).broadcast("Game ended, calculating points...\n");
 
-        int highestMade = 0;
-        for (Player p : this.players){
-            p.countPoints();
-            if (p.getPoints() > highestMade)
-                highestMade = p.getPoints();
-            Controller.getMyIO(this).broadcast(p.getUsername() + ":" + p.getPoints());
+        Player winner = null;
+
+        if (howManyActivePlayers() == 1){
+            for (Player p : players){
+                if (!p.isDisconnected())
+                    winner = p;
+            }
         }
+        else{
 
-        ArrayList<Player> winners = new ArrayList<>();
-        int highestWithPrivOC = 0;
-        int highestNumOfTokens = 0;
-        for (Player p : this.players){
-            if (p.getPoints() == highestMade && p.pointsInPrivObj() >= highestWithPrivOC){
-                highestWithPrivOC = p.pointsInPrivObj();
+            int highestMade = 0;
+            for (Player p : this.players){
+                p.countPoints();
+                if (p.getPoints() > highestMade)
+                    highestMade = p.getPoints();
+                Controller.getMyIO(this).broadcast(p.getUsername() + ":" + p.getPoints());
+            }
 
-                if (p.pointsInPrivObj() == highestWithPrivOC && p.getTokens() >= highestNumOfTokens){
-                    highestNumOfTokens = p.getTokens();
+            ArrayList<Player> winners = new ArrayList<>();
+            int highestWithPrivOC = 0;
+            int highestNumOfTokens = 0;
+            for (Player p : this.players){
+                if (p.getPoints() == highestMade && p.pointsInPrivObj() >= highestWithPrivOC){
+                    highestWithPrivOC = p.pointsInPrivObj();
 
-                    if (p.getTokens() == highestNumOfTokens)
-                        winners.add(p);
-                    else {
-                        winners.clear();
-                        winners.add(p);
+                    if (p.pointsInPrivObj() == highestWithPrivOC && p.getTokens() >= highestNumOfTokens){
+                        highestNumOfTokens = p.getTokens();
+
+                        if (p.getTokens() == highestNumOfTokens)
+                            winners.add(p);
+                        else {
+                            winners.clear();
+                            winners.add(p);
+                        }
                     }
                 }
             }
-        }
 
-        Player winner;
-        if (winners.size() > 1)
-           winner = lastCheck(winners);
-        else
-            winner = winners.get(0);
+            if (winners.size() > 1)
+                winner = lastCheck(winners);
+            else
+                winner = winners.get(0);
+        }
 
         Controller.getMyIO(this).broadcast("Congratulations " + winner.getUsername() + ", you won the game!");
 
         Controller.getMyIO(this).finishGameSocket();
+
+        System.exit(-1);
     }
 
     /**
@@ -384,6 +399,35 @@ public class Game implements Observer {
         }
 
         return winners.get(0);
+    }
+
+    /**
+     * Get a Player with a specific username
+     *
+     * @param username: the name of the Player you need
+     * @return the object Player with a specific username
+     * @author Andrea
+     */
+    public Player getPlayer(String username) {
+        for (Player p : players){
+            if (p.getUsername().equals(username))
+                return p;
+        }
+        return null;
+    }
+
+    /**
+     * Returns how many players are still playing (no disconnected)
+     *
+     * @return number of active players
+     */
+    private int howManyActivePlayers(){
+        int result = 0;
+        for (Player p : players){
+            if (!p.isDisconnected())
+                result ++;
+        }
+        return result;
     }
 
     /**
