@@ -152,7 +152,7 @@ public class ClientMain {
 
             if (server.playersInLobby() == 1){
                 System.out.println("You are the first player of the lobby!");
-                InputDelay doWait = new InputDelay(new PrintWriter(System.out), false);
+                InputDelay doWait = new InputDelay(new PrintWriter(System.out), true);
                 executorService.submit(doWait);
                 server.setDelay(doWait.getResult());
             }
@@ -245,6 +245,7 @@ public class ClientMain {
                 else{
                     this.out.println(delayString);
                     this.out.flush();
+                    System.out.println("Delay setted!");
                 }
             } catch (IOException e){
                 System.out.println("IOEXCEPTION IN INPUTDELAY");
