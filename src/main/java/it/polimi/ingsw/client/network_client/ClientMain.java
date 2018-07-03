@@ -36,9 +36,9 @@ public class ClientMain {
     }
 
     public static void main(String[] args) {
-        String check_UI = "CLI";
-
-        if (check_UI.equals("GUI")){
+        //String check_UI = args[0];
+        String check_UI = "gui";
+        if (check_UI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
             System.exit(0);
@@ -331,7 +331,6 @@ public class ClientMain {
                 socket.close();
         }
     }
-
 
     private static String askIP(){
         Scanner scanner = new Scanner(System.in);
