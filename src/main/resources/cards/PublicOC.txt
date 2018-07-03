@@ -1,20 +1,20 @@
-Different colors - rows
-[6 points each] Rows without repeated colors
-Different colors - columns
-[5 points each] Columns without repeated colors
-Different shades - rows
-[5 points each] Rows without repeated shades
-Different shades - columns
-[4 points each] Columns without repeated shades
-Light shades
-[2 points each] Sets of 1 & 2 everywhere
-Medium shades
-[2 points each] Sets of 3 & 4 everywhere
-Dark shades
-[2 points each] Sets of 5 & 6 everywhere
-Different shades
-[5 points each] Sets of dice each value everywhere
-Colored diagonals
-[# points] Number of same-colored dice diagonally adjacent
-Variety of color
-[4 points each] Sets of dice each color everywhere
+Row Color Variety
+[6 points each] Rows with no repeated colors.
+Column Color Variety
+[5 points each] Columns with no repeated colors.
+Row Shade Variety
+[5 points each] Rows with no repeated values.
+Column Shade Variety
+[4 points each] Columns with no repeated values.
+Light Shades
+[2 points each] Sets of 1 & 2 values anywhere.
+Medium Shades
+[2 points each] Sets of 3 & 4 values anywhere.
+Deep Shades
+[2 points each] Sets of 5 & 6 values anywhere.
+Shade Variety
+[5 points each] Sets of one of each value anywhere.
+Color diagonals
+[# points] Count of diagonally adjacent same color dice.
+Color Variety
+[4 points each] Sets of one of each color anywhere.

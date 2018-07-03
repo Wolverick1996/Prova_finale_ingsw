@@ -231,8 +231,8 @@ public class GameController {
     private void loadObjectiveCards(String privateOC, String table){
         String[] divide;
         String[] privOCs = {"Red", "Green", "Yellow", "Blue", "Purple"};
-        String[] pubOCs = {"Different colors - rows", "Different colors - columns", "Different shades - rows", "Different shades - columns",
-                "Light shades", "Medium shades", "Dark shades", "Different shades", "Colored diagonals", "Variety of color"};
+        String[] pubOCs = {"Row Color Variety", "Column Color Variety", "Row Shade Variety", "Column Shade Variety",
+                "Light Shades", "Medium Shades", "Deep Shades", "Shade Variety", "Color diagonals", "Color Variety"};
 
         //Setting private objective card
         divide = privateOC.split(NEWLINE);
@@ -245,15 +245,16 @@ public class GameController {
 
         //Setting public objective cards
         divide = table.split(PUBOC);
+        divide[1] = divide[1].replaceAll(COLORS, "");
         divide = divide[1].split(NEWLINE);
         for (int i = 0; i < pubOCs.length; i++) {
-            if (divide[1].contains(pubOCs[i]) || divide[3].contains(pubOCs[i]) || divide[5].contains(pubOCs[i])) {
+            if (divide[1].equals(pubOCs[i]) || divide[3].equals(pubOCs[i]) || divide[5].equals(pubOCs[i])) {
                 String path = "/images/pub" + (i+1) + ".jpeg";
-                if (divide[1].contains(pubOCs[i]))
+                if (divide[1].equals(pubOCs[i]))
                     setButtonImage(path, pubOC1);
-                else if (divide[3].contains(pubOCs[i]))
+                else if (divide[3].equals(pubOCs[i]))
                     setButtonImage(path, pubOC2);
-                else if (divide[5].contains(pubOCs[i]))
+                else if (divide[5].equals(pubOCs[i]))
                     setButtonImage(path, pubOC3);
             }
         }

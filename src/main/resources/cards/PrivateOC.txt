@@ -1,10 +1,10 @@
-Red shades
-[# points] Sum the values of all red dice
-Green shades
-[# points] Sum the values of all green dice
-Yellow shades
-[# points] Sum the values of all yellow dice
-Blue shades
-[# points] Sum the values of all blue dice
-Purple shades
-[# points] Sum the values of all purple dice
+Shades of Red
+[# points] Sum of values on red dice
+Shades of Green
+[# points] Sum of values on green dice
+Shades of Yellow
+[# points] Sum of values on yellow dice
+Shades of Blue
+[# points] Sum of values on blue dice
+Shades of Purple
+[# points] Sum of values on purple dice

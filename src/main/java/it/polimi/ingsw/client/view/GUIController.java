@@ -13,7 +13,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,12 +43,6 @@ public class GUIController implements Initializable {
     @FXML
     private AnchorPane pane2;
     @FXML
-    private AnchorPane pane3;
-    @FXML
-    private BorderPane pane4;
-    @FXML
-    private AnchorPane pane5;
-    @FXML
     private TextField username;
     @FXML
     private TextField ip;
@@ -59,7 +52,7 @@ public class GUIController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
 
-    private static void popup(String error) {
+    private static void popup(String error){
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Something happened...");
@@ -79,7 +72,7 @@ public class GUIController implements Initializable {
         popup.showAndWait();
     }
 
-    private static void waiting(int timer, int numP) {
+    private static void waiting(int timer, int numP){
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Waiting...");
@@ -105,17 +98,17 @@ public class GUIController implements Initializable {
     }
 
     @FXML
-    private String setUsername(ActionEvent event) {
+    private String setUsername(ActionEvent event){
         return username.getText();
     }
 
     @FXML
-    private String setIP(ActionEvent event) {
+    private String setIP(ActionEvent event){
         return ip.getText();
     }
 
     @FXML
-    private String checkConnection(ActionEvent event) {
+    private String checkConnection(ActionEvent event){
         if (rmiButton.isSelected()) return RMI;
         else return SOCKET;
     }
@@ -129,7 +122,7 @@ public class GUIController implements Initializable {
             popup("Invalid name, your ID should be at least 1 character (not *)");
             return false;
         }
-        System.out.println( name + " is trying to connect using GUI... \n" + connection + " " + address);
+        System.out.println(name + " is trying to connect using GUI... \n" + connection + " " + address);
         ClientMain clientMain = ClientMain.instance(address);
         try {
             if (connection.equals(RMI)){
@@ -192,7 +185,7 @@ public class GUIController implements Initializable {
         appStage.show();
     }
 
-    public static void setMessenger(SocketMessengerClient sm) {
+    public static void setMessenger(SocketMessengerClient sm){
         messenger = sm;
     }
 
