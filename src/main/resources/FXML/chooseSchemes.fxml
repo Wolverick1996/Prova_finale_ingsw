@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
@@ -59,7 +58,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty1" fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty1" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -109,7 +108,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty2" fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty2" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -159,7 +158,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty3" fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty3" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -209,7 +208,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty4" fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty4" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>

@@ -13,18 +13,51 @@
             <HBox prefHeight="210.0" prefWidth="200.0">
                <children>
                   <Region prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <VBox prefHeight="200.0" prefWidth="30.0">
+                     <children>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <Text fx:id="tokensT1" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Century Gothic" size="20.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
                   <Button fx:id="tool1" mnemonicParsing="false" prefHeight="210.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Button>
                   <Region layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <VBox prefHeight="200.0" prefWidth="30.0">
+                     <children>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <Text fx:id="tokensT2" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Century Gothic" size="20.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
                   <Button fx:id="tool2" layoutX="210.0" layoutY="10.0" mnemonicParsing="false" prefHeight="210.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Button>
                   <Region layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+                  <VBox prefHeight="200.0" prefWidth="30.0">
+                     <children>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                        <Text fx:id="tokensT3" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                              <Font name="Century Gothic" size="20.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
                   <Button fx:id="tool3" layoutX="473.0" layoutY="10.0" mnemonicParsing="false" prefHeight="210.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="20.0" />
@@ -94,21 +127,22 @@
                      </HBox.margin>
                   </Text>
                   <Region prefHeight="73.0" prefWidth="150.0" />
-                  <GridPane fx:id="roundtrack" gridLinesVisible="true" HBox.hgrow="NEVER">
+                  <GridPane fx:id="roundtrack" maxWidth="1000.0" HBox.hgrow="NEVER">
                      <columnConstraints>
                         <ColumnConstraints />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="60.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints maxHeight="-Infinity" minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
                      </rowConstraints>
                   </GridPane>
                   <Region HBox.hgrow="ALWAYS" />
@@ -191,14 +225,18 @@
                   <Region prefWidth="50.0" />
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                        <HBox prefHeight="50.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Active player: ">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="P1">
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Text fx:id="activeP" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="P1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -212,7 +250,7 @@
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                              <Text fx:id="round" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -226,7 +264,7 @@
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                              <Text fx:id="turn" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -240,7 +278,7 @@
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fill="#bb02ff" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                              <Text fx:id="tokensP" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
