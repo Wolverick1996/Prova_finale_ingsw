@@ -97,7 +97,7 @@
                         <Insets bottom="25.0" right="10.0" top="25.0" />
                      </HBox.margin>
                   </Text>
-                  <Region prefHeight="73.0" prefWidth="200.0" />
+                  <Region prefWidth="200.0" />
                   <GridPane fx:id="reserve" gridLinesVisible="true" HBox.hgrow="NEVER">
                     <columnConstraints>
                         <ColumnConstraints />
@@ -126,7 +126,7 @@
                         <Insets bottom="25.0" right="10.0" top="25.0" />
                      </HBox.margin>
                   </Text>
-                  <Region prefHeight="73.0" prefWidth="150.0" />
+                  <Region prefWidth="150.0" />
                   <GridPane fx:id="roundtrack" maxWidth="1000.0" HBox.hgrow="NEVER">
                      <columnConstraints>
                         <ColumnConstraints />
