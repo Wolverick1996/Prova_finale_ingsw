@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.Scheme;
 import it.polimi.ingsw.client.network_client.ClientMain;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -18,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -46,6 +46,7 @@ public class GUIController implements Initializable {
     private boolean isRMI = GUIupdater.isRMI;
     private boolean customSchemes = GUIupdater.getCustomSchemes();
     private static Stage activePopup;
+    private static Font myFont = new Font("Century Gothic", 18);
 
     @FXML
     private AnchorPane rootPane;
@@ -64,8 +65,6 @@ public class GUIController implements Initializable {
     @FXML
     private TextField delayTextField;
 
-    @FXML
-    private GridPane player1;
     @FXML
     private GridPane player2;
     @FXML
@@ -97,10 +96,14 @@ public class GUIController implements Initializable {
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Something happened...");
         Label label1 = new Label("WAIT!\n");
+        label1.setFont(myFont);
         Label label2 = new Label("The following error occured:\n");
+        label2.setFont(myFont);
         Text text = new Text();
         text.setText(error);
+        text.setFont(myFont);
         Button button = new Button("Ok");
+        button.setFont(myFont);
         button.setOnAction(e -> popup.close());
         VBox layout = new VBox(40);
         layout.getChildren().addAll(label1, label2, text, button);
@@ -113,24 +116,26 @@ public class GUIController implements Initializable {
     }
 
     static void waiting(int timer, int numP, boolean schemes){
-        if (activePopup != null){
+        if (activePopup != null)
             activePopup.close();
-        }
+
         Stage popup = new Stage();
         activePopup = popup;
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Waiting...");
         Label label1 = new Label("Waiting...\n");
+        label1.setFont(myFont);
         String message;
         if (schemes)
             message = "Somebody is picking a scheme";
         else
             message = "Players in the lobby:\t" + numP;
         Label label2 = new Label(message);
+        label2.setFont(myFont);
         VBox layout = new VBox(40);
         layout.getChildren().addAll(label1, label2);
         layout.setAlignment(Pos.CENTER);
-        Scene popupScene = new Scene(layout, 250, 200);
+        Scene popupScene = new Scene(layout, 350, 300);
         popup.setScene(popupScene);
         PauseTransition delay = new PauseTransition(Duration.seconds(timer));
         delay.setOnFinished(event -> {
@@ -143,24 +148,24 @@ public class GUIController implements Initializable {
     }
 
     @FXML
-    private void loadSecond(ActionEvent event) throws IOException {
+    private void loadSecond() throws IOException {
         pane1 = FXMLLoader.load(getClass().getResource("/FXML/login.fxml"));
         //The following command is used to replace the first window content with the second
         rootPane.getChildren().setAll(pane1);
     }
 
     @FXML
-    private String setUsername(ActionEvent event){
+    private String setUsername(){
         return username.getText();
     }
 
     @FXML
-    private String setIP(ActionEvent event){
+    private String setIP(){
         return ip.getText();
     }
 
     @FXML
-    private String checkConnection(ActionEvent event){
+    private String checkConnection(){
         if (rmiButton.isSelected()) return RMI;
         else return SOCKET;
     }
@@ -170,52 +175,50 @@ public class GUIController implements Initializable {
     //***************************//
 
     @FXML
-    private boolean trySetup(ActionEvent event){
-        String name = setUsername(event);
-        String address = setIP(event);
-        String connection = checkConnection(event);
-        if (name.equals("") || name.equals("*")){
+    private boolean trySetup(){
+        String name = setUsername();
+        String address = setIP();
+        String connection = checkConnection();
+        if (name.equals("") || name.equals("*")) {
             popup("Invalid name, your ID should be at least 1 character (not *)");
             return false;
         }
         System.out.println(name + " is trying to connect using GUI... \n" + connection + " " + address);
         ClientMain clientMain = ClientMain.instance(address);
         try {
-            if (connection.equals(RMI)){
+            if (connection.equals(RMI)) {
                 String message = clientMain.startGUIRMI(name);
                 if (message.equals("OK")) {
                     setNumPlayersAtBeginning(ClientMain.getPlayers());
                     isRMI = true;
                     GUIupdater.isRMI = isRMI;
                     return true;
-                }
-                else
+                } else
                     popup(message);
                 return false;
             } else {
                 String message = clientMain.startGUISocket(name, this);
-                if (message.equals("OK")){
+                if (message.equals("OK")) {
                     new Thread(messenger).start();
                     System.out.println("Hello " + name + ". I'm your GUI :)");
                     return true;
-                }
-                else
+                } else
                     popup(message);
                 return false;
             }
-        } catch (MalformedURLException m){
+        } catch (MalformedURLException m) {
             popup("Malformed URL");
             return false;
         } catch (NotBoundException n) {
             popup("Not Bound!");
             return false;
-        } catch (IOException e){
+        } catch (IOException e) {
             popup("IOException");
             return false;
         }
     }
 
-    public void setNumPlayersAtBeginning(int num) {
+    public void setNumPlayersAtBeginning(int num){
         numPlayersAtBeginning = num;
         GUIupdater.numPlayersAtBeginning = numPlayersAtBeginning;
         numPlayers = numPlayersAtBeginning;
@@ -223,7 +226,7 @@ public class GUIController implements Initializable {
     }
 
 
-    private void waitForGameStart() {
+    private void waitForGameStart(){
         if (isRMI) {
             try {
                 waiting(INFINITE, numPlayers, false);
@@ -247,7 +250,7 @@ public class GUIController implements Initializable {
             } catch (IOException e) {
                 System.out.println("SOMETHING IS WRONG WITH THE SERVER, IOEXC ON CHECKNEWPLAYERS");
             }
-            if (k == STARTED){
+            if (k == STARTED) {
                 if (activePopup!=null)
                 activePopup.close();
             } else {
@@ -261,7 +264,7 @@ public class GUIController implements Initializable {
 
     @FXML
     private void loadThird(ActionEvent event) throws IOException {
-        if (trySetup(event)){
+        if (trySetup()) {
             if (numPlayersAtBeginning == 1) {
                 pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
                 pane1.getChildren().setAll(pane2);
@@ -276,8 +279,8 @@ public class GUIController implements Initializable {
     //***************************//
 
     @FXML
-    private void setParameters(ActionEvent event) {
-        if (!customSchemesButtonNo.isSelected())  {
+    private void setParameters(){
+        if (!customSchemesButtonNo.isSelected()) {
             customSchemes = true;
             GUIupdater.setCustomSchemes(customSchemes);
         }
@@ -290,7 +293,7 @@ public class GUIController implements Initializable {
         setDelay(lobbyDelay);
     }
 
-    private void setDelay(int delay) {
+    private void setDelay(int delay){
         if (isRMI) {
             try {
                 ClientMain.setGUIlobbyDelay(delay);
@@ -305,9 +308,10 @@ public class GUIController implements Initializable {
     @FXML
     private void loadSchemes(ActionEvent event) throws IOException {
         if (numPlayersAtBeginning == 1){
-            setParameters(event);
+            setParameters();
             //TODO: CHECK FOR LATE "NEXT"
         }
+
         waitForGameStart();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/chooseSchemes.fxml"));
         Parent root = loader.load();
@@ -327,10 +331,9 @@ public class GUIController implements Initializable {
         appStage.show();
     }
 
-    private void waitForSchemes() {
-        while (GUIupdater.getSchemesToChoose().size() != 4) {
+    private void waitForSchemes(){
+        while (GUIupdater.getSchemesToChoose().size() != 4)
             waiting(INFINITE, 0, true);
-        }
     }
 
     public static void setMessenger(SocketMessengerClient sm){

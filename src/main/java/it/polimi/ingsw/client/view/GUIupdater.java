@@ -19,7 +19,7 @@ public class GUIupdater {
     private static String toSend;
     private static List<String> schemesToChoose = new ArrayList<>();
 
-    //attributes of the game
+    //Attributes of the game
     private static String table;
     private static String privObj;
     private static String tools;
@@ -29,7 +29,7 @@ public class GUIupdater {
         return ownUsername;
     }
 
-    public static synchronized boolean getCustomSchemes() {
+    public static synchronized boolean getCustomSchemes(){
         return customSchemes;
     }
 
@@ -53,27 +53,27 @@ public class GUIupdater {
         return numPlayers;
     }
 
-    public static synchronized String getTable() {
+    public static synchronized String getTable(){
         return table;
     }
 
-    public static synchronized List getPlayers() {
+    public static synchronized List getPlayers(){
         return players;
     }
 
-    public static synchronized String getPrivObj() {
+    public static synchronized String getPrivObj(){
         return privObj;
     }
 
-    public static synchronized String getTools() {
+    public static synchronized String getTools(){
         return tools;
     }
 
-    public static synchronized void setOwnUsername(String value) {
+    public static synchronized void setOwnUsername(String value){
         ownUsername = value;
     }
 
-    public static synchronized void setCustomSchemes(boolean value) {
+    public static synchronized void setCustomSchemes(boolean value){
         customSchemes = value;
     }
 
@@ -107,4 +107,5 @@ public class GUIupdater {
     public static synchronized void addPlayer(String value){
         players.add(value);
     }
+
 }

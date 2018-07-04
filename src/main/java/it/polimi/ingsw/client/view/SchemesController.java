@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.*;
-import it.polimi.ingsw.server.model.Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,8 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SchemesController {
 
@@ -202,35 +198,23 @@ public class SchemesController {
         while (!GUIupdater.getCanGoToGame())
             GUIController.waiting(GUIController.INFINITE, 0, true);
 
-        //TODO: Notify to the controller the window pattern chosen: loops are replaced by controller calls
-        //TODO: CONTROLLER REQUEST to get the following
-        // 1. (int) Number of players; DONE
-        // 2. (String) Window pattern chosen; DONE
-        // 3. (String) Private Objective Card;
-        // 4. (String) Table DONE
-        // 5. (String) Tool Cards;
-        // 6. (String) My player string
-        // 7. (String) Active player
-
         int numP = GUIupdater.getNumPlayers();
 
         String table = GUIupdater.getTable();
 
         String p1 = "";
-        for (int i=0; i<GUIupdater.getPlayers().size(); i++) {
-            if (GUIupdater.getPlayers().get(i).toString().split(NEWLINE)[0].equals(GUIupdater.getOwnUsername())){
+        for (int i=0; i<GUIupdater.getPlayers().size(); i++)
+            if (GUIupdater.getPlayers().get(i).toString().split(NEWLINE)[0].equals(GUIupdater.getOwnUsername()))
                 p1 = GUIupdater.getPlayers().get(i).toString();
-            }
-        }
 
-        String p2 = (String) GUIupdater.getPlayers().get(0);
+        String p2 = (String)GUIupdater.getPlayers().get(0);
 
         String privOC = GUIupdater.getPrivObj();
 
         String tools = GUIupdater.getTools();
 
         int temp = GUIupdater.getSchemeChosen() - 1;
-        String scheme = (String) GUIupdater.getSchemesToChoose().get(temp);
+        String scheme = (String)GUIupdater.getSchemesToChoose().get(temp);
 
         controller.reloadGame(numP, scheme, privOC, table, tools, p1, p2);
 
