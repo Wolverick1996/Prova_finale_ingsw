@@ -55,10 +55,10 @@ class ClientImplementationSocket {
     }
 
     String loginGUI(String name) throws IOException{
-        int dump;
+        int numPlayers;
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
-        dump = Integer.parseInt(in.readLine()); //Here we dump the number of players (sent by the Server)
+        numPlayers = Integer.parseInt(in.readLine()); //Here we read the number of players (sent by the Server)
         out.println(name);
         out.flush();
         String result = in.readLine();
@@ -71,8 +71,9 @@ class ClientImplementationSocket {
             return "Retry later...";
         else if (result.equals("invalid"))
             return "Invalid name, your ID should be an alphanumeric of at least 1 character";
-        else if (result.equals("true"))
+        else if (result.equals("true")){
             return "OK";
+        }
         return "SOMETHING WENT HORRIBLY WRONG";
     }
 

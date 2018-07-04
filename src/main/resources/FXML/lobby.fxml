@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
@@ -49,7 +50,7 @@
                      </font>
                   </Text>
                   <Region prefHeight="100.0" prefWidth="80.0" />
-                  <TextField opacity="0.8" text="15">
+                  <TextField fx:id="delayTextField" opacity="0.8" text="15">
                      <font>
                         <Font name="Century Gothic" size="18.0" />
                      </font>
@@ -81,7 +82,7 @@
                      </toggleGroup>
                   </RadioButton>
                   <Region prefHeight="200.0" prefWidth="200.0" />
-                  <RadioButton mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$yesOrNo_group">
+                  <RadioButton fx:id="customSchemesButtonNo" mnemonicParsing="false" selected="true" text="No" textFill="WHITE" toggleGroup="$yesOrNo_group">
                      <font>
                         <Font name="Century Gothic" size="25.0" />
                      </font>

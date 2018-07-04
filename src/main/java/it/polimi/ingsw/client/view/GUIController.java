@@ -11,7 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -28,16 +28,24 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class GUIController implements Initializable {
 
+    private static final int STARTED = 999;
+    private static final int INFINITE = 5;
     private static final String RMI = "rmi";
     private static final String SOCKET = "socket";
     private static final String NEWLINE = "\n";
     private static final String DIVISOR = ": \t";
-
-    private static SocketMessengerClient messenger;
+    private static SocketMessengerClient messenger = GUIupdater.messenger;
+    private int lobbyDelay = GUIupdater.lobbyDelay;
+    private int numPlayersAtBeginning = GUIupdater.numPlayersAtBeginning;
+    private int numPlayers = GUIupdater.numPlayers;
+    private boolean isRMI = GUIupdater.isRMI;
+    private boolean customSchemes = GUIupdater.customSchemes;
+    private static Stage activePopup;
 
     @FXML
     private AnchorPane rootPane;
@@ -51,6 +59,10 @@ public class GUIController implements Initializable {
     private TextField ip;
     @FXML
     private RadioButton rmiButton;
+    @FXML
+    private RadioButton customSchemesButtonNo;
+    @FXML
+    private TextField delayTextField;
 
     @FXML
     private GridPane player1;
@@ -100,8 +112,12 @@ public class GUIController implements Initializable {
         popup.showAndWait();
     }
 
-    private static void waiting(int timer, int numP){
+    private void waiting(int timer, int numP){
+        if (activePopup != null){
+            activePopup.close();
+        }
         Stage popup = new Stage();
+        activePopup = popup;
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Waiting...");
         Label label1 = new Label("Waiting...\n");
@@ -112,7 +128,10 @@ public class GUIController implements Initializable {
         Scene popupScene = new Scene(layout, 250, 200);
         popup.setScene(popupScene);
         PauseTransition delay = new PauseTransition(Duration.seconds(timer));
-        delay.setOnFinished(event -> popup.close());
+        delay.setOnFinished(event -> {
+            activePopup = null;
+            popup.close();
+        });
         delay.play();
         popup.initStyle(StageStyle.UNDECORATED);
         popup.showAndWait();
@@ -141,6 +160,10 @@ public class GUIController implements Initializable {
         else return SOCKET;
     }
 
+    //***************************//
+    //       LOGIN PHASE         //
+    //***************************//
+
     @FXML
     private boolean trySetup(ActionEvent event){
         String name = setUsername(event);
@@ -155,13 +178,17 @@ public class GUIController implements Initializable {
         try {
             if (connection.equals(RMI)){
                 String message = clientMain.startGUIRMI(name);
-                if (message.equals("OK"))
+                if (message.equals("OK")) {
+                    setNumPlayersAtBeginning(ClientMain.getPlayers());
+                    isRMI = true;
+                    GUIupdater.isRMI = isRMI;
                     return true;
+                }
                 else
                     popup(message);
                 return false;
             } else {
-                String message = clientMain.startGUISocket(name);
+                String message = clientMain.startGUISocket(name, this);
                 if (message.equals("OK")){
                     new Thread(messenger).start();
                     System.out.println("Hello " + name + ". I'm your GUI :)");
@@ -183,18 +210,98 @@ public class GUIController implements Initializable {
         }
     }
 
+    public void setNumPlayersAtBeginning(int num) {
+        numPlayersAtBeginning = num;
+        GUIupdater.numPlayersAtBeginning = numPlayersAtBeginning;
+        numPlayers = numPlayersAtBeginning;
+        GUIupdater.numPlayers = numPlayers;
+    }
+
+
+    private void waitForGameStart() {
+        if (isRMI) {
+            try {
+                waiting(INFINITE, numPlayers);
+                int n = ClientMain.waitForGameStart(numPlayers);
+                if (n == STARTED) {
+                    if (activePopup!=null)
+                    activePopup.close();
+                } else {
+                    numPlayers = n;
+                    waitForGameStart();
+                }
+            } catch (RemoteException e) {
+                System.out.println("server is down :(");
+            }
+        } else {
+            int k = 0;
+            try {
+                k = messenger.waitForGameStart(numPlayers);
+                System.out.println("I read " + k);
+            } catch (IOException e) {
+                System.out.println("SOMETHING IS WRONG WITH THE SERVER, IOEXC ON CHECKNEWPLAYERS");
+            }
+            if (k == STARTED){
+                if (activePopup!=null)
+                activePopup.close();
+            } else {
+                numPlayers = k;
+                waiting(INFINITE, numPlayers);
+                waitForGameStart();
+            }
+        }
+    }
+
     @FXML
     private void loadThird(ActionEvent event) throws IOException {
         if (trySetup(event)){
-            pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
-            pane1.getChildren().setAll(pane2);
+            if (numPlayersAtBeginning == 1) {
+                pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
+                pane1.getChildren().setAll(pane2);
+            } else {
+                loadSchemes(event);
+            }
+        }
+    }
+
+    //***************************//
+    //       SETUP PHASE         //
+    //***************************//
+
+    @FXML
+    private void setParameters(ActionEvent event) {
+        if (!customSchemesButtonNo.isSelected())  {
+            customSchemes = true;
+            GUIupdater.customSchemes = customSchemes;
+        }
+        try {
+            lobbyDelay = Integer.parseInt(delayTextField.getText());
+            GUIupdater.lobbyDelay = lobbyDelay;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid delay, was set to 20");
+        }
+        setDelay(lobbyDelay);
+    }
+
+    private void setDelay(int delay) {
+        if (isRMI) {
+            try {
+                ClientMain.setGUIlobbyDelay(delay);
+            } catch (RemoteException e) {
+                System.out.println("FATAL ERROR ON SERVER :(");
+            }
+        } else {
+            messenger.GUIsetTimer(delay);
         }
     }
 
     @FXML
     private void loadSchemes(ActionEvent event) throws IOException {
-        //waiting should get the timer from input and the number of players from the controller
-        //waiting(15, 3);
+        if (numPlayersAtBeginning == 1){
+            setParameters(event);
+        }
+        waitForGameStart();
+
         Scheme s1 = Scheme.initialize(1, false, 24);
         Scheme s2 = Scheme.initialize(2, false, 24);
         Scheme s3 = Scheme.initialize(3, false, 24);
