@@ -199,72 +199,40 @@ public class SchemesController {
         else
             GUIupdater.setSchemeChosen(4);
 
-        //while (!GUIupdater.canGoToGame)
-        //    GUIController.waiting(GUIController.INFINITE, 0, true);
+        while (!GUIupdater.getCanGoToGame())
+            GUIController.waiting(GUIController.INFINITE, 0, true);
 
         //TODO: Notify to the controller the window pattern chosen: loops are replaced by controller calls
         //TODO: CONTROLLER REQUEST to get the following
-        // 1. (int) Number of players;
-        // 2. (String) Window pattern chosen;
+        // 1. (int) Number of players; DONE
+        // 2. (String) Window pattern chosen; DONE
         // 3. (String) Private Objective Card;
-        // 4. (String) Table
+        // 4. (String) Table DONE
         // 5. (String) Tool Cards;
         // 6. (String) My player string
         // 7. (String) Active player
 
-        int numP = (int)(Math.random()*3 + 2);
-        Table table = new Table(numP);
-        Player p1 = new Player("ingconti", 0);
-        Player p2 = new Player("n1zzo", 0);
-        List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
-        table.setPlayers(nicknames);
+        int numP = GUIupdater.getNumPlayers();
 
-        String privOC = "This is your Private Objective Card:\n" +
-                PrivObjHandler.getColor(p1).escape() + PrivObjHandler.getName(p1) + "\n" + Enum.Color.RESET +
-                PrivObjHandler.getDescription(p1) + "\n";
+        String table = GUIupdater.getTable();
 
-        String tools = "\nTool Cards on table:\n";
-        for (int i = 0; i < 3; i++)
-        tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET + ToolHandler.getDescription(i) +
-                Enum.Color.YELLOW.escape() + "\n Tokens on: " + Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
+        String p1 = "";
+        for (int i=0; i<GUIupdater.getPlayers().size(); i++) {
+            if (GUIupdater.getPlayers().get(i).toString().split(NEWLINE)[0].equals(GUIupdater.getOwnUsername())){
+                p1 = GUIupdater.getPlayers().get(i).toString();
+            }
+        }
 
-        /*
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        */
+        String p2 = (String) GUIupdater.getPlayers().get(0);
 
-        Scheme s1 = Scheme.initialize(1, false, 24);
+        String privOC = GUIupdater.getPrivObj();
+
+        String tools = GUIupdater.getTools();
+
         int temp = GUIupdater.getSchemeChosen() - 1;
         String scheme = (String) GUIupdater.getSchemesToChoose().get(temp);
-        controller.reloadGame(numP, scheme, privOC, table.toString(), tools, p1.toString(), p2.toString());
+
+        controller.reloadGame(numP, scheme, privOC, table, tools, p1, p2);
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -1,10 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.network_client.ClientIntRMI;
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.PrivObjHandler;
-import it.polimi.ingsw.server.model.Scheme;
-import it.polimi.ingsw.server.model.Table;
+import it.polimi.ingsw.server.model.*;
+import it.polimi.ingsw.server.model.Enum;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
 
 import java.io.IOException;
@@ -145,9 +143,17 @@ public class IOhandler implements Observer{
             if (message.equals(STATUS)){
                 System.out.println(DIVISOR);
                 for (Player p: this.players) this.notify(p.getUsername(), DIVISOR);
+                for (Player p: this.players) this. notify(p.getUsername(), "Here is the status: ");
                 System.out.println(table);
                 for (Player p: this.players){
                     this.notify(p.getUsername(), table.toString());
+                    String tools = "\nTool Cards on table:\n";
+                    for (int i = 0; i<3; i++) {
+                        tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET +
+                                ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() + "\n Tokens on: " +
+                                Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
+                    }
+                    this.notify(p.getUsername(), tools);
                     this.notify(p.getUsername(), PrivObjHandler.getCard(p));
                 }
                 for (Player p: this.players){

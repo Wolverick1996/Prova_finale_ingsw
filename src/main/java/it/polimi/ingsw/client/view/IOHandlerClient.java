@@ -8,13 +8,14 @@ public class IOHandlerClient implements Observer {
 
     //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
 
-    private boolean debug = true;
+    private boolean debug = false;
     private String name;
     private Interface outputInt;
     private CLI commandLine;
 
     public IOHandlerClient (String username, Interface type) {
         this.name = username;
+        GUIupdater.setOwnUsername(this.name);
         this.outputInt = type;
     }
 
@@ -41,17 +42,42 @@ public class IOHandlerClient implements Observer {
 
     private boolean chooseSchemes = false;
     private int lineReadNumber = 0;
+    private boolean readStatus = false;
 
     private void sendGUI(String message){
         if (debug) System.out.println(message);
 
-        if (chooseSchemes && lineReadNumber<8) {
+        if (readStatus) {
+            if (message.equals("\n\n---------------------------------------------\n\n")) {
+                readStatus = false;
+                lineReadNumber = 0;
+            } else {
+                switch (lineReadNumber) {
+                    case 0:
+                        GUIupdater.setTable(message);
+                        break;
+                    case 1:
+                        GUIupdater.setTools(message);
+                        break;
+                    case 2:
+                        GUIupdater.setPrivObj(message);
+                        break;
+                    default:
+                        GUIupdater.addPlayer(message);
+                }
+                lineReadNumber++;
+            }
+            return;
+        }
+
+        if (chooseSchemes) {
             if (lineReadNumber%2 != 0) {
                 GUIupdater.getSchemesToChoose().add(message);
             }
             lineReadNumber++;
             if (lineReadNumber == 8){
                 chooseSchemes = false;
+                lineReadNumber = 0;
             }
         }
 
@@ -76,6 +102,12 @@ public class IOHandlerClient implements Observer {
                     }
                 }
                 GUIupdater.setToSend(Integer.toString(GUIupdater.getSchemeChosen()));
+                break;
+            case "Game is starting!\n" :
+                GUIupdater.setCanGoToGame(true);
+                break;
+            case "Here is the status: " :
+                readStatus = true;
                 break;
             default: break;
         }

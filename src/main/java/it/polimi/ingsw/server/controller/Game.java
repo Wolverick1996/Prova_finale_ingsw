@@ -89,10 +89,13 @@ public class Game implements Observer {
             p.chooseScheme(Scheme.initialize(Controller.getMyIO(this).chooseScheme(i,j,i+(this.table.getNumSchemes()/2),j+(this.table.getNumSchemes()/2), p.getUsername()),
                     this.table.getCustom(), this.table.getNumSchemes()));
         }
-        System.exit(0);
+
         this.active = 0;
         Controller.getMyIO(this).broadcast(STATUS);
         Controller.getMyIO(this).broadcast("Game is starting!\n");
+
+        System.exit(0);
+
         setObservables();
         this.next();
     }

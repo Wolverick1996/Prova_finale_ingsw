@@ -233,6 +233,7 @@ public class GUIController implements Initializable {
                     activePopup.close();
                 } else {
                     numPlayers = n;
+                    GUIupdater.numPlayers = numPlayers;
                     waitForGameStart();
                 }
             } catch (RemoteException e) {
@@ -251,6 +252,7 @@ public class GUIController implements Initializable {
                 activePopup.close();
             } else {
                 numPlayers = k;
+                GUIupdater.numPlayers = numPlayers;
                 waiting(INFINITE, numPlayers, false);
                 waitForGameStart();
             }
@@ -304,6 +306,7 @@ public class GUIController implements Initializable {
     private void loadSchemes(ActionEvent event) throws IOException {
         if (numPlayersAtBeginning == 1){
             setParameters(event);
+            //TODO: CHECK FOR LATE "NEXT"
         }
         waitForGameStart();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/chooseSchemes.fxml"));
