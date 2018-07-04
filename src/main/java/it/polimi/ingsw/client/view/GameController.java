@@ -134,23 +134,23 @@ public class GameController {
         divide3.toArray(boxes);
         prepareString(imageColor, imageValue, boxes);
 
-        int scroll = MAX_COL*MAX_ROW;
+        int scroll = 0;
         for (int i = 0; i < MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++) {
-                if (!imageColor.get(scroll-1).equals("none") && !imageValue.get(scroll-1).equals("none"))
-                    toFill.add(new ImageView(new Image("/images/" + imageColor.get(scroll-1) + imageValue.get(scroll-1) + ".jpeg",
+                if (!imageColor.get(scroll).equals("none") && !imageValue.get(scroll).equals("none"))
+                    toFill.add(new ImageView(new Image("/images/" + imageColor.get(scroll) + imageValue.get(scroll) + ".jpeg",
                             60, 60, false, false)));
-                else if (imageColor.get(scroll-1).equals("none") && !imageValue.get(scroll-1).equals("none"))
-                    toFill.add(new ImageView(new Image("/images/value_" + imageValue.get(scroll-1) + ".jpeg",
+                else if (imageColor.get(scroll).equals("none") && !imageValue.get(scroll).equals("none"))
+                    toFill.add(new ImageView(new Image("/images/value_" + imageValue.get(scroll) + ".jpeg",
                             60, 60, false, false)));
-                else if (!imageColor.get(scroll-1).equals("none") && imageValue.get(scroll-1).equals("none"))
-                    toFill.add(new ImageView(new Image("/images/color_" + imageColor.get(scroll-1) + ".jpeg",
+                else if (!imageColor.get(scroll).equals("none") && imageValue.get(scroll).equals("none"))
+                    toFill.add(new ImageView(new Image("/images/color_" + imageColor.get(scroll) + ".jpeg",
                             60, 60, false, false)));
                 else
                     toFill.add(new ImageView(new Image("/images/no_restr.jpeg",
                             60, 60, false, false)));
                 gridObj.add(toFill.get(MAX_COL*i + j), j, i);
-                scroll--;
+                scroll++;
             }
         }
 
