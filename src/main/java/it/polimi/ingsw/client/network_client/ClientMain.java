@@ -102,10 +102,25 @@ public class ClientMain {
         }
     }
 
+    public static int getPlayers() throws RemoteException{
+        return serverRMI.playersInLobby();
+    }
+
     public static void setGUIlobbyDelay(int delay) throws RemoteException{
         if (delay>=15 && delay<=60) {
             serverRMI.setDelay(delay);
         }
+    }
+
+    //this method return the number of players in the lobby if it changes, 999 if game started
+    public static int waitForGameStart(int num) throws RemoteException{
+        int check;
+        boolean hasStarted;
+        serverRMI.confirmConnections();
+        check = serverRMI.playersInLobby();
+        hasStarted = serverRMI.hasStarted();
+        if (hasStarted) return 999;
+        else return check;
     }
 
     private void startClientRMI() throws MalformedURLException, RemoteException{
@@ -188,7 +203,7 @@ public class ClientMain {
         }
     }
 
-    public String startGUISocket(String name) throws IOException{
+    public String startGUISocket(String name, GUIController controller) throws IOException{
         Socket socket = null;
         String feedback = "";
         try {
@@ -198,10 +213,7 @@ public class ClientMain {
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             feedback = clientImplementationSocket.loginGUI(name);
-            if (Integer.parseInt(in.readLine()) == 1) {
-                out.println("15");
-                out.flush();
-            }
+            controller.setNumPlayersAtBeginning(Integer.parseInt(in.readLine())); //this sends the number of players to the server
         }catch (NoSuchElementException e){
             System.err.println("NOTHING TO READ "+e.getMessage());
         } finally {

@@ -6,6 +6,7 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
 
 public class SocketMessengerClient implements Runnable{
 
+    private Boolean gameHasStarted = false;
     private Boolean debug = true;
     private String username;
     private PrintWriter out;
@@ -68,6 +69,7 @@ public class SocketMessengerClient implements Runnable{
         do {
             request = this.in.readLine();
         } while (!request.equals(GAMESTART));
+        setGameHasStarted();
         this.out.println(NAME + D_LEFT + this.username + D_RIGHT);
         this.out.flush();
 
@@ -164,5 +166,14 @@ public class SocketMessengerClient implements Runnable{
             this.out.println(delay);
             this.out.flush();
         }
+    }
+
+    private synchronized void setGameHasStarted() {
+        gameHasStarted = true;
+    }
+
+    public synchronized int waitForGameStart(int num) throws IOException {
+        if (gameHasStarted) return 999;
+        return Integer.parseInt(this.in.readLine());
     }
 }
