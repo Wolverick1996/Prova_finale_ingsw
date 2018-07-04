@@ -301,13 +301,13 @@ public class IOhandler implements Observer{
     int chooseScheme(int s1, int s2, int s3, int s4, String player){
         int answer = -1;
         boolean isValid = false;
-
         ArrayList<Integer> schemes = new ArrayList<>();
         schemes.add(s1);
         schemes.add(s2);
         schemes.add(s3);
         schemes.add(s4);
         try {
+            notify(player, "CHOOSE A SCHEME :");
             for (Integer i:schemes){
                 notify(player, "Scheme " + (schemes.indexOf(i)+1));
                 notify(player, Scheme.initialize(i, this.table.getCustom(), this.table.getNumSchemes()).toString());
@@ -456,6 +456,7 @@ public class IOhandler implements Observer{
             try {
                 notify(player, "Insert y/n");
                 answer = getInput(player).toLowerCase();
+                System.out.println("I read in YES or NO: " + answer);
                 if (answer.equals("y")){
                     return true;
                 } else if (answer.equals("n")){

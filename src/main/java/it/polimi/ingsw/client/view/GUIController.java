@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
 public class GUIController implements Initializable {
 
     private static final int STARTED = 999;
-    private static final int INFINITE = 5;
+    static final int INFINITE = 5;
     private static final String RMI = "rmi";
     private static final String SOCKET = "socket";
     private static final String NEWLINE = "\n";
@@ -44,7 +44,7 @@ public class GUIController implements Initializable {
     private int numPlayersAtBeginning = GUIupdater.numPlayersAtBeginning;
     private int numPlayers = GUIupdater.numPlayers;
     private boolean isRMI = GUIupdater.isRMI;
-    private boolean customSchemes = GUIupdater.customSchemes;
+    private boolean customSchemes = GUIupdater.getCustomSchemes();
     private static Stage activePopup;
 
     @FXML
@@ -112,7 +112,7 @@ public class GUIController implements Initializable {
         popup.showAndWait();
     }
 
-    private void waiting(int timer, int numP){
+    static void waiting(int timer, int numP, boolean schemes){
         if (activePopup != null){
             activePopup.close();
         }
@@ -121,7 +121,12 @@ public class GUIController implements Initializable {
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Waiting...");
         Label label1 = new Label("Waiting...\n");
-        Label label2 = new Label("Players in the lobby:\t" + numP);
+        String message;
+        if (schemes)
+            message = "Somebody is picking a scheme";
+        else
+            message = "Players in the lobby:\t" + numP;
+        Label label2 = new Label(message);
         VBox layout = new VBox(40);
         layout.getChildren().addAll(label1, label2);
         layout.setAlignment(Pos.CENTER);
@@ -221,7 +226,7 @@ public class GUIController implements Initializable {
     private void waitForGameStart() {
         if (isRMI) {
             try {
-                waiting(INFINITE, numPlayers);
+                waiting(INFINITE, numPlayers, false);
                 int n = ClientMain.waitForGameStart(numPlayers);
                 if (n == STARTED) {
                     if (activePopup!=null)
@@ -246,7 +251,7 @@ public class GUIController implements Initializable {
                 activePopup.close();
             } else {
                 numPlayers = k;
-                waiting(INFINITE, numPlayers);
+                waiting(INFINITE, numPlayers, false);
                 waitForGameStart();
             }
         }
@@ -272,7 +277,7 @@ public class GUIController implements Initializable {
     private void setParameters(ActionEvent event) {
         if (!customSchemesButtonNo.isSelected())  {
             customSchemes = true;
-            GUIupdater.customSchemes = customSchemes;
+            GUIupdater.setCustomSchemes(customSchemes);
         }
         try {
             lobbyDelay = Integer.parseInt(delayTextField.getText());
@@ -301,16 +306,15 @@ public class GUIController implements Initializable {
             setParameters(event);
         }
         waitForGameStart();
-
-        Scheme s1 = Scheme.initialize(1, false, 24);
-        Scheme s2 = Scheme.initialize(2, false, 24);
-        Scheme s3 = Scheme.initialize(3, false, 24);
-        Scheme s4 = Scheme.initialize(4, false, 24);
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/chooseSchemes.fxml"));
         Parent root = loader.load();
         SchemesController controller = loader.getController();
-        controller.setSchemes(s1.toString(), s2.toString(), s3.toString(), s4.toString());
+
+        waitForSchemes();
+
+        controller.setSchemes((String)GUIupdater.getSchemesToChoose().get(0),
+                (String)GUIupdater.getSchemesToChoose().get(1), (String)GUIupdater.getSchemesToChoose().get(2),
+                (String)GUIupdater.getSchemesToChoose().get(3));
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -318,6 +322,12 @@ public class GUIController implements Initializable {
         appStage.setResizable(true);
         appStage.setFullScreen(true);
         appStage.show();
+    }
+
+    private void waitForSchemes() {
+        while (GUIupdater.getSchemesToChoose().size() != 4) {
+            waiting(INFINITE, 0, true);
+        }
     }
 
     public static void setMessenger(SocketMessengerClient sm){

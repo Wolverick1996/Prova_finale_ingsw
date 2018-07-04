@@ -42,7 +42,7 @@ public class SocketMessengerClient implements Runnable{
                 this.waitStart();
             } else {
                 //GUI
-                this.handler = new IOHandlerClient(this.username, cli);
+                this.handler = new IOHandlerClient(this.username, gui);
                 this.handler.startInterface();
             }
         } catch (IOException e) {

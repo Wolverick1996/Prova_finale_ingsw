@@ -190,6 +190,18 @@ public class SchemesController {
         Parent root = loader.load();
         GameController controller = loader.getController();
 
+        if (grid1Button.isSelected())
+            GUIupdater.setSchemeChosen(1);
+        else if (grid2Button.isSelected())
+            GUIupdater.setSchemeChosen(2);
+        else if (grid3Button.isSelected())
+            GUIupdater.setSchemeChosen(3);
+        else
+            GUIupdater.setSchemeChosen(4);
+
+        //while (!GUIupdater.canGoToGame)
+        //    GUIController.waiting(GUIController.INFINITE, 0, true);
+
         //TODO: Notify to the controller the window pattern chosen: loops are replaced by controller calls
         //TODO: CONTROLLER REQUEST to get the following
         // 1. (int) Number of players;
@@ -199,25 +211,6 @@ public class SchemesController {
         // 5. (String) Tool Cards;
         // 6. (String) My player string
         // 7. (String) Active player
-
-        /*
-            //Block of code relative to the first version of reloadGame method
-            //ownRestriction is an ImageView array used to pass images as parameters to GameController
-
-            ArrayList<ImageView> ownRestrictions = new ArrayList<>();
-            if (grid1Button.isSelected())
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(i));
-            else if (grid2Button.isSelected())
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(20+i));
-            else if (grid3Button.isSelected())
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(40+i));
-            else
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(60+i));
-        */
 
         int numP = (int)(Math.random()*3 + 2);
         Table table = new Table(numP);
@@ -269,8 +262,9 @@ public class SchemesController {
         */
 
         Scheme s1 = Scheme.initialize(1, false, 24);
-
-        controller.reloadGame(numP, s1.toString(), privOC, table.toString(), tools, p1.toString(), p2.toString());
+        int temp = GUIupdater.getSchemeChosen() - 1;
+        String scheme = (String) GUIupdater.getSchemesToChoose().get(temp);
+        controller.reloadGame(numP, scheme, privOC, table.toString(), tools, p1.toString(), p2.toString());
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -87,7 +87,7 @@ public class ClientMain {
         ServerIntRMI server;
         server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
         serverRMI = server;
-        ClientImplementationRMI client = new ClientImplementationRMI(text);
+        ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.gui);
 
         ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 
@@ -154,7 +154,7 @@ public class ClientMain {
                     text = "*";
                 }
                 if (!text.equals("*")) {
-                    ClientImplementationRMI client = new ClientImplementationRMI(text);
+                    ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.cli);
 
                     ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 

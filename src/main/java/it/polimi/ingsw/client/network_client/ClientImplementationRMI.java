@@ -12,9 +12,9 @@ public class ClientImplementationRMI extends Observable implements ClientIntRMI 
     private String name;
     private IOHandlerClient handler;
 
-    ClientImplementationRMI (String n){
+    ClientImplementationRMI (String n, IOHandlerClient.Interface handlerType){
         name=n;
-        this.handler = new IOHandlerClient(n, cli); //TODO: LET CHOOSE BETWEEN CLI AND GUI
+        this.handler = new IOHandlerClient(n, handlerType); //TODO: LET CHOOSE BETWEEN CLI AND GUI
     }
 
     public void notify(String message) throws RemoteException {
