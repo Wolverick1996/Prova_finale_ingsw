@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -33,6 +34,8 @@ public class GUIController implements Initializable {
 
     private static final String RMI = "rmi";
     private static final String SOCKET = "socket";
+    private static final String NEWLINE = "\n";
+    private static final String DIVISOR = ": \t";
 
     private static SocketMessengerClient messenger;
 
@@ -48,6 +51,31 @@ public class GUIController implements Initializable {
     private TextField ip;
     @FXML
     private RadioButton rmiButton;
+
+    @FXML
+    private GridPane player1;
+    @FXML
+    private GridPane player2;
+    @FXML
+    private GridPane player3;
+    @FXML
+    private GridPane player4;
+    @FXML
+    private Text player1Name;
+    @FXML
+    private Text player1Score;
+    @FXML
+    private Text player2Name;
+    @FXML
+    private Text player2Score;
+    @FXML
+    private Text player3Name;
+    @FXML
+    private Text player3Score;
+    @FXML
+    private Text player4Name;
+    @FXML
+    private Text player4Score;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
@@ -187,6 +215,37 @@ public class GUIController implements Initializable {
 
     public static void setMessenger(SocketMessengerClient sm){
         messenger = sm;
+    }
+
+    void setPlayers(int numP, String rank){
+        if (numP <= 3)
+            player4.setVisible(false);
+        if (numP <= 2)
+            player3.setVisible(false);
+        if (numP == 1)
+            player2.setVisible(false);
+
+        String[] divide;
+        String[] splitter;
+        divide = rank.split(NEWLINE);
+        splitter = divide[2].split(DIVISOR);
+        player1Name.setText(splitter[0]);
+        player1Score.setText(splitter[1]);
+        if (numP >= 2) {
+            splitter = divide[3].split(DIVISOR);
+            player2Name.setText(splitter[0]);
+            player2Score.setText(splitter[1]);
+        }
+        if (numP >= 3) {
+            splitter = divide[4].split(DIVISOR);
+            player3Name.setText(splitter[0]);
+            player3Score.setText(splitter[1]);
+        }
+        if (numP >= 4) {
+            splitter = divide[5].split(DIVISOR);
+            player4Name.setText(splitter[0]);
+            player4Score.setText(splitter[1]);
+        }
     }
 
 }

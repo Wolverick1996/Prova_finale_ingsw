@@ -373,4 +373,28 @@ public class GameController {
         appStage.show();
     }
 
+    private void endGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameEnd.fxml"));
+        Parent root = loader.load();
+        GUIController controller = loader.getController();
+
+        String rank = "Game ended!\n\ningconti: \t1000000\nn1zzo: \t100\nmichele-bertone: \t100\nvalerio-castelli: \t10";
+
+        controller.setPlayers(4, rank);
+
+        Scene scene = new Scene(root);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(false);
+        appStage.show();
+    }
+
+    @FXML
+    private void passTurn(ActionEvent event) throws IOException {
+        //if (TURN IS THE LAST OF THE GAME)
+        endGame(event);
+        //else
+        //TODO: Method to pass the turn
+    }
+
 }

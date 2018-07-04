@@ -218,7 +218,7 @@
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" text="End turn" />
+                        <Button mnemonicParsing="false" onAction="#passTurn" text="End turn" />
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
