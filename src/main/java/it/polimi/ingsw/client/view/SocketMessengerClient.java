@@ -6,8 +6,8 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
 
 public class SocketMessengerClient implements Runnable{
 
-    private Boolean gameHasStarted = false;
-    private Boolean debug = true;
+    private boolean gameHasStarted = false;
+    private boolean debug = true;
     private String username;
     private PrintWriter out;
     private BufferedReader in;

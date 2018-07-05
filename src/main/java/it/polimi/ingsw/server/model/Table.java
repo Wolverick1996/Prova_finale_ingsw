@@ -25,7 +25,7 @@ public class Table {
     private int greenExt = 0;
     private int purpleExt = 0;
     private int yellowExt = 0;
-    private int bluExt = 0;
+    private int blueExt = 0;
     private int round = -1; //must match ROUND in controller
     private boolean clockwise = true;
     private int turn = 0;
@@ -121,7 +121,7 @@ public class Table {
     public Dice pickDiceFromBag(){
         boolean isAVB = false;
         Enum.Color color = Enum.Color.getRandomColor();
-        if (redExt==18 && purpleExt==18 && bluExt==18 && greenExt==18 && yellowExt==18){
+        if (redExt==18 && purpleExt==18 && blueExt ==18 && greenExt==18 && yellowExt==18){
             System.err.println("Bag is empty");
             return null; }
         while(!isAVB){
@@ -129,7 +129,7 @@ public class Table {
             switch (color){
                 case RED: if (redExt < 18) { isAVB = true; redExt++;} break;
                 case PURPLE: if (purpleExt < 18) { isAVB = true; purpleExt++;} break;
-                case BLUE: if (bluExt < 18) { isAVB = true; bluExt++;} break;
+                case BLUE: if (blueExt < 18) { isAVB = true; blueExt++;} break;
                 case GREEN: if (greenExt < 18) { isAVB = true; greenExt++;} break;
                 case YELLOW: if (yellowExt < 18) { isAVB = true; yellowExt++;} break;
             }
@@ -185,11 +185,11 @@ public class Table {
         switch (color){
             case RED: redExt--; break;
             case PURPLE: purpleExt--; break;
-            case BLUE: bluExt--; break;
+            case BLUE: blueExt--; break;
             case GREEN: greenExt--; break;
             case YELLOW: yellowExt--; break;
         }
-        if (redExt < 0 || purpleExt < 0 || bluExt < 0 || greenExt < 0 || yellowExt < 0)
+        if (redExt < 0 || purpleExt < 0 || blueExt < 0 || greenExt < 0 || yellowExt < 0)
             System.err.println("colorExt < 0: something strange happened");
         reserve.remove(dicePos);
         return true;
@@ -272,7 +272,7 @@ public class Table {
      * @param bool: the boolean value that canExtract should assumes
      * @author Riccardo
      */
-    public void setCanExtract(Boolean bool){ this.canExtract = bool; }
+    public void setCanExtract(boolean bool){ this.canExtract = bool; }
 
     /**
      * Gets the current value of the canExtract flag

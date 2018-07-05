@@ -49,7 +49,7 @@ public class ClientMain {
         System.out.println("Which kind of connection do you want to use? [RMI or socket]");
         Scanner scanner = new Scanner(System.in);
         String string;
-        Boolean check = false;
+        boolean check = false;
         while (!check) {
             string = scanner.nextLine();
             string = string.toLowerCase();

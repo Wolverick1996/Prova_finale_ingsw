@@ -110,7 +110,7 @@ public class Game implements Observer {
             //End Game
             gameEnding();
         } else {
-            Boolean end = false;
+            boolean end = false;
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
             if (this.players.get(active).getTool8()){
                 end = true;

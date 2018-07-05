@@ -24,8 +24,8 @@ public class Lobby /*extends Observer*/ {
     private int delay = 20000;
     private List<String> players = new ArrayList<>();
     private List<Socket> sockets = new ArrayList<>();
-    private Boolean streetlight;
-    private Boolean hasStarted = false;
+    private boolean streetlight;
+    private boolean hasStarted = false;
     private Timer timer;
 
     /**
