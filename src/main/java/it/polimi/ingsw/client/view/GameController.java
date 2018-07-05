@@ -43,6 +43,8 @@ public class GameController {
     @FXML
     private GridPane grid;
     @FXML
+    private Button pass;
+    @FXML
     private Button p1;
     @FXML
     private Button p2;
@@ -80,6 +82,56 @@ public class GameController {
     private Text round;
     @FXML
     private Text turn;
+
+    GameController() {
+        super();
+    }
+
+    void highlightGrid(boolean on){
+        if (on)
+            for (ImageView i:gridIMG)
+                i.setEffect(ds);
+        else
+            for (ImageView i:gridIMG)
+                i.setEffect(null);
+    }
+
+    void highlightDraft(boolean on){
+        if (on)
+            for (ImageView i:draftIMG)
+                i.setEffect(ds);
+        else
+            for (ImageView i:draftIMG)
+                i.setEffect(null);
+    }
+
+    void highlightRoundtrack(boolean on){
+        if (on)
+            for (ImageView i:roundtrackIMG)
+                i.setEffect(ds);
+        else
+            for (ImageView i:roundtrackIMG)
+                i.setEffect(null);
+    }
+
+    void highlightTool(boolean on) {
+        if (on) {
+            tool1.setEffect(ds);
+            tool2.setEffect(ds);
+            tool3.setEffect(ds);
+        } else {
+            tool1.setEffect(null);
+            tool2.setEffect(null);
+            tool3.setEffect(null);
+        }
+    }
+
+    void highlightPass(boolean on){
+        if (on)
+            pass.setEffect(ds);
+        else
+            pass.setEffect(null);
+    }
 
     private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
         for (String s:divide) {
@@ -156,7 +208,12 @@ public class GameController {
 
         //TODO: Controller call to associate an action with the window pattern images
         for (ImageView i: toFill)
-            i.setOnMouseClicked(e -> System.out.println("I'm a window pattern image!"));
+            i.setOnMouseClicked(e -> {
+                if(GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.WINDOWPATTERN){
+                    //GUIupdater.addToSendIntList(Integer.toString());
+                    //GUIupdater.addToSendIntList(Integer.toString());
+                }
+            });
     }
 
     private void loadReserve(String draft){
@@ -176,12 +233,14 @@ public class GameController {
             reserve.add((draftIMG.get(imageColor.size()-i)), i, 0);
         }
 
-        //TODO: Controller call to associate an action with the reserve images
         for (ImageView i:draftIMG)
             i.setOnMouseClicked(e -> {
-                i.setEffect(ds);
-                System.out.println("I'm a dice in the reserve!");
-                i.setEffect(null);
+                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST){
+                    GUIupdater.addToSendIntList("d");
+                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.indexOf(i) + 1));
+                } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.RESERVE){
+                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.indexOf(i) + 1));
+                }
             });
     }
 
@@ -217,12 +276,11 @@ public class GameController {
             }
         }
 
-        //TODO: Controller call to associate an action with the roundtrack images
         for (ImageView i:roundtrackIMG)
             i.setOnMouseClicked(e -> {
-                i.setEffect(ds);
-                System.out.println("I'm a dice in the roundtrack!");
-                i.setEffect(null);
+                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.ROUNDTRACK) {
+                    GUIupdater.addToSendIntList(Integer.toString(roundtrackIMG.indexOf(i) + 1));
+                }
             });
     }
 
@@ -286,10 +344,24 @@ public class GameController {
             }
         }
 
-        //TODO: Controller call to associate an action with the tool cards buttons
-        tool1.setOnMouseClicked(e -> System.out.println("I'm the tool card 1!"));
-        tool2.setOnMouseClicked(e -> System.out.println("I'm the tool card 2!"));
-        tool3.setOnMouseClicked(e -> System.out.println("I'm the tool card 3!"));
+        tool1.setOnMouseClicked(e -> {
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+                GUIupdater.addToSendIntList("t");
+                GUIupdater.addToSendIntList("1");
+            }
+        });
+        tool2.setOnMouseClicked(e -> {
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+                GUIupdater.addToSendIntList("t");
+                GUIupdater.addToSendIntList("2");
+            }
+        });
+        tool3.setOnMouseClicked(e -> {
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+                GUIupdater.addToSendIntList("t");
+                GUIupdater.addToSendIntList("3");
+            }
+        });
     }
 
     /*

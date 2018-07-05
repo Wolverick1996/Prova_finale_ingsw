@@ -172,7 +172,7 @@ public class SocketMessengerClient implements Runnable{
         gameHasStarted = true;
     }
 
-    public synchronized int waitForGameStart(int num) throws IOException {
+    public synchronized int waitForGameStart() throws IOException {
         if (gameHasStarted) return 999;
         return Integer.parseInt(this.in.readLine());
     }

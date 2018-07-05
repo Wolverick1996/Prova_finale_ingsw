@@ -8,7 +8,7 @@ public class IOHandlerClient implements Observer {
 
     //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
 
-    private boolean debug = false;
+    private boolean debug = true;
     private String name;
     private Interface outputInt;
     private CLI commandLine;
@@ -43,43 +43,15 @@ public class IOHandlerClient implements Observer {
     private boolean chooseSchemes = false;
     private int lineReadNumber = 0;
     private boolean readStatus = false;
+    private boolean readActivePlayer = false;
 
     private void sendGUI(String message){
-        if (debug) System.out.println(message);
 
-        if (readStatus) {
-            if (message.equals("\n\n---------------------------------------------\n\n")) {
-                readStatus = false;
-                lineReadNumber = 0;
-            } else {
-                switch (lineReadNumber) {
-                    case 0:
-                        GUIupdater.setTable(message);
-                        break;
-                    case 1:
-                        GUIupdater.setTools(message);
-                        break;
-                    case 2:
-                        GUIupdater.setPrivObj(message);
-                        break;
-                    default:
-                        GUIupdater.addPlayer(message);
-                }
-                lineReadNumber++;
-            }
-            return;
-        }
+        if (readActivePlayer){ readActivePlayer(message); return; }
 
-        if (chooseSchemes) {
-            if (lineReadNumber%2 != 0) {
-                GUIupdater.getSchemesToChoose().add(message);
-            }
-            lineReadNumber++;
-            if (lineReadNumber == 8){
-                chooseSchemes = false;
-                lineReadNumber = 0;
-            }
-        }
+        if (readStatus) { getStatus(message); return; }
+
+        if (chooseSchemes) { chooseSchemes(message); }
 
         switch (message) {
             case "Do you want to use custom window patterns?" :
@@ -109,14 +81,79 @@ public class IOHandlerClient implements Observer {
             case "Here is the status: " :
                 readStatus = true;
                 break;
+            case "Turn passed": case "Used tool 8, so is passing the turn..." :
+                resetGUIupdater();
+                readActivePlayer = true;
+                break;
+            case "Insert action (d = place dice, t = use tool, q = pass turn)" :
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.STANDARDREQUEST);
+                break;
             default: break;
         }
     }
 
-    private String requestGUI(){
-        String toSend = GUIupdater.getToSend();
+    private void chooseSchemes(String message){
+        if (lineReadNumber%2 != 0) {
+            GUIupdater.getSchemesToChoose().add(message);
+        }
+        lineReadNumber++;
+        if (lineReadNumber == 8){
+            chooseSchemes = false;
+            lineReadNumber = 0;
+        }
+    }
+
+    private void readActivePlayer(String message){
+        GUIupdater.setActivePlayer(message.split(",")[0]);
+        readActivePlayer = false;
+    }
+
+    private void getStatus(String message){
+        if (message.equals("\n\n---------------------------------------------\n\n")) {
+            GUIupdater.refresh();
+            readStatus = false;
+            lineReadNumber = 0;
+        } else {
+            switch (lineReadNumber) {
+                case 0:
+                    GUIupdater.setTable(message);
+                    break;
+                case 1:
+                    GUIupdater.setTools(message);
+                    break;
+                case 2:
+                    GUIupdater.setPrivObj(message);
+                    break;
+                default:
+                    GUIupdater.addPlayer(message);
+            }
+            lineReadNumber++;
+        }
+    }
+
+    private void resetGUIupdater() {
         GUIupdater.setToSend(null);
-        return toSend;
+        GUIupdater.setTypeRequested(null);
+        GUIupdater.emptyToSendIntList();
+    }
+
+    private String requestGUI(){
+        if (GUIupdater.getTypeRequested() == null) {
+            String toSend = GUIupdater.getToSend();
+            GUIupdater.setToSend(null);
+            if (debug) System.out.println("I'm sending: " + toSend);
+            return toSend;
+        }
+        while (GUIupdater.isToSendIntListEmpty()){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        String output = GUIupdater.getToSendList();
+        if (debug) System.out.println("I'm sending: " + output);
+        return output;
     }
 
     @Override

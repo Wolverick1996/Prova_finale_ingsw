@@ -39,7 +39,7 @@ public class ClientMain {
 
     public static void main(String[] args) {
         //String check_UI = args[0];
-        String check_UI = "gui";
+        String check_UI = "cli";
         if (check_UI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
@@ -113,7 +113,7 @@ public class ClientMain {
     }
 
     //this method return the number of players in the lobby if it changes, 999 if game started
-    public static int waitForGameStart(int num) throws RemoteException{
+    public static int waitForGameStart() throws RemoteException{
         int check;
         boolean hasStarted;
         serverRMI.confirmConnections();

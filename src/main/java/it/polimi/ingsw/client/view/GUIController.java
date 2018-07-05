@@ -230,7 +230,7 @@ public class GUIController implements Initializable {
         if (isRMI) {
             try {
                 waiting(INFINITE, numPlayers, false);
-                int n = ClientMain.waitForGameStart(numPlayers);
+                int n = ClientMain.waitForGameStart();
                 if (n == STARTED) {
                     if (activePopup!=null)
                     activePopup.close();
@@ -245,7 +245,7 @@ public class GUIController implements Initializable {
         } else {
             int k = 0;
             try {
-                k = messenger.waitForGameStart(numPlayers);
+                k = messenger.waitForGameStart();
                 System.out.println("I read " + k);
             } catch (IOException e) {
                 System.out.println("SOMETHING IS WRONG WITH THE SERVER, IOEXC ON CHECKNEWPLAYERS");
