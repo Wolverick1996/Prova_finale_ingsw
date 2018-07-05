@@ -22,10 +22,14 @@ public class IOhandler implements Observer{
     //***************************//
 
     private List<ClientIntRMI> usersRMI = new ArrayList<>();
+    private List<DisconnectedPlayers> disconnectedRMI = new ArrayList<>();
+    private ServerIntRMI server;
     private List<SocketUser> socketUserList = new ArrayList<>(); //this is the list of socket BY socketUser->name
+    private List<DisconnectedPlayers> disconnectedSocket = new ArrayList<>();
     private List<Player> players;
     private Observable ov = null;
     private Table table;
+    private static final String DISCONNECTION = "disconnection";
     private static final String STATUS = "STATUS";
     private static final String DIVISOR = "\n\n---------------------------------------------\n\n";
 
@@ -57,9 +61,13 @@ public class IOhandler implements Observer{
         try {
             usersRMI = server.getConnected();
             for (ClientIntRMI c : usersRMI)
-                c.startIterface();
+                c.startInterface();
         } catch (RemoteException e){
-            e.printStackTrace();
+            try {
+                server.confirmConnections();
+            } catch (RemoteException e1) {
+                System.err.println("SETSERVER IOHANDLER ERROR");
+            }
         }
     }
 
@@ -138,35 +146,46 @@ public class IOhandler implements Observer{
      * @author Matteo
      */
     void broadcast(Object message){
-        try {
-            System.out.println(message);
-            if (message.equals(STATUS)){
-                System.out.println(DIVISOR);
-                for (Player p: this.players) this.notify(p.getUsername(), DIVISOR);
-                for (Player p: this.players) this. notify(p.getUsername(), "Here is the status: ");
-                System.out.println(table);
-                for (Player p: this.players){
-                    this.notify(p.getUsername(), table.toString());
-                    String tools = "\nTool Cards on table:\n";
-                    for (int i = 0; i<3; i++) {
-                        tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET +
-                                ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() + "\n Tokens on: " +
-                                Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
-                    }
-                    this.notify(p.getUsername(), tools);
-                    this.notify(p.getUsername(), PrivObjHandler.getCard(p));
+        System.out.println(message);
+        if (message.equals(STATUS)){
+            System.out.println(DIVISOR);
+            for (Player p: getListOfActive()) this.notify(p.getUsername(), DIVISOR);
+            for (Player p: getListOfActive()) this. notify(p.getUsername(), "Here is the status: ");
+            System.out.println(table);
+            for (Player p: getListOfActive()){
+                this.notify(p.getUsername(), table.toString());
+                String tools = "\nTool Cards on table:\n";
+                for (int i = 0; i<3; i++) {
+                    tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET +
+                            ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() + "\n Tokens on: " +
+                            Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
                 }
-                for (Player p: this.players){
-                    System.out.println(p);
-                    for (Player pl: this.players) this.notify(pl.getUsername(), p.toString());
-                }
-                System.out.println(DIVISOR);
-                for (Player p: this.players) this.notify(p.getUsername(), DIVISOR);
-            } else
-                for (Player p: this.players) this.notify(p.getUsername(), message.toString());
-        } catch (RemoteException e){
-            System.err.println("ERROR BROADCAST: "+e.getMessage());
+                this.notify(p.getUsername(), tools);
+                this.notify(p.getUsername(), PrivObjHandler.getCard(p));
+            }
+            for (Player p: getListOfActive()){
+                System.out.println(p);
+                for (Player pl: getListOfActive()) this.notify(pl.getUsername(), p.toString());
+            }
+            System.out.println(DIVISOR);
+            for (Player p: getListOfActive()) this.notify(p.getUsername(), DIVISOR);
+        } else
+            for (Player p: getListOfActive()) this.notify(p.getUsername(), message.toString());
+    }
+
+    /**
+     * Returns a list of the players not disconnected
+     *
+     * @return a list of the active Players
+     * @author Andrea
+     */
+    private List<Player> getListOfActive(){
+        ArrayList<Player> actives = new ArrayList<>();
+        for (Player p : players){
+            if (!p.isDisconnected())
+                actives.add(p);
         }
+        return actives;
     }
 
     /**
@@ -188,21 +207,15 @@ public class IOhandler implements Observer{
                     return "d";
                 } else if (answer.equals("t")){
                     return "t";
-                } else if (answer.equals("q")){
+                } else if (answer.equals("q") || answer.equals(DISCONNECTION)){
                     return "q";
                 } else {
                     notify(player, "Invalid input!");
                 }
             }
         } catch (IllegalArgumentException e){
-            try {
-                notify(player, "What did you write, sorry?");
-            } catch (RemoteException e1){
-                e1.printStackTrace();
-            }
+            notify(player, "What did you write, sorry?");
             return getStandardAction(player);
-        } catch (RemoteException e){
-            System.err.println("GETSTDACTION ERROR: " +e.getMessage());
         }
         return null;
     }
@@ -224,16 +237,14 @@ public class IOhandler implements Observer{
 
                 notify(player, "Insert the place of the dice in the reserve");
                 notify(player, table.printReserve());
-                answer = Integer.parseInt(getInput(player));
+                String answerString = getInput(player);
+                //if disconnected return to the previous status asking for an action(d,t,q)
+                if (answerString.equals(DISCONNECTION))
+                    return -1;
+                answer = Integer.parseInt(answerString);
                 return answer-1;
             } catch (IllegalArgumentException i){
-                try {
-                    notify(player, "You don't know what you just said");
-                } catch (RemoteException e){
-                    e.printStackTrace();
-                }
-            } catch (RemoteException e){
-                e.printStackTrace();
+                notify(player, "You don't know what you just said");
             }
             check = false;
         } while (!check);
@@ -253,16 +264,13 @@ public class IOhandler implements Observer{
         try {
             notify(player,"Choose a dice from round track [from 1 to N]");
             notify(player, table.printRoundtrack());
-            answer = Integer.parseInt(getInput(player));
+            String answerString = getInput(player);
+            if (answerString.equals(DISCONNECTION))
+                return -1;
+            answer = Integer.parseInt(answerString);
             return answer-1;
         } catch (IllegalArgumentException e){
-            try {
-                notify(player,"I do not understand. Am I the only one here?");
-            } catch (RemoteException e1){
-                e1.printStackTrace();
-            }
-        } catch (RemoteException e){
-            System.err.println("GETDICE: " + e.getMessage());
+            notify(player,"I do not understand. Am I the only one here?");
         }
 
         return -1;
@@ -278,18 +286,14 @@ public class IOhandler implements Observer{
     public int getCoordinate(String player){
         int answer;
         try {
-            answer = Integer.parseInt(getInput(player));
+            String answerString = getInput(player);
+            if (answerString.equals(DISCONNECTION))
+                return -1;
+            answer = Integer.parseInt(answerString);
             return answer-1;
         } catch (IllegalArgumentException i){
-            try {
-                notify(player, "What did you mean? I have no idea");
-            } catch (RemoteException e){
-                e.printStackTrace();
-            }
-        } catch (RemoteException e){
-            System.err.println("GETCOORDINATE: " +e.getMessage());
+            notify(player, "What did you mean? I have no idea");
         }
-
         return -1;
     }
 
@@ -321,7 +325,10 @@ public class IOhandler implements Observer{
 
             while (!isValid){
                 notify(player, "Pick a scheme (write 1, 2, 3 or 4)");
-                answer = Integer.parseInt(getInput(player));
+                String answerString = getInput(player);
+                if (answerString.equals(DISCONNECTION))
+                    return 1;
+                answer = Integer.parseInt(answerString);
 
                 if (answer == 1 || answer == 2 || answer == 3 || answer == 4){
                     isValid = true;
@@ -331,21 +338,10 @@ public class IOhandler implements Observer{
             }
             return schemes.get(answer-1);
         } catch (NumberFormatException n){
-            try {
-                notify(player, "In my town, we do not call that a number");
-            } catch (RemoteException e){
-                e.printStackTrace();
-            }
+            notify(player, "In my town, we do not call that a number");
         } catch (IllegalArgumentException i){
-            try {
-                notify(player, "What is that character? Just write a number, is it that hard?");
-            } catch (RemoteException e){
-                e.printStackTrace();
-            }
-        } catch (RemoteException e){
-            System.err.println("CHOOSESCHEME: " +e.getMessage());
+            notify(player, "What is that character? Just write a number, is it that hard?");
         }
-
         return chooseScheme(s1, s2, s3, s4, player);
     }
 
@@ -360,22 +356,15 @@ public class IOhandler implements Observer{
         int answer;
         try {
             notify(player,"\nChoose a tool card [1, 2, 3] or type '0' if you want to go back");
-            answer = Integer.parseInt(getInput(player));
+            String answerString = getInput(player);
+            if (answerString.equals(DISCONNECTION))
+                return -1;
+            answer = Integer.parseInt(answerString);
             return answer-1;
         } catch (NumberFormatException n){
-            try {
-                notify(player, "I may be a computer, but I don't think that is a number");
-            } catch (RemoteException e){
-                e.printStackTrace();
-            }
+            notify(player, "I may be a computer, but I don't think that is a number");
         } catch (IllegalArgumentException i){
-            try {
-                notify(player, "I DON'T UNDERSTAAAAND");
-            } catch (RemoteException e){
-                e.printStackTrace();
-            }
-        } catch (RemoteException e){
-            System.err.println("GETTOOL: " + e.getMessage());
+            notify(player, "I DON'T UNDERSTAAAAND");
         }
         return -1;
     }
@@ -395,22 +384,15 @@ public class IOhandler implements Observer{
                 notify(player,"Increment or decrement the value typing '+1' or '-1'");
             else
                 notify(player,"Insert the new value [1-6]");
-            answer = Integer.parseInt(getInput(player));
+            String answerString = getInput(player);
+            if (answerString.equals(DISCONNECTION))
+                return -1;
+            answer = Integer.parseInt(answerString);
             return answer;
         } catch (NumberFormatException n){
-            try {
-                notify(player, "That is no number, not even in Wakanda");
-            } catch (RemoteException e){
-                e.printStackTrace();
-            }
+            notify(player, "That is no number, not even in Wakanda");
         } catch (IllegalArgumentException i){
-            try {
-                notify(player, "Sorry, what?");
-            } catch (RemoteException e){
-                e.printStackTrace();
-            }
-        } catch (RemoteException e){
-            System.err.println("CHOOSEDICEVALUE: " + e.getMessage());
+            notify(player, "Sorry, what?");
         }
         return -1;
     }
@@ -423,24 +405,39 @@ public class IOhandler implements Observer{
      * @throws RemoteException when client RMI disconnected
      * @author Matteo
      */
-    public synchronized void notify(String player, String message) throws RemoteException {
-        for (ClientIntRMI r: usersRMI){
-            if (r.getName().equals(player)){
-                r.notify(message);
-                return;
+    public synchronized void notify(String player, String message) {
+        int index = -1;
+        int oneToBeDelete = -1;
+        for (int i = 0; i < usersRMI.size(); i++){
+            try {
+                if (usersRMI.get(i).getName().equals(player)){
+                    usersRMI.get(i).notify(message);
+                    return;
+                }
+            }catch (RemoteException e){
+                oneToBeDelete = i;
+                index = disconnectPlayer(i);
             }
         }
+        if (oneToBeDelete != -1){
+            disconnectedRMI.add(new DisconnectedPlayers(oneToBeDelete, players.get(index).getUsername()));
+        }
+        oneToBeDelete = -1;
         for (SocketUser u: socketUserList){
             if (u.name.equals(player)){
                 try {
                     SocketMessengerServer.write(u.socket, message);
                     return;
                 } catch (IOException e){
-                    //TODO: SOMETHING WRONG
-                    e.printStackTrace();
-                    return;
+                    oneToBeDelete = socketUserList.indexOf(u);
+                    index = findDisconnected(u.name);
+                    players.get(index).setDisconnected(true);
                 }
             }
+        }
+        if (oneToBeDelete != -1){
+            disconnectedSocket.add(new DisconnectedPlayers(oneToBeDelete, players.get(index).getUsername()));
+            socketUserList.remove(oneToBeDelete);
         }
     }
 
@@ -452,7 +449,7 @@ public class IOhandler implements Observer{
      * @throws RemoteException when client RMI disconnected
      * @author Matteo
      */
-    public boolean yesOrNo(String player) throws RemoteException{
+    public boolean yesOrNo(String player){
         boolean check = true;
         String answer;
         do {
@@ -466,6 +463,9 @@ public class IOhandler implements Observer{
                 if (answer.equals("y")){
                     return true;
                 } else if (answer.equals("n")){
+                    return false;
+                } else if (answer.equals(DISCONNECTION)){
+                    broadcast("First player got disconnected!");
                     return false;
                 }
             } catch (IllegalArgumentException e){
@@ -481,30 +481,141 @@ public class IOhandler implements Observer{
      *
      * @param player: the player who has to insert an input
      * @return the inserted input
-     * @throws RemoteException when client RMI disconnected
      * @author Matteo
      */
-    private synchronized String getInput(String player) throws RemoteException{
-
-        for (ClientIntRMI r: usersRMI){
-            if (r.getName().equals(player)){
-                return r.getInput();
+    private synchronized String getInput(String player){
+        int oneToBeDelete = -1;
+        int index = -1;
+        for (int i = 0; i < usersRMI.size(); i++){
+            try{
+                if (usersRMI.get(i).getName().equals(player)){
+                    return usersRMI.get(i).getInput();
+                }
+            }catch (RemoteException e){
+                oneToBeDelete = i;
+                index = disconnectPlayer(i);
             }
         }
+        if (oneToBeDelete != -1){
+            disconnectedRMI.add(new DisconnectedPlayers(oneToBeDelete, players.get(index).getUsername()));
+            if (players.get(index).getUsername().equals(player)){
+                return DISCONNECTION;
+            }
+        }
+        oneToBeDelete = -1;
         for (SocketUser u: socketUserList){
             if (u.name.equals(player)){
                 try {
                     return SocketMessengerServer.get(u.socket);
                 } catch (IOException e){
-                    //TODO: SOMETHING WRONG
-                    e.printStackTrace();
-                    return "";
+                    oneToBeDelete = socketUserList.indexOf(u);
+                    index = findDisconnected(u.name);
+                    players.get(index).setDisconnected(true);
                 }
             }
         }
+        if (oneToBeDelete != -1){
+            disconnectedSocket.add(new DisconnectedPlayers(oneToBeDelete, players.get(index).getUsername()));
+            socketUserList.remove(oneToBeDelete);
+            return DISCONNECTION;
+        }
         System.err.println("COULD NOT FIND PLAYER FOR THE INPUT");
-        return "INVALID";
+        return DISCONNECTION;
     }
+
+    /**
+     * Private method to reduce complexity of try/catch in case of a RemoteException
+     *
+     * @param disconnected: index of the ClientIntRmi in usersRMI that should be removed from active players
+     * @return index of the player that have to be set as "disconected"
+     */
+    private int disconnectPlayer (int disconnected){
+        int index = findDisconnected(usersRMI.get(disconnected));
+        players.get(index).setDisconnected(true);
+        try {
+            server.confirmConnections();
+        } catch (RemoteException e1) {
+            System.out.println("DISCONNECTPLAYER ERROR");
+        }
+        return index;
+    }
+
+    /**
+     * Used to find out who is the player disconnected (index in arraylist<> players)
+     *
+     * @param o: ClientIntRmi disconnected or SocketUser.name disconnected
+     * @return index of disconnected player
+     * @author Andrea
+     */
+    private int findDisconnected(Object o){
+        int index = 0;
+        ArrayList<String> names = new ArrayList<>();
+
+        // Socket case
+        if (o.getClass() == String.class){
+            for (SocketUser s : socketUserList){
+                if (!s.name.equals(o))
+                    names.add(s.name);
+            }
+            for (ClientIntRMI c : usersRMI){
+                try {
+                    names.add(c.getName());
+                } catch (RemoteException e) {
+                    //WE CAN MANAGE ONE DISCONNECTION PER TIME
+                }
+            }
+        }
+        //RMI case
+        else {
+            for (ClientIntRMI c : usersRMI){
+                try {
+                    if (c != o)
+                        names.add(c.getName());
+                } catch (RemoteException e){
+                    //NOW I CAN MANAGE ONLY ONE DISCONNECTION PER TIME
+                }
+            }
+            for (SocketUser s : socketUserList){
+                names.add(s.name);
+            }
+        }
+
+        for (int i = 0; i < players.size(); i++){
+            boolean found = false;
+            for (String n : names){
+                if (players.get(i).getUsername().equals(n)){
+                    found = true;
+                }
+            }
+            if (!found){
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    ////////////////////////////////////////////////////////////////
+
+    /**
+     * Class used to keep trace of a disconnected player
+     * @author Andrea
+     */
+    class DisconnectedPlayers{
+        int index;
+        String name;
+        /**
+         * Constructor of the object
+         *
+         * @param index: index in list userRmi or SocketUser
+         * @param name: name of the disconnected player
+         * @author Andrea
+         */
+        DisconnectedPlayers(int index, String name){
+            this.index = index;
+            this.name = name;
+        }
+    }
+    ////////////////////////////////////////////////////////////////
 
     //TODO: Realize JavaDoc comment when GUI will be implemented
     @Override

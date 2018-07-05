@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Enum;
 
-import java.rmi.RemoteException;
 import java.util.*;
 
 /**
@@ -55,17 +54,13 @@ public class Game implements Observer {
         if (Controller.getMyIO(this) == null)
             return;
 
-        try {
-            Controller.getMyIO(this).broadcast(this.players.get(0).getUsername() + " is deciding whether to add custom window patterns or not");
-            Controller.getMyIO(this).notify(this.players.get(0).getUsername(), "Do you want to use custom window patterns?");
-            if (Controller.getMyIO(this).yesOrNo(this.players.get(0).getUsername())){
-                this.table.setCustom();
-                Controller.getMyIO(this).broadcast("Custom window patterns enabled!");
-            } else
-                Controller.getMyIO(this).broadcast("Old school, only standard window patterns!");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        Controller.getMyIO(this).broadcast(this.players.get(0).getUsername() + " is deciding whether to add custom window patterns or not");
+        Controller.getMyIO(this).notify(this.players.get(0).getUsername(), "Do you want to use custom window patterns?");
+        if (Controller.getMyIO(this).yesOrNo(this.players.get(0).getUsername())){
+            this.table.setCustom();
+            Controller.getMyIO(this).broadcast("Custom window patterns enabled!");
+        } else
+            Controller.getMyIO(this).broadcast("Old school, only standard window patterns!");
 
         Integer[] schemes = new Integer[table.getNumSchemes()/2];
         for (int k = 0; k < schemes.length; k++)
@@ -73,14 +68,9 @@ public class Game implements Observer {
 
         Collections.shuffle(Arrays.asList(schemes));
         for (Player p:this.players){
-            try {
-                Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card:\n" +
-                        PrivObjHandler.getColor(p).escape() + PrivObjHandler.getName(p) + "\n" + Enum.Color.RESET +
-                        PrivObjHandler.getDescription(p) + "\n");
-            } catch (RemoteException e) {
-                e.printStackTrace();
-                //THIS PLAYER HAS DISCONNECTED
-            }
+            Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card:\n" +
+            PrivObjHandler.getColor(p).escape() + PrivObjHandler.getName(p) + "\n" + Enum.Color.RESET +
+            PrivObjHandler.getDescription(p) + "\n");
             Controller.getMyIO(this).broadcast(p.getUsername() + " has to choose a scheme");
 
             i = schemes[this.players.indexOf(p)];
@@ -117,7 +107,8 @@ public class Game implements Observer {
             }
             if (this.players.get(active).isDisconnected()){
                 end = true;
-                Controller.getMyIO(this).broadcast(players.get(active).getUsername() + " it's disconnected, so is passing the turn...");
+                Controller.getMyIO(this).broadcast(players.get(active).getUsername() +
+                        " it's disconnected, so is passing the turn...\nTurn passed");
             }
             while (!end){
                 String action = Controller.getMyIO(this).getStandardAction(players.get(active).getUsername());
@@ -199,16 +190,11 @@ public class Game implements Observer {
         int index = -2;
         toolUsed = true;
 
-        try {
-            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "\nTool Cards on table:\n");
-            for (int i = 0; i<3; i++) {
-                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), Enum.Color.YELLOW.escape()
-                        + ToolHandler.getName(i) + "\n" + Enum.Color.RESET + ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() +
-                        "\n Tokens on: " + Enum.Color.RESET + ToolHandler.getTokens(i) + "\n");
-            }
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            return;
+        Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "\nTool Cards on table:\n");
+        for (int i = 0; i<3; i++) {
+            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), Enum.Color.YELLOW.escape()
+                    + ToolHandler.getName(i) + "\n" + Enum.Color.RESET + ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() +
+                    "\n Tokens on: " + Enum.Color.RESET + ToolHandler.getTokens(i) + "\n");
         }
         while (index<0 || index>2){
             if (index == -1){
@@ -216,11 +202,7 @@ public class Game implements Observer {
                 Controller.getMyIO(this).broadcast("Nope, nothing done :(");
                 return;
             }
-            try {
-                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Insert number from 1 to 3");
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Insert number from 1 to 3");
             index = Controller.getMyIO(this).getTool(this.players.get(active).getUsername());
         }
 
@@ -245,12 +227,15 @@ public class Game implements Observer {
 
         Dice dice = null;
         boolean check = false;
+        int index = 0;
         while (!check){
             try {
-                dice = null;
-                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), players.get(active).getOwnScheme().toString());
-                Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Type '0' if you want to go back");
-                int index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
+                if (index != -1){
+                    dice = null;
+                    Controller.getMyIO(this).notify(this.players.get(active).getUsername(), players.get(active).getOwnScheme().toString());
+                    Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Type '0' if you want to go back");
+                    index = Controller.getMyIO(this).getDiceFromReserve(players.get(active).getUsername());
+                }
                 if (index == -1){
                     table.setCanExtract(true);
                     Controller.getMyIO(this).broadcast("Nope, nothing done");
@@ -259,9 +244,15 @@ public class Game implements Observer {
                 dice = this.table.checkDiceFromReserve(index);
 
                 Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Insert the coordinates of the dice to be placed, one at a time (x, y)");
-                check = this.players.get(active).placeDice(Controller.getMyIO(this).getCoordinate(this.players.get(active).getUsername()),
-                        Controller.getMyIO(this).getCoordinate(this.players.get(active).getUsername()),
-                        this.table, index);
+                int x = Controller.getMyIO(this).getCoordinate(this.players.get(active).getUsername());
+                if (x != -1){
+                    int y = Controller.getMyIO(this).getCoordinate(this.players.get(active).getUsername());
+                    if (y != -1)
+                        check = this.players.get(active).placeDice(x, y , this.table, index);
+                    else
+                        index = -1;
+                }else
+                    index = -1;
 
                 if (!check){
                     Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again\n");
@@ -290,11 +281,8 @@ public class Game implements Observer {
             putDiceStandard();
 
         this.table.setCanExtract(true);
-        try {
-            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Place the second dice: ");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        Controller.getMyIO(this).notify(this.players.get(active).getUsername(), "Place the second dice: ");
+
         putDiceStandard();
         this.players.get(active).setTool8(true);
     }
@@ -451,11 +439,7 @@ public class Game implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        try {
-            Controller.getMyIO(this).notify(this.players.get(active).getUsername(), arg.toString());
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        Controller.getMyIO(this).notify(this.players.get(active).getUsername(), arg.toString());
     }
 
 }

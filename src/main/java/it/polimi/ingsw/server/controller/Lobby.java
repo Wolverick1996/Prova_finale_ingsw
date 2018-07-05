@@ -125,12 +125,20 @@ public class Lobby /*extends Observer*/ {
             if (p.equals(username))
                 wasConnected = true;
         }
-
         if(wasConnected && Controller.getMyGame(this).getPlayer(username).isDisconnected()){
-            Controller.getMyGame(this).getPlayer(username).setDisconnected(false);
             return true;
         }
         return false;
+    }
+
+    /**
+     *
+     *
+     * @param username: name of the player who rejoined the match
+     */
+    public void rejoinedMatch(String username){
+        Controller.getMyGame(this).getPlayer(username).setDisconnected(false);
+        Controller.getMyIO(this).setServer(this.server);
     }
 
     /**

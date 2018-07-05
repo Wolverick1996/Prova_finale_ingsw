@@ -23,7 +23,8 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
 
     public synchronized boolean login(ClientIntRMI a) throws RemoteException{
 
-        confirmConnections();
+        if(!lobby.hasStarted())
+            confirmConnections();
 
         if (lobby.getPlayers().size() >= Lobby.MAX_PLAYERS){
             System.out.println("Max number of players reached!");
@@ -37,6 +38,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
                 usernames.add(a.getName());
                 System.out.println("[RMI Server]\t" +a.getName()+ "  got connected again....");
                 a.notify("Welcome back " +a.getName()+ ".\nYou have connected successfully.");
+                lobby.rejoinedMatch(a.getName());
                 return true;
             }else{
                 a.notify("The game started without you :(\n\nGet better friends dude");
@@ -55,31 +57,37 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         }
     }
 
-    public synchronized void logout(ClientIntRMI a) throws RemoteException{
-
-        confirmConnections();
-
-        System.out.println("[RMI Server]\t" +a.getName()+ "  disconnected....");
-        lobby.removePlayer(a.getName());
-        usernames.remove(a.getName());
-        clients.remove(a);
-        a.notify("You have disconnected successfully");
-    }
-
-
     public synchronized void confirmConnections() throws RemoteException{
+
         Iterator<ClientIntRMI> clientIterator = clients.iterator();
+        ArrayList<ClientIntRMI> toBeDeleted = new ArrayList<>();
+        ClientIntRMI c = null;
         int i = 0;
         while(clientIterator.hasNext()){
             String s = usernames.get(i);
             try{
-                clientIterator.next().confirmConnection();
+                c = clientIterator.next();
+                c.confirmConnection();
             }catch(ConnectException e) {
-                clientIterator.remove();
+                toBeDeleted.add(c);
                 lobby.removePlayer(s);
                 System.out.println("[RMI Server]\t" +s+ "  disconnected....");
             }
             i++;
+        }
+
+        ArrayList<Integer> indexToRemove = new ArrayList<>();
+        for (ClientIntRMI clientIntRMI : toBeDeleted){
+            for (ClientIntRMI usr : this.clients){
+                if (clientIntRMI ==  usr){
+                    indexToRemove.add(this.clients.indexOf(usr));
+                }
+            }
+        }
+
+        for (Integer n : indexToRemove){
+            clients.remove(n.intValue());
+            usernames.remove(n.intValue());
         }
     }
 
@@ -113,11 +121,11 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         return s;
     }
 
-    public List<ClientIntRMI> getConnected() throws RemoteException{
-        return clients;
+    public List<ClientIntRMI> getConnected(){
+        return this.clients;
     }
 
-    public int playersInLobby() throws RemoteException{
+    public int playersInLobby(){
         return this.lobby.getPlayers().size();
     }
 
@@ -125,7 +133,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         return this.lobby.hasStarted();
     }
 
-    public void setDelay(int delay) throws RemoteException{
+    public void setDelay(int delay){
         this.lobby.setDelay(delay);
     }
 
