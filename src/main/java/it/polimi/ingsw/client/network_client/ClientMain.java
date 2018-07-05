@@ -39,7 +39,7 @@ public class ClientMain {
 
     public static void main(String[] args) {
         //String check_UI = args[0];
-        String check_UI = "gui";
+        String check_UI = "cli";
         if (check_UI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
