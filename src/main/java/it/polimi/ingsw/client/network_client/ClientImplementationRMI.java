@@ -39,7 +39,7 @@ public class ClientImplementationRMI extends Observable implements ClientIntRMI 
         //used to ping and check connection
     }
 
-    public void startIterface() throws RemoteException{
+    public void startInterface() throws RemoteException{
         this.handler.startInterface();
     }
 }

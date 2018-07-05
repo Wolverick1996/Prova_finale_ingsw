@@ -9,5 +9,5 @@ public interface ClientIntRMI extends Remote {
     String getName()throws RemoteException;
     void confirmConnection () throws RemoteException;
     String getInput () throws RemoteException;
-    void startIterface() throws RemoteException;
+    void startInterface() throws RemoteException;
 }

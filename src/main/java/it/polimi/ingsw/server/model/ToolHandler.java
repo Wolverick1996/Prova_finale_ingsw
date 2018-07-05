@@ -180,12 +180,7 @@ public class ToolHandler {
      */
     static boolean getYesOrNo(Player player){
         if (simulatedInput1 == null){
-            try {
-                return currentIO.yesOrNo(player.getUsername());
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            return false;
+            return currentIO.yesOrNo(player.getUsername());
         }
 
         /* TEST SECTION ONLY */
@@ -203,11 +198,7 @@ public class ToolHandler {
         if (simulatedInput1 == null && simulatedInput2 == null && simulatedInput3 == null && simulatedInput4 == null && simulatedInput5 == null
                 && simulatedInput6 == null && simulatedInput7 == null && simulatedInput8 == null && simulatedInput9 == null &&
                 simulatedInput10 == null && simulatedInput11 == null){
-            try {
-                currentIO.notify(player.getUsername(), string);
-            } catch (RemoteException e) {
-                System.err.println("ERROR IN TOOLHANDLER NOTIFY()" + e.getMessage());
-            }
+            currentIO.notify(player.getUsername(), string);
         }
 
         /* TEST SECTION ONLY */
