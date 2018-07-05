@@ -432,10 +432,10 @@ public class GameController {
 
         //TODO: Controller call to request player toString and player's scheme toString
 
-        Scheme s = Scheme.initialize(24, false, 24);
         Player p = new Player("ingconti", 0);
+        p.chooseScheme(Scheme.initialize(1, false, 24));
 
-        controller.loadGrid(p.toString(), s.toString(), draftIMG);
+        controller.loadGrid(p.toString(), draftIMG);
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

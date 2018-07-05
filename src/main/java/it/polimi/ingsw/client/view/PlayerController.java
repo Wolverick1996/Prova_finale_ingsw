@@ -82,9 +82,11 @@ public class PlayerController {
         appStage.show();
     }
 
-    void loadGrid(String player, String scheme, ArrayList<ImageView> draftIMG){
+    void loadGrid(String player, ArrayList<ImageView> draftIMG){
         String[] divide;
 
+        divide = player.split("Active window pattern:\n");
+        String scheme = divide[1];
         String schemeNoCol = scheme.replaceAll(COLORS, "");
         divide = schemeNoCol.split(NEWLINE);
         divide = divide[0].split(DIVISOR);
