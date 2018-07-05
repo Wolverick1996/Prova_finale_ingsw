@@ -163,7 +163,7 @@ public class ToolHandler {
      * @return the value asked
      * @author Matteo
      */
-    static int getDiceValue(Boolean restricted, Player player){
+    static int getDiceValue(boolean restricted, Player player){
         if (simulatedInput10 == null)
             return currentIO.chooseDiceValue(player.getUsername(), restricted);
 

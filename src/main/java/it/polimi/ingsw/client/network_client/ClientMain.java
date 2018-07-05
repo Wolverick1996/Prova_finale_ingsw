@@ -23,6 +23,8 @@ import java.util.concurrent.Executors;
 
 public class ClientMain {
 
+    private static ServerIntRMI serverRMI;
+
     private String ip;
     private static final int PORT = 1337;
     private static final int MAX_PLAYERS = 4;
@@ -47,7 +49,7 @@ public class ClientMain {
         System.out.println("Which kind of connection do you want to use? [RMI or socket]");
         Scanner scanner = new Scanner(System.in);
         String string;
-        Boolean check = false;
+        boolean check = false;
         while (!check) {
             string = scanner.nextLine();
             string = string.toLowerCase();
@@ -84,8 +86,8 @@ public class ClientMain {
     public String startGUIRMI(String text) throws MalformedURLException, RemoteException, NotBoundException{
         ServerIntRMI server;
         server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
-
-        ClientImplementationRMI client = new ClientImplementationRMI(text);
+        serverRMI = server;
+        ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.gui);
 
         ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 
@@ -98,6 +100,27 @@ public class ClientMain {
             else
                 return "ID already taken!";
         }
+    }
+
+    public static int getPlayers() throws RemoteException{
+        return serverRMI.playersInLobby();
+    }
+
+    public static void setGUIlobbyDelay(int delay) throws RemoteException{
+        if (delay>=15 && delay<=60) {
+            serverRMI.setDelay(delay);
+        }
+    }
+
+    //this method return the number of players in the lobby if it changes, 999 if game started
+    public static int waitForGameStart(int num) throws RemoteException{
+        int check;
+        boolean hasStarted;
+        serverRMI.confirmConnections();
+        check = serverRMI.playersInLobby();
+        hasStarted = serverRMI.hasStarted();
+        if (hasStarted) return 999;
+        else return check;
     }
 
     private void startClientRMI() throws MalformedURLException, RemoteException{
@@ -131,7 +154,7 @@ public class ClientMain {
                     text = "*";
                 }
                 if (!text.equals("*")) {
-                    ClientImplementationRMI client = new ClientImplementationRMI(text);
+                    ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.cli);
 
                     ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 
@@ -180,7 +203,7 @@ public class ClientMain {
         }
     }
 
-    public String startGUISocket(String name) throws IOException{
+    public String startGUISocket(String name, GUIController controller) throws IOException{
         Socket socket = null;
         String feedback = "";
         try {
@@ -190,10 +213,7 @@ public class ClientMain {
             System.out.println("Connection established");
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             feedback = clientImplementationSocket.loginGUI(name);
-            if (Integer.parseInt(in.readLine()) == 1) {
-                out.println("20");
-                out.flush();
-            }
+            controller.setNumPlayersAtBeginning(Integer.parseInt(in.readLine())); //this sends the number of players to the server
         }catch (NoSuchElementException e){
             System.err.println("NOTHING TO READ "+e.getMessage());
         } finally {

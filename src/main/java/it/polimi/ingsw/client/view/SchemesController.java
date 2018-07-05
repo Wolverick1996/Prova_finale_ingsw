@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.*;
-import it.polimi.ingsw.server.model.Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,8 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class SchemesController {
 
@@ -190,87 +186,37 @@ public class SchemesController {
         Parent root = loader.load();
         GameController controller = loader.getController();
 
-        //TODO: Notify to the controller the window pattern chosen: loops are replaced by controller calls
-        //TODO: CONTROLLER REQUEST to get the following
-        // 1. (int) Number of players;
-        // 2. (String) Window pattern chosen;
-        // 3. (String) Private Objective Card;
-        // 4. (String) Table
-        // 5. (String) Tool Cards;
-        // 6. (String) My player string
-        // 7. (String) Active player
+        if (grid1Button.isSelected())
+            GUIupdater.setSchemeChosen(1);
+        else if (grid2Button.isSelected())
+            GUIupdater.setSchemeChosen(2);
+        else if (grid3Button.isSelected())
+            GUIupdater.setSchemeChosen(3);
+        else
+            GUIupdater.setSchemeChosen(4);
 
-        /*
-            //Block of code relative to the first version of reloadGame method
-            //ownRestriction is an ImageView array used to pass images as parameters to GameController
+        while (!GUIupdater.getCanGoToGame())
+            GUIController.waiting(GUIController.INFINITE, 0, true);
 
-            ArrayList<ImageView> ownRestrictions = new ArrayList<>();
-            if (grid1Button.isSelected())
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(i));
-            else if (grid2Button.isSelected())
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(20+i));
-            else if (grid3Button.isSelected())
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(40+i));
-            else
-                for (int i = 0; i < MAX_COL*MAX_ROW; i++)
-                    ownRestrictions.add(restrictions.get(60+i));
-        */
+        int numP = GUIupdater.getNumPlayers();
 
-        int numP = (int)(Math.random()*3 + 2);
-        Table table = new Table(numP);
-        Player p1 = new Player("ingconti", 0);
-        Player p2 = new Player("n1zzo", 0);
-        List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
-        table.setPlayers(nicknames);
+        String table = GUIupdater.getTable();
 
-        String privOC = "This is your Private Objective Card:\n" +
-                PrivObjHandler.getColor(p1).escape() + PrivObjHandler.getName(p1) + "\n" + Enum.Color.RESET +
-                PrivObjHandler.getDescription(p1) + "\n";
+        String p1 = "";
+        for (int i=0; i<GUIupdater.getPlayers().size(); i++)
+            if (GUIupdater.getPlayers().get(i).toString().split(NEWLINE)[0].equals(GUIupdater.getOwnUsername()))
+                p1 = GUIupdater.getPlayers().get(i).toString();
 
-        String tools = "\nTool Cards on table:\n";
-        for (int i = 0; i < 3; i++)
-        tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET + ToolHandler.getDescription(i) +
-                Enum.Color.YELLOW.escape() + "\n Tokens on: " + Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
+        String p2 = (String)GUIupdater.getPlayers().get(0);
 
-        /*
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        for (int i=0; i<numP*2-1; i++)
-            table.nextTurn();
-        table.nextTurn();
-        */
+        String privOC = GUIupdater.getPrivObj();
 
-        Scheme s1 = Scheme.initialize(1, false, 24);
+        String tools = GUIupdater.getTools();
 
-        controller.reloadGame(numP, s1.toString(), privOC, table.toString(), tools, p1.toString(), p2.toString());
+        int temp = GUIupdater.getSchemeChosen() - 1;
+        String scheme = (String)GUIupdater.getSchemesToChoose().get(temp);
+
+        controller.reloadGame(numP, scheme, privOC, table, tools, p1, p2);
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

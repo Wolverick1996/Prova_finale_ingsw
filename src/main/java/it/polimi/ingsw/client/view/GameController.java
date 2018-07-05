@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.server.model.Player;
+import it.polimi.ingsw.server.model.Scheme;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -79,7 +81,7 @@ public class GameController {
     @FXML
     private Text turn;
 
-    private void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
+    private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
         for (String s:divide) {
             if (s.contains("31m"))
                 imageColor.add("red");
@@ -114,7 +116,7 @@ public class GameController {
         }
     }
 
-    private void loadScheme(String wp){
+    static void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         ArrayList<String> divide3 = new ArrayList<>();
@@ -132,28 +134,28 @@ public class GameController {
         divide3.toArray(boxes);
         prepareString(imageColor, imageValue, boxes);
 
-        int scroll = MAX_COL*MAX_ROW;
+        int scroll = 0;
         for (int i = 0; i < MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++) {
-                if (!imageColor.get(scroll-1).equals("none") && !imageValue.get(scroll-1).equals("none"))
-                    gridIMG.add(new ImageView(new Image("/images/" + imageColor.get(scroll-1) + imageValue.get(scroll-1) + ".jpeg",
+                if (!imageColor.get(scroll).equals("none") && !imageValue.get(scroll).equals("none"))
+                    toFill.add(new ImageView(new Image("/images/" + imageColor.get(scroll) + imageValue.get(scroll) + ".jpeg",
                             60, 60, false, false)));
-                else if (imageColor.get(scroll-1).equals("none") && !imageValue.get(scroll-1).equals("none"))
-                    gridIMG.add(new ImageView(new Image("/images/value_" + imageValue.get(scroll-1) + ".jpeg",
+                else if (imageColor.get(scroll).equals("none") && !imageValue.get(scroll).equals("none"))
+                    toFill.add(new ImageView(new Image("/images/value_" + imageValue.get(scroll) + ".jpeg",
                             60, 60, false, false)));
-                else if (!imageColor.get(scroll-1).equals("none") && imageValue.get(scroll-1).equals("none"))
-                    gridIMG.add(new ImageView(new Image("/images/color_" + imageColor.get(scroll-1) + ".jpeg",
+                else if (!imageColor.get(scroll).equals("none") && imageValue.get(scroll).equals("none"))
+                    toFill.add(new ImageView(new Image("/images/color_" + imageColor.get(scroll) + ".jpeg",
                             60, 60, false, false)));
                 else
-                    gridIMG.add(new ImageView(new Image("/images/no_restr.jpeg",
+                    toFill.add(new ImageView(new Image("/images/no_restr.jpeg",
                             60, 60, false, false)));
-                grid.add(gridIMG.get(MAX_COL*i + j), j, i);
-                scroll--;
+                gridObj.add(toFill.get(MAX_COL*i + j), j, i);
+                scroll++;
             }
         }
 
         //TODO: Controller call to associate an action with the window pattern images
-        for (ImageView i: gridIMG)
+        for (ImageView i: toFill)
             i.setOnMouseClicked(e -> System.out.println("I'm a window pattern image!"));
     }
 
@@ -312,7 +314,7 @@ public class GameController {
         String track = divide[3];
 
         //Filling window pattern with restrictions images
-        loadScheme(scheme);
+        loadScheme(scheme, gridIMG, grid);
 
         //Removing player buttons
         if (numP == 3 || numP == 2)
@@ -352,13 +354,47 @@ public class GameController {
 
     @FXML
     private void loadPlayer(ActionEvent event) throws IOException {
-        Parent blah = FXMLLoader.load(getClass().getResource("/FXML/player.fxml"));
-        Scene scene = new Scene(blah);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/player.fxml"));
+        Parent root = loader.load();
+        PlayerController controller = loader.getController();
+
+        //TODO: Controller call to request player toString and player's scheme toString
+
+        Scheme s = Scheme.initialize(24, false, 24);
+        Player p = new Player("ingconti", 0);
+
+        controller.loadGrid(p.toString(), s.toString(), draftIMG);
+
+        Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.setScene(scene);
         appStage.setResizable(true);
         appStage.setFullScreen(true);
         appStage.show();
+    }
+
+    private void endGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameEnd.fxml"));
+        Parent root = loader.load();
+        GUIController controller = loader.getController();
+
+        String rank = "Game ended!\n\ningconti: \t1000000\nn1zzo: \t100\nmichele-bertone: \t100\nvalerio-castelli: \t10";
+
+        controller.setPlayers(4, rank);
+
+        Scene scene = new Scene(root);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(false);
+        appStage.show();
+    }
+
+    @FXML
+    private void passTurn(ActionEvent event) throws IOException {
+        //if (TURN IS THE LAST OF THE GAME)
+        endGame(event);
+        //else
+        //TODO: Method to pass the turn
     }
 
 }

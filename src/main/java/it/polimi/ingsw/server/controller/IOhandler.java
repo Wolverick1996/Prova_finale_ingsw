@@ -1,10 +1,8 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.client.network_client.ClientIntRMI;
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.PrivObjHandler;
-import it.polimi.ingsw.server.model.Scheme;
-import it.polimi.ingsw.server.model.Table;
+import it.polimi.ingsw.server.model.*;
+import it.polimi.ingsw.server.model.Enum;
 import it.polimi.ingsw.server.network_server.ServerIntRMI;
 
 import java.io.IOException;
@@ -152,9 +150,17 @@ public class IOhandler implements Observer{
         if (message.equals(STATUS)){
             System.out.println(DIVISOR);
             for (Player p: getListOfActive()) this.notify(p.getUsername(), DIVISOR);
+            for (Player p: getListOfActive()) this. notify(p.getUsername(), "Here is the status: ");
             System.out.println(table);
             for (Player p: getListOfActive()){
                 this.notify(p.getUsername(), table.toString());
+                String tools = "\nTool Cards on table:\n";
+                for (int i = 0; i<3; i++) {
+                    tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET +
+                            ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() + "\n Tokens on: " +
+                            Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
+                }
+                this.notify(p.getUsername(), tools);
                 this.notify(p.getUsername(), PrivObjHandler.getCard(p));
             }
             for (Player p: getListOfActive()){
@@ -305,13 +311,13 @@ public class IOhandler implements Observer{
     int chooseScheme(int s1, int s2, int s3, int s4, String player){
         int answer = -1;
         boolean isValid = false;
-
         ArrayList<Integer> schemes = new ArrayList<>();
         schemes.add(s1);
         schemes.add(s2);
         schemes.add(s3);
         schemes.add(s4);
         try {
+            notify(player, "CHOOSE A SCHEME :");
             for (Integer i:schemes){
                 notify(player, "Scheme " + (schemes.indexOf(i)+1));
                 notify(player, Scheme.initialize(i, this.table.getCustom(), this.table.getNumSchemes()).toString());
@@ -453,6 +459,7 @@ public class IOhandler implements Observer{
             try {
                 notify(player, "Insert y/n");
                 answer = getInput(player).toLowerCase();
+                System.out.println("I read in YES or NO: " + answer);
                 if (answer.equals("y")){
                     return true;
                 } else if (answer.equals("n")){

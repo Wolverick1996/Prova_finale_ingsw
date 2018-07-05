@@ -83,6 +83,9 @@ public class Game implements Observer {
         this.active = 0;
         Controller.getMyIO(this).broadcast(STATUS);
         Controller.getMyIO(this).broadcast("Game is starting!\n");
+
+        System.exit(0);
+
         setObservables();
         this.next();
     }
@@ -97,7 +100,7 @@ public class Game implements Observer {
             //End Game
             gameEnding();
         } else {
-            Boolean end = false;
+            boolean end = false;
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
             if (this.players.get(active).getTool8()){
                 end = true;

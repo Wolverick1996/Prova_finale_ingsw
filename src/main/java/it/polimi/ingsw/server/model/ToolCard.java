@@ -521,7 +521,7 @@ public class ToolCard {
      */
     private boolean modifyDiceValue(int index, Player player, Dice dice){
         //NOTE: for the tool card 1 it MUST be +/-1, for the tool card 11 it MUST be a dice value (1 to 6)
-        Boolean restricted = false;
+        boolean restricted = false;
         if (this.cardID == 1)
             restricted = true;
 
