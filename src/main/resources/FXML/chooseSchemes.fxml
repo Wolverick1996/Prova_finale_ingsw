@@ -58,7 +58,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty1" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty1" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -108,7 +108,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty2" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty2" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -158,7 +158,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty3" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty3" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -208,7 +208,7 @@
                                  </font>
                               </Text>
                               <Region prefHeight="200.0" prefWidth="15.0" />
-                              <Text fx:id="difficulty4" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                              <Text fx:id="difficulty4" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>

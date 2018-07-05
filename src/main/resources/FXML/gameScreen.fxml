@@ -16,7 +16,7 @@
                   <VBox prefHeight="200.0" prefWidth="30.0">
                      <children>
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Text fx:id="tokensT1" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                        <Text fx:id="tokensT1" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                            <font>
                               <Font name="Century Gothic" size="20.0" />
                            </font>
@@ -33,7 +33,7 @@
                   <VBox prefHeight="200.0" prefWidth="30.0">
                      <children>
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Text fx:id="tokensT2" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                        <Text fx:id="tokensT2" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                            <font>
                               <Font name="Century Gothic" size="20.0" />
                            </font>
@@ -50,7 +50,7 @@
                   <VBox prefHeight="200.0" prefWidth="30.0">
                      <children>
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Text fx:id="tokensT3" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                        <Text fx:id="tokensT3" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                            <font>
                               <Font name="Century Gothic" size="20.0" />
                            </font>
@@ -236,7 +236,7 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Text fx:id="activeP" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="P1">
+                              <Text fx:id="activeP" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="P1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -250,7 +250,7 @@
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="round" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                              <Text fx:id="round" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -264,7 +264,7 @@
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="turn" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                              <Text fx:id="turn" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
@@ -278,7 +278,7 @@
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
                               </Text>
-                              <Text fx:id="tokensP" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                              <Text fx:id="tokensP" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                                  <font>
                                     <Font name="Century Gothic" size="20.0" />
                                  </font>
