@@ -158,8 +158,11 @@ public class ClientMain {
 
                     ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 
-                    if (server.login(remoteRef))
+                    if (server.login(remoteRef)){
                         loginSuccess = true;
+                        if (server.hasStarted())
+                            return;
+                    }
                     else {
                         if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
@@ -184,7 +187,6 @@ public class ClientMain {
 
             int num = 0;
             while (active) {
-
                 server.confirmConnections();
                 if (num != server.playersInLobby() && !server.hasStarted()){
                     System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");

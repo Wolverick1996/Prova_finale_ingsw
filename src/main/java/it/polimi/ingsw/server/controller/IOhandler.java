@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.client.network_client.ClientIntRMI;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Enum;
-import it.polimi.ingsw.server.network_server.ServerIntRMI;
+import it.polimi.ingsw.server.network_server.ServerImplementationRMI;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -23,7 +23,7 @@ public class IOhandler implements Observer{
 
     private List<ClientIntRMI> usersRMI = new ArrayList<>();
     private List<DisconnectedPlayers> disconnectedRMI = new ArrayList<>();
-    private ServerIntRMI server;
+    private ServerImplementationRMI server;
     private List<SocketUser> socketUserList = new ArrayList<>(); //this is the list of socket BY socketUser->name
     private List<DisconnectedPlayers> disconnectedSocket = new ArrayList<>();
     private List<Player> players;
@@ -57,17 +57,14 @@ public class IOhandler implements Observer{
      * @param server: RMI server
      * @author Matteo
      */
-    void setServer(ServerIntRMI server){
+    void setServer(ServerImplementationRMI server){
         try {
-            usersRMI = server.getConnected();
+            this.server = server;
+            this.usersRMI = server.getConnected();
             for (ClientIntRMI c : usersRMI)
                 c.startInterface();
         } catch (RemoteException e){
-            try {
-                server.confirmConnections();
-            } catch (RemoteException e1) {
-                System.err.println("SETSERVER IOHANDLER ERROR");
-            }
+            //Strange behave of the skeleton
         }
     }
 
@@ -83,9 +80,7 @@ public class IOhandler implements Observer{
             try {
                 name = SocketMessengerServer.getToKnow(s);
             } catch (IOException e) {
-                //TODO: DISCONNECTION/ERROR
-                e.printStackTrace();
-                sockets.remove(s);
+                //Strange behave of the socket
                 continue;
             }
             if (!name.equals(""))
@@ -124,6 +119,76 @@ public class IOhandler implements Observer{
     /////////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Method used by Lobby to re-add a client to the list of users (RMI or socket)
+     *
+     * @param username: player's username
+     * @param o: object useful for socket re-connection (it will be the actual reference to that client's socket), useless for RMI
+     * @author Andrea
+     */
+    void rejoinMatch(String username, Object o){
+        boolean wasRmi = false;
+        for (DisconnectedPlayers d : disconnectedRMI)
+            if (d.name.equals(username))
+                wasRmi = true;
+        if (wasRmi)
+            reconnectRmi(username);
+        //else
+        //    reconnectSocket(username, o);
+    }
+
+    /**
+     * Re-add the player to the list of usersRMI ini the same position he was before he got disconnected
+     *
+     * @param username: name of the RMI user who want to reconnect
+     * @author Andrea
+     */
+    private void reconnectRmi(String username){
+        ClientIntRMI uRMI = null;
+        try {
+            for (ClientIntRMI c : server.getConnected()){
+                if (c.getName().equals(username))
+                    uRMI = c;
+            }
+        }catch (RemoteException e){
+            System.out.println("RECONNECTRMI ERROR!");
+        }
+        if (uRMI != null){
+            int index = -1;
+            for (DisconnectedPlayers d : disconnectedRMI){
+                if (d.name.equals(username))
+                    index = d.index;
+            }
+
+            ArrayList<ClientIntRMI> fooCopy = new ArrayList<>(usersRMI);
+            this.usersRMI.clear();
+            boolean setted = false;
+            for (int i = 0; i < fooCopy.size() + 1 ; i++){
+                if (!setted){
+                    if (i == index){
+                        this.usersRMI.add(uRMI);
+                        setted = true;
+                    }
+                    else
+                        this.usersRMI.add(fooCopy.get(i));
+                }else
+                    this.usersRMI.add(fooCopy.get(i-1));
+            }
+            try {
+                DisconnectedPlayers d = null;
+                for (DisconnectedPlayers dP : disconnectedRMI){
+                    if (dP.name.equals(username))
+                        d = dP;
+                }
+                if (d != null)
+                    disconnectedRMI.remove(d);
+                uRMI.startInterface();
+            } catch (RemoteException e) {
+                System.out.println("RECONNECTRMI ERROR (STARTINTERFACE)");
+            }
+        }
+    }
+
+    /**
      * Sends a specific message to notify client (Socket) the game has ended
      *
      * @author Andrea
@@ -134,7 +199,7 @@ public class IOhandler implements Observer{
                 SocketMessengerServer.sendFinish(s.socket);
                 s.socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("FINISHGAMESOCKET ERROR" + e.getMessage());
             }
         }
     }
@@ -150,7 +215,7 @@ public class IOhandler implements Observer{
         if (message.equals(STATUS)){
             System.out.println(DIVISOR);
             for (Player p: getListOfActive()) this.notify(p.getUsername(), DIVISOR);
-            for (Player p: getListOfActive()) this. notify(p.getUsername(), "Here is the status: ");
+            for (Player p: getListOfActive()) this.notify(p.getUsername(), "Here is the status: ");
             System.out.println(table);
             for (Player p: getListOfActive()){
                 this.notify(p.getUsername(), table.toString());
@@ -402,7 +467,6 @@ public class IOhandler implements Observer{
      *
      * @param player: the player whom message needs to be sent to
      * @param message: the message to be printed
-     * @throws RemoteException when client RMI disconnected
      * @author Matteo
      */
     public synchronized void notify(String player, String message) {
@@ -438,6 +502,7 @@ public class IOhandler implements Observer{
         if (oneToBeDelete != -1){
             disconnectedSocket.add(new DisconnectedPlayers(oneToBeDelete, players.get(index).getUsername()));
             socketUserList.remove(oneToBeDelete);
+            System.out.println("[Socket Server]\t" + players.get(index).getUsername() + "  disconnected....");
         }
     }
 
@@ -446,7 +511,6 @@ public class IOhandler implements Observer{
      *
      * @param player: the player who has to choose
      * @return a boolean value (true for yes, false for no)
-     * @throws RemoteException when client RMI disconnected
      * @author Matteo
      */
     public boolean yesOrNo(String player){
@@ -517,6 +581,7 @@ public class IOhandler implements Observer{
         if (oneToBeDelete != -1){
             disconnectedSocket.add(new DisconnectedPlayers(oneToBeDelete, players.get(index).getUsername()));
             socketUserList.remove(oneToBeDelete);
+            System.out.println("[Socket Server]\t" + players.get(index).getUsername() + "  disconnected....");
             return DISCONNECTION;
         }
         System.err.println("COULD NOT FIND PLAYER FOR THE INPUT");
@@ -531,12 +596,8 @@ public class IOhandler implements Observer{
      */
     private int disconnectPlayer (int disconnected){
         int index = findDisconnected(usersRMI.get(disconnected));
-        players.get(index).setDisconnected(true);
-        try {
-            server.confirmConnections();
-        } catch (RemoteException e1) {
-            System.out.println("DISCONNECTPLAYER ERROR");
-        }
+        this.players.get(index).setDisconnected(true);
+        this.server.removeClientAndUsername(this.usersRMI.get(disconnected), this.players.get(index).getUsername());
         return index;
     }
 
@@ -595,7 +656,6 @@ public class IOhandler implements Observer{
     }
 
     ////////////////////////////////////////////////////////////////
-
     /**
      * Class used to keep trace of a disconnected player
      * @author Andrea

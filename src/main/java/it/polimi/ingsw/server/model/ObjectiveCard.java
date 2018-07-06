@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.model;
 /**
  * Interface that contains the attributes common to all objective cards
  *
- * @author Matteo
+ * @author Andrea
  */
 public interface ObjectiveCard {
     int countPoints(Player player);

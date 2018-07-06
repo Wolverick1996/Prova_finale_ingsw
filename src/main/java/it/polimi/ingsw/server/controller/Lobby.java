@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.network_server.ServerIntRMI;
+import it.polimi.ingsw.server.network_server.ServerImplementationRMI;
 
 import java.net.Socket;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class Lobby /*extends Observer*/ {
     //        Attributes         //
     //***************************//
 
-    private ServerIntRMI server;
+    private ServerImplementationRMI server;
 
     public static final int MAX_PLAYERS = 4;
     private static final int ONE_SEC = 1000;
@@ -132,14 +132,16 @@ public class Lobby /*extends Observer*/ {
     }
 
     /**
+     * Allows user to re-join current match (calls IOhandler's method rejoinMatch(..) method)
      *
-     *
-     * @param username: name of the player who rejoined the match
+     * @param username: username to be re-activate
+     * @param o: useful to allow socket connection, useless if RMI
      */
-    public void rejoinedMatch(String username){
+    public void rejoinedMatch(String username, Object o){
         Controller.getMyGame(this).getPlayer(username).setDisconnected(false);
-        Controller.getMyIO(this).setServer(this.server);
+        Controller.getMyIO(this).rejoinMatch(username, o);
     }
+
 
     /**
      * Adds a socket to sockets array to be passed to the controller
@@ -197,7 +199,7 @@ public class Lobby /*extends Observer*/ {
      * @param server: the server to be set up
      * @author Andrea
      */
-    public void setServerRMI(ServerIntRMI server){
+    public void setServerRMI(ServerImplementationRMI server){
         this.server = server;
     }
 

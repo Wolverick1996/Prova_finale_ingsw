@@ -84,8 +84,6 @@ public class Game implements Observer {
         Controller.getMyIO(this).broadcast(STATUS);
         Controller.getMyIO(this).broadcast("Game is starting!\n");
 
-        System.exit(0);
-
         setObservables();
         this.next();
     }
@@ -170,8 +168,10 @@ public class Game implements Observer {
         }
 
         if (this.players.get(active).isDisconnected()){
-            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + " is disconnected and misses his turn -.-");
-            endTurn(); }
+            Controller.getMyIO(this).broadcast(players.get(active).getUsername() +
+                    " is disconnected and misses his turn -.-\nTurn passed");
+            endTurn();
+        }
 
         this.turn++;
         this.table.nextTurn();
