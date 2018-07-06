@@ -4,6 +4,11 @@ import java.util.*;
 
 import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.cli;
 
+/**
+ * Class intended for GUI/CLI message sorting
+ *
+ * @author Matteo
+ */
 public class IOHandlerClient implements Observer {
 
     //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
@@ -13,27 +18,51 @@ public class IOHandlerClient implements Observer {
     private Interface outputInt;
     private CLI commandLine;
 
-    public IOHandlerClient (String username, Interface type) {
+    /**
+     * Constructor of the IOHandlerClient class
+     *
+     * @param username: player's username
+     * @param type: type of the user interface (CLI/GUI)
+     * @author Matteo
+     */
+    public IOHandlerClient (String username, Interface type){
         this.name = username;
         GUIupdater.setOwnUsername(this.name);
         this.outputInt = type;
     }
 
+    /**
+     * Calls the CLI constructor to let it start
+     *
+     * @author Matteo
+     */
     public void startInterface(){
         if (this.outputInt == cli)
             this.commandLine = new CLI();
     }
 
+    /**
+     * Sends a message to the user interface
+     *
+     * @param message: the string to be passed to CLI/GUI
+     * @author Matteo
+     */
     public void send(String message){
-        if(this.outputInt == cli){
+        if (this.outputInt == cli){
             commandLine.output(message);
         } else {
             sendGUI(message);
         }
     }
 
+    /**
+     * Requests an input from the user interface
+     *
+     * @return the input requested
+     * @author Matteo
+     */
     public String request(){
-        if(this.outputInt == cli){
+        if (this.outputInt == cli){
             return commandLine.input();
         } else {
             return requestGUI();
@@ -65,9 +94,9 @@ public class IOHandlerClient implements Observer {
 
         if (chooseSchemes) { chooseSchemes(message); }
 
-        switch (message) {
+        switch (message){
             case "Do you want to use custom window patterns?" :
-                if (GUIupdater.getCustomSchemes()) {
+                if (GUIupdater.getCustomSchemes()){
                     GUIupdater.setToSend("y");
                 } else {
                     GUIupdater.setToSend("n");
@@ -202,12 +231,13 @@ public class IOHandlerClient implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg){
 
     }
 
-    public enum Interface{
+    public enum Interface {
         cli,
         gui
     }
+
 }

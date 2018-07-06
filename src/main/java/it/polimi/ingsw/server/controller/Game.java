@@ -168,8 +168,10 @@ public class Game implements Observer {
         }
 
         if (this.players.get(active).isDisconnected()){
-            Controller.getMyIO(this).broadcast(players.get(active).getUsername() + " is disconnected and misses his turn -.-");
-            endTurn(); }
+            Controller.getMyIO(this).broadcast(players.get(active).getUsername() +
+                    " is disconnected and misses his turn -.-\nTurn passed");
+            endTurn();
+        }
 
         this.turn++;
         this.table.nextTurn();
