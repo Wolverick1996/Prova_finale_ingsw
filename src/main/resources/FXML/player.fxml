@@ -59,7 +59,7 @@
                      </font>
                   </Text>
                   <Region prefHeight="200.0" prefWidth="15.0" />
-                  <Text fx:id="playerTokens" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                  <Text fx:id="playerTokens" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                      <font>
                         <Font name="Century Gothic" size="20.0" />
                      </font>
@@ -90,7 +90,7 @@
                            </font>
                         </Text>
                         <Region prefHeight="200.0" prefWidth="15.0" />
-                        <Text fx:id="schemeDifficulty" fill="PURPLE" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                        <Text fx:id="schemeDifficulty" fill="BROWN" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                            <font>
                               <Font name="Century Gothic" size="20.0" />
                            </font>
