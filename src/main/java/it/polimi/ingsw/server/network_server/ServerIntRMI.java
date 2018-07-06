@@ -23,6 +23,7 @@ public interface ServerIntRMI extends Remote {
      */
     boolean login(ClientIntRMI client) throws RemoteException;
 
+    //TODO: JavaDoc
     void confirmConnections() throws RemoteException;
 
     /**

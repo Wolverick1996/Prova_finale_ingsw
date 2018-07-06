@@ -2,45 +2,82 @@ package it.polimi.ingsw.client.network_client;
 
 import it.polimi.ingsw.client.view.IOHandlerClient;
 
-import java.rmi.RemoteException;
 import java.util.Observable;
 
-import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
-
+/**
+ * Implementation of the ClientIntRMI interface
+ *
+ * @author Andrea
+ */
 public class ClientImplementationRMI extends Observable implements ClientIntRMI {
 
     private String name;
     private IOHandlerClient handler;
 
-    ClientImplementationRMI (String n, IOHandlerClient.Interface handlerType){
-        name=n;
-        this.handler = new IOHandlerClient(n, handlerType); //TODO: LET CHOOSE BETWEEN CLI AND GUI
+    /**
+     * Constructor of the ClientImplementationRMI object
+     *
+     * @param n: player's username
+     * @param handlerType: choice between CLI or GUI
+     * @author Andrea
+     */
+    ClientImplementationRMI(String n, IOHandlerClient.Interface handlerType){
+        name = n;
+        this.handler = new IOHandlerClient(n, handlerType);
     }
 
-    public void notify(String message) throws RemoteException {
+    /**
+     * Shows to the client a specified message
+     *
+     * @param message: the string to be showed
+     * @author Andrea
+     */
+    public void notify(String message){
         try {
             this.handler.send(message);
-        }catch (NullPointerException e){
-            //The cli or the GUI is not active yet
+        } catch (NullPointerException e) {
+            //The CLI or the GUI is not active yet
             System.out.println(message);
         }
 
     }
 
-    public String getName() throws RemoteException{
+    /**
+     * Gets the player's username
+     *
+     * @return the player's username
+     * @author Andrea
+     */
+    public String getName(){
         return this.name;
     }
 
-    public String getInput() throws RemoteException{
-        return this.handler.request();
-    }
-
-    public void confirmConnection() throws RemoteException{
+    /**
+     * Throws an exception if client has connection issues (the exception will be caught from the server)
+     *
+     * @author Andrea
+     */
+    public void confirmConnection(){
         //used to ping and check connection
     }
 
-    public void startInterface() throws RemoteException{
+    /**
+     * Calls the IOhandler getInput method
+     *
+     * @return the input inserted by the player
+     * @author Andrea
+     */
+    public String getInput(){
+        return this.handler.request();
+    }
+
+    /**
+     * Calls the IOhandler method to start the CLI
+     *
+     * @author Andrea
+     */
+    public void startInterface(){
         this.handler.startInterface();
     }
-}
 
+}

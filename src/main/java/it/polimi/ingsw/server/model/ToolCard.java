@@ -188,6 +188,7 @@ public class ToolCard {
                     table.putDiceInReserve(dice);
                     table.setCanExtract(canExtract);
                 } else {
+                    ToolHandler.notify(player, "Dice rolled: " + dice);
                     ToolHandler.notify(player, isPlaceable(dice, player));
                     ToolHandler.notify(player, player.getOwnScheme().toString());
                     ToolHandler.notify(player,"Insert the coordinates of the dice to be placed, one at a time (x, y)");

@@ -7,30 +7,59 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
+/**
+ * Allows the connection between the game and the socket (server-side)
+ *
+ * @author Andrea
+ * @author Matteo
+ */
 public class ServerImplementationSocket implements Runnable {
     private Socket socket;
     private Lobby lobby;
     private String playerConnected;
 
-    ServerImplementationSocket(Socket socket, Lobby lobby) {
+    /**
+     * Constructor of the ServerImplementationSocket class
+     *
+     * @param socket: socket of the client
+     * @param lobby: lobby related to the current match
+     * @author Andrea
+     */
+    ServerImplementationSocket(Socket socket, Lobby lobby){
         this.socket = socket;
         this.lobby = lobby;
     }
 
+    /**
+     * Instantiates a thread which waits for a delay to set
+     *
+     * @author Matteo
+     */
     class WaitForDelay implements Runnable {
 
-        WaitForDelay() {
-//TRY AND USE EXECUTORSERVICE HERE
+        /**
+         * (Empty) constructor of the WaitForDelay class
+         *
+         * @author Matteo
+         */
+        WaitForDelay(){
+            //TRY AND USE EXECUTORSERVICE HERE
+            super();
         }
+
+        /**
+         * Override of the run method of the Runnable interface, waits to receive an input from the client and sets the delay of the lobby when received
+         *
+         * @author Matteo
+         */
         @Override
-        public void run() {
+        public void run(){
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                while (!in.ready()){
+                while (!in.ready())
                     Thread.sleep(200);
-                }
+
                 lobby.setDelay(Integer.parseInt(in.readLine()));
                 System.out.println("GOT IT!");
             } catch (IOException e) {
@@ -44,53 +73,41 @@ public class ServerImplementationSocket implements Runnable {
                 System.out.println("WAITFORDELAY WAS INTERRUPTED");
             }
         }
+
     }
 
-    public void run() {
+    /**
+     * Override of the run method of the Runnable interface
+     * Waiting room before the game start (socket, server-side)
+     *
+     * @author Andrea
+     */
+    @Override
+    public void run(){
         try {
-            //BufferedReader in;
             PrintWriter out;
-            boolean gameCanStart;
-            do{
+            boolean gameCanStart = false;
+            do {
                 login();
-                //in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
                 out = new PrintWriter(this.socket.getOutputStream());
                 out.println(this.lobby.getPlayers().size());
                 out.flush();
                 Thread waitForInput = new Thread(new WaitForDelay());
-                if (this.lobby.getPlayers().size() == 1){
+                if (this.lobby.getPlayers().size() == 1)
                     waitForInput.start();
-                }
-                gameCanStart = true;
-                while (gameCanStart && !this.lobby.hasStarted()){
+
+                while (!this.lobby.hasStarted()){
                     out.println(this.lobby.getPlayers().size());
                     out.flush();
-                    //Here old and deprecated code is commented for future investigation
-                    /*string = in.readLine();
-                    if (string.equals("e")){
-                        logout();
-                        gameCanStart = false;
-                    }else{
-                        out.println(this.lobby.getPlayers().size());
-                        out.flush();
-                    }*/
+                    gameCanStart = true;
                 }
                 if (!waitForInput.isInterrupted())
                     waitForInput.interrupt();
                 out.println(999);
                 out.flush();
                 System.out.println("HERE I CLOSE THE SOCKET IMPLEMENTATION THREAD :\t" + Thread.currentThread().getName());
-            }while (!gameCanStart);
-
-            //DOES NOTHING
-            while (!gameCanStart){
-                Scanner s = new Scanner(System.in);
-                String t = s.nextLine();
-            }
-            //in.close();
-            //out.close();
-            //this.socket.close();
-        }catch (IOException e){
+            } while (!gameCanStart);
+        } catch (IOException e) {
             System.err.println("Connection lost from a client");
             if (this.playerConnected != null){
                 System.out.println("[Socket Server]\t" +this.playerConnected+ "  disconnected....");
@@ -100,7 +117,13 @@ public class ServerImplementationSocket implements Runnable {
         }
     }
 
-    private synchronized void login() throws IOException{
+    /**
+     * Allows the login of a socket user (server-side)
+     *
+     * @throws IOException if client has connection issues
+     * @author Andrea
+     */
+    private synchronized void login() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
         boolean loginSuccess = false;
@@ -113,15 +136,14 @@ public class ServerImplementationSocket implements Runnable {
                 if (string.equals("")){
                     out.println("invalid");
                     out.flush();
-                }
-                else if (this.lobby.addPlayer(string)){
+                } else if (this.lobby.addPlayer(string)){
                     this.lobby.addSocket(this.socket);
                     loginSuccess = true;
                     System.out.println("[Socket Server]\t" +string+ "  got connected....");
                     this.playerConnected = string;
                     out.println("true");
                     out.flush();
-                }else {
+                } else {
                     boolean sameUsername = false;
                     for (String s : this.lobby.getPlayers())
                         if (s.equals(string))
@@ -141,16 +163,22 @@ public class ServerImplementationSocket implements Runnable {
         }
     }
 
-    private synchronized void logout() throws IOException{
+    /**
+     * Allows the logout of a socket user (server-side)
+     *
+     * @throws IOException if client has connection issues
+     * @author Andrea
+     */
+    private synchronized void logout() throws IOException {
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
-        if(this.lobby.removePlayer(this.playerConnected)){
+        if (this.lobby.removePlayer(this.playerConnected)){
             out.println("ok");
             out.flush();
-            System.out.println("[Socket Server]\t" +this.playerConnected+ "  disconnected....");
-        }
-        else{
+            System.out.println("[Socket Server]\t" + this.playerConnected + "  disconnected....");
+        } else {
             out.println("ko");
             out.flush();
         }
     }
+
 }

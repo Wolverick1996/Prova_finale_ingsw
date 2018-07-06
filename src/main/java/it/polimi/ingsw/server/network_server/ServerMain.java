@@ -10,26 +10,46 @@ import java.rmi.registry.LocateRegistry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Entry point of the application: lets the program start (server-side)
+ *
+ * @author Andrea
+ */
 public class ServerMain {
 
-    private static final int PORTRMI = 1099; // porta di default
-    private static final int PORTSOCKET = 1337; // porta di default
+    private static final int PORTRMI = 1099; //default port
+    private static final int PORTSOCKET = 1337; //default port
     private Lobby lobby;
 
+    /**
+     * Constructor of the ServerMain class
+     *
+     * @author Andrea
+     */
     private ServerMain(){
         this.lobby = new Lobby();
     }
 
-    public static void main(String[] args) {
+    /**
+     * Launches the application
+     *
+     * @param args: list of strings received from the user during the JAR execution
+     * @author Andrea
+     */
+    public static void main(String[] args){
         ServerMain serverMain = new ServerMain();
         serverMain.startServerRMI();
         serverMain.startServerSocket();
     }
 
-    private void startServerRMI (){
+    /**
+     * Allows the game to work with an RMI connection (server-side)
+     *
+     * @author Andrea
+     */
+    private void startServerRMI(){
         try {
             LocateRegistry.createRegistry(PORTRMI);
-
         } catch (RemoteException e) {
             System.err.println("There is already a registry!");
         }
@@ -48,6 +68,11 @@ public class ServerMain {
         }
     }
 
+    /**
+     * Allows the game to work with a socket connection (server-side)
+     *
+     * @author Andrea
+     */
     private void startServerSocket (){
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket = null;
@@ -56,7 +81,7 @@ public class ServerMain {
 
             System.out.println("[Socket Server]\tServer is ready...");
             boolean on = true;
-            while (on) {
+            while (on){
                 if (!lobby.hasStarted())
                 try {
                     Socket socket = serverSocket.accept();
@@ -68,9 +93,8 @@ public class ServerMain {
             }
             executor.shutdown();
         } catch (IOException e) {
-            System.err.println(e.getMessage()); // porta non disponibile
-        }
-        finally {
+            System.err.println(e.getMessage()); //port not available
+        } finally {
             try {
                 if (serverSocket != null)
                     serverSocket.close();
@@ -79,4 +103,5 @@ public class ServerMain {
             }
         }
     }
+
 }

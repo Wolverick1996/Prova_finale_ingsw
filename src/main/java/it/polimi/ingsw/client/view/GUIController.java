@@ -230,7 +230,7 @@ public class GUIController implements Initializable {
         if (isRMI) {
             try {
                 waiting(INFINITE, numPlayers, false);
-                int n = ClientMain.waitForGameStart(numPlayers);
+                int n = ClientMain.waitForGameStart();
                 if (n == STARTED) {
                     if (activePopup!=null)
                     activePopup.close();

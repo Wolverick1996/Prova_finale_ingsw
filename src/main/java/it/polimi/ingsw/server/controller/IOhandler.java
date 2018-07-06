@@ -65,7 +65,7 @@ public class IOhandler implements Observer{
         } catch (RemoteException e){
             try {
                 server.confirmConnections();
-            } catch (RemoteException e1) {
+            } catch (RemoteException e1){
                 System.err.println("SETSERVER IOHANDLER ERROR");
             }
         }
@@ -78,16 +78,9 @@ public class IOhandler implements Observer{
      * @author Matteo
      */
     synchronized void setSockets(List<Socket> sockets){
-        for(Socket s: sockets){
+        for (Socket s: sockets){
             String name;
-            try {
-                name = SocketMessengerServer.getToKnow(s);
-            } catch (IOException e) {
-                //TODO: DISCONNECTION/ERROR
-                e.printStackTrace();
-                sockets.remove(s);
-                continue;
-            }
+            name = SocketMessengerServer.getToKnow(s);
             if (!name.equals(""))
                 socketUserList.add(new SocketUser(name, s));
             else
@@ -133,7 +126,7 @@ public class IOhandler implements Observer{
             try {
                 SocketMessengerServer.sendFinish(s.socket);
                 s.socket.close();
-            } catch (IOException e) {
+            } catch (IOException e){
                 e.printStackTrace();
             }
         }
@@ -402,7 +395,6 @@ public class IOhandler implements Observer{
      *
      * @param player: the player whom message needs to be sent to
      * @param message: the message to be printed
-     * @throws RemoteException when client RMI disconnected
      * @author Matteo
      */
     public synchronized void notify(String player, String message) {
@@ -414,14 +406,15 @@ public class IOhandler implements Observer{
                     usersRMI.get(i).notify(message);
                     return;
                 }
-            }catch (RemoteException e){
+            } catch (RemoteException e){
                 oneToBeDelete = i;
                 index = disconnectPlayer(i);
             }
         }
-        if (oneToBeDelete != -1){
+
+        if (oneToBeDelete != -1)
             disconnectedRMI.add(new DisconnectedPlayers(oneToBeDelete, players.get(index).getUsername()));
-        }
+
         oneToBeDelete = -1;
         for (SocketUser u: socketUserList){
             if (u.name.equals(player)){
@@ -446,7 +439,6 @@ public class IOhandler implements Observer{
      *
      * @param player: the player who has to choose
      * @return a boolean value (true for yes, false for no)
-     * @throws RemoteException when client RMI disconnected
      * @author Matteo
      */
     public boolean yesOrNo(String player){
@@ -487,11 +479,10 @@ public class IOhandler implements Observer{
         int oneToBeDelete = -1;
         int index = -1;
         for (int i = 0; i < usersRMI.size(); i++){
-            try{
-                if (usersRMI.get(i).getName().equals(player)){
+            try {
+                if (usersRMI.get(i).getName().equals(player))
                     return usersRMI.get(i).getInput();
-                }
-            }catch (RemoteException e){
+            } catch (RemoteException e){
                 oneToBeDelete = i;
                 index = disconnectPlayer(i);
             }
@@ -534,14 +525,14 @@ public class IOhandler implements Observer{
         players.get(index).setDisconnected(true);
         try {
             server.confirmConnections();
-        } catch (RemoteException e1) {
+        } catch (RemoteException e1){
             System.out.println("DISCONNECTPLAYER ERROR");
         }
         return index;
     }
 
     /**
-     * Used to find out who is the player disconnected (index in arraylist<> players)
+     * Used to find out who is the player disconnected (index in ArrayList<> players)
      *
      * @param o: ClientIntRmi disconnected or SocketUser.name disconnected
      * @return index of disconnected player
@@ -560,13 +551,12 @@ public class IOhandler implements Observer{
             for (ClientIntRMI c : usersRMI){
                 try {
                     names.add(c.getName());
-                } catch (RemoteException e) {
+                } catch (RemoteException e){
                     //WE CAN MANAGE ONE DISCONNECTION PER TIME
                 }
             }
-        }
         //RMI case
-        else {
+        } else {
             for (ClientIntRMI c : usersRMI){
                 try {
                     if (c != o)
@@ -575,21 +565,18 @@ public class IOhandler implements Observer{
                     //NOW I CAN MANAGE ONLY ONE DISCONNECTION PER TIME
                 }
             }
-            for (SocketUser s : socketUserList){
+            for (SocketUser s : socketUserList)
                 names.add(s.name);
-            }
         }
 
         for (int i = 0; i < players.size(); i++){
             boolean found = false;
             for (String n : names){
-                if (players.get(i).getUsername().equals(n)){
+                if (players.get(i).getUsername().equals(n))
                     found = true;
-                }
             }
-            if (!found){
+            if (!found)
                 index = i;
-            }
         }
         return index;
     }
@@ -598,15 +585,17 @@ public class IOhandler implements Observer{
 
     /**
      * Class used to keep trace of a disconnected player
+     *
      * @author Andrea
      */
-    class DisconnectedPlayers{
+    class DisconnectedPlayers {
         int index;
         String name;
+
         /**
-         * Constructor of the object
+         * Constructor of the DisconnectedPlayer object
          *
-         * @param index: index in list userRmi or SocketUser
+         * @param index: index in list usersRMI or socketUserList
          * @param name: name of the disconnected player
          * @author Andrea
          */
@@ -614,12 +603,14 @@ public class IOhandler implements Observer{
             this.index = index;
             this.name = name;
         }
+
     }
+
     ////////////////////////////////////////////////////////////////
 
     //TODO: Realize JavaDoc comment when GUI will be implemented
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg){
         if (o == ov)
             System.out.println(ov);
     }

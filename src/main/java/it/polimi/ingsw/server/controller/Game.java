@@ -84,7 +84,7 @@ public class Game implements Observer {
         Controller.getMyIO(this).broadcast(STATUS);
         Controller.getMyIO(this).broadcast("Game is starting!\n");
 
-        System.exit(0);
+        //System.exit(0);
 
         setObservables();
         this.next();

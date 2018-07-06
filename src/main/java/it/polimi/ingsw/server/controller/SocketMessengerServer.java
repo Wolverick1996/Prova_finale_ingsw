@@ -6,6 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Static class used to initialize socket communication
+ *
+ * @author Matteo
+ */
 class SocketMessengerServer {
     //SocketMessengerServer is intended for single-game Servers. Update this method to enable multi-games on same server
 
@@ -21,13 +26,25 @@ class SocketMessengerServer {
     private static final String REQUEST = "requestData";
     private static final String NEWLINE = "%%%nnn%%%";
 
+    /**
+     * Private constructor of SocketMessengerServer used to not allows multiple instantiations
+     *
+     * @author Matteo
+     */
     private SocketMessengerServer(){
         super();
     }
 
-    static synchronized String getToKnow(Socket socket) throws IOException{
-        String name = "";
-        try{
+    /**
+     * Receives the name of a specific socket
+     *
+     * @param socket: socket object
+     * @return the string representing socket's username
+     * @author Matteo
+     */
+    static synchronized String getToKnow(Socket socket){
+        String name;
+        try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             System.out.println("I'm sending the GAMESTART to: " + socket);
@@ -37,9 +54,9 @@ class SocketMessengerServer {
             name = in.readLine();
 
             String[] parts = name.split(D_LEFT);
-            if (!parts[0].equals(NAME)){
+            if (!parts[0].equals(NAME))
                 return FAILED;
-            }
+
             parts = parts[1].split(D_RIGHT);
             name = parts[0];
             out.println(OK);
@@ -51,7 +68,15 @@ class SocketMessengerServer {
         return name;
     }
 
-    static synchronized void write(Socket socket, String message) throws IOException{
+    /**
+     * Used to send a generic message to the socket
+     *
+     * @param socket: socket which will receives the message
+     * @param message: message to be sent
+     * @throws IOException if socket has connection issues
+     * @author Matteo
+     */
+    static synchronized void write(Socket socket, String message) throws IOException {
         message = cleanString(message);
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         String output = PRINT + D_LEFT + message + D_RIGHT;
@@ -61,6 +86,13 @@ class SocketMessengerServer {
         askIfReceived(socket);
     }
 
+    /**
+     * Sends a specific message to communicate that game ended
+     *
+     * @param socket: socket which will receives the message
+     * @throws IOException if socket has connection issues
+     * @author Matteo
+     */
     static synchronized void sendFinish(Socket socket) throws IOException{
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         String output = FINISH;
@@ -70,6 +102,14 @@ class SocketMessengerServer {
         askIfReceived(socket);
     }
 
+    /**
+     * Used to receive an input from the socket user
+     *
+     * @param socket: the socket related to the user who should insert an input
+     * @return the input string
+     * @throws IOException if socket has connection issues
+     * @author Matteo
+     */
     static synchronized String get(Socket socket) throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream());
@@ -86,6 +126,13 @@ class SocketMessengerServer {
         return response;
     }
 
+    /**
+     * Checks if an output message was correctly received
+     *
+     * @param socket: socket who received the message
+     * @throws IOException if socket has connection issues
+     * @author Matteo
+     */
     private static synchronized void askIfReceived(Socket socket) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String request;
@@ -99,6 +146,13 @@ class SocketMessengerServer {
         }
     }
 
+    /**
+     * Substitutes '\n' with char allowed by socket
+     *
+     * @param s: the string in which substitutions are made
+     * @return the modified string
+     * @author Matteo
+     */
     private static synchronized String cleanString(String s){
         return s.replaceAll("\\n", NEWLINE);
     }

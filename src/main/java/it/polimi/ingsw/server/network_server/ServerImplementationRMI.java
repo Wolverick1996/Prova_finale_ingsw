@@ -8,20 +8,39 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-public class ServerImplementationRMI extends UnicastRemoteObject implements
-        ServerIntRMI{
+/**
+ * Implementation of the ServerIntRMI interface
+ *
+ * @author Andrea
+ */
+public class ServerImplementationRMI extends UnicastRemoteObject implements ServerIntRMI {
 
     private ArrayList<ClientIntRMI> clients = new ArrayList<>();
     private ArrayList<String> usernames = new ArrayList<>();
     private Lobby lobby;
 
+    /**
+     * Constructor of the ServerImplementationRMI object
+     *
+     * @param lobby: the lobby containing the active players
+     * @throws RemoteException if connection fails
+     * @author Andrea
+     */
     ServerImplementationRMI(Lobby lobby) throws RemoteException {
         super(0);
         this.lobby = lobby;
         this.lobby.setServerRMI(this);
     }
 
-    public synchronized boolean login(ClientIntRMI a) throws RemoteException{
+    /**
+     * Allows connection to the RMI server
+     *
+     * @param a: skeleton related to the specific client
+     * @return true if login is successful, otherwise false
+     * @throws RemoteException if connection to the skeleton fails
+     * @author Andrea
+     */
+    public synchronized boolean login(ClientIntRMI a) throws RemoteException {
 
         if(!lobby.hasStarted())
             confirmConnections();
@@ -40,7 +59,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
                 a.notify("Welcome back " +a.getName()+ ".\nYou have connected successfully.");
                 lobby.rejoinedMatch(a.getName());
                 return true;
-            }else{
+            } else {
                 a.notify("The game started without you :(\n\nGet better friends dude");
                 return false;
             }
@@ -57,18 +76,18 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         }
     }
 
-    public synchronized void confirmConnections() throws RemoteException{
-
+    //TODO: JavaDoc
+    public synchronized void confirmConnections() throws RemoteException {
         Iterator<ClientIntRMI> clientIterator = clients.iterator();
         ArrayList<ClientIntRMI> toBeDeleted = new ArrayList<>();
         ClientIntRMI c = null;
         int i = 0;
-        while(clientIterator.hasNext()){
+        while (clientIterator.hasNext()){
             String s = usernames.get(i);
-            try{
+            try {
                 c = clientIterator.next();
                 c.confirmConnection();
-            }catch(ConnectException e) {
+            } catch(ConnectException e) {
                 toBeDeleted.add(c);
                 lobby.removePlayer(s);
                 System.out.println("[RMI Server]\t" +s+ "  disconnected....");
@@ -91,59 +110,54 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements
         }
     }
 
-    public void notify(String username, String message){
-        try{
-            for (ClientIntRMI c : clients){
-                if(c.getName().equals(username)){
-                    c.notify(message);
-                }
-            }
-        } catch (RemoteException e){
-            System.err.println("NOTIFY FAILED");
-        } catch (NullPointerException e){
-            System.err.println("CLIENTRMI DOES NOT EXIST");
-        }
-    }
-
-    public void broadcast(String message) throws RemoteException{
-        for(ClientIntRMI user:clients){
-            user.notify(message);
-        }
-    }
-
-    public String getInput(String username) throws RemoteException{
-        String s = null;
-        for (ClientIntRMI c : clients){
-            if(c.getName().equals(username)){
-                s = c.getInput();
-            }
-        }
-        return s;
-    }
-
+    /**
+     * Returns the list of skeleton saved
+     *
+     * @return the list of skeleton
+     * @author Andrea
+     */
     public List<ClientIntRMI> getConnected(){
         return this.clients;
     }
 
+    /**
+     * Returns the number of players in the lobby
+     *
+     * @return the number of players in the lobby
+     * @author Andrea
+     */
     public int playersInLobby(){
         return this.lobby.getPlayers().size();
     }
 
-    public boolean hasStarted() {
+    /**
+     * Communicates if the match started or not
+     *
+     * @return true if the match started, otherwise false
+     * @author Andrea
+     */
+    public boolean hasStarted(){
         return this.lobby.hasStarted();
     }
 
+    /**
+     * Sets the delay of the lobby
+     *
+     * @param delay: number of seconds
+     * @author Andrea
+     */
     public void setDelay(int delay){
         this.lobby.setDelay(delay);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj){
         return super.equals(obj);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode(){
         return super.hashCode();
     }
+
 }
