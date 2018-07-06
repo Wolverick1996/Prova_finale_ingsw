@@ -132,7 +132,7 @@ public class IOhandler implements Observer{
     }
 
     /**
-     * Re-add the player to the list of usersRMI in the same position he was before he got disconnected
+     * Re-adds the player to the list of usersRMI in the same position he was before he got disconnected
      *
      * @param username: name of the RMI user who want to reconnect
      * @author Andrea
@@ -144,7 +144,7 @@ public class IOhandler implements Observer{
                 if (c.getName().equals(username))
                     uRMI = c;
             }
-        }catch (RemoteException e){
+        } catch (RemoteException e) {
             System.out.println("RECONNECTRMI ERROR!");
         }
         if (uRMI != null){
@@ -162,8 +162,7 @@ public class IOhandler implements Observer{
                     if (i == index){
                         this.usersRMI.add(uRMI);
                         setted = true;
-                    }
-                    else
+                    } else
                         this.usersRMI.add(fooCopy.get(i));
                 } else
                     this.usersRMI.add(fooCopy.get(i-1));
@@ -617,7 +616,7 @@ public class IOhandler implements Observer{
             for (ClientIntRMI c : usersRMI){
                 try {
                     names.add(c.getName());
-                } catch (RemoteException e){
+                } catch (RemoteException e) {
                     //WE CAN MANAGE ONE DISCONNECTION PER TIME
                 }
             }
@@ -627,7 +626,7 @@ public class IOhandler implements Observer{
                 try {
                     if (c != o)
                         names.add(c.getName());
-                } catch (RemoteException e){
+                } catch (RemoteException e) {
                     //NOW I CAN MANAGE ONLY ONE DISCONNECTION PER TIME
                 }
             }
@@ -648,6 +647,7 @@ public class IOhandler implements Observer{
     }
 
     ////////////////////////////////////////////////////////////////
+
     /**
      * Class used to keep trace of a disconnected player
      *

@@ -61,7 +61,7 @@ public class ClientMain {
      * @param args: list of strings received from the user during the JAR execution
      * @author Andrea
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         //String check_UI = args[0];
         String check_UI = "cli";
         if (check_UI.equals("gui")){
@@ -158,7 +158,7 @@ public class ClientMain {
         } catch (NoSuchElementException e) {
             System.err.println("NOTHING TO READ "+e.getMessage());
         } finally {
-            SocketMessengerClient s = new SocketMessengerClient(this.ip, PORT, socket, name, IOHandlerClient.Interface.gui);
+            SocketMessengerClient s = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.gui);
             GUIController.setMessenger(s);
         }
         return feedback;
@@ -261,8 +261,7 @@ public class ClientMain {
                         loginSuccess = true;
                         if (server.hasStarted())
                             return;
-                    }
-                    else {
+                    } else {
                         if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
                         else if (server.hasStarted()){
@@ -293,7 +292,6 @@ public class ClientMain {
                     executorService.shutdownNow();
                     break;
                 }
-
             }
         } catch (NotBoundException e) {
             System.err.println("This reference is not connected!");
@@ -345,7 +343,7 @@ public class ClientMain {
                     if (num != i){
                         if (i == 999){
                             executorService.shutdownNow();
-                            SocketMessengerClient messenger = new SocketMessengerClient(this.ip, PORT, socket, name, IOHandlerClient.Interface.cli);
+                            SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli);
                             messenger.close();
                         }
                         System.out.println("[Players in the lobby: " + i + "]");
@@ -413,7 +411,7 @@ public class ClientMain {
                 do {
                     System.out.println("Please set a timer (min 15s, max 60s)");
                     try {
-                        // wait until we have data to complete a readLine()
+                        //wait until we have data to complete a readLine()
                         while (!in.ready())
                             Thread.sleep(200);
 
@@ -427,6 +425,7 @@ public class ClientMain {
                         delay = -1;
                     }
                 } while ("".equals(delayString) || delay < 15 || delay > 60);
+
                 if (isRmi){
                     this.result = delay;
                     this.finished = true;

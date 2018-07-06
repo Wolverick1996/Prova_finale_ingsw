@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * Static class used to initialize socket communication
+ * Static class used to initialize socket communication (server-side)
  *
  * @author Matteo
  */
