@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.Table;
-import it.polimi.ingsw.server.network_server.ServerIntRMI;
+import it.polimi.ingsw.server.network_server.ServerImplementationRMI;
 
 import java.net.Socket;
 import java.util.*;
@@ -35,7 +35,7 @@ public class Controller {
      * @param sockets: list of users connected with socket
      * @author Matteo
      */
-    static void startGame(List<String> nicknames, Lobby lobby, ServerIntRMI server, List<Socket> sockets){
+    static void startGame(List<String> nicknames, Lobby lobby, ServerImplementationRMI server, List<Socket> sockets){
 
         try {
             lobbies.add(lobby);

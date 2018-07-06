@@ -15,8 +15,8 @@ import java.util.*;
  */
 public class ServerImplementationRMI extends UnicastRemoteObject implements ServerIntRMI {
 
-    private ArrayList<ClientIntRMI> clients = new ArrayList<>();
-    private ArrayList<String> usernames = new ArrayList<>();
+    private List<ClientIntRMI> clients = new ArrayList<>();
+    private List<String> usernames = new ArrayList<>();
     private Lobby lobby;
 
     /**
@@ -40,29 +40,25 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements Serv
      * @throws RemoteException if connection to the skeleton fails
      * @author Andrea
      */
-    public synchronized boolean login(ClientIntRMI a) throws RemoteException {
-
-        if(!lobby.hasStarted())
-            confirmConnections();
-
-        if (lobby.getPlayers().size() >= Lobby.MAX_PLAYERS){
-            System.out.println("Max number of players reached!");
-            a.notify("The lobby is full!");
-            return false;
-        }
-
+    public boolean login(ClientIntRMI a) throws RemoteException {
         if (lobby.hasStarted()){
             if (lobby.addPlayer(a.getName())){
                 clients.add(a);
                 usernames.add(a.getName());
                 System.out.println("[RMI Server]\t" +a.getName()+ "  got connected again....");
                 a.notify("Welcome back " +a.getName()+ ".\nYou have connected successfully.");
-                lobby.rejoinedMatch(a.getName());
+                lobby.rejoinedMatch(a.getName(), true);
                 return true;
             } else {
                 a.notify("The game started without you :(\n\nGet better friends dude");
                 return false;
             }
+        }
+
+        if (lobby.getPlayers().size() >= Lobby.MAX_PLAYERS){
+            System.out.println("Max number of players reached!");
+            a.notify("The lobby is full!");
+            return false;
         }
 
         if (!lobby.addPlayer(a.getName()))
@@ -77,7 +73,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements Serv
     }
 
     //TODO: JavaDoc
-    public synchronized void confirmConnections() throws RemoteException {
+    public void confirmConnections() throws RemoteException {
         Iterator<ClientIntRMI> clientIterator = clients.iterator();
         ArrayList<ClientIntRMI> toBeDeleted = new ArrayList<>();
         ClientIntRMI c = null;
@@ -94,19 +90,19 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements Serv
             }
             i++;
         }
-
-        ArrayList<Integer> indexToRemove = new ArrayList<>();
-        for (ClientIntRMI clientIntRMI : toBeDeleted){
-            for (ClientIntRMI usr : this.clients){
-                if (clientIntRMI ==  usr){
-                    indexToRemove.add(this.clients.indexOf(usr));
+        if (!toBeDeleted.isEmpty()){
+            ArrayList<Integer> indexToRemove = new ArrayList<>();
+            for (ClientIntRMI clientIntRMI : toBeDeleted){
+                for (ClientIntRMI usr : this.clients){
+                    if (clientIntRMI ==  usr){
+                        indexToRemove.add(this.clients.indexOf(usr));
+                    }
                 }
             }
-        }
-
-        for (Integer n : indexToRemove){
-            clients.remove(n.intValue());
-            usernames.remove(n.intValue());
+            for (Integer n : indexToRemove) {
+                clients.remove(n.intValue());
+                usernames.remove(n.intValue());
+            }
         }
     }
 
@@ -148,6 +144,18 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements Serv
      */
     public void setDelay(int delay){
         this.lobby.setDelay(delay);
+    }
+
+    /**
+     * Removes a target skeleton from the list of clients and a target username from the list of usernames
+     *
+     * @param c: ClientIntRMI to be removed
+     * @param username: username string to be removed
+     * @author Andrea
+     */
+    public void removeClientAndUsername(ClientIntRMI c, String username) {
+        this.clients.remove(c);
+        this.usernames.remove(username);
     }
 
     @Override

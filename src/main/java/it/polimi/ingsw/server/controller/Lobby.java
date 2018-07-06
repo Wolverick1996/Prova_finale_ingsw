@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.network_server.ServerIntRMI;
+import it.polimi.ingsw.server.network_server.ServerImplementationRMI;
 
 import java.net.Socket;
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ public class Lobby /*extends Observer*/ {
     //        Attributes         //
     //***************************//
 
-    private ServerIntRMI server;
+    private ServerImplementationRMI server;
 
     public static final int MAX_PLAYERS = 4;
     private static final int ONE_SEC = 1000;
@@ -116,7 +116,7 @@ public class Lobby /*extends Observer*/ {
      * Check if there is a disconnected player in the current game, if the answer is positive he joins the match
      *
      * @param username: the username to be checked
-     * @return true if there is a disconnectd player in the game otherwise false
+     * @return true if there is a disconnected player in the game otherwise false
      * @author Andrea
      */
     private boolean checkReConnection(String username){
@@ -125,20 +125,19 @@ public class Lobby /*extends Observer*/ {
             if (p.equals(username))
                 wasConnected = true;
         }
-        if(wasConnected && Controller.getMyGame(this).getPlayer(username).isDisconnected()){
-            return true;
-        }
-        return false;
+        return wasConnected && Controller.getMyGame(this).getPlayer(username).isDisconnected();
     }
 
     /**
+     * Allows user to re-join current match (calls IOhandler's rejoinMatch method)
      *
-     *
-     * @param username: name of the player who rejoined the match
+     * @param username: username to be re-activate
+     * @param o: useful to allow socket connection, useless if RMI
+     * @author Andrea
      */
-    public void rejoinedMatch(String username){
+    public void rejoinedMatch(String username, Object o){
         Controller.getMyGame(this).getPlayer(username).setDisconnected(false);
-        Controller.getMyIO(this).setServer(this.server);
+        Controller.getMyIO(this).rejoinMatch(username, o);
     }
 
     /**
@@ -197,7 +196,7 @@ public class Lobby /*extends Observer*/ {
      * @param server: the server to be set up
      * @author Andrea
      */
-    public void setServerRMI(ServerIntRMI server){
+    public void setServerRMI(ServerImplementationRMI server){
         this.server = server;
     }
 

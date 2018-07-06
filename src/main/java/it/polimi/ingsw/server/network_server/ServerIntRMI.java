@@ -61,5 +61,4 @@ public interface ServerIntRMI extends Remote {
      * @author Andrea
      */
     void setDelay(int delay) throws RemoteException;
-
 }
