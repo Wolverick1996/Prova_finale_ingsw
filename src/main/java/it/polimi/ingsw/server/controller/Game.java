@@ -209,6 +209,7 @@ public class Game implements Observer {
         if (this.table.useToolCard(index, this.players.get(active), Controller.getMyIO(this))){
             Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() +
             " has used " + ToolHandler.getName(index) + " correctly! :)");
+                Controller.getMyIO(this).broadcast("HOORAY!");
         } else {
             toolUsed = false;
             Controller.getMyIO(this).broadcast("Something went wrong... :(");

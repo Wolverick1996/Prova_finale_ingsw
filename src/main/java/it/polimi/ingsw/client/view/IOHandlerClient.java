@@ -44,8 +44,20 @@ public class IOHandlerClient implements Observer {
     private int lineReadNumber = 0;
     private boolean readStatus = false;
     private boolean readActivePlayer = false;
-
+    private String activePlayer;
+    //"Player " + this.players.get(active).getUsername() +
+    //            " has used " + ToolHandler.getName(index) + " correctly! :)"
+    //STILL TODO
     private void sendGUI(String message){
+        if (debug) System.out.println(message);
+        String PLAYERDIDNOTDOITRIGHT = "Player " + activePlayer + " didn't do it right, try again\n";
+        String EXCEPTIONCAUGHTNOTRIGHT = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
+
+        if(message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
+            resetGUIupdater();
+            //Undo the move, go back to standardchoice
+            GUIupdater.setToSend("0");
+        }
 
         if (readActivePlayer){ readActivePlayer(message); return; }
 
@@ -75,9 +87,6 @@ public class IOHandlerClient implements Observer {
                 }
                 GUIupdater.setToSend(Integer.toString(GUIupdater.getSchemeChosen()));
                 break;
-            case "Game is starting!\n" :
-                GUIupdater.setCanGoToGame(true);
-                break;
             case "Here is the status: " :
                 readStatus = true;
                 break;
@@ -86,7 +95,30 @@ public class IOHandlerClient implements Observer {
                 readActivePlayer = true;
                 break;
             case "Insert action (d = place dice, t = use tool, q = pass turn)" :
+                resetGUIupdater();
                 GUIupdater.setTypeRequested(GUIupdater.TypeRequested.STANDARDREQUEST);
+                break;
+            case "Someone is trying to use a tool card TWICE... YOU CAAAAAAAAAAAAAN'T" :
+            case "Nope, nothing done :(" :
+            case "Something went wrong... :(" :
+            case "Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T" :
+            case "Nope, nothing done" :
+            case "Dice correctly placed!" :
+            case "HOORAY!" :
+                resetGUIupdater();
+                break;
+            case "Choose a dice from round track [from 1 to N]":
+                resetGUIupdater();
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.ROUNDTRACK);
+                break;
+            case "Insert the place of the dice in the reserve":
+                resetGUIupdater();
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.RESERVE);
+                break;
+            case "Insert the coordinates of the dice to be placed, one at a time (x, y)":
+                GUIupdater.refresh();
+                resetGUIupdater();
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.WINDOWPATTERN);
                 break;
             default: break;
         }
@@ -104,13 +136,14 @@ public class IOHandlerClient implements Observer {
     }
 
     private void readActivePlayer(String message){
-        GUIupdater.setActivePlayer(message.split(",")[0]);
+        activePlayer = message.split(",")[0];
+        GUIupdater.setActivePlayer(activePlayer);
         readActivePlayer = false;
     }
 
     private void getStatus(String message){
         if (message.equals("\n\n---------------------------------------------\n\n")) {
-            GUIupdater.refresh();
+            GUIupdater.setCanGoToGame(true);
             readStatus = false;
             lineReadNumber = 0;
         } else {
@@ -138,8 +171,17 @@ public class IOHandlerClient implements Observer {
     }
 
     private String requestGUI(){
+        if (debug) System.out.println("The context of the input request is " + GUIupdater.getTypeRequested());
         if (GUIupdater.getTypeRequested() == null) {
             String toSend = GUIupdater.getToSend();
+            if (toSend == null) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return requestGUI();
+            }
             GUIupdater.setToSend(null);
             if (debug) System.out.println("I'm sending: " + toSend);
             return toSend;
@@ -151,8 +193,11 @@ public class IOHandlerClient implements Observer {
                 System.out.println(e.getMessage());
             }
         }
-        String output = GUIupdater.getToSendList();
-        if (debug) System.out.println("I'm sending: " + output);
+        String output = null;
+        do {
+            output = GUIupdater.getToSendList();
+        } while (output == null);
+        if (debug) System.out.println("I'm sending from list: " + output);
         return output;
     }
 

@@ -5,7 +5,8 @@ import java.util.List;
 
 public class GUIupdater {
 
-    private static GameController effectsController;
+    private static boolean hasGameEnded = false;
+    private static boolean hasGetStatus = false;
 
     private static String ownUsername;
     private static String activePlayer;
@@ -53,8 +54,15 @@ public class GUIupdater {
 
     public static synchronized String getOwnScheme() {
         String me = getOwnPlayer();
-        return me.split("\n")[3];
+        String[] split = me.split("\n");
+        me = split[3] + "\n" + split[4] + "\n" + split[5] + "\n" + split[6] + "\n" + split[7] + "\n" +
+                split[8] + "\n" + split[9];
+        return me;
     }
+
+    public static synchronized boolean getHasGameEnded() { return hasGameEnded; }
+
+    public static synchronized boolean getHasGetStatus() { return hasGetStatus; }
 
     public static synchronized TypeRequested getTypeRequested(){ return requested; }
 
@@ -101,6 +109,8 @@ public class GUIupdater {
     public static synchronized String getTools(){
         return tools;
     }
+
+    public static synchronized void setHasGameEnded(boolean value) { hasGameEnded = value; }
 
     public static synchronized void setActivePlayer(String value) { activePlayer = value; }
 
@@ -161,6 +171,8 @@ public class GUIupdater {
         return res;
     }
 
+    public static synchronized void setHasGetStatus(boolean value) { hasGetStatus = value; }
+
     public static synchronized void emptyToSendIntList() {
         toSendList.clear();
     }
@@ -177,31 +189,25 @@ public class GUIupdater {
     }
 
     public static synchronized void refresh() {
-        if (effectsController == null) {
-            effectsController = new GameController();
-        }
-        effectsController.reloadGame(numPlayers, getOwnScheme(), getPrivObj(), getTable(),
-                getTools(), getOwnPlayer(), getActivePlayer());
+        GameController.setNeedsToReload(true);
     }
 
     private static synchronized void notifyGUI(boolean turnOn){
-        if (effectsController == null) {
-            effectsController = new GameController();
-        }
+        if (requested == null) return;
         switch (requested) {
             case STANDARDREQUEST:
-                effectsController.highlightGrid(turnOn);
-                effectsController.highlightDraft(turnOn);
-                effectsController.highlightPass(turnOn);
+                GameController.highlightTool(turnOn);
+                GameController.highlightDraft(turnOn);
+                GameController.highlightPass(turnOn);
                 break;
             case RESERVE:
-                effectsController.highlightDraft(turnOn);
+                GameController.highlightDraft(turnOn);
                 break;
             case ROUNDTRACK:
-                effectsController.highlightRoundtrack(turnOn);
+                GameController.highlightRoundtrack(turnOn);
                 break;
             case WINDOWPATTERN:
-                effectsController.highlightGrid(turnOn);
+                GameController.highlightGrid(turnOn);
                 break;
             default:
         }

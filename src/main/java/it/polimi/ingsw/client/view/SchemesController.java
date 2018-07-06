@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.view;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -183,8 +185,6 @@ public class SchemesController {
     @FXML
     private void loadGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameScreen.fxml"));
-        Parent root = loader.load();
-        GameController controller = loader.getController();
 
         if (grid1Button.isSelected())
             GUIupdater.setSchemeChosen(1);
@@ -198,13 +198,17 @@ public class SchemesController {
         while (!GUIupdater.getCanGoToGame())
             GUIController.waiting(GUIController.INFINITE, 0, true);
 
+        Parent root = loader.load();
+        GameController controller = loader.getController();
+
         int numP = GUIupdater.getNumPlayers();
 
         String table = GUIupdater.getTable();
 
         String p1 = "";
+
         for (int i=0; i<GUIupdater.getPlayers().size(); i++)
-            if (GUIupdater.getPlayers().get(i).toString().split(NEWLINE)[0].equals(GUIupdater.getOwnUsername()))
+            if (GUIupdater.getPlayers().get(i).toString().contains(GUIupdater.getOwnUsername()))
                 p1 = GUIupdater.getPlayers().get(i).toString();
 
         String p2 = (String)GUIupdater.getPlayers().get(0);
@@ -213,10 +217,40 @@ public class SchemesController {
 
         String tools = GUIupdater.getTools();
 
-        int temp = GUIupdater.getSchemeChosen() - 1;
-        String scheme = (String)GUIupdater.getSchemesToChoose().get(temp);
+        //int temp = GUIupdater.getSchemeChosen() - 1;
+        //String scheme = (String)GUIupdater.getSchemesToChoose().get(temp);
+        String scheme = GUIupdater.getOwnScheme();
 
-        controller.reloadGame(numP, scheme, privOC, table, tools, p1, p2);
+        controller.setNeedsToReload(true);
+        Task refresh = new Task() {
+            @Override
+            protected Object call() {
+                while(!GUIupdater.getHasGameEnded()){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (controller.getNeedsToReload()){
+                        controller.setNeedsToReload(false);
+                        controller.reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
+                                GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
+                                GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
+                    }
+                }
+                return null;
+            }
+        };
+
+        //new Thread(refresh).start();
+
+        controller.reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
+                GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
+                GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
+        //controller.reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(), GUIupdater.getPrivObj(),
+        //        GUIupdater.getTable(), GUIupdater.getTools(), GUIupdater.getOwnPlayer(),
+        //        GUIupdater.getActivePlayer());
+        //controller.reloadGame(numP, scheme, privOC, table, tools, p1, p2);
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
