@@ -15,7 +15,7 @@ import java.util.*;
  *
  * @author Matteo
  */
-public class IOhandler implements Observer{
+public class IOhandler implements Observer {
 
     //***************************//
     //        Attributes         //
@@ -63,7 +63,7 @@ public class IOhandler implements Observer{
             this.usersRMI = server.getConnected();
             for (ClientIntRMI c : usersRMI)
                 c.startInterface();
-        } catch (RemoteException e) {
+        } catch (RemoteException e){
             //Strange behave of the skeleton
         }
     }
@@ -93,6 +93,7 @@ public class IOhandler implements Observer{
      * @author Matteo
      */
     private class SocketUser {
+
         //NEVER MODIFY SINGLE ATTRIBUTES OF THIS SUB CLASS
         private String name;
         private Socket socket;
@@ -144,7 +145,7 @@ public class IOhandler implements Observer{
                 if (c.getName().equals(username))
                     uRMI = c;
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException e){
             System.out.println("RECONNECTRMI ERROR!");
         }
         if (uRMI != null){
@@ -176,30 +177,30 @@ public class IOhandler implements Observer{
                 if (d != null)
                     disconnectedRMI.remove(d);
                 uRMI.startInterface();
-            } catch (RemoteException e) {
+            } catch (RemoteException e){
                 System.out.println("RECONNECTRMI ERROR (STARTINTERFACE)");
             }
         }
     }
 
     /**
-     * Re-add the player to the list of socketUsers in the same position he was before he got disconnected
+     * Re-adds the player to the list of socketUsers in the same position he was before he got disconnected
      *
      * @param username: name of the socket user who wants to re-connect
      * @param o: Socket of the user who wants to re-connect
      * @author Andrea
      */
-    private void reconnectSocket(String username, Object o) {
+    private void reconnectSocket(String username, Object o){
         Socket socketToReJoin;
         try {
             socketToReJoin = (Socket) o;
-        } catch (ClassCastException c) {
+        } catch (ClassCastException c){
             System.err.println("ERROR IN CASTING!! Obj cannot be cast into a Socket");
             return;
         }
-        if (socketToReJoin != null) {
+        if (socketToReJoin != null){
             int index = -1;
-            for (DisconnectedPlayers d : disconnectedSocket) {
+            for (DisconnectedPlayers d : disconnectedSocket){
                 if (d.name.equals(username))
                     index = d.index;
             }
@@ -209,9 +210,9 @@ public class IOhandler implements Observer{
             ArrayList<SocketUser> fooCopy = new ArrayList<>(socketUserList);
             this.socketUserList.clear();
             boolean setted = false;
-            for (int i = 0; i < fooCopy.size() + 1; i++) {
-                if (!setted) {
-                    if (i == index) {
+            for (int i = 0; i < fooCopy.size() + 1; i++){
+                if (!setted){
+                    if (i == index){
                         this.socketUserList.add(userToRejoin);
                         setted = true;
                     } else
@@ -220,7 +221,7 @@ public class IOhandler implements Observer{
                     this.socketUserList.add(fooCopy.get(i - 1));
             }
             DisconnectedPlayers d = null;
-            for (DisconnectedPlayers dP : disconnectedSocket) {
+            for (DisconnectedPlayers dP : disconnectedSocket){
                 if (dP.name.equals(username))
                     d = dP;
             }
@@ -239,7 +240,7 @@ public class IOhandler implements Observer{
             try {
                 SocketMessengerServer.sendFinish(s.socket);
                 s.socket.close();
-            } catch (IOException e) {
+            } catch (IOException e){
                 System.err.println("FINISHGAMESOCKET ERROR" + e.getMessage());
             }
         }
@@ -654,11 +655,12 @@ public class IOhandler implements Observer{
         int index = 0;
         ArrayList<String> names = new ArrayList<>();
 
-        // Socket case
+        //Socket case
         for (SocketUser s : socketUserList){
             if (!s.name.equals(o))
                 names.add(s.name);
         }
+        //RMI case
         for (ClientIntRMI c : usersRMI){
             try {
                 names.add(c.getName());
@@ -699,6 +701,7 @@ public class IOhandler implements Observer{
                 //WE CAN MANAGE ONE DISCONNECTION PER TIME
             }
         }
+        //Socket case
         for (SocketUser s : socketUserList)
             names.add(s.name);
 

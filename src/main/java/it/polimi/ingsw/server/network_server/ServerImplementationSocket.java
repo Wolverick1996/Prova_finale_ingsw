@@ -189,22 +189,4 @@ public class ServerImplementationSocket implements Runnable {
         lobby.rejoinMatch(this.playerConnected, this.socket);
     }
 
-    /**
-     * Allows the logout of a socket user (server-side)
-     *
-     * @throws IOException if client has connection issues
-     * @author Andrea
-     */
-    private synchronized void logout() throws IOException {
-        PrintWriter out = new PrintWriter(this.socket.getOutputStream());
-        if (this.lobby.removePlayer(this.playerConnected)){
-            out.println("ok");
-            out.flush();
-            System.out.println("[Socket Server]\t" + this.playerConnected + "  disconnected....");
-        } else {
-            out.println("ko");
-            out.flush();
-        }
-    }
-
 }

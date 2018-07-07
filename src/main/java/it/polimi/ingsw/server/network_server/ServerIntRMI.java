@@ -23,7 +23,12 @@ public interface ServerIntRMI extends Remote {
      */
     boolean login(ClientIntRMI client) throws RemoteException;
 
-    //TODO: JavaDoc
+    /**
+     * Checks if all clients in clients list are still connected and provides to remove it if connection fails
+     *
+     * @throws RemoteException if connection to the skeleton fails
+     * @author Andrea
+     */
     void confirmConnections() throws RemoteException;
 
     /**
