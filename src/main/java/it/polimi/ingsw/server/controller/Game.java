@@ -322,20 +322,16 @@ public class Game implements Observer {
             }
             if (!winners.isEmpty()){
                 ArrayList<Player> tiers = new ArrayList<>(firstTypeOfTie(winners));
-                if (tiers.size() == 1){
+                if (tiers.size() == 1)
                     winner = tiers.get(0);
-                }
                 else {
                     ArrayList<Player> stillTiers = new ArrayList<>(secondTypeOfTie(tiers));
-                    if (stillTiers.size() == 1){
+                    if (stillTiers.size() == 1)
                         winner = stillTiers.get(0);
-                    }
-                    else {
+                    else
                         winner = thirdTypeOfTie(stillTiers);
-                    }
                 }
-            }
-            else {
+            } else {
                 winner = finalRank.get(0);
             }
         }
@@ -343,10 +339,8 @@ public class Game implements Observer {
         finalRank = calculateFinalRank(winner);
 
         Controller.getMyIO(this).broadcast("Game ended! Calculating points...\n");
-        for (Player p : finalRank){
+        for (Player p : finalRank)
             Controller.getMyIO(this).broadcast( p.getUsername() + ": \t" +p.getPoints());
-        }
-
 
         Controller.getMyIO(this).finishGameSocket();
 
@@ -396,16 +390,16 @@ public class Game implements Observer {
     }
 
     /**
-     * Checks the first kind of tie (points with private objective cards)
+     * Checks the first type of parity (points with private objective cards)
      *
-     * @param winners: list of players that tied
-     * @return list of players that are still tie or the winner
+     * @param winners: list of tied players
+     * @return the list of still tied players or the winner
      * @author Andrea
      */
     private List<Player> firstTypeOfTie(List<Player> winners){
         ArrayList<Player> tiers = new ArrayList<>();
         int highestWithPrivOC = -1;
-        for (Player p : winners) {
+        for (Player p : winners){
             if (p.pointsInPrivObj() >= highestWithPrivOC)
                 highestWithPrivOC = p.pointsInPrivObj();
         }
@@ -417,16 +411,16 @@ public class Game implements Observer {
     }
 
     /**
-     * Checks the second kind of tie (number of tokens left)
+     * Checks the second type of parity (number of tokens left)
      *
-     * @param tiers: list of players that tied
-     * @return list of players that are still tie or the winner
+     * @param tiers: list of tied players
+     * @return the list of still tied players or the winner
      * @author Andrea
      */
     private List<Player> secondTypeOfTie(List<Player> tiers){
         ArrayList<Player> stillTiers = new ArrayList<>();
         int highestNumOfTokens = -1;
-        for (Player p : tiers) {
+        for (Player p : tiers){
             if (p.getTokens() >= highestNumOfTokens)
                 highestNumOfTokens = p.getTokens();
         }
@@ -488,7 +482,7 @@ public class Game implements Observer {
      * @return the object Player with a specific username
      * @author Andrea
      */
-    Player getPlayer(String username) {
+    Player getPlayer(String username){
         for (Player p : players){
             if (p.getUsername().equals(username))
                 return p;

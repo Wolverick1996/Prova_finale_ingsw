@@ -173,7 +173,7 @@ public class GameController {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Make a decision!");
-        Label label1 = new Label("WAIT!\n");
+        Label label1 = new Label("USING TOOL CARD...\n");
         label1.setFont(myFont);
         Label label2 = new Label("You have to make a decision...\n");
         label2.setFont(myFont);
