@@ -118,7 +118,6 @@ public class Game implements Observer {
                         putDiceStandard();
                         break;
                     case "q":
-                        Controller.getMyIO(this).broadcast("Turn passed");
                         end = true;
                         toolUsed = false;
                         break;
@@ -176,6 +175,7 @@ public class Game implements Observer {
         this.turn++;
         this.table.nextTurn();
         Controller.getMyIO(this).broadcast(STATUS);
+        Controller.getMyIO(this).broadcast("Turn passed");
         next();
     }
 
@@ -211,7 +211,8 @@ public class Game implements Observer {
         if (this.table.useToolCard(index, this.players.get(active), Controller.getMyIO(this))){
             Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() +
             " has used " + ToolHandler.getName(index) + " correctly! :)");
-                Controller.getMyIO(this).broadcast("HOORAY!");
+            Controller.getMyIO(this).broadcast("HOORAY!");
+            Controller.getMyIO(this).broadcast(STATUS);
         } else {
             toolUsed = false;
             Controller.getMyIO(this).broadcast("Something went wrong... :(");
@@ -271,6 +272,7 @@ public class Game implements Observer {
 
         }
         Controller.getMyIO(this).broadcast("Dice correctly placed!");
+        Controller.getMyIO(this).broadcast(STATUS);
     }
 
     /**

@@ -124,9 +124,9 @@ public class IOHandlerClient implements Observer {
                 readActivePlayer = true;
                 break;
             case "Insert action (d = place dice, t = use tool, q = pass turn)" :
-                GameController.setNeedsToReload(true);
                 resetGUIupdater();
-                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.STANDARDREQUEST);
+                boolean check;
+                setTypeRequested(GUIupdater.TypeRequested.STANDARDREQUEST);
                 break;
             case "Someone is trying to use a tool card TWICE... YOU CAAAAAAAAAAAAAN'T" :
             case "Nope, nothing done :(" :
@@ -139,19 +139,22 @@ public class IOHandlerClient implements Observer {
                 break;
             case "Choose a dice from round track [from 1 to N]":
                 resetGUIupdater();
-                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.ROUNDTRACK);
+                setTypeRequested(GUIupdater.TypeRequested.ROUNDTRACK);
                 break;
             case "Insert the place of the dice in the reserve":
-                resetGUIupdater();
-                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.RESERVE);
+                if (GUIupdater.getTypeRequested() != GUIupdater.TypeRequested.STANDARDREQUEST)
+                setTypeRequested(GUIupdater.TypeRequested.RESERVE);
                 break;
             case "Insert the coordinates of the dice to be placed, one at a time (x, y)":
-                GUIupdater.refresh();
                 resetGUIupdater();
-                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.WINDOWPATTERN);
+                setTypeRequested(GUIupdater.TypeRequested.WINDOWPATTERN);
                 break;
             default: break;
         }
+    }
+
+    private void setTypeRequested(GUIupdater.TypeRequested requested) {
+        GUIupdater.setTypeRequested(requested);
     }
 
     private void chooseSchemes(String message){
@@ -174,6 +177,7 @@ public class IOHandlerClient implements Observer {
     private void getStatus(String message){
         if (message.equals("\n\n---------------------------------------------\n\n")) {
             GUIupdater.setCanGoToGame(true);
+            setTypeRequested(GUIupdater.TypeRequested.REFRESH);
             readStatus = false;
             lineReadNumber = 0;
         } else {
@@ -197,7 +201,7 @@ public class IOHandlerClient implements Observer {
 
     private void resetGUIupdater() {
         GUIupdater.setToSend(null);
-        GUIupdater.setTypeRequested(null);
+        setTypeRequested(null);
         GUIupdater.emptyToSendIntList();
     }
 

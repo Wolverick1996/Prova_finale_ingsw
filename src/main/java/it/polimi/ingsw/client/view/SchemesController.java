@@ -197,28 +197,6 @@ public class SchemesController {
         while (!GUIupdater.getCanGoToGame())
             GUIController.waiting(GUIController.INFINITE, 0, true);
 
-        Task refresh = new Task() {
-            @Override
-            protected Object call() {
-                while(!GUIupdater.getHasGameEnded()){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (GameController.getNeedsToReload()){
-                        GameController.setNeedsToReload(false);
-                        System.out.println("I'm trying to reload...");
-                        GUIupdater.getController().reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
-                                GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
-                                GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
-                        System.out.println("I did it!");
-                    }
-                }
-                return null;
-            }
-        };
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameScreen.fxml"));
         Parent root = loader.load();
         GameController controller = loader.getController();
@@ -234,15 +212,6 @@ public class SchemesController {
         appStage.setResizable(true);
         appStage.setFullScreen(true);
         appStage.show();
-
-        /*Thread keepRefresh = new Thread(refresh);
-        keepRefresh.setDaemon(true);
-        keepRefresh.start();*/
-
-        //controller.reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(), GUIupdater.getPrivObj(),
-        //        GUIupdater.getTable(), GUIupdater.getTools(), GUIupdater.getOwnPlayer(),
-        //        GUIupdater.getActivePlayer());
-        //controller.reloadGame(numP, scheme, privOC, table, tools, p1, p2);
     }
 
 }
