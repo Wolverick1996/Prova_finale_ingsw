@@ -32,7 +32,7 @@ class ClientImplementationSocket {
     /**
      * Allows the login of a socket user (CLI, client-side)
      *
-     * @return username of the player logged in
+     * @return the username of the player logged in
      * @throws IOException if client has connection issues
      * @author Andrea
      */
@@ -81,15 +81,14 @@ class ClientImplementationSocket {
     /**
      * Allows the login of a socket user (GUI, client-side)
      *
-     * @return username of the player logged in
+     * @return the username of the player logged in
      * @throws IOException if client has connection issues
      * @author Matteo
      */
     String loginGUI(String name) throws IOException {
-        int numPlayers;
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
-        numPlayers = Integer.parseInt(in.readLine()); //Here we read the number of players (sent by the Server)
+        int numPlayers = Integer.parseInt(in.readLine()); //Here we read the number of players (sent by the Server)
         out.println(name);
         out.flush();
         String result = in.readLine();
@@ -115,7 +114,7 @@ class ClientImplementationSocket {
      * @return true if game started, otherwise false
      * @author Andrea
      */
-    public boolean isGameStarted() {
+    boolean isGameStarted(){
         return this.gameStarted;
     }
 

@@ -26,7 +26,7 @@ public interface ClientIntRMI extends Remote {
      * @throws RemoteException if client has connection issues
      * @author Andrea
      */
-    String getName()throws RemoteException;
+    String getName() throws RemoteException;
 
     /**
      * Throws an exception if client has connection issues (the exception will be caught from the server)
@@ -34,7 +34,7 @@ public interface ClientIntRMI extends Remote {
      * @throws RemoteException if client has connection issues
      * @author Andrea
      */
-    void confirmConnection () throws RemoteException;
+    void confirmConnection() throws RemoteException;
 
     /**
      * Calls the IOhandler getInput method
@@ -43,7 +43,7 @@ public interface ClientIntRMI extends Remote {
      * @throws RemoteException if client has connection issues
      * @author Andrea
      */
-    String getInput () throws RemoteException;
+    String getInput() throws RemoteException;
 
     /**
      * Calls the IOhandler method to start the CLI

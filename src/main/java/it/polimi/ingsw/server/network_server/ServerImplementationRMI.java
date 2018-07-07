@@ -158,7 +158,7 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements Serv
      * @param username: username string to be removed
      * @author Andrea
      */
-    public void removeClientAndUsername(ClientIntRMI c, String username) {
+    public void removeClientAndUsername(ClientIntRMI c, String username){
         this.clients.remove(c);
         this.usernames.remove(username);
     }

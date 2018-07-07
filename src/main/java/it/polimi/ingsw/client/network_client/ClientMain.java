@@ -438,7 +438,7 @@ public class ClientMain {
                     this.out.flush();
                     System.out.println("Delay set!");
                 }
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.out.println("IOEXCEPTION IN INPUTDELAY");
             }
         }

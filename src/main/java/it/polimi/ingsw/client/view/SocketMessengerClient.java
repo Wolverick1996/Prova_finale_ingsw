@@ -9,7 +9,7 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
  *
  * @author Matteo
  */
-public class SocketMessengerClient implements Runnable{
+public class SocketMessengerClient implements Runnable {
 
     private boolean gameHasStarted = false;
     private boolean debug = false;
@@ -66,7 +66,7 @@ public class SocketMessengerClient implements Runnable{
      * @param s: socket of the client
      * @param n: player's username
      * @param ui: type of interface (CLI/GUI)
-     * @param isReconnecting: flag that represent the status of reconnecting
+     * @param isReconnecting: flag that represents the status of reconnecting
      * @author Andrea
      */
     public SocketMessengerClient (Socket s, String n, IOHandlerClient.Interface ui, boolean isReconnecting){

@@ -257,7 +257,7 @@ public class Game implements Observer {
                         check = this.players.get(active).placeDice(x, y , this.table, index);
                     else
                         index = -1;
-                }else
+                } else
                     index = -1;
 
                 if (!check){
@@ -308,9 +308,7 @@ public class Game implements Observer {
                 if (!p.isDisconnected())
                     winner = p;
             }
-        }
-        else{
-
+        } else {
             int highestMade = 0;
             for (Player p : this.players){
                 p.countPoints();
@@ -359,10 +357,10 @@ public class Game implements Observer {
      * @return the winner of the game
      * @author Andrea
      */
-    private Player lastCheck(List<Player> winners) {
+    private Player lastCheck(List<Player> winners){
         int firstPlLastTurn = MAX_ROUNDS % this.players.size();
         int lastPlLastTurn;
-        if (firstPlLastTurn == 0) {
+        if (firstPlLastTurn == 0){
             firstPlLastTurn = this.players.size() - 1;
             lastPlLastTurn = firstPlLastTurn - 1;
         } else {
@@ -374,8 +372,8 @@ public class Game implements Observer {
         }
 
         int[] orderFinalRound = new int[this.players.size()];
-        for (int i = 0; i < this.players.size(); i++) {
-            if (lastPlLastTurn == 0) {
+        for (int i = 0; i < this.players.size(); i++){
+            if (lastPlLastTurn == 0){
                 orderFinalRound[i] = lastPlLastTurn;
                 lastPlLastTurn = this.players.size() - 1;
             } else {
@@ -384,9 +382,9 @@ public class Game implements Observer {
             }
         }
 
-        for (int i = 0; i < this.players.size(); i++) {
-            for (Player w : winners) {
-                if (orderFinalRound[i] == this.players.indexOf(w)) {
+        for (int i = 0; i < this.players.size(); i++){
+            for (Player w : winners){
+                if (orderFinalRound[i] == this.players.indexOf(w)){
                     winners.clear();
                     winners.add(w);
                 }
@@ -403,7 +401,7 @@ public class Game implements Observer {
      * @return the object Player with a specific username
      * @author Andrea
      */
-    public Player getPlayer(String username) {
+    Player getPlayer(String username){
         for (Player p : players){
             if (p.getUsername().equals(username))
                 return p;
@@ -415,6 +413,7 @@ public class Game implements Observer {
      * Returns how many players are still playing (no disconnected)
      *
      * @return number of active players
+     * @author Andrea
      */
     private int howManyActivePlayers(){
         int result = 0;
@@ -444,7 +443,7 @@ public class Game implements Observer {
      * @author Matteo
      */
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg){
         Controller.getMyIO(this).notify(this.players.get(active).getUsername(), arg.toString());
     }
 

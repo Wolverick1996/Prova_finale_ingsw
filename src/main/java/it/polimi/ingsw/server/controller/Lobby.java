@@ -79,7 +79,7 @@ public class Lobby /*extends Observer*/ {
                     this.timer.cancel();
 
                 this.timer = new Timer();
-                TimerTask task = new TimerTask() {
+                TimerTask task = new TimerTask(){
 
                     @Override
                     public void run(){
@@ -108,15 +108,15 @@ public class Lobby /*extends Observer*/ {
     }
 
     /**
-     * Checks if a player is re-connectable
+     * Checks if a player is re-connectible
      *
      * @param username: player's username
-     * @return true if player is re-connectable, otherwise false
+     * @return true if player is re-connectible, otherwise false
      * @author Andrea
      */
     public boolean willingToReconnectPlayer(String username){
         canIGo();
-        if(this.hasStarted){
+        if (this.hasStarted){
             this.streetlight = true;
             return checkReConnection(username);
         }
@@ -127,7 +127,7 @@ public class Lobby /*extends Observer*/ {
      * Checks if there is a disconnected player in the current game, if the answer is positive he joins the match
      *
      * @param username: the username to be checked
-     * @return true if there is a disconnected player in the game otherwise false
+     * @return true if there is a disconnected player in the game, otherwise false
      * @author Andrea
      */
     private boolean checkReConnection(String username){
@@ -195,9 +195,9 @@ public class Lobby /*extends Observer*/ {
      * @author Matteo
      */
     private void canIGo(){
-        while (!this.streetlight){
+        while (!this.streetlight)
             assert true;
-        }
+
         this.streetlight = false;
     }
 
@@ -237,7 +237,9 @@ public class Lobby /*extends Observer*/ {
      * @return true if game already started, otherwise false
      * @author Matteo
      */
-    public boolean hasStarted(){ return hasStarted; }
+    public boolean hasStarted(){
+        return hasStarted;
+    }
 
     /**
      * Used to print active players in the lobby
