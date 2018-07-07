@@ -9,7 +9,7 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
  *
  * @author Matteo
  */
-public class SocketMessengerClient implements Runnable{
+public class SocketMessengerClient implements Runnable {
 
     private boolean gameHasStarted = false;
     private boolean debug = false;
@@ -57,6 +57,39 @@ public class SocketMessengerClient implements Runnable{
         } catch (IOException e) {
             this.handler.send("Server is down, I repeat, server is down!");
             this.handler.send(e.getMessage());
+        }
+    }
+
+    /**
+     * Public constructor of SocketMessengerClient with isReconnecting parameter
+     *
+     * @param s: socket of the client
+     * @param n: player's username
+     * @param ui: type of interface (CLI/GUI)
+     * @param isReconnecting: flag that represents the status of reconnecting
+     * @author Andrea
+     */
+    public SocketMessengerClient (Socket s, String n, IOHandlerClient.Interface ui, boolean isReconnecting){
+        if (isReconnecting){
+            try{
+                this.socket = s;
+                this.username = n;
+                this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                this.out = new PrintWriter(s.getOutputStream());
+                this.gameHasStarted = true;
+                if (ui == cli){
+                    this.handler = new IOHandlerClient(this.username, cli);
+                    this.handler.startInterface();
+                    this.game();
+                } else {
+                    //GUI
+                    this.handler = new IOHandlerClient(this.username, gui);
+                    this.handler.startInterface();
+                }
+            } catch (IOException e) {
+                this.handler.send("Server is down, I repeat, server is down!");
+                this.handler.send(e.getMessage());
+            }
         }
     }
 

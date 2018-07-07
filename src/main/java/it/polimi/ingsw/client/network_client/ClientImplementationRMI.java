@@ -39,7 +39,6 @@ public class ClientImplementationRMI extends Observable implements ClientIntRMI 
             //The CLI or the GUI is not active yet
             System.out.println(message);
         }
-
     }
 
     /**

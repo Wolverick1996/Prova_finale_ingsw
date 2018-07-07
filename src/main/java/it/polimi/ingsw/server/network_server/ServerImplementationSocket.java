@@ -90,6 +90,12 @@ public class ServerImplementationSocket implements Runnable {
             boolean gameCanStart = false;
             do {
                 login();
+                if (this.lobby.hasStarted()){
+                    reconnection();
+                    System.out.println("[Socket Server]\t" + this.playerConnected + "  got connected again....");
+                    System.out.println("HERE I CLOSE THE SOCKET IMPLEMENTATION THREAD :\t" + Thread.currentThread().getName());
+                    return;
+                }
                 out = new PrintWriter(this.socket.getOutputStream());
                 out.println(this.lobby.getPlayers().size());
                 out.flush();
@@ -152,6 +158,16 @@ public class ServerImplementationSocket implements Runnable {
                     if (this.lobby.hasStarted()){
                         out.println("started");
                         out.flush();
+                        if (this.lobby.willingToReconnectPlayer(string)){
+                            this.playerConnected = string;
+                            out.println("true");
+                            out.flush();
+                            return;
+                        } else{
+                            out.println("false");
+                            out.flush();
+                            return;
+                        }
                     } else if (sameUsername){
                         out.println("same");
                         out.flush();
@@ -165,21 +181,12 @@ public class ServerImplementationSocket implements Runnable {
     }
 
     /**
-     * Allows the logout of a socket user (server-side)
+     * Re-connect player to the match
      *
-     * @throws IOException if client has connection issues
      * @author Andrea
      */
-    private synchronized void logout() throws IOException {
-        PrintWriter out = new PrintWriter(this.socket.getOutputStream());
-        if (this.lobby.removePlayer(this.playerConnected)){
-            out.println("ok");
-            out.flush();
-            System.out.println("[Socket Server]\t" + this.playerConnected + "  disconnected....");
-        } else {
-            out.println("ko");
-            out.flush();
-        }
+    private void reconnection(){
+        lobby.rejoinMatch(this.playerConnected, this.socket);
     }
 
 }

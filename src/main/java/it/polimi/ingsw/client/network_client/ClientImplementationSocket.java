@@ -17,6 +17,7 @@ import java.util.Scanner;
 class ClientImplementationSocket {
 
     private Socket socket;
+    private boolean gameStarted;
 
     /**
      * Constructor of the ClientImplementationSocket class
@@ -31,6 +32,7 @@ class ClientImplementationSocket {
     /**
      * Allows the login of a socket user (CLI, client-side)
      *
+     * @return the username of the player logged in
      * @throws IOException if client has connection issues
      * @author Andrea
      */
@@ -58,15 +60,20 @@ class ClientImplementationSocket {
                     } else {
                         if (result.equals("same"))
                             System.out.println("Login failed, this userID is already used");
-                        else if (result.equals("started"))
+                        else if (result.equals("started")){
+                            this.gameStarted = true;
+                            if(in.readLine().equals("true")){
+                                return string;
+                            }
                             System.out.println("Your friends started without you :(\n\nGet better friends");
+                        }
                         else if (result.equals("max"))
                             System.out.println("Retry later...");
                     }
                 }
             } while (!success);
         } catch (NoSuchElementException e) {
-            System.err.println("ERROR "+e.getMessage());
+            System.err.println("LOGIN "+e.getMessage());
         }
         return string;
     }
@@ -74,14 +81,14 @@ class ClientImplementationSocket {
     /**
      * Allows the login of a socket user (GUI, client-side)
      *
+     * @return the username of the player logged in
      * @throws IOException if client has connection issues
      * @author Matteo
      */
     String loginGUI(String name) throws IOException {
-        int numPlayers;
         BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         PrintWriter out = new PrintWriter(this.socket.getOutputStream());
-        numPlayers = Integer.parseInt(in.readLine()); //Here we read the number of players (sent by the Server)
+        int numPlayers = Integer.parseInt(in.readLine()); //Here we read the number of players (sent by the Server)
         out.println(name);
         out.flush();
         String result = in.readLine();
@@ -102,19 +109,13 @@ class ClientImplementationSocket {
     }
 
     /**
-     * Allows the logout of a socket user (client-side)
+     * Gets the current value of gameStarted flag
      *
-     * @throws IOException if client has connection issues
+     * @return true if game started, otherwise false
      * @author Andrea
      */
-    void logout() throws IOException {
-        String result;
-        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        result = in.readLine();
-        if (result.equals("ok"))
-            System.out.println("You have disconnected successfully");
-        else
-            System.out.println("Error in your disconnection!!");
+    boolean isGameStarted(){
+        return this.gameStarted;
     }
 
 }

@@ -284,8 +284,8 @@ public class ClientMain {
 
             int num = 0;
             while (active){
-                server.confirmConnections();
                 if (num != server.playersInLobby() && !server.hasStarted()){
+                    server.confirmConnections();
                     System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                     num = server.playersInLobby();
                 } else if (server.hasStarted()){
@@ -322,6 +322,10 @@ public class ClientMain {
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             do {
                 name = clientImplementationSocket.login();
+                if (clientImplementationSocket.isGameStarted()){
+                    SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli, true);
+                    messenger.close();
+                }
                 activePlayers = Integer.parseInt(in.readLine());
                 success = true;
                 if (activePlayers == 1){
@@ -434,7 +438,7 @@ public class ClientMain {
                     this.out.flush();
                     System.out.println("Delay set!");
                 }
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.out.println("IOEXCEPTION IN INPUTDELAY");
             }
         }

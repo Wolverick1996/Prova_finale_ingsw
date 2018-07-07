@@ -64,11 +64,6 @@ public class Lobby /*extends Observer*/ {
     public synchronized boolean addPlayer(String username){
         canIGo();
 
-        if (this.hasStarted){
-            this.streetlight = true;
-            return checkReConnection(username);
-        }
-
         if (this.players.size()<= MAX_PLAYERS){
             for (String s : this.players){
                 if (s.equals(username)){
@@ -84,7 +79,7 @@ public class Lobby /*extends Observer*/ {
                     this.timer.cancel();
 
                 this.timer = new Timer();
-                TimerTask task = new TimerTask() {
+                TimerTask task = new TimerTask(){
 
                     @Override
                     public void run(){
@@ -113,10 +108,26 @@ public class Lobby /*extends Observer*/ {
     }
 
     /**
-     * Check if there is a disconnected player in the current game, if the answer is positive he joins the match
+     * Checks if a player is re-connectible
+     *
+     * @param username: player's username
+     * @return true if player is re-connectible, otherwise false
+     * @author Andrea
+     */
+    public boolean willingToReconnectPlayer(String username){
+        canIGo();
+        if (this.hasStarted){
+            this.streetlight = true;
+            return checkReConnection(username);
+        }
+        return false;
+    }
+
+    /**
+     * Checks if there is a disconnected player in the current game, if the answer is positive he joins the match
      *
      * @param username: the username to be checked
-     * @return true if there is a disconnected player in the game otherwise false
+     * @return true if there is a disconnected player in the game, otherwise false
      * @author Andrea
      */
     private boolean checkReConnection(String username){
@@ -135,7 +146,7 @@ public class Lobby /*extends Observer*/ {
      * @param o: useful to allow socket connection, useless if RMI
      * @author Andrea
      */
-    public void rejoinedMatch(String username, Object o){
+    public void rejoinMatch(String username, Object o){
         Controller.getMyGame(this).getPlayer(username).setDisconnected(false);
         Controller.getMyIO(this).rejoinMatch(username, o);
     }
@@ -184,9 +195,9 @@ public class Lobby /*extends Observer*/ {
      * @author Matteo
      */
     private void canIGo(){
-        while (!this.streetlight){
+        while (!this.streetlight)
             assert true;
-        }
+
         this.streetlight = false;
     }
 
@@ -226,7 +237,9 @@ public class Lobby /*extends Observer*/ {
      * @return true if game already started, otherwise false
      * @author Matteo
      */
-    public boolean hasStarted(){ return hasStarted; }
+    public boolean hasStarted(){
+        return hasStarted;
+    }
 
     /**
      * Used to print active players in the lobby
