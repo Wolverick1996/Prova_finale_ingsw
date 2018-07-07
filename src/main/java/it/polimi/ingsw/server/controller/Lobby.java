@@ -21,7 +21,7 @@ public class Lobby /*extends Observer*/ {
 
     public static final int MAX_PLAYERS = 4;
     private static final int ONE_SEC = 1000;
-    private int delay = 1000;
+    private int delay = 1000; //TODO: restore delay and setDelay method
     private List<String> players = new ArrayList<>();
     private List<Socket> sockets = new ArrayList<>();
     private boolean streetlight;

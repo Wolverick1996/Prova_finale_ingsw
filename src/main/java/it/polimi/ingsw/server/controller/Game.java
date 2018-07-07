@@ -345,11 +345,47 @@ public class Game implements Observer {
                 winner = winners.get(0);
         }
 
-        Controller.getMyIO(this).broadcast("Congratulations " + winner.getUsername() + ", you won the game!");
+        printFinalRank(winner);
 
         Controller.getMyIO(this).finishGameSocket();
 
         System.exit(-1);
+    }
+
+    /**
+     * This method will be used at the end of the game to print the final Rank of the game after all calculations
+     *
+     * @param winner: object of the player who won (calculated before calling this method)
+     */
+    private void printFinalRank(Player winner){
+        ArrayList<Player> finalRank = new ArrayList<>();
+        finalRank.add(winner);
+        ArrayList<Player> fooCopyPlayers = new ArrayList<>(this.players);
+        fooCopyPlayers.remove(winner);
+        boolean isGreater;
+
+        while (finalRank.size() != this.players.size()){
+            isGreater = false;
+            Player greater = null;
+
+            for (Player p1 : fooCopyPlayers){
+                if (!isGreater){
+                    for (Player p2 : fooCopyPlayers){
+                        isGreater = p1.getPoints() >= p2.getPoints();
+                    }
+                }
+                if (isGreater)
+                    greater = p1;
+            }
+
+            fooCopyPlayers.remove(greater);
+            finalRank.add(greater);
+        }
+
+        Controller.getMyIO(this).broadcast("Game ended!\n");
+        for (Player p : finalRank){
+            Controller.getMyIO(this).broadcast( p.getUsername() + ":\t" +p.getPoints());
+        }
     }
 
     /**
@@ -403,7 +439,7 @@ public class Game implements Observer {
      * @return the object Player with a specific username
      * @author Andrea
      */
-    public Player getPlayer(String username) {
+    Player getPlayer(String username) {
         for (Player p : players){
             if (p.getUsername().equals(username))
                 return p;
