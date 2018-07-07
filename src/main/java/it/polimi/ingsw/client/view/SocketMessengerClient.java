@@ -13,8 +13,6 @@ public class SocketMessengerClient implements Runnable{
     private BufferedReader in;
     private IOHandlerClient handler;
     private Socket socket;
-    private String ip;
-    private int port;
 
     //DICTIONARY:
     private static final String FAILED = "";
@@ -28,10 +26,8 @@ public class SocketMessengerClient implements Runnable{
     private static final String REQUEST = "requestData";
     private static final String NEWLINE = "%%%nnn%%%";
 
-    public SocketMessengerClient(String ip, int port, Socket s, String n, IOHandlerClient.Interface ui) {
+    public SocketMessengerClient(Socket s, String n, IOHandlerClient.Interface ui) {
         try{
-            this.ip = ip;
-            this.port = port;
             this.socket = s;
             this.username = n;
             this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -48,6 +44,39 @@ public class SocketMessengerClient implements Runnable{
         } catch (IOException e) {
             this.handler.send("Server is down, I repeat, server is down!");
             this.handler.send(e.getMessage());
+        }
+    }
+
+    /**
+     * Public constructor of SocketMessengerClient with isReconnecting parameter
+     *
+     * @param s: socket of the client
+     * @param n: player's username
+     * @param ui: type of interface (CLI/GUI)
+     * @param isReconnecting: flag that represent the status of reconnecting
+     * @author Andrea
+     */
+    public SocketMessengerClient (Socket s, String n, IOHandlerClient.Interface ui, boolean isReconnecting){
+        if (isReconnecting){
+            try{
+                this.socket = s;
+                this.username = n;
+                this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
+                this.out = new PrintWriter(s.getOutputStream());
+                this.gameHasStarted = true;
+                if (ui == cli){
+                    this.handler = new IOHandlerClient(this.username, cli);
+                    this.handler.startInterface();
+                    this.game();
+                } else {
+                    //GUI
+                    this.handler = new IOHandlerClient(this.username, gui);
+                    this.handler.startInterface();
+                }
+            } catch (IOException e) {
+                this.handler.send("Server is down, I repeat, server is down!");
+                this.handler.send(e.getMessage());
+            }
         }
     }
 

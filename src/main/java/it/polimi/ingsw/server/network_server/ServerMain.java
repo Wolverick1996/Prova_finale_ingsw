@@ -54,7 +54,7 @@ public class ServerMain {
             System.err.println("There is already a registry!");
         }
         try {
-            ServerImplementationRMI serverImplementation = new ServerImplementationRMI(lobby);
+            ServerImplementationRMI serverImplementation = new ServerImplementationRMI(this.lobby);
             InetAddress ip;
             ip = InetAddress.getLocalHost();
             Naming.rebind("//" +ip.getHostAddress()+ "/MyServer", serverImplementation);
@@ -82,10 +82,9 @@ public class ServerMain {
             System.out.println("[Socket Server]\tServer is ready...");
             boolean on = true;
             while (on){
-                if (!lobby.hasStarted())
                 try {
                     Socket socket = serverSocket.accept();
-                    executor.submit(new ServerImplementationSocket(socket, lobby));
+                    executor.submit(new ServerImplementationSocket(socket, this.lobby));
                 } catch(IOException e) {
                     System.err.println(e.getMessage());
                     //on = false;

@@ -42,12 +42,12 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements Serv
      */
     public boolean login(ClientIntRMI a) throws RemoteException {
         if (lobby.hasStarted()){
-            if (lobby.addPlayer(a.getName())){
+            if (lobby.willingToReconnectPlayer(a.getName())){
                 clients.add(a);
                 usernames.add(a.getName());
                 System.out.println("[RMI Server]\t" +a.getName()+ "  got connected again....");
                 a.notify("Welcome back " +a.getName()+ ".\nYou have connected successfully.");
-                lobby.rejoinedMatch(a.getName(), true);
+                lobby.rejoinMatch(a.getName(), true);
                 return true;
             } else {
                 a.notify("The game started without you :(\n\nGet better friends dude");
@@ -72,8 +72,13 @@ public class ServerImplementationRMI extends UnicastRemoteObject implements Serv
         }
     }
 
-    //TODO: JavaDoc
-    public void confirmConnections() throws RemoteException {
+    /**
+     * Checks if all clients in clients list are still connected and provides to remove it if connection fails
+     *
+     * @throws RemoteException if connection to the skeleton fails
+     * @author Andrea
+     */
+    public synchronized void confirmConnections() throws RemoteException {
         Iterator<ClientIntRMI> clientIterator = clients.iterator();
         ArrayList<ClientIntRMI> toBeDeleted = new ArrayList<>();
         ClientIntRMI c = null;

@@ -158,7 +158,7 @@ public class ClientMain {
         } catch (NoSuchElementException e) {
             System.err.println("NOTHING TO READ "+e.getMessage());
         } finally {
-            SocketMessengerClient s = new SocketMessengerClient(this.ip, PORT, socket, name, IOHandlerClient.Interface.gui);
+            SocketMessengerClient s = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.gui);
             GUIController.setMessenger(s);
         }
         return feedback;
@@ -285,8 +285,8 @@ public class ClientMain {
 
             int num = 0;
             while (active){
-                server.confirmConnections();
                 if (num != server.playersInLobby() && !server.hasStarted()){
+                    server.confirmConnections();
                     System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                     num = server.playersInLobby();
                 } else if (server.hasStarted()){
@@ -324,6 +324,10 @@ public class ClientMain {
             ClientImplementationSocket clientImplementationSocket = new ClientImplementationSocket(socket);
             do {
                 name = clientImplementationSocket.login();
+                if (clientImplementationSocket.isGameStarted()){
+                    SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli, true);
+                    messenger.close();
+                }
                 activePlayers = Integer.parseInt(in.readLine());
                 success = true;
                 if (activePlayers == 1){
@@ -345,7 +349,7 @@ public class ClientMain {
                     if (num != i){
                         if (i == 999){
                             executorService.shutdownNow();
-                            SocketMessengerClient messenger = new SocketMessengerClient(this.ip, PORT, socket, name, IOHandlerClient.Interface.cli);
+                            SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli);
                             messenger.close();
                         }
                         System.out.println("[Players in the lobby: " + i + "]");

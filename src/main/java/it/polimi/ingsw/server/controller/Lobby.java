@@ -64,11 +64,6 @@ public class Lobby /*extends Observer*/ {
     public synchronized boolean addPlayer(String username){
         canIGo();
 
-        if(this.hasStarted){
-            this.streetlight = true;
-            return checkReConnection(username);
-        }
-
         if (this.players.size()<= MAX_PLAYERS){
 
             for (String s : this.players){
@@ -113,7 +108,23 @@ public class Lobby /*extends Observer*/ {
     }
 
     /**
-     * Check if there is a disconnected player in the current game, if the answer is positive he joins the match
+     * Checks if a player is re-connectable
+     *
+     * @param username: player's username
+     * @return true if player is re-connectable, otherwise false
+     * @author Andrea
+     */
+    public boolean willingToReconnectPlayer(String username){
+        canIGo();
+        if(this.hasStarted){
+            this.streetlight = true;
+            return checkReConnection(username);
+        }
+        return false;
+    }
+
+    /**
+     * Checks if there is a disconnected player in the current game, if the answer is positive he joins the match
      *
      * @param username: the username to be checked
      * @return true if there is a disconnected player in the game otherwise false
@@ -135,7 +146,7 @@ public class Lobby /*extends Observer*/ {
      * @param o: useful to allow socket connection, useless if RMI
      * @author Andrea
      */
-    public void rejoinedMatch(String username, Object o){
+    public void rejoinMatch(String username, Object o){
         Controller.getMyGame(this).getPlayer(username).setDisconnected(false);
         Controller.getMyIO(this).rejoinMatch(username, o);
     }

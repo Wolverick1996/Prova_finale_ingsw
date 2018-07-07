@@ -127,14 +127,14 @@ public class IOhandler implements Observer{
                 wasRmi = true;
         if (wasRmi)
             reconnectRmi(username);
-        //else
-        //    reconnectSocket(username, o);
+        else
+            reconnectSocket(username, o);
     }
 
     /**
      * Re-add the player to the list of usersRMI in the same position he was before he got disconnected
      *
-     * @param username: name of the RMI user who want to reconnect
+     * @param username: name of the RMI user who wants to re-connect
      * @author Andrea
      */
     private void reconnectRmi(String username){
@@ -180,6 +180,53 @@ public class IOhandler implements Observer{
             } catch (RemoteException e) {
                 System.out.println("RECONNECTRMI ERROR (STARTINTERFACE)");
             }
+        }
+    }
+
+    /**
+     * Re-add the player to the list of socketUsers in the same position he was before he got disconnected
+     *
+     * @param username: name of the socket user who wants to re-connect
+     * @param o: Socket of the user who wants to re-connect
+     * @author Andrea
+     */
+    private void reconnectSocket(String username, Object o) {
+        Socket socketToReJoin;
+        try {
+            socketToReJoin = (Socket) o;
+        } catch (ClassCastException c) {
+            System.err.println("ERROR IN CASTING!! Obj cannot be cast into a Socket");
+            return;
+        }
+        if (socketToReJoin != null) {
+            int index = -1;
+            for (DisconnectedPlayers d : disconnectedSocket) {
+                if (d.name.equals(username))
+                    index = d.index;
+            }
+
+            SocketUser userToRejoin = new SocketUser(username, socketToReJoin);
+
+            ArrayList<SocketUser> fooCopy = new ArrayList<>(socketUserList);
+            this.socketUserList.clear();
+            boolean setted = false;
+            for (int i = 0; i < fooCopy.size() + 1; i++) {
+                if (!setted) {
+                    if (i == index) {
+                        this.socketUserList.add(userToRejoin);
+                        setted = true;
+                    } else
+                        this.socketUserList.add(fooCopy.get(i));
+                } else
+                    this.socketUserList.add(fooCopy.get(i - 1));
+            }
+            DisconnectedPlayers d = null;
+            for (DisconnectedPlayers dP : disconnectedSocket) {
+                if (dP.name.equals(username))
+                    d = dP;
+            }
+            if (d != null)
+                disconnectedSocket.remove(d);
         }
     }
 
@@ -490,7 +537,7 @@ public class IOhandler implements Observer{
                     return;
                 } catch (IOException e){
                     oneToBeDelete = socketUserList.indexOf(u);
-                    index = findDisconnected(u.name);
+                    index = findDisconnectedSocket(u.name);
                     players.get(index).setDisconnected(true);
                 }
             }
@@ -568,7 +615,7 @@ public class IOhandler implements Observer{
                     return SocketMessengerServer.get(u.socket);
                 } catch (IOException e){
                     oneToBeDelete = socketUserList.indexOf(u);
-                    index = findDisconnected(u.name);
+                    index = findDisconnectedSocket(u.name);
                     players.get(index).setDisconnected(true);
                 }
             }
@@ -591,7 +638,7 @@ public class IOhandler implements Observer{
      * @author Andrea
      */
     private int disconnectPlayer (int disconnected){
-        int index = findDisconnected(usersRMI.get(disconnected));
+        int index = findDisconnectedRmi(usersRMI.get(disconnected));
         this.players.get(index).setDisconnected(true);
         this.server.removeClientAndUsername(this.usersRMI.get(disconnected), this.players.get(index).getUsername());
         return index;
@@ -600,40 +647,59 @@ public class IOhandler implements Observer{
     /**
      * Used to find out who is the player disconnected (index in ArrayList<> players)
      *
-     * @param o: ClientIntRmi disconnected or SocketUser.name disconnected
+     * @param o: SocketUser.name disconnected
      * @return index of disconnected player
      * @author Andrea
      */
-    private int findDisconnected(Object o){
+    private int findDisconnectedSocket(String o){
         int index = 0;
         ArrayList<String> names = new ArrayList<>();
 
         // Socket case
-        if (o.getClass() == String.class){
-            for (SocketUser s : socketUserList){
-                if (!s.name.equals(o))
-                    names.add(s.name);
-            }
-            for (ClientIntRMI c : usersRMI){
-                try {
-                    names.add(c.getName());
-                } catch (RemoteException e){
-                    //WE CAN MANAGE ONE DISCONNECTION PER TIME
-                }
-            }
-        //RMI case
-        } else {
-            for (ClientIntRMI c : usersRMI){
-                try {
-                    if (c != o)
-                        names.add(c.getName());
-                } catch (RemoteException e){
-                    //NOW I CAN MANAGE ONLY ONE DISCONNECTION PER TIME
-                }
-            }
-            for (SocketUser s : socketUserList)
+        for (SocketUser s : socketUserList){
+            if (!s.name.equals(o))
                 names.add(s.name);
         }
+        for (ClientIntRMI c : usersRMI){
+            try {
+                names.add(c.getName());
+            } catch (RemoteException e){
+                //WE CAN MANAGE ONE DISCONNECTION PER TIME
+            }
+        }
+
+        for (int i = 0; i < players.size(); i++){
+            boolean found = false;
+            for (String n : names){
+                if (players.get(i).getUsername().equals(n))
+                    found = true;
+            }
+            if (!found)
+                index = i;
+        }
+        return index;
+    }
+
+    /**
+     * Used to find out who is the player disconnected (index in ArrayList<> players)
+     *
+     * @param o: ClientIntRmi disconnected
+     * @return index of disconnected player
+     * @author Andrea
+     */
+    private int findDisconnectedRmi(ClientIntRMI o){
+        int index = 0;
+        ArrayList<String> names = new ArrayList<>();
+        for (ClientIntRMI c : usersRMI){
+            try {
+                if (c != o)
+                    names.add(c.getName());
+            } catch (RemoteException e){
+                //WE CAN MANAGE ONE DISCONNECTION PER TIME
+            }
+        }
+        for (SocketUser s : socketUserList)
+            names.add(s.name);
 
         for (int i = 0; i < players.size(); i++){
             boolean found = false;

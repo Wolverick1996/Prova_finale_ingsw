@@ -89,6 +89,12 @@ public class ServerImplementationSocket implements Runnable {
             boolean gameCanStart = false;
             do {
                 login();
+                if (this.lobby.hasStarted()){
+                    reconnection();
+                    System.out.println("[Socket Server]\t" + this.playerConnected + "  got connected again....");
+                    System.out.println("HERE I CLOSE THE SOCKET IMPLEMENTATION THREAD :\t" + Thread.currentThread().getName());
+                    return;
+                }
                 out = new PrintWriter(this.socket.getOutputStream());
                 out.println(this.lobby.getPlayers().size());
                 out.flush();
@@ -151,6 +157,16 @@ public class ServerImplementationSocket implements Runnable {
                     if (this.lobby.hasStarted()){
                         out.println("started");
                         out.flush();
+                        if (this.lobby.willingToReconnectPlayer(string)){
+                            this.playerConnected = string;
+                            out.println("true");
+                            out.flush();
+                            return;
+                        } else{
+                            out.println("false");
+                            out.flush();
+                            return;
+                        }
                     } else if (sameUsername){
                         out.println("same");
                         out.flush();
@@ -161,6 +177,15 @@ public class ServerImplementationSocket implements Runnable {
                 }
             }
         }
+    }
+
+    /**
+     * Re-connect player to the match
+     *
+     * @author Andrea
+     */
+    private void reconnection(){
+        lobby.rejoinMatch(this.playerConnected, this.socket);
     }
 
     /**
