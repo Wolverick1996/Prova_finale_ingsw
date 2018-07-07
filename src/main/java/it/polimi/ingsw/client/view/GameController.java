@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.Scheme;
+import it.polimi.ingsw.server.model.*;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +19,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameController {
 
@@ -34,11 +35,8 @@ public class GameController {
     private static final int MAX_COL = 5;
     private static final int MAX_HEIGHT_ROUNDTRACK = 27;
     private ArrayList<ImageView> draftIMG = new ArrayList<>();
-    private static ArrayList<ImageView> draftStatic;
     private ArrayList<ImageView> roundtrackIMG = new ArrayList<>();
-    private static ArrayList<ImageView> roundtrackStatic;
     private ArrayList<ImageView> gridIMG = new ArrayList<>();
-    private static ArrayList<ImageView> gridStatic;
     private DropShadow ds = new DropShadow(70, Color.GOLD);
     private static boolean gridEffectOn = false;
     private static boolean reserveEffectOn = false;
@@ -80,6 +78,8 @@ public class GameController {
     @FXML
     private Button tool3;
     @FXML
+    private Button refresh;
+    @FXML
     private Text activeP;
     @FXML
     private Text tokensP;
@@ -94,7 +94,7 @@ public class GameController {
     @FXML
     private Text turn;
 
-    synchronized void refreshEffects() {
+    private synchronized void refreshEffects() {
         if (gridEffectOn)
             for (ImageView i:gridIMG)
                 i.setEffect(ds);
@@ -132,8 +132,7 @@ public class GameController {
             pass.setEffect(null);
     }
 
-    Task keepRefreshing = new Task<Void>() {
-        //TODO: check for every variable conflict issue;
+    private Task keepRefreshing = new Task<Void>() {
         @Override
         protected Void call() {
             taskIsRunning = true;
@@ -416,29 +415,27 @@ public class GameController {
             }
         }
     */
+    @FXML
+    synchronized void refreshScreen(){
+        //TODO: replace with strings from controller
+        System.out.println("THIS IS THE SCHEME I'M PRINTING \n" + GUIupdater.getOwnScheme());
+        reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
+                GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
+                GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
+    }
 
     @FXML
     synchronized void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
 
-        System.out.println("/n---------gridIMG-----------/n" + gridIMG.hashCode());
-
-        if(!taskIsRunning){
-            gridStatic = gridIMG;
-            System.out.println("/n-------gridStatic==gridIMG------------/n" + gridStatic.hashCode());
-            roundtrackStatic = roundtrackIMG;
-            draftStatic = draftIMG;
-            Thread refresh = new Thread(keepRefreshing);
-            refresh.setDaemon(true);
-            refresh.start();
-        } else {
-            System.out.println("/n----------gridStatic----------/n" + gridStatic.hashCode());
-            gridStatic.clear();
-            draftStatic.clear();
-            roundtrackStatic.clear();
-            gridStatic = gridIMG;
-            roundtrackStatic = roundtrackIMG;
-            draftStatic = draftIMG;
-        }
+        for (ImageView i:gridIMG)
+            i.setImage(null);
+        gridIMG.clear();
+        for (ImageView i:roundtrackIMG)
+            i.setImage(null);
+        roundtrackIMG.clear();
+        for (ImageView i:draftIMG)
+            i.setImage(null);
+        draftIMG.clear();
 
         String[] divide;
         divide = table.split(NEWLINE);
@@ -483,6 +480,11 @@ public class GameController {
         divide = divide[1].split(DIVISOR);
         tokensP.setText(divide[1]);
 
+        if(!taskIsRunning){
+            Thread refresh = new Thread(keepRefreshing);
+            refresh.setDaemon(true);
+            refresh.start();
+        }
     }
 
     @FXML

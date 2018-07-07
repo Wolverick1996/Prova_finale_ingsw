@@ -167,6 +167,8 @@ public class GUIupdater {
         players.add(value);
     }
 
+    public static synchronized void clearPlayers() { players.clear(); }
+
     public static synchronized void addToSendIntList(String value) { toSendList.add(value); }
 
     public static synchronized String getToSendList() {

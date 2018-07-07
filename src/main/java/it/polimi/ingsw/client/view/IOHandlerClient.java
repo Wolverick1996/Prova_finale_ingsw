@@ -186,6 +186,7 @@ public class IOHandlerClient implements Observer {
                     break;
                 case 2:
                     GUIupdater.setPrivObj(message);
+                    GUIupdater.clearPlayers();
                     break;
                 default:
                     GUIupdater.addPlayer(message);
