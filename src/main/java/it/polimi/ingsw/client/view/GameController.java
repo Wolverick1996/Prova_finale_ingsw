@@ -34,8 +34,11 @@ public class GameController {
     private static final int MAX_COL = 5;
     private static final int MAX_HEIGHT_ROUNDTRACK = 27;
     private ArrayList<ImageView> draftIMG = new ArrayList<>();
+    private static ArrayList<ImageView> draftStatic;
     private ArrayList<ImageView> roundtrackIMG = new ArrayList<>();
+    private static ArrayList<ImageView> roundtrackStatic;
     private ArrayList<ImageView> gridIMG = new ArrayList<>();
+    private static ArrayList<ImageView> gridStatic;
     private DropShadow ds = new DropShadow(70, Color.GOLD);
     private static boolean gridEffectOn = false;
     private static boolean reserveEffectOn = false;
@@ -130,6 +133,7 @@ public class GameController {
     }
 
     Task keepRefreshing = new Task<Void>() {
+        //TODO: check for every variable conflict issue;
         @Override
         protected Void call() {
             taskIsRunning = true;
@@ -158,7 +162,7 @@ public class GameController {
 
     static synchronized void highlightPass(boolean on){ passEffectOn = on; }
 
-    private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
+    synchronized private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
         for (String s:divide) {
             if (s.contains("31m"))
                 imageColor.add("red");
@@ -193,7 +197,7 @@ public class GameController {
         }
     }
 
-    static void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
+    synchronized static void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         ArrayList<String> divide3 = new ArrayList<>();
@@ -249,7 +253,7 @@ public class GameController {
             });
     }
 
-    private void loadReserve(String draft){
+    synchronized private void loadReserve(String draft){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         String[] divide;
@@ -277,7 +281,7 @@ public class GameController {
             });
     }
 
-    private void loadRoundtrack(String track){
+    synchronized private void loadRoundtrack(String track){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         String[] divide;
@@ -317,11 +321,11 @@ public class GameController {
             });
     }
 
-    private void setButtonImage(String path, Button button){
+    synchronized private void setButtonImage(String path, Button button){
         button.setStyle("-fx-background-image: url('" + path + "')");
     }
 
-    private void loadObjectiveCards(String privateOC, String table){
+    synchronized private void loadObjectiveCards(String privateOC, String table){
         String[] divide;
         String[] privOCs = {"Red", "Green", "Yellow", "Blue", "Purple"};
         String[] pubOCs = {"Row Color Variety", "Column Color Variety", "Row Shade Variety", "Column Shade Variety",
@@ -353,7 +357,7 @@ public class GameController {
         }
     }
 
-    private void loadTools(String activeTools){
+    synchronized private void loadTools(String activeTools){
         String[] divide;
         String[] tools = {"Grozing Pliers", "Eglomise Brush", "Copper Foil Burnisher", "Lathekin", "Lens Cutter", "Flux Brush",
                 "Glazing Hammer", "Running Pliers", "Cork-backed Straightedge", "Grinding Stone", "Flux Remover", "Tap Wheel"};
@@ -414,7 +418,28 @@ public class GameController {
     */
 
     @FXML
-    void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
+    synchronized void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
+
+        System.out.println("/n---------gridIMG-----------/n" + gridIMG.hashCode());
+
+        if(!taskIsRunning){
+            gridStatic = gridIMG;
+            System.out.println("/n-------gridStatic==gridIMG------------/n" + gridStatic.hashCode());
+            roundtrackStatic = roundtrackIMG;
+            draftStatic = draftIMG;
+            Thread refresh = new Thread(keepRefreshing);
+            refresh.setDaemon(true);
+            refresh.start();
+        } else {
+            System.out.println("/n----------gridStatic----------/n" + gridStatic.hashCode());
+            gridStatic.clear();
+            draftStatic.clear();
+            roundtrackStatic.clear();
+            gridStatic = gridIMG;
+            roundtrackStatic = roundtrackIMG;
+            draftStatic = draftIMG;
+        }
+
         String[] divide;
         divide = table.split(NEWLINE);
         String draft = divide[1] + NEWLINE + divide[2];
@@ -457,12 +482,6 @@ public class GameController {
         divide = me.split(NEWLINE);
         divide = divide[1].split(DIVISOR);
         tokensP.setText(divide[1]);
-
-        if(!taskIsRunning){
-            Thread refresh = new Thread(keepRefreshing);
-            refresh.setDaemon(true);
-            refresh.start();
-        }
 
     }
 

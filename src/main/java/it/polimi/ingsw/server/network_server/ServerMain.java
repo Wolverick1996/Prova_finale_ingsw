@@ -29,7 +29,7 @@ public class ServerMain {
     private ServerMain(){
         this.lobby = new Lobby();
     }
-    
+
     /**
      * Launches the application
      *

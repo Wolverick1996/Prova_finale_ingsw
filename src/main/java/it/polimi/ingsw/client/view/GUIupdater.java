@@ -5,6 +5,10 @@ import java.util.List;
 
 public class GUIupdater {
 
+    private static GameController controller;
+    public static synchronized GameController getController() { return controller; }
+    public static synchronized void setController(GameController value) { controller = value; }
+
     private static boolean hasGameEnded = false;
     private static boolean hasGetStatus = false;
 

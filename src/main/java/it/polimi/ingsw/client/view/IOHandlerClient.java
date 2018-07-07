@@ -124,6 +124,7 @@ public class IOHandlerClient implements Observer {
                 readActivePlayer = true;
                 break;
             case "Insert action (d = place dice, t = use tool, q = pass turn)" :
+                GameController.setNeedsToReload(true);
                 resetGUIupdater();
                 GUIupdater.setTypeRequested(GUIupdater.TypeRequested.STANDARDREQUEST);
                 break;
