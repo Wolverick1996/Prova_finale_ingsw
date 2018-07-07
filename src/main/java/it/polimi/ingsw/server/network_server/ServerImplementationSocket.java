@@ -15,6 +15,7 @@ import java.net.Socket;
  * @author Matteo
  */
 public class ServerImplementationSocket implements Runnable {
+
     private Socket socket;
     private Lobby lobby;
     private String playerConnected;

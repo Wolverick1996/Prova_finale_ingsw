@@ -11,7 +11,9 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.cli;
  */
 public class IOHandlerClient implements Observer {
 
-    private boolean debug = false;
+    //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
+
+    private boolean debug = true;
     private String name;
     private Interface outputInt;
     private CLI commandLine;
@@ -70,43 +72,27 @@ public class IOHandlerClient implements Observer {
     private boolean chooseSchemes = false;
     private int lineReadNumber = 0;
     private boolean readStatus = false;
-
+    private boolean readActivePlayer = false;
+    private String activePlayer;
+    //"Player " + this.players.get(active).getUsername() +
+    //            " has used " + ToolHandler.getName(index) + " correctly! :)"
+    //STILL TODO
     private void sendGUI(String message){
         if (debug) System.out.println(message);
+        String PLAYERDIDNOTDOITRIGHT = "Player " + activePlayer + " didn't do it right, try again\n";
+        String EXCEPTIONCAUGHTNOTRIGHT = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
 
-        if (readStatus){
-            if (message.equals("\n\n---------------------------------------------\n\n")){
-                readStatus = false;
-                lineReadNumber = 0;
-            } else {
-                switch (lineReadNumber){
-                    case 0:
-                        GUIupdater.setTable(message);
-                        break;
-                    case 1:
-                        GUIupdater.setTools(message);
-                        break;
-                    case 2:
-                        GUIupdater.setPrivObj(message);
-                        break;
-                    default:
-                        GUIupdater.addPlayer(message);
-                }
-                lineReadNumber++;
-            }
-            return;
+        if(message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
+            resetGUIupdater();
+            //Undo the move, go back to standardchoice
+            GUIupdater.setToSend("0");
         }
 
-        if (chooseSchemes){
-            if (lineReadNumber%2 != 0)
-                GUIupdater.getSchemesToChoose().add(message);
+        if (readActivePlayer){ readActivePlayer(message); return; }
 
-            lineReadNumber++;
-            if (lineReadNumber == 8){
-                chooseSchemes = false;
-                lineReadNumber = 0;
-            }
-        }
+        if (readStatus) { getStatus(message); return; }
+
+        if (chooseSchemes) { chooseSchemes(message); }
 
         switch (message){
             case "Do you want to use custom window patterns?" :
@@ -130,20 +116,120 @@ public class IOHandlerClient implements Observer {
                 }
                 GUIupdater.setToSend(Integer.toString(GUIupdater.getSchemeChosen()));
                 break;
-            case "Game is starting!\n" :
-                GUIupdater.setCanGoToGame(true);
-                break;
             case "Here is the status: " :
                 readStatus = true;
+                break;
+            case "Turn passed": case "Used tool 8, so is passing the turn..." :
+                resetGUIupdater();
+                readActivePlayer = true;
+                break;
+            case "Insert action (d = place dice, t = use tool, q = pass turn)" :
+                GameController.setNeedsToReload(true);
+                resetGUIupdater();
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.STANDARDREQUEST);
+                break;
+            case "Someone is trying to use a tool card TWICE... YOU CAAAAAAAAAAAAAN'T" :
+            case "Nope, nothing done :(" :
+            case "Something went wrong... :(" :
+            case "Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T" :
+            case "Nope, nothing done" :
+            case "Dice correctly placed!" :
+            case "HOORAY!" :
+                resetGUIupdater();
+                break;
+            case "Choose a dice from round track [from 1 to N]":
+                resetGUIupdater();
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.ROUNDTRACK);
+                break;
+            case "Insert the place of the dice in the reserve":
+                resetGUIupdater();
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.RESERVE);
+                break;
+            case "Insert the coordinates of the dice to be placed, one at a time (x, y)":
+                GUIupdater.refresh();
+                resetGUIupdater();
+                GUIupdater.setTypeRequested(GUIupdater.TypeRequested.WINDOWPATTERN);
                 break;
             default: break;
         }
     }
 
-    private String requestGUI(){
-        String toSend = GUIupdater.getToSend();
+    private void chooseSchemes(String message){
+        if (lineReadNumber%2 != 0) {
+            GUIupdater.getSchemesToChoose().add(message);
+        }
+        lineReadNumber++;
+        if (lineReadNumber == 8){
+            chooseSchemes = false;
+            lineReadNumber = 0;
+        }
+    }
+
+    private void readActivePlayer(String message){
+        activePlayer = message.split(",")[0];
+        GUIupdater.setActivePlayer(activePlayer);
+        readActivePlayer = false;
+    }
+
+    private void getStatus(String message){
+        if (message.equals("\n\n---------------------------------------------\n\n")) {
+            GUIupdater.setCanGoToGame(true);
+            readStatus = false;
+            lineReadNumber = 0;
+        } else {
+            switch (lineReadNumber) {
+                case 0:
+                    GUIupdater.setTable(message);
+                    break;
+                case 1:
+                    GUIupdater.setTools(message);
+                    break;
+                case 2:
+                    GUIupdater.setPrivObj(message);
+                    GUIupdater.clearPlayers();
+                    break;
+                default:
+                    GUIupdater.addPlayer(message);
+            }
+            lineReadNumber++;
+        }
+    }
+
+    private void resetGUIupdater() {
         GUIupdater.setToSend(null);
-        return toSend;
+        GUIupdater.setTypeRequested(null);
+        GUIupdater.emptyToSendIntList();
+    }
+
+    private String requestGUI(){
+        if (debug) System.out.println("The context of the input request is " + GUIupdater.getTypeRequested());
+        if (GUIupdater.getTypeRequested() == null) {
+            String toSend = GUIupdater.getToSend();
+            if (toSend == null) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return requestGUI();
+            }
+            GUIupdater.setToSend(null);
+            if (debug) System.out.println("I'm sending: " + toSend);
+            return toSend;
+        }
+        while (GUIupdater.isToSendIntListEmpty()){
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        String output = null;
+        do {
+            output = GUIupdater.getToSendList();
+        } while (output == null);
+        if (debug) System.out.println("I'm sending from list: " + output);
+        return output;
     }
 
     @Override

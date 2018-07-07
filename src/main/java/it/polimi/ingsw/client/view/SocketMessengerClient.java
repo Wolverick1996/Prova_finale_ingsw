@@ -4,6 +4,11 @@ import java.io.*;
 import java.net.Socket;
 import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.*;
 
+/**
+ * Static class used to initialize socket communication (client-side)
+ *
+ * @author Matteo
+ */
 public class SocketMessengerClient implements Runnable{
 
     private boolean gameHasStarted = false;
@@ -14,7 +19,7 @@ public class SocketMessengerClient implements Runnable{
     private IOHandlerClient handler;
     private Socket socket;
 
-    //DICTIONARY:
+    //DICTIONARY
     private static final String FAILED = "";
     private static final String D_LEFT = "<";
     private static final String D_RIGHT = ">";
@@ -26,8 +31,16 @@ public class SocketMessengerClient implements Runnable{
     private static final String REQUEST = "requestData";
     private static final String NEWLINE = "%%%nnn%%%";
 
-    public SocketMessengerClient(Socket s, String n, IOHandlerClient.Interface ui) {
-        try{
+    /**
+     * Constructor of SocketMessengerClient
+     *
+     * @param s: socket of the client
+     * @param n: player's username
+     * @param ui: type of interface (CLI/GUI)
+     * @author Matteo
+     */
+    public SocketMessengerClient(Socket s, String n, IOHandlerClient.Interface ui){
+        try {
             this.socket = s;
             this.username = n;
             this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -80,8 +93,13 @@ public class SocketMessengerClient implements Runnable{
         }
     }
 
+    /**
+     * Override of the run method of the Runnable interface
+     *
+     * @author Matteo
+     */
     @Override
-    public void run() {
+    public void run(){
         try {
             this.waitStart();
         } catch (IOException e) {
@@ -90,10 +108,16 @@ public class SocketMessengerClient implements Runnable{
         }
     }
 
-    private void waitStart() throws IOException{
+    /**
+     * Waits until the server gives a "GAMESTART" signal
+     *
+     * @throws IOException if server disconnects
+     * @author Matteo
+     */
+    private void waitStart() throws IOException {
         String request;
-        //this method waits until the server gives a "GAMESTART" signal
-        if (debug) this.handler.send("I'm wating for the server to tell me that I can start...");
+        if (debug)
+            this.handler.send("I'm wating for the server to tell me that I can start...");
 
         do {
             request = this.in.readLine();
@@ -106,12 +130,18 @@ public class SocketMessengerClient implements Runnable{
         this.game();
     }
 
-    private void game() throws IOException{
+    /**
+     * Handles games input
+     *
+     * @throws IOException if server disconnects
+     * @author Matteo
+     */
+    private void game() throws IOException {
         this.handler.send("We're ready to roll! " + this.username + ", let's go! Even if you are playing with " +
                 "Socket, I'm with you");
         String input;
         String request;
-        do{
+        do {
             input = this.in.readLine();
             request = this.getRequest(input);
             switch (request){
@@ -133,49 +163,86 @@ public class SocketMessengerClient implements Runnable{
                     this.unexpectedMessageFromServer();
                     break;
             }
-
-        }while (!request.equals(FINISH));
+        } while (!request.equals(FINISH));
 
         this.close();
     }
 
-    private String getRequest (String input){
+    /**
+     * Splits a string received from the server and returns the string fragment corresponding to the request
+     *
+     * @param input: the string to be split
+     * @return the string corresponding to the request (first of the splittedInput array)
+     * @author Matteo
+     */
+    private String getRequest(String input){
         String[] splittedInput = input.split(D_LEFT);
         return splittedInput[0];
     }
 
-    private String getFirstParameter (String input){
-        try{
+    /**
+     * Splits a string received from the server and returns the string fragment corresponding to the first parameter
+     *
+     * @param input: the string to be split
+     * @return the string corresponding to the request (second of the splittedInput array)
+     * @author Matteo
+     */
+    private String getFirstParameter(String input){
+        try {
             String[] splittedInput = input.split(D_LEFT);
             splittedInput = splittedInput[1].split(D_RIGHT);
             return splittedInput[0];
         } catch (ArrayIndexOutOfBoundsException e) {
-            return"";
+            return "";
         }
     }
 
-    private void unexpectedMessageFromServer() throws IOException{
+    /**
+     * Throws an IOException if server disconnects
+     *
+     * @throws IOException if server disconnects
+     * @author Matteo
+     */
+    private void unexpectedMessageFromServer() throws IOException {
         this.handler.send("Something went horribly wrong on the Server, I'm sorry :(");
         throw new IOException();
     }
 
+    /**
+     * Sends a message to the user
+     *
+     * @param input: the string to be sent to the user
+     * @author Matteo
+     */
     private void send(String input){
         String message = this.getFirstParameter(input);
         message = message.replaceAll(NEWLINE, "\n");
         this.handler.send(message);
     }
 
+    /**
+     * Requests an input from the user
+     *
+     * @return the input inserted
+     * @author Matteo
+     */
     private String get(){
-        String s = "";
-        s = this.handler.request();
-        return s;
+        return this.handler.request();
     }
 
+    /**
+     * Gets an input from the server and returns if the received input is "OK", otherwise calls the unexpectedMessageFromServer method
+     *
+     * @throws IOException if server disconnects
+     * @author Matteo
+     */
     private void askIfReceived() throws IOException {
         String request;
-        if (debug) this.handler.send("I'm waiting to know if the server understood...");
+        if (debug)
+            this.handler.send("I'm waiting to know if the server understood...");
         request = this.in.readLine();
-        if (debug) this.handler.send("I read : " + request);
+        if (debug)
+            this.handler.send("I read : " + request);
         if (request.equals(OK)){
             return;
         } else {
@@ -183,26 +250,51 @@ public class SocketMessengerClient implements Runnable{
         }
     }
 
+    /**
+     * Closes the socket connection if server disconnects
+     *
+     * @throws IOException if server disconnects
+     * @author Matteo
+     */
     public void close() throws IOException {
-        if(this.handler!=null)
-        this.handler.send("Bye bye <3");
+        if (this.handler!=null)
+            this.handler.send("Bye bye <3");
 
         this.socket.close();
     }
 
-    public void GUIsetTimer(int delay) {
-        if (delay>=15 && delay <=60) {
+    /**
+     * Sets the delay of the lobby (GUI)
+     *
+     * @param delay: number of seconds
+     * @author Matteo
+     */
+    void GUIsetTimer(int delay){
+        if (delay>=15 && delay <=60){
             this.out.println(delay);
             this.out.flush();
         }
     }
 
-    private synchronized void setGameHasStarted() {
+    /**
+     * Sets the gameHasStarted flag true
+     *
+     * @author Matteo
+     */
+    private synchronized void setGameHasStarted(){
         gameHasStarted = true;
     }
 
-    public synchronized int waitForGameStart(int num) throws IOException {
+    /**
+     * Returns 999 if game already started, otherwise returns the number of players in the lobby
+     *
+     * @return 999 if game already started, otherwise the number of players in the lobby
+     * @throws IOException if server disconnects
+     * @author Matteo
+     */
+    synchronized int waitForGameStart() throws IOException {
         if (gameHasStarted) return 999;
         return Integer.parseInt(this.in.readLine());
     }
+
 }

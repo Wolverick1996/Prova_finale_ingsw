@@ -132,7 +132,7 @@ public class IOhandler implements Observer{
     }
 
     /**
-     * Re-add the player to the list of usersRMI in the same position he was before he got disconnected
+     * Re-adds the player to the list of usersRMI in the same position he was before he got disconnected
      *
      * @param username: name of the RMI user who wants to re-connect
      * @author Andrea
@@ -144,7 +144,7 @@ public class IOhandler implements Observer{
                 if (c.getName().equals(username))
                     uRMI = c;
             }
-        }catch (RemoteException e){
+        } catch (RemoteException e) {
             System.out.println("RECONNECTRMI ERROR!");
         }
         if (uRMI != null){
@@ -162,8 +162,7 @@ public class IOhandler implements Observer{
                     if (i == index){
                         this.usersRMI.add(uRMI);
                         setted = true;
-                    }
-                    else
+                    } else
                         this.usersRMI.add(fooCopy.get(i));
                 } else
                     this.usersRMI.add(fooCopy.get(i-1));
@@ -690,6 +689,8 @@ public class IOhandler implements Observer{
     private int findDisconnectedRmi(ClientIntRMI o){
         int index = 0;
         ArrayList<String> names = new ArrayList<>();
+
+        //RMI case
         for (ClientIntRMI c : usersRMI){
             try {
                 if (c != o)
@@ -714,6 +715,7 @@ public class IOhandler implements Observer{
     }
 
     ////////////////////////////////////////////////////////////////
+
     /**
      * Class used to keep trace of a disconnected player
      *

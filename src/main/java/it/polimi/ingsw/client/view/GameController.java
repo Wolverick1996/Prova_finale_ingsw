@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.Scheme;
+import it.polimi.ingsw.server.model.*;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 public class GameController {
 
+    private boolean taskIsRunning = false;
     private static final String COLORS = "\u001B\\[[;\\d]*m";
     private static final String NEWLINE = "\n";
     private static final String DIVISOR = ": ";
@@ -35,6 +36,12 @@ public class GameController {
     private ArrayList<ImageView> roundtrackIMG = new ArrayList<>();
     private ArrayList<ImageView> gridIMG = new ArrayList<>();
     private DropShadow ds = new DropShadow(70, Color.GOLD);
+    private static boolean gridEffectOn = false;
+    private static boolean reserveEffectOn = false;
+    private static boolean roundtrackEffectOn = false;
+    private static boolean toolEffectOn = false;
+    private static boolean passEffectOn = false;
+    private static boolean needsToReload = false;
 
     @FXML
     private BorderPane pane4;
@@ -42,6 +49,8 @@ public class GameController {
     private AnchorPane pane5;
     @FXML
     private GridPane grid;
+    @FXML
+    private Button pass;
     @FXML
     private Button p1;
     @FXML
@@ -67,6 +76,8 @@ public class GameController {
     @FXML
     private Button tool3;
     @FXML
+    private Button refresh;
+    @FXML
     private Text activeP;
     @FXML
     private Text tokensP;
@@ -81,7 +92,74 @@ public class GameController {
     @FXML
     private Text turn;
 
-    private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
+    private synchronized void refreshEffects() {
+        if (gridEffectOn)
+            for (ImageView i:gridIMG)
+                i.setEffect(ds);
+        else
+            for (ImageView i:gridIMG)
+                i.setEffect(null);
+
+        if (reserveEffectOn)
+            for (ImageView i:draftIMG)
+                i.setEffect(ds);
+        else
+            for (ImageView i:draftIMG)
+                i.setEffect(null);
+
+        if (roundtrackEffectOn)
+            for (ImageView i:roundtrackIMG)
+                i.setEffect(ds);
+        else
+            for (ImageView i:roundtrackIMG)
+                i.setEffect(null);
+
+        if (toolEffectOn) {
+            tool1.setEffect(ds);
+            tool2.setEffect(ds);
+            tool3.setEffect(ds);
+        } else {
+            tool1.setEffect(null);
+            tool2.setEffect(null);
+            tool3.setEffect(null);
+        }
+
+        if (passEffectOn)
+            pass.setEffect(ds);
+        else
+            pass.setEffect(null);
+    }
+
+    private Task keepRefreshing = new Task<Void>() {
+        @Override
+        protected Void call() {
+            taskIsRunning = true;
+            while(!GUIupdater.getHasGameEnded()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                refreshEffects();
+            }
+            return null;
+        }
+    };
+
+    static synchronized void setNeedsToReload(boolean value) { needsToReload = value; }
+    static synchronized boolean getNeedsToReload() { return needsToReload; }
+
+    static synchronized void highlightGrid(boolean on){ gridEffectOn = on; }
+
+    static synchronized void highlightDraft(boolean on){ reserveEffectOn = on; }
+
+    static synchronized void highlightRoundtrack(boolean on){ roundtrackEffectOn = on; }
+
+    static synchronized void highlightTool(boolean on) { toolEffectOn = on; }
+
+    static synchronized void highlightPass(boolean on){ passEffectOn = on; }
+
+    synchronized private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
         for (String s:divide) {
             if (s.contains("31m"))
                 imageColor.add("red");
@@ -116,7 +194,7 @@ public class GameController {
         }
     }
 
-    static void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
+    synchronized static void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         ArrayList<String> divide3 = new ArrayList<>();
@@ -154,12 +232,25 @@ public class GameController {
             }
         }
 
-        //TODO: Controller call to associate an action with the window pattern images
         for (ImageView i: toFill)
-            i.setOnMouseClicked(e -> System.out.println("I'm a window pattern image!"));
+            i.setOnMouseClicked(e -> {
+                if(GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.WINDOWPATTERN){
+                    int posx = toFill.indexOf(i);
+                    if(posx<5)
+                        posx = 1;
+                    else if (posx<10)
+                        posx = 2;
+                    else if (posx<15)
+                        posx = 3;
+                    else
+                        posx = 4;
+                    GUIupdater.addToSendIntList(Integer.toString(posx));
+                    GUIupdater.addToSendIntList(Integer.toString(toFill.indexOf(i)%MAX_COL + 1));
+                }
+            });
     }
 
-    private void loadReserve(String draft){
+    synchronized private void loadReserve(String draft){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         String[] divide;
@@ -176,16 +267,18 @@ public class GameController {
             reserve.add((draftIMG.get(imageColor.size()-i)), i, 0);
         }
 
-        //TODO: Controller call to associate an action with the reserve images
         for (ImageView i:draftIMG)
             i.setOnMouseClicked(e -> {
-                i.setEffect(ds);
-                System.out.println("I'm a dice in the reserve!");
-                i.setEffect(null);
+                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST){
+                    GUIupdater.addToSendIntList("d");
+                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.indexOf(draftIMG.get(draftIMG.size() - draftIMG.indexOf(i)))));
+                } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.RESERVE){
+                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.indexOf(draftIMG.get(draftIMG.size() - draftIMG.indexOf(i)))));
+                }
             });
     }
 
-    private void loadRoundtrack(String track){
+    synchronized private void loadRoundtrack(String track){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         String[] divide;
@@ -217,20 +310,19 @@ public class GameController {
             }
         }
 
-        //TODO: Controller call to associate an action with the roundtrack images
         for (ImageView i:roundtrackIMG)
             i.setOnMouseClicked(e -> {
-                i.setEffect(ds);
-                System.out.println("I'm a dice in the roundtrack!");
-                i.setEffect(null);
+                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.ROUNDTRACK) {
+                    GUIupdater.addToSendIntList(Integer.toString(roundtrackIMG.indexOf(i) + 1));
+                }
             });
     }
 
-    private void setButtonImage(String path, Button button){
+    synchronized private void setButtonImage(String path, Button button){
         button.setStyle("-fx-background-image: url('" + path + "')");
     }
 
-    private void loadObjectiveCards(String privateOC, String table){
+    synchronized private void loadObjectiveCards(String privateOC, String table){
         String[] divide;
         String[] privOCs = {"Red", "Green", "Yellow", "Blue", "Purple"};
         String[] pubOCs = {"Row Color Variety", "Column Color Variety", "Row Shade Variety", "Column Shade Variety",
@@ -262,7 +354,7 @@ public class GameController {
         }
     }
 
-    private void loadTools(String activeTools){
+    synchronized private void loadTools(String activeTools){
         String[] divide;
         String[] tools = {"Grozing Pliers", "Eglomise Brush", "Copper Foil Burnisher", "Lathekin", "Lens Cutter", "Flux Brush",
                 "Glazing Hammer", "Running Pliers", "Cork-backed Straightedge", "Grinding Stone", "Flux Remover", "Tap Wheel"};
@@ -286,10 +378,26 @@ public class GameController {
             }
         }
 
-        //TODO: Controller call to associate an action with the tool cards buttons
-        tool1.setOnMouseClicked(e -> System.out.println("I'm the tool card 1!"));
-        tool2.setOnMouseClicked(e -> System.out.println("I'm the tool card 2!"));
-        tool3.setOnMouseClicked(e -> System.out.println("I'm the tool card 3!"));
+        tool1.setOnMouseClicked(e -> {
+            refreshEffects();
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+                GUIupdater.addToSendIntList("t");
+                GUIupdater.addToSendIntList("1");
+            }
+        });
+        tool2.setOnMouseClicked(e -> {
+            refreshEffects();
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+                GUIupdater.addToSendIntList("t");
+                GUIupdater.addToSendIntList("2");
+            }
+        });
+        tool3.setOnMouseClicked(e -> {
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+                GUIupdater.addToSendIntList("t");
+                GUIupdater.addToSendIntList("3");
+            }
+        });
     }
 
     /*
@@ -305,9 +413,28 @@ public class GameController {
             }
         }
     */
+    @FXML
+    synchronized void refreshScreen(){
+        //TODO: replace with strings from controller
+        System.out.println("THIS IS THE SCHEME I'M PRINTING \n" + GUIupdater.getOwnScheme());
+        reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
+                GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
+                GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
+    }
 
     @FXML
-    void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
+    synchronized void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
+
+        for (ImageView i:gridIMG)
+            i.setImage(null);
+        gridIMG.clear();
+        for (ImageView i:roundtrackIMG)
+            i.setImage(null);
+        roundtrackIMG.clear();
+        for (ImageView i:draftIMG)
+            i.setImage(null);
+        draftIMG.clear();
+
         String[] divide;
         divide = table.split(NEWLINE);
         String draft = divide[1] + NEWLINE + divide[2];
@@ -350,6 +477,12 @@ public class GameController {
         divide = me.split(NEWLINE);
         divide = divide[1].split(DIVISOR);
         tokensP.setText(divide[1]);
+
+        if(!taskIsRunning){
+            Thread refresh = new Thread(keepRefreshing);
+            refresh.setDaemon(true);
+            refresh.start();
+        }
     }
 
     @FXML
@@ -391,10 +524,12 @@ public class GameController {
 
     @FXML
     private void passTurn(ActionEvent event) throws IOException {
+        if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+            GUIupdater.addToSendIntList("q");
+        }
         //if (TURN IS THE LAST OF THE GAME)
-        endGame(event);
+        //endGame(event);
         //else
-        //TODO: Method to pass the turn
     }
 
 }

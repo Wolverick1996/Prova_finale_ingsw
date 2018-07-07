@@ -61,9 +61,9 @@ public class ClientMain {
      * @param args: list of strings received from the user during the JAR execution
      * @author Andrea
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         //String check_UI = args[0];
-        String check_UI = "cli";
+        String check_UI = "gui";
         if (check_UI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
@@ -261,8 +261,7 @@ public class ClientMain {
                         loginSuccess = true;
                         if (server.hasStarted())
                             return;
-                    }
-                    else {
+                    } else {
                         if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
                         else if (server.hasStarted()){
@@ -293,7 +292,6 @@ public class ClientMain {
                     executorService.shutdownNow();
                     break;
                 }
-
             }
         } catch (NotBoundException e) {
             System.err.println("This reference is not connected!");
@@ -417,7 +415,7 @@ public class ClientMain {
                 do {
                     System.out.println("Please set a timer (min 15s, max 60s)");
                     try {
-                        // wait until we have data to complete a readLine()
+                        //wait until we have data to complete a readLine()
                         while (!in.ready())
                             Thread.sleep(200);
 
@@ -431,6 +429,7 @@ public class ClientMain {
                         delay = -1;
                     }
                 } while ("".equals(delayString) || delay < 15 || delay > 60);
+
                 if (isRmi){
                     this.result = delay;
                     this.finished = true;

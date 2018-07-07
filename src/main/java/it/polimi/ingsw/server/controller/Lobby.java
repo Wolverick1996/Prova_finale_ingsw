@@ -21,7 +21,7 @@ public class Lobby /*extends Observer*/ {
 
     public static final int MAX_PLAYERS = 4;
     private static final int ONE_SEC = 1000;
-    private int delay = 20000;
+    private int delay = 1000;
     private List<String> players = new ArrayList<>();
     private List<Socket> sockets = new ArrayList<>();
     private boolean streetlight;
@@ -65,7 +65,6 @@ public class Lobby /*extends Observer*/ {
         canIGo();
 
         if (this.players.size()<= MAX_PLAYERS){
-
             for (String s : this.players){
                 if (s.equals(username)){
                     this.streetlight = true;
@@ -75,14 +74,15 @@ public class Lobby /*extends Observer*/ {
 
             this.players.add(username);
 
-            if (this.players.size() >= 2) {
+            if (this.players.size() >= 2){
                 if (this.timer != null)
                     this.timer.cancel();
 
                 this.timer = new Timer();
                 TimerTask task = new TimerTask() {
+
                     @Override
-                    public void run() {
+                    public void run(){
                         try {
                             List<String> check = players;
                             server.confirmConnections();
@@ -90,11 +90,11 @@ public class Lobby /*extends Observer*/ {
                             streetlight = true;
                             if (players.size() >= 2 && check.equals(players))
                                 startGame();
-
-                        } catch (RemoteException re){
+                        } catch (RemoteException re) {
                             System.err.println("ERROR" + re.getMessage());
                         }
                     }
+
                 };
                 this.timer.schedule(task, delay);
             }
@@ -178,9 +178,9 @@ public class Lobby /*extends Observer*/ {
         for (String s : this.players){
             if (s.equals(username)){
                 this.players.remove(s);
-                if (this.players.size() == 1){
+                if (this.players.size() == 1)
                         this.timer.cancel();
-                }
+
                 this.streetlight = true;
                 return true;
             }
@@ -218,7 +218,7 @@ public class Lobby /*extends Observer*/ {
      * @author Andrea
      */
     public void setDelay(int delay){
-        this.delay = delay*ONE_SEC;
+        //this.delay = delay*ONE_SEC;
     }
 
     /**
