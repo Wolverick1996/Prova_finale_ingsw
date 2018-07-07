@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.Player;
-import it.polimi.ingsw.server.model.Scheme;
+import it.polimi.ingsw.server.model.*;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +19,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameController {
 
@@ -76,6 +77,8 @@ public class GameController {
     private Button tool2;
     @FXML
     private Button tool3;
+    @FXML
+    private Button refresh;
     @FXML
     private Text activeP;
     @FXML
@@ -414,7 +417,41 @@ public class GameController {
     */
 
     @FXML
+    void refreshScreen(){
+        //TODO: replace with strings from controller
+
+        int numP = (int)(Math.random()*3 + 2);
+        Table table = new Table(numP);
+        Player p1 = new Player("ingconti", 0);
+        Player p2 = new Player("n1zzo", 0);
+        List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
+        table.setPlayers(nicknames);
+
+        String privOC = "This is your Private Objective Card:\n" +
+                PrivObjHandler.getColor(p1).escape() + PrivObjHandler.getName(p1) + "\n" + it.polimi.ingsw.server.model.Enum.Color.RESET +
+                PrivObjHandler.getDescription(p1) + "\n";
+
+        String tools = "\nTool Cards on table:\n";
+        for (int i = 0; i < 3; i++)
+            tools = tools + it.polimi.ingsw.server.model.Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + it.polimi.ingsw.server.model.Enum.Color.RESET + ToolHandler.getDescription(i) +
+                    it.polimi.ingsw.server.model.Enum.Color.YELLOW.escape() + "\n Tokens on: " + it.polimi.ingsw.server.model.Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
+
+        Scheme s1 = Scheme.initialize(1, false, 24);
+
+        reloadGame(numP, s1.toString(), privOC, table.toString(), tools, p1.toString(), p2.toString());
+    }
+
+    @FXML
     void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
+
+        gridIMG.clear();
+        for (ImageView i:roundtrackIMG)
+            i.setImage(null);
+        roundtrackIMG.clear();
+        for (ImageView i:draftIMG)
+            i.setImage(null);
+        draftIMG.clear();
+
         String[] divide;
         divide = table.split(NEWLINE);
         String draft = divide[1] + NEWLINE + divide[2];
