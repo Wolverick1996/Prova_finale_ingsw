@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.*;
-import it.polimi.ingsw.server.model.Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,14 +13,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import static it.polimi.ingsw.client.view.SchemesController.COLORS;
+import static it.polimi.ingsw.client.view.SchemesController.DIVISOR;
+import static it.polimi.ingsw.client.view.SchemesController.NEWLINE;
 
 public class PlayerController {
 
-    private static final String COLORS = "\u001B\\[[;\\d]*m";
-    private static final String NEWLINE = "\n";
-    private static final String DIVISOR = ": ";
     private ArrayList<ImageView> playerIMG = new ArrayList<>();
 
     @FXML
@@ -57,9 +54,6 @@ public class PlayerController {
     }
 
     void loadGrid(String player, ArrayList<ImageView> draftIMG){
-        for (ImageView i : draftIMG)
-            i.setEffect(null);
-
         String[] divide;
 
         divide = player.split("Active window pattern:\n");

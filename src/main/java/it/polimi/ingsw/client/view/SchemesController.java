@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.view;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,11 +18,11 @@ import java.util.ArrayList;
 
 public class SchemesController {
 
-    private static final String COLORS = "\u001B\\[[;\\d]*m";
-    private static final String NEWLINE = "\n";
-    private static final String DIVISOR = ": ";
-    private static final int MAX_ROW = 4;
-    private static final int MAX_COL = 5;
+    static final String COLORS = "\u001B\\[[;\\d]*m";
+    static final String NEWLINE = "\n";
+    static final String DIVISOR = ": ";
+    static final int MAX_ROW = 4;
+    static final int MAX_COL = 5;
     private ArrayList<ImageView> restrictions = new ArrayList<>();
 
     @FXML

@@ -31,14 +31,15 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
+import static it.polimi.ingsw.client.view.SchemesController.NEWLINE;
+
 public class GUIController implements Initializable {
 
     private static final int STARTED = 999;
     static final int INFINITE = 5;
     private static final String RMI = "rmi";
     private static final String SOCKET = "socket";
-    private static final String NEWLINE = "\n";
-    private static final String DIVISOR = ": \t";
+    private static final String RANK_DIVISOR = ": \t";
     private static SocketMessengerClient messenger = GUIupdater.messenger;
     private int lobbyDelay = GUIupdater.lobbyDelay;
     private int numPlayersAtBeginning = GUIupdater.numPlayersAtBeginning;
@@ -46,7 +47,7 @@ public class GUIController implements Initializable {
     private boolean isRMI = GUIupdater.isRMI;
     private boolean customSchemes = GUIupdater.getCustomSchemes();
     private static Stage activePopup;
-    private static Font myFont = new Font("Century Gothic", 18);
+    static Font myFont = new Font("Century Gothic", 18);
 
     @FXML
     private AnchorPane rootPane;
@@ -64,7 +65,6 @@ public class GUIController implements Initializable {
     private RadioButton customSchemesButtonNo;
     @FXML
     private TextField delayTextField;
-
     @FXML
     private GridPane player2;
     @FXML
@@ -89,7 +89,9 @@ public class GUIController implements Initializable {
     private Text player4Score;
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) { System.out.println("Switching between scenes..."); }
+    public void initialize(URL location, ResourceBundle resources){
+        System.out.println("Switching between scenes...");
+    }
 
     private static void popup(String error){
         Stage popup = new Stage();
@@ -351,21 +353,21 @@ public class GUIController implements Initializable {
         String[] divide;
         String[] splitter;
         divide = rank.split(NEWLINE);
-        splitter = divide[2].split(DIVISOR);
+        splitter = divide[2].split(RANK_DIVISOR);
         player1Name.setText(splitter[0]);
         player1Score.setText(splitter[1]);
         if (numP >= 2) {
-            splitter = divide[3].split(DIVISOR);
+            splitter = divide[3].split(RANK_DIVISOR);
             player2Name.setText(splitter[0]);
             player2Score.setText(splitter[1]);
         }
         if (numP >= 3) {
-            splitter = divide[4].split(DIVISOR);
+            splitter = divide[4].split(RANK_DIVISOR);
             player3Name.setText(splitter[0]);
             player3Score.setText(splitter[1]);
         }
         if (numP >= 4) {
-            splitter = divide[5].split(DIVISOR);
+            splitter = divide[5].split(RANK_DIVISOR);
             player4Name.setText(splitter[0]);
             player4Score.setText(splitter[1]);
         }

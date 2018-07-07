@@ -1,36 +1,36 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.server.model.*;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static it.polimi.ingsw.client.view.GUIController.myFont;
+import static it.polimi.ingsw.client.view.SchemesController.*;
+
 public class GameController {
 
     private boolean taskIsRunning = false;
-    private static final String COLORS = "\u001B\\[[;\\d]*m";
-    private static final String NEWLINE = "\n";
-    private static final String DIVISOR = ": ";
     private static final String COMMA = ",";
     private static final String PUBOC = "Public Objective Cards:";
     private static final String TAB = "\t";
-    private static final int MAX_ROW = 4;
-    private static final int MAX_COL = 5;
     private static final int MAX_HEIGHT_ROUNDTRACK = 27;
     private ArrayList<ImageView> draftIMG = new ArrayList<>();
     private ArrayList<ImageView> roundtrackIMG = new ArrayList<>();
@@ -44,15 +44,9 @@ public class GameController {
     private static boolean refreshEffectOn = false;
 
     @FXML
-    private BorderPane pane4;
-    @FXML
-    private AnchorPane pane5;
-    @FXML
     private GridPane grid;
     @FXML
     private Button pass;
-    @FXML
-    private Button p1;
     @FXML
     private Button p2;
     @FXML
@@ -92,7 +86,7 @@ public class GameController {
     @FXML
     private Text turn;
 
-    private synchronized void refreshEffects() {
+    private synchronized void refreshEffects(){
         if (gridEffectOn)
             for (ImageView i:gridIMG)
                 i.setEffect(ds);
@@ -139,7 +133,7 @@ public class GameController {
         @Override
         protected Void call() {
             taskIsRunning = true;
-            while(!GUIupdater.getHasGameEnded()) {
+            while (!GUIupdater.getHasGameEnded()) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -151,19 +145,97 @@ public class GameController {
         }
     };
 
-    static synchronized void highlightGrid(boolean on){ gridEffectOn = on; }
+    static synchronized void highlightGrid(boolean on){
+        gridEffectOn = on;
+    }
 
-    static synchronized void highlightDraft(boolean on){ reserveEffectOn = on; }
+    static synchronized void highlightDraft(boolean on){
+        reserveEffectOn = on;
+    }
 
-    static synchronized void highlightRoundtrack(boolean on){ roundtrackEffectOn = on; }
+    static synchronized void highlightRoundtrack(boolean on){
+        roundtrackEffectOn = on;
+    }
 
-    static synchronized void highlightTool(boolean on) { toolEffectOn = on; }
+    static synchronized void highlightTool(boolean on){
+        toolEffectOn = on;
+    }
 
-    static synchronized void highlightPass(boolean on){ passEffectOn = on; }
+    static synchronized void highlightPass(boolean on){
+        passEffectOn = on;
+    }
 
-    static synchronized void highlightRefresh(boolean on) { refreshEffectOn = on; }
+    static synchronized void highlightRefresh(boolean on){
+        refreshEffectOn = on;
+    }
 
-    synchronized private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
+    private static void choicePopup(String message, String option1, String option2){
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Make a decision!");
+        Label label1 = new Label("WAIT!\n");
+        label1.setFont(myFont);
+        Label label2 = new Label("You have to make a decision...\n");
+        label2.setFont(myFont);
+        Text text = new Text();
+        text.setText(message);
+        text.setFont(myFont);
+        Button button1 = new Button(option1);
+        button1.setFont(myFont);
+        button1.setOnAction(e -> popup.close());
+        Button button2 = new Button(option2);
+        button2.setFont(myFont);
+        button2.setOnAction(e -> popup.close());
+        HBox choiceLine = new HBox();
+        Region r1 = new Region();
+        Region r2 = new Region();
+        Region r3 = new Region();
+        choiceLine.getChildren().addAll(r1, button1, r2, button2, r3);
+        choiceLine.setHgrow(r1, Priority.ALWAYS);
+        choiceLine.setHgrow(r2, Priority.ALWAYS);
+        choiceLine.setHgrow(r3, Priority.ALWAYS);
+        VBox layout = new VBox(40);
+        layout.getChildren().addAll(label1, label2, text, choiceLine);
+        layout.setAlignment(Pos.CENTER);
+        Scene popupScene = new Scene(layout, 400, 350);
+        popup.setScene(popupScene);
+        popup.setResizable(false);
+        popup.setIconified(false);
+        popup.showAndWait();
+    }
+
+    private static void dicePopup(String message){
+        String[] divide;
+        String[] toBePrepared = new String[1];
+        divide = message.split(DIVISOR);
+        ArrayList<String> color = new ArrayList<>();
+        ArrayList<String> value = new ArrayList<>();
+        toBePrepared[0] = divide[1];
+        prepareString(color, value, toBePrepared);
+        ImageView img = new ImageView(new Image("/images/" + color.get(0) + value.get(0) + ".jpeg",
+                60, 60, false, false));
+
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Advertisement");
+        Label label1 = new Label("USING TOOL CARD...\n");
+        label1.setFont(myFont);
+        Label label2 = new Label(divide[0]+":");
+        label2.setFont(myFont);
+        Button button = new Button("Ok");
+        button.setFont(myFont);
+        button.setOnAction(e -> popup.close());
+        VBox layout = new VBox(40);
+        layout.getChildren().addAll(label1, label2, img, button);
+        layout.setAlignment(Pos.CENTER);
+        Scene popupScene = new Scene(layout, 400, 350);
+        popup.setScene(popupScene);
+        popup.setResizable(false);
+        popup.setIconified(false);
+        popup.showAndWait();
+    }
+
+    private static synchronized void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
         for (String s:divide) {
             if (s.contains("31m"))
                 imageColor.add("red");
@@ -198,7 +270,7 @@ public class GameController {
         }
     }
 
-    synchronized static void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
+    static synchronized void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         ArrayList<String> divide3 = new ArrayList<>();
@@ -255,7 +327,7 @@ public class GameController {
             });
     }
 
-    synchronized private void loadReserve(String draft){
+    private synchronized void loadReserve(String draft){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         String[] divide;
@@ -275,17 +347,17 @@ public class GameController {
         for (ImageView i:draftIMG)
             i.setOnMouseClicked(e -> {
                 if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
-                        && !GUIupdater.getNeedsToReload()){
+                        && !GUIupdater.getNeedsToReload()) {
                     GUIupdater.addToSendIntList("d");
                     GUIupdater.addToSendIntList(Integer.toString(draftIMG.size() - draftIMG.indexOf(i)));
                 } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.RESERVE
-                        && !GUIupdater.getNeedsToReload()){
+                        && !GUIupdater.getNeedsToReload()) {
                     GUIupdater.addToSendIntList(Integer.toString(draftIMG.size() - draftIMG.indexOf(i)));
                 }
             });
     }
 
-    synchronized private void loadRoundtrack(String track){
+    private synchronized void loadRoundtrack(String track){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
         String[] divide;
@@ -326,11 +398,11 @@ public class GameController {
             });
     }
 
-    synchronized private void setButtonImage(String path, Button button){
+    private synchronized void setButtonImage(String path, Button button){
         button.setStyle("-fx-background-image: url('" + path + "')");
     }
 
-    synchronized private void loadObjectiveCards(String privateOC, String table){
+    private synchronized void loadObjectiveCards(String privateOC, String table){
         String[] divide;
         String[] privOCs = {"Red", "Green", "Yellow", "Blue", "Purple"};
         String[] pubOCs = {"Row Color Variety", "Column Color Variety", "Row Shade Variety", "Column Shade Variety",
@@ -362,7 +434,7 @@ public class GameController {
         }
     }
 
-    synchronized private void loadTools(String activeTools){
+    private synchronized void loadTools(String activeTools){
         String[] divide;
         String[] tools = {"Grozing Pliers", "Eglomise Brush", "Copper Foil Burnisher", "Lathekin", "Lens Cutter", "Flux Brush",
                 "Glazing Hammer", "Running Pliers", "Cork-backed Straightedge", "Grinding Stone", "Flux Remover", "Tap Wheel"};
@@ -411,19 +483,6 @@ public class GameController {
         });
     }
 
-    /*
-        //Block of code relative to the first version of reloadGame method
-        //ArrayList<ImageView> restrictions is passed as parameter from SchemesController
-
-        int scroll = 0;
-        for (int i = 0; i < MAX_ROW; i++) {
-            for (int j = 0; j < MAX_COL; j++) {
-                gridIMG.add(restrictions.get(scroll));
-                grid.add(restrictions.get(scroll), j, i);
-                scroll++;
-            }
-        }
-    */
     @FXML
     synchronized void refreshScreen(){
             GUIupdater.setNeedsToReload(false);
@@ -435,7 +494,6 @@ public class GameController {
 
     @FXML
     synchronized void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
-
         for (ImageView i:gridIMG)
             i.setImage(null);
         gridIMG.clear();

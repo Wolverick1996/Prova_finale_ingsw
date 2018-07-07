@@ -6,8 +6,14 @@ import java.util.List;
 public class GUIupdater {
 
     private static GameController controller;
-    public static synchronized GameController getController() { return controller; }
-    public static synchronized void setController(GameController value) { controller = value; }
+
+    public static synchronized GameController getController(){
+        return controller;
+    }
+
+    public static synchronized void setController(GameController value){
+        controller = value;
+    }
 
     private static boolean hasGameEnded = false;
     private static boolean hasGetStatus = false;
@@ -37,82 +43,86 @@ public class GUIupdater {
     private static String tools;
     private static List<String> players = new ArrayList<>();
 
-    public static synchronized String getPlayer(int number) {
+    static synchronized String getPlayer(int number){
         int count = 1;
-        for(String p: players) {
-            if (p.equals(getOwnPlayer())){
+        for (String p: players) {
+            if (p.equals(getOwnPlayer()))
                 continue;
-            } else {
-                if (count == number) {
+            else {
+                if (count == number)
                     return p;
-                }
                 count++;
             }
         }
         return getOwnPlayer();
     }
 
-    public static synchronized String getActivePlayer() {
+    static synchronized String getActivePlayer(){
         for (String p : players) {
             String temp = p;
-            if (p.split("\n")[0].equals(activePlayer)){
+            if (p.split("\n")[0].equals(activePlayer))
                 return temp;
-            }
         }
         return players.get(0);
     }
 
-    public static synchronized String getOwnPlayer() {
+    static synchronized String getOwnPlayer(){
         for (String p : players) {
             String temp = p;
-            if (p.split("\n")[0].equals(ownUsername)){
+            if (p.split("\n")[0].equals(ownUsername))
                 return temp;
-            }
         }
         return players.get(0);
     }
 
-    public static synchronized String getOwnScheme() {
+    public static synchronized String getOwnScheme(){
         String me = getOwnPlayer();
         String[] split = me.split("\n");
-        me = split[3] + "\n" + split[4] + "\n" + split[5] + "\n" + split[6] + "\n" + split[7] + "\n" +
-                split[8] + "\n" + split[9];
+        me = split[3] + "\n" + split[4] + "\n" + split[5] + "\n" + split[6] + "\n" + split[7] + "\n" + split[8] + "\n" + split[9];
         return me;
     }
 
-    public static synchronized boolean getNeedsToReload() { return needsToReload; }
+    static synchronized boolean getNeedsToReload(){
+        return needsToReload;
+    }
 
-    public static synchronized boolean getHasGameEnded() { return hasGameEnded; }
+    static synchronized boolean getHasGameEnded(){
+        return hasGameEnded;
+    }
 
-    public static synchronized boolean getHasGetStatus() { return hasGetStatus; }
+    public static synchronized boolean getHasGetStatus(){
+        return hasGetStatus;
+    }
 
-    public static synchronized TypeRequested getTypeRequested(){ return requested; }
+    static synchronized TypeRequested getTypeRequested(){
+        return requested;
+    }
 
     public static synchronized String getOwnUsername(){
         return ownUsername;
     }
 
-    public static synchronized boolean getCustomSchemes(){
+    static synchronized boolean getCustomSchemes(){
         return customSchemes;
     }
 
-    public static synchronized int getSchemeChosen(){
+    static synchronized int getSchemeChosen(){
         return schemeChosen;
     }
 
-    public static synchronized boolean getCanGoToGame(){
+    static synchronized boolean getCanGoToGame(){
         return canGoToGame;
     }
 
-    public static synchronized String getToSend(){
+    static synchronized String getToSend(){
         return toSend;
     }
 
-    public static synchronized List getSchemesToChoose(){
+    static synchronized List getSchemesToChoose(){
         return schemesToChoose;
     }
 
-    public static synchronized int getNumPlayers(){
+    static synchronized int getNumPlayers(){
         return numPlayers;
     }
 
@@ -124,27 +134,33 @@ public class GUIupdater {
         return players;
     }
 
-    public static synchronized String getPrivObj(){
+    static synchronized String getPrivObj(){
         return privObj;
     }
 
-    public static synchronized String getTools(){
+    static synchronized String getTools(){
         return tools;
     }
 
-    public static synchronized void setNeedsToReload(boolean value) { needsToReload = value; }
+    static synchronized void setNeedsToReload(boolean value){
+        needsToReload = value;
+    }
 
-    public static synchronized void setHasGameEnded(boolean value) { hasGameEnded = value; }
+    public static synchronized void setHasGameEnded(boolean value){
+        hasGameEnded = value;
+    }
 
-    public static synchronized void setActivePlayer(String value) { activePlayer = value; }
+    static synchronized void setActivePlayer(String value){
+        activePlayer = value;
+    }
 
-    public static synchronized void setTypeRequested(TypeRequested value){
-        if (value == TypeRequested.REFRESH){
+    static synchronized void setTypeRequested(TypeRequested value){
+        if (value == TypeRequested.REFRESH) {
             setNeedsToReload(true);
             GameController.highlightRefresh(true);
             return;
         }
-        if (value == null){
+        if (value == null) {
             notifyGUI(false);
             requested = null;
         } else {
@@ -153,23 +169,23 @@ public class GUIupdater {
         }
     }
 
-    public static synchronized void setOwnUsername(String value){
+    static synchronized void setOwnUsername(String value){
         ownUsername = value;
     }
 
-    public static synchronized void setCustomSchemes(boolean value){
+    static synchronized void setCustomSchemes(boolean value){
         customSchemes = value;
     }
 
-    public static synchronized void setSchemeChosen(int value){
+    static synchronized void setSchemeChosen(int value){
         schemeChosen = value;
     }
 
-    public static synchronized void setCanGoToGame(boolean value){
+    static synchronized void setCanGoToGame(boolean value){
         canGoToGame = value;
     }
 
-    public static synchronized void setToSend(String value){
+    static synchronized void setToSend(String value){
         if (value == null)
             toSend = null;
         else
@@ -180,35 +196,41 @@ public class GUIupdater {
         table = value;
     }
 
-    public static synchronized void setTools(String value){
+    static synchronized void setTools(String value){
         tools = value;
     }
 
-    public static synchronized void setPrivObj(String value){
+    static synchronized void setPrivObj(String value){
         privObj = value;
     }
 
-    public static synchronized void addPlayer(String value){
+    static synchronized void addPlayer(String value){
         players.add(value);
     }
 
-    public static synchronized void clearPlayers() { players.clear(); }
+    static synchronized void clearPlayers(){
+        players.clear();
+    }
 
-    public static synchronized void addToSendIntList(String value) { toSendList.add(value); }
+    static synchronized void addToSendIntList(String value){
+        toSendList.add(value);
+    }
 
-    public static synchronized String getToSendList() {
+    static synchronized String getToSendList(){
         String res = toSendList.get(0);
         toSendList.remove(0);
         return res;
     }
 
-    public static synchronized void setHasGetStatus(boolean value) { hasGetStatus = value; }
+    public static synchronized void setHasGetStatus(boolean value){
+        hasGetStatus = value;
+    }
 
-    public static synchronized void emptyToSendIntList() {
+    static synchronized void emptyToSendIntList(){
         toSendList.clear();
     }
 
-    public static synchronized boolean isToSendIntListEmpty() {
+    static synchronized boolean isToSendIntListEmpty(){
         return toSendList.isEmpty();
     }
 
