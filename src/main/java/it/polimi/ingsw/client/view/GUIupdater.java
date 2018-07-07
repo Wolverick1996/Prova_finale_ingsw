@@ -11,6 +11,7 @@ public class GUIupdater {
 
     private static boolean hasGameEnded = false;
     private static boolean hasGetStatus = false;
+    private static boolean needsToReload = false;
 
     private static String ownUsername;
     private static String activePlayer;
@@ -35,6 +36,21 @@ public class GUIupdater {
     private static String privObj;
     private static String tools;
     private static List<String> players = new ArrayList<>();
+
+    public static synchronized String getPlayer(int number) {
+        int count = 1;
+        for(String p: players) {
+            if (p.equals(getOwnPlayer())){
+                continue;
+            } else {
+                if (count == number) {
+                    return p;
+                }
+                count++;
+            }
+        }
+        return getOwnPlayer();
+    }
 
     public static synchronized String getActivePlayer() {
         for (String p : players) {
@@ -63,6 +79,8 @@ public class GUIupdater {
                 split[8] + "\n" + split[9];
         return me;
     }
+
+    public static synchronized boolean getNeedsToReload() { return needsToReload; }
 
     public static synchronized boolean getHasGameEnded() { return hasGameEnded; }
 
@@ -114,14 +132,21 @@ public class GUIupdater {
         return tools;
     }
 
+    public static synchronized void setNeedsToReload(boolean value) { needsToReload = value; }
+
     public static synchronized void setHasGameEnded(boolean value) { hasGameEnded = value; }
 
     public static synchronized void setActivePlayer(String value) { activePlayer = value; }
 
     public static synchronized void setTypeRequested(TypeRequested value){
+        if (value == TypeRequested.REFRESH){
+            setNeedsToReload(true);
+            GameController.highlightRefresh(true);
+            return;
+        }
         if (value == null){
             notifyGUI(false);
-            requested = value;
+            requested = null;
         } else {
             requested = value;
             notifyGUI(true);
@@ -188,14 +213,11 @@ public class GUIupdater {
     }
 
     enum TypeRequested {
+        REFRESH,
         ROUNDTRACK,
         RESERVE,
         WINDOWPATTERN,
         STANDARDREQUEST;
-    }
-
-    public static synchronized void refresh() {
-        GameController.setNeedsToReload(true);
     }
 
     private static synchronized void notifyGUI(boolean turnOn){
@@ -214,6 +236,9 @@ public class GUIupdater {
                 break;
             case WINDOWPATTERN:
                 GameController.highlightGrid(turnOn);
+                break;
+            case REFRESH:
+                GameController.highlightRefresh(turnOn);
                 break;
             default:
         }

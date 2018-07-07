@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -158,7 +159,7 @@
             <HBox prefHeight="60.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="p1" mnemonicParsing="false" onAction="#loadPlayer" text="P1" HBox.hgrow="ALWAYS">
+                  <Button fx:id="p1" mnemonicParsing="false" onAction="#loadPlayer1" text="P1" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -176,7 +177,7 @@
             <VBox prefHeight="200.0" prefWidth="60.0" HBox.hgrow="ALWAYS">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="p2" mnemonicParsing="false" onAction="#loadPlayer" rotate="90.0" text="P2" VBox.vgrow="ALWAYS">
+                  <Button fx:id="p2" mnemonicParsing="false" onAction="#loadPlayer2" rotate="90.0" text="P2" VBox.vgrow="ALWAYS">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -193,7 +194,7 @@
             <VBox prefHeight="200.0" prefWidth="60.0" HBox.hgrow="ALWAYS">
                <children>
                   <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="p3" mnemonicParsing="false" onAction="#loadPlayer" rotate="270.0" text="P3" VBox.vgrow="ALWAYS">
+                  <Button fx:id="p3" mnemonicParsing="false" onAction="#loadPlayer3" rotate="270.0" text="P3" VBox.vgrow="ALWAYS">
                      <font>
                         <Font size="20.0" />
                      </font>

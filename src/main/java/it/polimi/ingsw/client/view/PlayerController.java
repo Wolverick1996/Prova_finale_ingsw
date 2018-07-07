@@ -44,35 +44,9 @@ public class PlayerController {
         Parent root = loader.load();
         GameController controller = loader.getController();
 
-        //TODO: Notify to the controller the window pattern chosen: loops are replaced by controller calls
-        //TODO: CONTROLLER REQUEST to get the following
-        // 1. (int) Number of players;
-        // 2. (String) Window pattern chosen;
-        // 3. (String) Private Objective Card;
-        // 4. (String) Table
-        // 5. (String) Tool Cards;
-        // 6. (String) My player string
-        // 7. (String) Active player
-
-        int numP = (int)(Math.random()*3 + 2);
-        Table table = new Table(numP);
-        Player p1 = new Player("ingconti", 0);
-        Player p2 = new Player("n1zzo", 0);
-        List<String> nicknames = Arrays.asList("ingconti", "n1zzo", "michele-bertoni", "valerio-castelli");
-        table.setPlayers(nicknames);
-
-        String privOC = "This is your Private Objective Card:\n" +
-                PrivObjHandler.getColor(p1).escape() + PrivObjHandler.getName(p1) + "\n" + Enum.Color.RESET +
-                PrivObjHandler.getDescription(p1) + "\n";
-
-        String tools = "\nTool Cards on table:\n";
-        for (int i = 0; i < 3; i++)
-            tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET + ToolHandler.getDescription(i) +
-                    Enum.Color.YELLOW.escape() + "\n Tokens on: " + Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
-
-        Scheme s1 = Scheme.initialize(1, false, 24);
-
-        controller.reloadGame(numP, s1.toString(), privOC, table.toString(), tools, p1.toString(), p2.toString());
+        controller.reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
+                GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
+                GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -83,6 +57,9 @@ public class PlayerController {
     }
 
     void loadGrid(String player, ArrayList<ImageView> draftIMG){
+        for (ImageView i : draftIMG)
+            i.setEffect(null);
+
         String[] divide;
 
         divide = player.split("Active window pattern:\n");

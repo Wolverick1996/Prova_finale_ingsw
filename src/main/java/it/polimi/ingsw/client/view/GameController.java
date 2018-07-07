@@ -41,7 +41,7 @@ public class GameController {
     private static boolean roundtrackEffectOn = false;
     private static boolean toolEffectOn = false;
     private static boolean passEffectOn = false;
-    private static boolean needsToReload = false;
+    private static boolean refreshEffectOn = false;
 
     @FXML
     private BorderPane pane4;
@@ -128,6 +128,11 @@ public class GameController {
             pass.setEffect(ds);
         else
             pass.setEffect(null);
+
+        if (refreshEffectOn)
+            refresh.setEffect(ds);
+        else
+            refresh.setEffect(null);
     }
 
     private Task keepRefreshing = new Task<Void>() {
@@ -146,9 +151,6 @@ public class GameController {
         }
     };
 
-    static synchronized void setNeedsToReload(boolean value) { needsToReload = value; }
-    static synchronized boolean getNeedsToReload() { return needsToReload; }
-
     static synchronized void highlightGrid(boolean on){ gridEffectOn = on; }
 
     static synchronized void highlightDraft(boolean on){ reserveEffectOn = on; }
@@ -158,6 +160,8 @@ public class GameController {
     static synchronized void highlightTool(boolean on) { toolEffectOn = on; }
 
     static synchronized void highlightPass(boolean on){ passEffectOn = on; }
+
+    static synchronized void highlightRefresh(boolean on) { refreshEffectOn = on; }
 
     synchronized private static void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
         for (String s:divide) {
@@ -234,7 +238,8 @@ public class GameController {
 
         for (ImageView i: toFill)
             i.setOnMouseClicked(e -> {
-                if(GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.WINDOWPATTERN){
+                if(GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.WINDOWPATTERN
+                        && !GUIupdater.getNeedsToReload()){
                     int posx = toFill.indexOf(i);
                     if(posx<5)
                         posx = 1;
@@ -269,11 +274,13 @@ public class GameController {
 
         for (ImageView i:draftIMG)
             i.setOnMouseClicked(e -> {
-                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST){
+                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
+                        && !GUIupdater.getNeedsToReload()){
                     GUIupdater.addToSendIntList("d");
-                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.indexOf(draftIMG.get(draftIMG.size() - draftIMG.indexOf(i)))));
-                } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.RESERVE){
-                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.indexOf(draftIMG.get(draftIMG.size() - draftIMG.indexOf(i)))));
+                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.size() - draftIMG.indexOf(i)));
+                } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.RESERVE
+                        && !GUIupdater.getNeedsToReload()){
+                    GUIupdater.addToSendIntList(Integer.toString(draftIMG.size() - draftIMG.indexOf(i)));
                 }
             });
     }
@@ -312,8 +319,9 @@ public class GameController {
 
         for (ImageView i:roundtrackIMG)
             i.setOnMouseClicked(e -> {
-                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.ROUNDTRACK) {
-                    GUIupdater.addToSendIntList(Integer.toString(roundtrackIMG.indexOf(i) + 1));
+                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.ROUNDTRACK
+                        && !GUIupdater.getNeedsToReload()) {
+                    GUIupdater.addToSendIntList(Integer.toString(roundtrackIMG.size() - roundtrackIMG.indexOf(i)));
                 }
             });
     }
@@ -380,20 +388,23 @@ public class GameController {
 
         tool1.setOnMouseClicked(e -> {
             refreshEffects();
-            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
+                    && !GUIupdater.getNeedsToReload()) {
                 GUIupdater.addToSendIntList("t");
                 GUIupdater.addToSendIntList("1");
             }
         });
         tool2.setOnMouseClicked(e -> {
             refreshEffects();
-            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
+                    && !GUIupdater.getNeedsToReload()) {
                 GUIupdater.addToSendIntList("t");
                 GUIupdater.addToSendIntList("2");
             }
         });
         tool3.setOnMouseClicked(e -> {
-            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+            if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
+                    && !GUIupdater.getNeedsToReload()) {
                 GUIupdater.addToSendIntList("t");
                 GUIupdater.addToSendIntList("3");
             }
@@ -415,11 +426,11 @@ public class GameController {
     */
     @FXML
     synchronized void refreshScreen(){
-        //TODO: replace with strings from controller
-        System.out.println("THIS IS THE SCHEME I'M PRINTING \n" + GUIupdater.getOwnScheme());
-        reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
-                GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
-                GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
+            GUIupdater.setNeedsToReload(false);
+            highlightRefresh(false);
+            reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
+                    GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
+                    GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
     }
 
     @FXML
@@ -486,17 +497,44 @@ public class GameController {
     }
 
     @FXML
-    private void loadPlayer(ActionEvent event) throws IOException {
+    private void loadPlayer1(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/player.fxml"));
         Parent root = loader.load();
         PlayerController controller = loader.getController();
 
-        //TODO: Controller call to request player toString and player's scheme toString
+        controller.loadGrid(GUIupdater.getPlayer(1), draftIMG);
 
-        Player p = new Player("ingconti", 0);
-        p.chooseScheme(Scheme.initialize(1, false, 24));
+        Scene scene = new Scene(root);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(true);
+        appStage.setFullScreen(true);
+        appStage.show();
+    }
 
-        controller.loadGrid(p.toString(), draftIMG);
+    @FXML
+    private void loadPlayer2(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/player.fxml"));
+        Parent root = loader.load();
+        PlayerController controller = loader.getController();
+
+        controller.loadGrid(GUIupdater.getPlayer(2), draftIMG);
+
+        Scene scene = new Scene(root);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.setScene(scene);
+        appStage.setResizable(true);
+        appStage.setFullScreen(true);
+        appStage.show();
+    }
+
+    @FXML
+    private void loadPlayer3(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/player.fxml"));
+        Parent root = loader.load();
+        PlayerController controller = loader.getController();
+
+        controller.loadGrid(GUIupdater.getPlayer(3), draftIMG);
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -524,7 +562,8 @@ public class GameController {
 
     @FXML
     private void passTurn(ActionEvent event) throws IOException {
-        if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST) {
+        if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
+                && !GUIupdater.getNeedsToReload()) {
             GUIupdater.addToSendIntList("q");
         }
         //if (TURN IS THE LAST OF THE GAME)
