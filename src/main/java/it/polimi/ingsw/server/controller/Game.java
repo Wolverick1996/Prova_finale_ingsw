@@ -94,7 +94,7 @@ public class Game implements Observer {
      * @author Matteo
      */
     private void next(){
-        if (this.turn > this.players.size()*2* MAX_ROUNDS || howManyActivePlayers() <= 1){
+        if (this.turn > this.players.size()*2*MAX_ROUNDS || howManyActivePlayers() <= 1){
             //End Game
             gameEnding();
         } else {
@@ -299,51 +299,52 @@ public class Game implements Observer {
      * @author Andrea
      */
     private void gameEnding(){
-        Controller.getMyIO(this).broadcast("Game ended, calculating points...\n");
-
+        List<Player> finalRank = null;
         Player winner = null;
 
+        for (Player p : this.players)
+            p.countPoints();
+
         if (howManyActivePlayers() == 1){
-            for (Player p : players){
+            for (Player p : this.players){
                 if (!p.isDisconnected())
-                    winner = p;
+                    finalRank.add(p);
             }
         } else {
-            int highestMade = 0;
-            for (Player p : this.players){
-                p.countPoints();
-                if (p.getPoints() > highestMade)
-                    highestMade = p.getPoints();
-                Controller.getMyIO(this).broadcast(p.getUsername() + ":" + p.getPoints());
-            }
+            finalRank = calculateFinalRank(null);
 
             ArrayList<Player> winners = new ArrayList<>();
-            int highestWithPrivOC = 0;
-            int highestNumOfTokens = 0;
-            for (Player p : this.players){
-                if (p.getPoints() == highestMade && p.pointsInPrivObj() >= highestWithPrivOC){
-                    highestWithPrivOC = p.pointsInPrivObj();
-
-                    if (p.pointsInPrivObj() == highestWithPrivOC && p.getTokens() >= highestNumOfTokens){
-                        highestNumOfTokens = p.getTokens();
-
-                        if (p.getTokens() == highestNumOfTokens)
-                            winners.add(p);
-                        else {
-                            winners.clear();
-                            winners.add(p);
-                        }
+            for (Player p : finalRank){
+                if (p != finalRank.get(0) && p.getPoints() == finalRank.get(0).getPoints())
+                    winners.add(p);
+            }
+            if (!winners.isEmpty()){
+                ArrayList<Player> tiers = new ArrayList<>(firstTypeOfTie(winners));
+                if (tiers.size() == 1){
+                    winner = tiers.get(0);
+                }
+                else {
+                    ArrayList<Player> stillTiers = new ArrayList<>(secondTypeOfTie(tiers));
+                    if (stillTiers.size() == 1){
+                        winner = stillTiers.get(0);
+                    }
+                    else {
+                        winner = thirdTypeOfTie(stillTiers);
                     }
                 }
             }
-
-            if (winners.size() > 1)
-                winner = lastCheck(winners);
-            else
-                winner = winners.get(0);
+            else {
+                winner = finalRank.get(0);
+            }
         }
 
-        printFinalRank(winner);
+        finalRank = calculateFinalRank(winner);
+
+        Controller.getMyIO(this).broadcast("Game ended! Calculating points...\n");
+        for (Player p : finalRank){
+            Controller.getMyIO(this).broadcast( p.getUsername() + ": \t" +p.getPoints());
+        }
+
 
         Controller.getMyIO(this).finishGameSocket();
 
@@ -351,39 +352,87 @@ public class Game implements Observer {
     }
 
     /**
-     * This method will be used at the end of the game to print the final Rank of the game after all calculations
+     * Method to order players by points (desc order)
      *
-     * @param winner: object of the player who won (calculated before calling this method)
+     * @param winner: object of the player who won the match and will be the leader of finalRank list
+     * @return the list of players in desc order
+     * @author Andrea
      */
-    private void printFinalRank(Player winner){
+    private List<Player> calculateFinalRank(Player winner){
         ArrayList<Player> finalRank = new ArrayList<>();
-        finalRank.add(winner);
         ArrayList<Player> fooCopyPlayers = new ArrayList<>(this.players);
-        fooCopyPlayers.remove(winner);
         boolean isGreater;
 
+        if (winner != null){
+            finalRank.add(winner);
+            fooCopyPlayers.remove(winner);
+        }
+
         while (finalRank.size() != this.players.size()){
-            isGreater = false;
             Player greater = null;
 
-            for (Player p1 : fooCopyPlayers){
-                if (!isGreater){
-                    for (Player p2 : fooCopyPlayers){
-                        isGreater = p1.getPoints() >= p2.getPoints();
-                    }
+            for (Player anch : fooCopyPlayers){
+                isGreater = false;
+                boolean logicAnd;
+                int i = 0;
+                for (Player p : fooCopyPlayers){
+                    logicAnd = anch.getPoints() >= p.getPoints();
+                    if (logicAnd)
+                        i++;
                 }
+                if (i == fooCopyPlayers.size())
+                    isGreater = true;
                 if (isGreater)
-                    greater = p1;
+                    greater = anch;
             }
 
             fooCopyPlayers.remove(greater);
             finalRank.add(greater);
         }
 
-        Controller.getMyIO(this).broadcast("Game ended!\n");
-        for (Player p : finalRank){
-            Controller.getMyIO(this).broadcast( p.getUsername() + ":\t" +p.getPoints());
+        return finalRank;
+    }
+
+    /**
+     * Checks the first kind of tie (points with private objective cards)
+     *
+     * @param winners: list of players that tied
+     * @return list of players that are still tie or the winner
+     * @author Andrea
+     */
+    private List<Player> firstTypeOfTie(List<Player> winners){
+        ArrayList<Player> tiers = new ArrayList<>();
+        int highestWithPrivOC = -1;
+        for (Player p : winners) {
+            if (p.pointsInPrivObj() >= highestWithPrivOC)
+                highestWithPrivOC = p.pointsInPrivObj();
         }
+        for (Player p : winners){
+            if (p.pointsInPrivObj() == highestWithPrivOC)
+                tiers.add(p);
+        }
+        return tiers;
+    }
+
+    /**
+     * Checks the second kind of tie (number of tokens left)
+     *
+     * @param tiers: list of players that tied
+     * @return list of players that are still tie or the winner
+     * @author Andrea
+     */
+    private List<Player> secondTypeOfTie(List<Player> tiers){
+        ArrayList<Player> stillTiers = new ArrayList<>();
+        int highestNumOfTokens = -1;
+        for (Player p : tiers) {
+            if (p.getTokens() >= highestNumOfTokens)
+                highestNumOfTokens = p.getTokens();
+        }
+        for (Player p : tiers){
+            if (p.getTokens() == highestNumOfTokens)
+                stillTiers.add(p);
+        }
+        return stillTiers;
     }
 
     /**
@@ -393,7 +442,7 @@ public class Game implements Observer {
      * @return the winner of the game
      * @author Andrea
      */
-    private Player lastCheck(List<Player> winners){
+    private Player thirdTypeOfTie(List<Player> winners){
         int firstPlLastTurn = MAX_ROUNDS % this.players.size();
         int lastPlLastTurn;
         if (firstPlLastTurn == 0){

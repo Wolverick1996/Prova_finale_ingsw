@@ -134,7 +134,7 @@ public class PublicOC implements ObjectiveCard {
                     if (checkColor.isEmpty() || !checkColor.contains(grid[i][j].getDice().getColor()))
                         checkColor.add(grid[i][j].getDice().getColor());
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
             if(checkColor.size() == 5)
@@ -163,7 +163,7 @@ public class PublicOC implements ObjectiveCard {
                     if (checkColor.isEmpty() || !checkColor.contains(grid[i][j].getDice().getColor()))
                         checkColor.add(grid[i][j].getDice().getColor());
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
             if(checkColor.size() == 4)
@@ -192,7 +192,7 @@ public class PublicOC implements ObjectiveCard {
                     if (checkValue.isEmpty() || !checkValue.contains(grid[i][j].getDice().getValue()))
                         checkValue.add(grid[i][j].getDice().getValue());
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
             if(checkValue.size() == 5)
@@ -221,7 +221,7 @@ public class PublicOC implements ObjectiveCard {
                     if (checkValue.isEmpty() || !checkValue.contains(grid[i][j].getDice().getValue()))
                         checkValue.add(grid[i][j].getDice().getValue());
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
             if(checkValue.size() == 4)
@@ -266,7 +266,7 @@ public class PublicOC implements ObjectiveCard {
                     else if (grid[i][j].getDice().getValue() == secondValue)
                         seconds++;
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
         }
@@ -309,7 +309,7 @@ public class PublicOC implements ObjectiveCard {
                             flag[i][j] = true;
                         }
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
+                        // grid[x][y] doesn't contains any dice so this position has to be ignored
                     }
 
                     if (checkValue.size() == 6)
@@ -364,7 +364,7 @@ public class PublicOC implements ObjectiveCard {
                         }
                     }
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
                 try {
                     if ((i+1 < Scheme.MAX_ROW) && (j-1 >= 0)) {
@@ -395,7 +395,7 @@ public class PublicOC implements ObjectiveCard {
                         }
                     }
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
         }
@@ -428,7 +428,7 @@ public class PublicOC implements ObjectiveCard {
                             flag[i][j] = true;
                         }
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
+                        // grid[x][y] doesn't contains any dice so this position has to be ignored
                     }
 
                     if (checkColor.size() == 5)
