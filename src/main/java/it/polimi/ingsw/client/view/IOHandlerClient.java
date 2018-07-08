@@ -82,10 +82,16 @@ public class IOHandlerClient implements Observer {
         String PLAYERDIDNOTDOITRIGHT = "Player " + activePlayer + " didn't do it right, try again\n";
         String EXCEPTIONCAUGHTNOTRIGHT = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
 
+        if (checkIfTool6(message)){
+            resetGUIupdater();
+            GameController.dicePopup(message);
+            return;
+        }
+
         if(message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
             resetGUIupdater();
             //Undo the move, go back to standardchoice
-            GUIupdater.setToSend("0");
+            GUIupdater.setToSendForced("0");
         }
 
         if (readActivePlayer){ readActivePlayer(message); return; }
@@ -149,6 +155,16 @@ public class IOHandlerClient implements Observer {
                 resetGUIupdater();
                 setTypeRequested(GUIupdater.TypeRequested.WINDOWPATTERN);
                 break;
+            case "Increment or decrement the value typing '+1' or '-1'" :
+                resetGUIupdater();
+                GameController.choicePopup("Do you want to increment or decrement the value?",
+                        "+1", "-1", true);
+                break;
+            case "Do you want to move another dice?" :
+                resetGUIupdater();
+                GameController.choicePopup("Do you want to move another dice?",
+                        "yes", "no", false);
+                break;
             default: break;
         }
     }
@@ -166,6 +182,14 @@ public class IOHandlerClient implements Observer {
             chooseSchemes = false;
             lineReadNumber = 0;
         }
+    }
+
+    private boolean checkIfTool6(String message){
+        if (message.split(":")[0].equals("Dice rolled")){
+            return true;
+        }
+        else
+            return false;
     }
 
     private void readActivePlayer(String message){
@@ -207,6 +231,9 @@ public class IOHandlerClient implements Observer {
 
     private String requestGUI(){
         if (debug) System.out.println("The context of the input request is " + GUIupdater.getTypeRequested());
+        String forced = GUIupdater.getToSendForced();
+        if (forced != null)
+            return forced;
         if (GUIupdater.getTypeRequested() == null) {
             String toSend = GUIupdater.getToSend();
             if (toSend == null) {

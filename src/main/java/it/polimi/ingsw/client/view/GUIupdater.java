@@ -34,6 +34,7 @@ public class GUIupdater {
     private static TypeRequested requested;
 
     private static String toSend;
+    private static String toSendForced;
     private static List<String> toSendList = new ArrayList<>();
     private static List<String> schemesToChoose = new ArrayList<>();
 
@@ -118,6 +119,12 @@ public class GUIupdater {
         return toSend;
     }
 
+    static synchronized String getToSendForced(){
+        String out = toSendForced;
+        toSendForced = null;
+        return out;
+    }
+
     static synchronized List getSchemesToChoose(){
         return schemesToChoose;
     }
@@ -186,10 +193,11 @@ public class GUIupdater {
     }
 
     static synchronized void setToSend(String value){
-        if (value == null)
-            toSend = null;
-        else
-            toSend = value;
+        toSend = value;
+    }
+
+    static synchronized void setToSendForced(String value){
+        toSendForced = value;
     }
 
     public static synchronized void setTable(String value){

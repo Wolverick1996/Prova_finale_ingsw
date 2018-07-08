@@ -13,6 +13,8 @@ import java.util.*;
  */
 public class Controller {
 
+    public static final String STATUS = "STATUS";
+
     private static List<Lobby> lobbies = new ArrayList<>();
     private static List<Game> games = new ArrayList<>();
     private static List<IOhandler> speakers = new ArrayList<>();

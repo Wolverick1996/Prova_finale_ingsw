@@ -219,6 +219,7 @@ public class Game implements Observer {
         } else {
             toolUsed = false;
             Controller.getMyIO(this).broadcast("Something went wrong... :(");
+            Controller.getMyIO(this).broadcast(STATUS);
         }
     }
 
@@ -265,10 +266,12 @@ public class Game implements Observer {
                     Controller.getMyIO(this).broadcast("Player " + this.players.get(active).getUsername() + " didn't do it right, try again\n");
                     if (dice!= null && dice != this.table.checkDiceFromReserve(index))
                         this.table.putDiceInReserve(dice);
+                    Controller.getMyIO(this).broadcast(STATUS);
                 }
 
             } catch (Exception e) {
                 Controller.getMyIO(this).broadcast("EXCEPTION CAUGHT! Player " + this.players.get(active).getUsername() + " didn't do it right, try again\n");
+                Controller.getMyIO(this).broadcast(STATUS);
                 Controller.getMyIO(this).broadcast(e.getMessage());
                 if (dice!= null) this.table.putDiceInReserve(dice);
             }

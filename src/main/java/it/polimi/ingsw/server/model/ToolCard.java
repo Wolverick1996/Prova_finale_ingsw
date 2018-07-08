@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.controller.Controller;
+
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -181,14 +183,13 @@ public class ToolCard {
                 if (dice == null) {
                     table.setCanExtract(canExtract);
                     return false; }
-
                 dice.rollDice();
+                ToolHandler.notify(player, "Dice rolled: " + dice);
                 if (isPlaceable(dice, player) == null) {
                     ToolHandler.notify(player,"You can't place the dice in your window pattern.\nThe dice will be reinserted in the reserve");
                     table.putDiceInReserve(dice);
                     table.setCanExtract(canExtract);
                 } else {
-                    ToolHandler.notify(player, "Dice rolled: " + dice);
                     ToolHandler.notify(player, isPlaceable(dice, player));
                     ToolHandler.notify(player, player.getOwnScheme().toString());
                     ToolHandler.notify(player,"Insert the coordinates of the dice to be placed, one at a time (x, y)");
@@ -412,7 +413,7 @@ public class ToolCard {
                     return false;
             }
         }
-
+        ToolHandler.notify(player, Controller.STATUS );
         ToolHandler.notify(player,"Insert the NEW coordinates of the FIRST dice to be moved, one at a time (x, y)");
         coord1NEW = getCoordinates(player);
 

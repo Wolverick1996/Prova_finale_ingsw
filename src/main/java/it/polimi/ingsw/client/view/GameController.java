@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -169,7 +170,7 @@ public class GameController {
         refreshEffectOn = on;
     }
 
-    private static void choicePopup(String message, String option1, String option2){
+    static void choicePopup(String message, String option1, String option2, boolean isOne){
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Make a decision!");
@@ -182,10 +183,22 @@ public class GameController {
         text.setFont(myFont);
         Button button1 = new Button(option1);
         button1.setFont(myFont);
-        button1.setOnAction(e -> popup.close());
+        button1.setOnAction(e -> {
+            if(isOne)
+                GUIupdater.setToSend("+1");
+            else
+                GUIupdater.setToSend("y");
+            popup.close();
+        });
         Button button2 = new Button(option2);
         button2.setFont(myFont);
-        button2.setOnAction(e -> popup.close());
+        button2.setOnAction(e -> {
+            if (isOne)
+                GUIupdater.setToSend("-1");
+            else
+                GUIupdater.setToSend("n");
+            popup.close();
+        });
         HBox choiceLine = new HBox();
         Region r1 = new Region();
         Region r2 = new Region();
@@ -201,10 +214,11 @@ public class GameController {
         popup.setScene(popupScene);
         popup.setResizable(false);
         popup.setIconified(false);
+        popup.initStyle(StageStyle.UNDECORATED);
         popup.showAndWait();
     }
 
-    private static void dicePopup(String message){
+    static void dicePopup(String message){
         String[] divide;
         String[] toBePrepared = new String[1];
         divide = message.split(DIVISOR);
