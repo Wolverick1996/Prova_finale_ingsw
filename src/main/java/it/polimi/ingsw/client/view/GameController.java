@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.view;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -173,138 +174,144 @@ public class GameController {
     }
 
     static void choicePopup(String message, String option1, String option2, boolean isOne){
-        Stage popup = new Stage();
-        popup.initModality(Modality.APPLICATION_MODAL);
-        popup.setTitle("Make a decision!");
-        Label label1 = new Label(TOOL);
-        label1.setFont(myFont);
-        Label label2 = new Label("You have to make a decision...\n");
-        label2.setFont(myFont);
-        Text text = new Text();
-        text.setText(message);
-        text.setFont(myFont);
-        Button button1 = new Button(option1);
-        button1.setFont(myFont);
-        button1.setOnAction(e -> {
-            if(isOne)
-                GUIupdater.setToSend("+1");
-            else
-                GUIupdater.setToSend("y");
-            popup.close();
+        Platform.runLater(() -> {
+            Stage popup = new Stage();
+            popup.initModality(Modality.APPLICATION_MODAL);
+            popup.setTitle("Make a decision!");
+            Label label1 = new Label(TOOL);
+            label1.setFont(myFont);
+            Label label2 = new Label("You have to make a decision...\n");
+            label2.setFont(myFont);
+            Text text = new Text();
+            text.setText(message);
+            text.setFont(myFont);
+            Button button1 = new Button(option1);
+            button1.setFont(myFont);
+            button1.setOnAction(e -> {
+                if(isOne)
+                    GUIupdater.setToSend("+1");
+                else
+                    GUIupdater.setToSend("y");
+                popup.close();
+            });
+            Button button2 = new Button(option2);
+            button2.setFont(myFont);
+            button2.setOnAction(e -> {
+                if (isOne)
+                    GUIupdater.setToSend("-1");
+                else
+                    GUIupdater.setToSend("n");
+                popup.close();
+            });
+            HBox choiceLine = new HBox();
+            Region r1 = new Region();
+            Region r2 = new Region();
+            Region r3 = new Region();
+            choiceLine.getChildren().addAll(r1, button1, r2, button2, r3);
+            choiceLine.setHgrow(r1, Priority.ALWAYS);
+            choiceLine.setHgrow(r2, Priority.ALWAYS);
+            choiceLine.setHgrow(r3, Priority.ALWAYS);
+            VBox layout = new VBox(40);
+            layout.getChildren().addAll(label1, label2, text, choiceLine);
+            layout.setAlignment(Pos.CENTER);
+            Scene popupScene = new Scene(layout, 400, 350);
+            popup.setScene(popupScene);
+            popup.setResizable(false);
+            popup.setIconified(false);
+            popup.initStyle(StageStyle.UNDECORATED);
+            popup.showAndWait();
         });
-        Button button2 = new Button(option2);
-        button2.setFont(myFont);
-        button2.setOnAction(e -> {
-            if (isOne)
-                GUIupdater.setToSend("-1");
-            else
-                GUIupdater.setToSend("n");
-            popup.close();
-        });
-        HBox choiceLine = new HBox();
-        Region r1 = new Region();
-        Region r2 = new Region();
-        Region r3 = new Region();
-        choiceLine.getChildren().addAll(r1, button1, r2, button2, r3);
-        choiceLine.setHgrow(r1, Priority.ALWAYS);
-        choiceLine.setHgrow(r2, Priority.ALWAYS);
-        choiceLine.setHgrow(r3, Priority.ALWAYS);
-        VBox layout = new VBox(40);
-        layout.getChildren().addAll(label1, label2, text, choiceLine);
-        layout.setAlignment(Pos.CENTER);
-        Scene popupScene = new Scene(layout, 400, 350);
-        popup.setScene(popupScene);
-        popup.setResizable(false);
-        popup.setIconified(false);
-        popup.initStyle(StageStyle.UNDECORATED);
-        popup.showAndWait();
     }
 
     static void chooseValuePopup(){
-        Stage popup = new Stage();
-        popup.initModality(Modality.APPLICATION_MODAL);
-        popup.setTitle("Choose a dice value!");
-        Label label1 = new Label(TOOL);
-        label1.setFont(myFont);
-        Label label2 = new Label("You have to choose a value for the extracted dice...\n");
-        label2.setFont(myFont);
+        Platform.runLater(() -> {
+            Stage popup = new Stage();
+            popup.initModality(Modality.APPLICATION_MODAL);
+            popup.setTitle("Choose a dice value!");
+            Label label1 = new Label(TOOL);
+            label1.setFont(myFont);
+            Label label2 = new Label("You have to choose a value for the extracted dice...\n");
+            label2.setFont(myFont);
 
-        Button button1 = new Button("1");
-        button1.setFont(myFont);
-        button1.setOnAction(e -> {
-            GUIupdater.setToSend("1");
-            popup.close();
-        });
-        Button button2 = new Button("2");
-        button2.setFont(myFont);
-        button2.setOnAction(e -> {
-            GUIupdater.setToSend("2");
-            popup.close();
-        });
-        Button button3 = new Button("3");
-        button3.setFont(myFont);
-        button3.setOnAction(e -> {
-            GUIupdater.setToSend("3");
-            popup.close();
-        });
-        Button button4 = new Button("4");
-        button4.setFont(myFont);
-        button4.setOnAction(e -> {
-            GUIupdater.setToSend("4");
-            popup.close();
-        });
-        Button button5 = new Button("5");
-        button5.setFont(myFont);
-        button5.setOnAction(e -> {
-            GUIupdater.setToSend("5");
-            popup.close();
-        });
-        Button button6 = new Button("6");
-        button6.setFont(myFont);
-        button6.setOnAction(e -> {
-            GUIupdater.setToSend("6");
-            popup.close();
-        });
+            Button button1 = new Button("1");
+            button1.setFont(myFont);
+            button1.setOnAction(e -> {
+                GUIupdater.setToSend("1");
+                popup.close();
+            });
+            Button button2 = new Button("2");
+            button2.setFont(myFont);
+            button2.setOnAction(e -> {
+                GUIupdater.setToSend("2");
+                popup.close();
+            });
+            Button button3 = new Button("3");
+            button3.setFont(myFont);
+            button3.setOnAction(e -> {
+                GUIupdater.setToSend("3");
+                popup.close();
+            });
+            Button button4 = new Button("4");
+            button4.setFont(myFont);
+            button4.setOnAction(e -> {
+                GUIupdater.setToSend("4");
+                popup.close();
+            });
+            Button button5 = new Button("5");
+            button5.setFont(myFont);
+            button5.setOnAction(e -> {
+                GUIupdater.setToSend("5");
+                popup.close();
+            });
+            Button button6 = new Button("6");
+            button6.setFont(myFont);
+            button6.setOnAction(e -> {
+                GUIupdater.setToSend("6");
+                popup.close();
+            });
 
-        VBox layout = new VBox(10);
-        layout.getChildren().addAll(label1, label2, button1, button2, button3, button4, button5, button6);
-        layout.setAlignment(Pos.CENTER);
-        Scene popupScene = new Scene(layout, 500, 350);
-        popup.setScene(popupScene);
-        popup.setResizable(false);
-        popup.setIconified(false);
-        popup.showAndWait();
+            VBox layout = new VBox(10);
+            layout.getChildren().addAll(label1, label2, button1, button2, button3, button4, button5, button6);
+            layout.setAlignment(Pos.CENTER);
+            Scene popupScene = new Scene(layout, 500, 350);
+            popup.setScene(popupScene);
+            popup.setResizable(false);
+            popup.setIconified(false);
+            popup.showAndWait();
+        });
     }
 
     static void dicePopup(String message){
-        String[] divide;
-        String[] toBePrepared = new String[1];
-        divide = message.split(DIVISOR);
-        ArrayList<String> color = new ArrayList<>();
-        ArrayList<String> value = new ArrayList<>();
-        toBePrepared[0] = divide[1];
-        prepareString(color, value, toBePrepared);
-        ImageView img = new ImageView(new Image("/images/" + color.get(0) + value.get(0) + ".jpeg",
-                60, 60, false, false));
+        Platform.runLater(() -> {
+            String[] divide;
+            String[] toBePrepared = new String[1];
+            divide = message.split(DIVISOR);
+            ArrayList<String> color = new ArrayList<>();
+            ArrayList<String> value = new ArrayList<>();
+            toBePrepared[0] = divide[1];
+            prepareString(color, value, toBePrepared);
+            ImageView img = new ImageView(new Image("/images/" + color.get(0) + value.get(0) + ".jpeg",
+                    60, 60, false, false));
 
-        Stage popup = new Stage(); //TODO: SOLVE INVOCATIONEXCEPTION
-        popup.initModality(Modality.APPLICATION_MODAL);
-        popup.setTitle("Advertisement");
-        Label label1 = new Label(TOOL);
-        label1.setFont(myFont);
-        Label label2 = new Label(divide[0]+":");
-        label2.setFont(myFont);
-        Button button = new Button("Ok");
-        button.setFont(myFont);
-        button.setOnAction(e -> popup.close());
-        VBox layout = new VBox(40);
-        layout.getChildren().addAll(label1, label2, img, button);
-        layout.setAlignment(Pos.CENTER);
-        Scene popupScene = new Scene(layout, 400, 350);
-        popup.setScene(popupScene);
-        popup.setResizable(false);
-        popup.setIconified(false);
-        popup.showAndWait();
+            Stage popup = new Stage(); //TODO: SOLVE INVOCATIONEXCEPTION
+            popup.initModality(Modality.APPLICATION_MODAL);
+            popup.setTitle("Advertisement");
+            Label label1 = new Label(TOOL);
+            label1.setFont(myFont);
+            Label label2 = new Label(divide[0]+":");
+            label2.setFont(myFont);
+            Button button = new Button("Ok");
+            button.setFont(myFont);
+            button.setOnAction(e -> popup.close());
+            VBox layout = new VBox(40);
+            layout.getChildren().addAll(label1, label2, img, button);
+            layout.setAlignment(Pos.CENTER);
+            Scene popupScene = new Scene(layout, 400, 350);
+            popup.setScene(popupScene);
+            popup.setResizable(false);
+            popup.setIconified(false);
+            popup.showAndWait();
+        });
     }
 
     private static synchronized void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
