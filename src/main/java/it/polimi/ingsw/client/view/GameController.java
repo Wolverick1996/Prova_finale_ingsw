@@ -160,7 +160,7 @@ public class GameController {
     };
 
     /**
-     * Gets the Roundtrack ImageView arraylist
+     * Gets the Roundtrack ImageView ArrayList
      *
      * @return roundtrackIMG
      * @author Matteo
@@ -230,10 +230,10 @@ public class GameController {
     /**
      * Opens a popup for a boolean choice
      *
-     * @param message : the message to be shown
-     * @param option1 : +1 or y choice
-     * @param option2 : -1 or n choice
-     * @param isOne : boolean that influences the follow-up of the popup
+     * @param message: the message to be shown
+     * @param option1: +1 or y choice
+     * @param option2: -1 or n choice
+     * @param isOne: boolean that influences the follow-up of the popup
      * @author Riccardo
      */
     static void choicePopup(String message, String option1, String option2, boolean isOne){
@@ -394,9 +394,9 @@ public class GameController {
     /**
      * Decode a String for scheme printing
      *
-     * @param imageColor : Color vector to be printed
-     * @param imageValue : Value vector to be printed
-     * @param divide : The string to decode
+     * @param imageColor: Color vector to be printed
+     * @param imageValue: Value vector to be printed
+     * @param divide: The string to decode
      * @author Riccardo
      */
     private static synchronized void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
@@ -437,9 +437,9 @@ public class GameController {
     /**
      * Loads the Window Pattern on the GUI
      *
-     * @param wp : the String of the window pattern to be loaded
-     * @param toFill : the list of ImageViews to fill
-     * @param gridObj : the grid on the Scene
+     * @param wp: the String of the window pattern to be loaded
+     * @param toFill: the list of ImageViews to fill
+     * @param gridObj: the grid on the Scene
      * @author Riccardo
      */
     static synchronized void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
@@ -502,7 +502,7 @@ public class GameController {
     /**
      * Loads the draft on the GUI
      *
-     * @param draft : the String of the draft to be loaded
+     * @param draft: the String of the draft to be loaded
      * @author Riccardo
      */
     private synchronized void loadReserve(String draft){
@@ -538,7 +538,7 @@ public class GameController {
     /**
      * Loads the Roundtrack on the GUI
      *
-     * @param track : the String of the Roundtrack to be loaded
+     * @param track: the String of the Roundtrack to be loaded
      * @author Riccardo
      */
     private synchronized void loadRoundtrack(String track){
@@ -585,8 +585,8 @@ public class GameController {
     /**
      * Loads an image on the button
      *
-     * @param path : url of the image to be shown
-     * @param button : button to fill
+     * @param path: url of the image to be shown
+     * @param button: button to fill
      * @author Riccardo
      */
     private synchronized void setButtonImage(String path, Button button){
@@ -596,8 +596,8 @@ public class GameController {
     /**
      * Loads all the Objective cards to the GUI
      *
-     * @param privateOC : the string of the private Objective card
-     * @param table : the string of the entire table, to be split
+     * @param privateOC: the string of the private Objective card
+     * @param table: the string of the entire table, to be split
      * @author Riccardo
      */
     private synchronized void loadObjectiveCards(String privateOC, String table){
@@ -635,7 +635,7 @@ public class GameController {
     /**
      * Loads the tools on the GUI
      *
-     * @param activeTools : the String of the tools to be loaded
+     * @param activeTools: the String of the tools to be loaded
      * @author Riccardo
      */
     private synchronized void loadTools(String activeTools){
@@ -688,7 +688,7 @@ public class GameController {
     }
 
     /**
-     * Called  from the refresh button. Updates the GUI with parameters from the
+     * Called from the refresh button. Updates the GUI with parameters from the
      * GUIupdater if needed and turns off the button.
      *
      * @author Riccardo
@@ -705,13 +705,13 @@ public class GameController {
     /**
      * Reloads the GUI, resetting all the parameters from Strings. Starts the task that refreshes the effects
      *
-     * @param numP : number of players
-     * @param scheme : scheme of the current player
-     * @param privateOC : the privOC card of the current player
-     * @param table : the current table
-     * @param activeTools : the tools
-     * @param me : the current player
-     * @param activePlayer : the player that is playing
+     * @param numP: number of players
+     * @param scheme: scheme of the current player
+     * @param privateOC: the privOC card of the current player
+     * @param table: the current table
+     * @param activeTools: the tools
+     * @param me: the current player
+     * @param activePlayer: the player that is playing
      * @author Riccardo
      */
     @FXML
@@ -780,7 +780,7 @@ public class GameController {
      * Loads the first player in the game (that is not the current player)
      *
      * @param event : the trigger of the method
-     * @throws IOException
+     * @throws IOException associated to the event
      * @author Riccardo
      */
     @FXML
@@ -802,8 +802,8 @@ public class GameController {
     /**
      * Loads the second player in the game (that is not the current player)
      *
-     * @param event : the trigger of the method
-     * @throws IOException
+     * @param event: the trigger of the method
+     * @throws IOException associated to the event
      * @author Riccardo
      */
     @FXML
@@ -825,8 +825,8 @@ public class GameController {
     /**
      * Loads the third player in the game (that is not the current player)
      *
-     * @param event : the trigger of the method
-     * @throws IOException
+     * @param event: the trigger of the method
+     * @throws IOException associated to the event
      * @author Riccardo
      */
     @FXML
@@ -848,8 +848,8 @@ public class GameController {
     /**
      * Triggers the end of the game and changes the scene to the final rank
      *
-     * @param event : the event that fires the method (pass button on Game screen)
-     * @throws IOException
+     * @param event: the event that fires the method (pass button on Game screen)
+     * @throws IOException associated to the event
      * @author Riccardo
      */
     private synchronized void endGame(ActionEvent event) throws IOException {

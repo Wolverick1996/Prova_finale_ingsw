@@ -44,7 +44,7 @@ public class PlayerController {
      * Re-loads the game screen
      *
      * @param event: button event
-     * @throws IOException
+     * @throws IOException associated to the event
      * @author Riccardo
      */
     @FXML

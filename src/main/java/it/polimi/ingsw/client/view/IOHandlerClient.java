@@ -80,7 +80,7 @@ public class IOHandlerClient {
      * Gets the message sent by Client and decodes it for the GUI.
      * Each string correspond to a different mechanism that triggers different events
      *
-     * @param message : the message sent from the client
+     * @param message: the message sent from the client
      * @author Matteo
      */
     private void sendGUI(String message){
@@ -229,7 +229,7 @@ public class IOHandlerClient {
     /**
      * Triggers the Game End
      *
-     * @param message : the message containing the ranking
+     * @param message: the message containing the ranking
      * @return the right message to be read
      * @author Matteo
      */
@@ -250,7 +250,7 @@ public class IOHandlerClient {
     /**
      * Triggers the algorithm to read the Schemes to be chosen
      *
-     * @param message : the message from the server
+     * @param message: the message from the server
      * @author Matteo
      */
     private void chooseSchemes(String message){
@@ -267,7 +267,7 @@ public class IOHandlerClient {
     /**
      * Checks from the message the right tool that was used and needs further examination
      *
-     * @param message : the message from the server
+     * @param message: the message from the server
      * @return true if tool was used
      * @author Matteo
      */
@@ -284,7 +284,7 @@ public class IOHandlerClient {
     /**
      * Reads the active player and sets it
      *
-     * @param message : the message from the server
+     * @param message: the message from the server
      * @author Matteo
      */
     private void readActivePlayer(String message){
@@ -296,7 +296,7 @@ public class IOHandlerClient {
     /**
      * Gets the STATUS from the Server and updates all the data for GUI refreshing
      *
-     * @param message : the status
+     * @param message: the status
      * @author Matteo
      */
     private void getStatus(String message){
@@ -336,7 +336,7 @@ public class IOHandlerClient {
     }
 
     /**
-     * Request an input from the gui. toSendForced has maximum priority.
+     * Request an input from the GUI. toSendForced has maximum priority.
      *
      * @return the input of the player
      * @author Matteo

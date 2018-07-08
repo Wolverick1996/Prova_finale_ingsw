@@ -20,7 +20,7 @@ public class GUIupdater {
     /**
      * Sets the GameController for the current setup
      *
-     * @param value : the controller
+     * @param value: the controller
      * @author Matteo
      */
     public static synchronized void setController(GameController value){
@@ -287,7 +287,7 @@ public class GUIupdater {
     }
 
     /**
-     * Gets the Tools fr the current setup
+     * Gets the Tools for the current setup
      *
      * @return the string of the tools
      * @author Matteo
@@ -317,10 +317,10 @@ public class GUIupdater {
     }
 
     /**
-     * Sets the messege with the ranking
+     * Sets the message with the ranking
      *
      * @param value: the String of the ranking
-     * @authot Matteo
+     * @author Matteo
      */
     static synchronized void setFinalMessage(String value){
         finalMessage = value;
@@ -360,7 +360,7 @@ public class GUIupdater {
     /**
      * Sets the boolean of the "Custom scheme" setup choice
      *
-     * @param value: true if Custom schemes were chosen
+     * @param value: true if custom schemes were chosen
      * @author Matteo
      */
     static synchronized void setCustomSchemes(boolean value){
@@ -399,7 +399,7 @@ public class GUIupdater {
     /**
      * Sets the toSendForced variable (check the get method for further information)
      *
-     * @param value: the String to be Forcedly sent
+     * @param value: the string to be sent
      * @author Matteo
      */
     static synchronized void setToSendForced(String value){
@@ -436,9 +436,8 @@ public class GUIupdater {
         privObj = value;
     }
 
-
     /**
-     * Add a player to the current setup
+     * Adds a player to the current setup
      *
      * @param value: the String of the player
      * @author Matteo
@@ -448,7 +447,7 @@ public class GUIupdater {
     }
 
     /**
-     * Clear all the players from the current setup
+     * Clears all the players from the current setup
      *
      * @author Matteo
      */
@@ -467,7 +466,7 @@ public class GUIupdater {
     }
 
     /**
-     * gets the list of consecutive outputs from the Client to the Server
+     * Gets the list of consecutive outputs from the Client to the Server
      *
      * @return the whole list of messages to be sent
      * @author Matteo
@@ -489,7 +488,7 @@ public class GUIupdater {
     }
 
     /**
-     * Empty the list of consecutive ouputs to be sent to the server
+     * Empties the list of consecutive outputs to be sent to the server
      *
      * @author Matteo
      */
@@ -526,17 +525,19 @@ public class GUIupdater {
     /**
      * Sets the tool's effect "disabled" on the GUI
      *
-     * @param value : true if the tools needs to be disabled
+     * @param value: true if the tools needs to be disabled
      * @author Matteo
      */
     static synchronized void setToolDisabled(boolean value) { toolDisabled = value; }
+
     /**
      * Sets the Draft's effect "disabled" on the GUI
      *
-     * @param value : true if the draft needs to be disabled
+     * @param value: true if the draft needs to be disabled
      * @author Matteo
      */
     static synchronized void setDraftDisabled(boolean value) { draftDisabled = value; }
+
     /**
      * Gets the "disabled" flag of the Tools on the GUI
      *
@@ -544,6 +545,7 @@ public class GUIupdater {
      * @author Matteo
      */
     private static synchronized boolean getToolDisabled() { return toolDisabled; }
+
     /**
      * Gets the "disabled" flag of the Draft on the GUI
      *

@@ -23,6 +23,11 @@ import java.util.ArrayList;
 
 import static it.polimi.ingsw.client.view.GUIController.myFont;
 
+/**
+ * Controller class for the Schemes Stage in the GUI
+ *
+ * @author Riccardo
+ */
 public class SchemesController {
 
     static final String COLORS = "\u001B\\[[;\\d]*m";
@@ -248,7 +253,7 @@ public class SchemesController {
      * Loads the game screen
      *
      * @param event: button event
-     * @throws IOException
+     * @throws IOException associated to the event
      * @author Riccardo
      */
     @FXML

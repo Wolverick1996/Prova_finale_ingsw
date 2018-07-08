@@ -100,8 +100,8 @@ public class GUIController implements Initializable {
     /**
      * Initialize the GUI
      *
-     * @param location
-     * @param resources
+     * @param location: URL location
+     * @param resources: ResourceBundle resources
      * @author Riccardo
      */
     @Override
@@ -112,7 +112,7 @@ public class GUIController implements Initializable {
     /**
      * Popups an error message to the user
      *
-     * @param error : the string of the error to be shown
+     * @param error: the string of the error to be shown
      * @author Riccardo
      */
     private static void popup(String error){
@@ -142,10 +142,9 @@ public class GUIController implements Initializable {
     /**
      * Waiting popup. Blocks the execution for a given time while displaying a message
      *
-     * @param timer : how long the popup will show
-     * @param numP : number of player
-     * @param schemes : changes the type of message to be shown
-     *                (waiting for schemes settings / waiting for game to start)
+     * @param timer: how long the popup will show
+     * @param numP: number of player
+     * @param schemes: changes the type of message to be shown (waiting for schemes settings / waiting for game to start)
      * @author Riccardo
      */
     static void waiting(int timer, int numP, boolean schemes){
@@ -183,7 +182,7 @@ public class GUIController implements Initializable {
     /**
      * Loads the login scene
      *
-     * @throws IOException
+     * @throws IOException associated to the event
      * @author Riccardo
      */
     @FXML
@@ -207,7 +206,7 @@ public class GUIController implements Initializable {
     /**
      * Sets the IP from the textfield
      *
-     * @return the ip
+     * @return the IP
      * @author Matteo
      */
     @FXML
@@ -234,7 +233,7 @@ public class GUIController implements Initializable {
     /**
      * Checks the setup: tries to connect first and then asks the Server for confirmation of the username
      *
-     * @return true if login was succesfull
+     * @return true if login was successful
      * @author Matteo
      */
     @FXML
@@ -337,7 +336,7 @@ public class GUIController implements Initializable {
      * Loads the lobby with the gamesettings if player's ID is 1, else waits
      *
      * @param event: next button on login Scene
-     * @throws IOException
+     * @throws IOException associated to the event
      * @author Matteo
      */
     @FXML
@@ -346,12 +345,6 @@ public class GUIController implements Initializable {
             if (numPlayersAtBeginning == 1) {
                 pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
                 pane1.getChildren().setAll(pane2);
-                /**
-                 * Tasks that prevents the sending of parameters after game has started.
-                 * After 19 seconds popups an error and disables the setParameters().
-                 *
-                 * @author Matteo
-                 */
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
@@ -400,7 +393,7 @@ public class GUIController implements Initializable {
     /**
      * Sets the delay for the lobby
      *
-     * @param delay : the delay in millisec
+     * @param delay: the delay in milliseconds
      * @author Matteo
      */
     private void setDelay(int delay){
@@ -419,8 +412,8 @@ public class GUIController implements Initializable {
      * Opens the scene for choosing the scheme. Waits if other players are choosing the scheme.
      * Set parameters if current player's ID is 1
      *
-     * @param event : next on the last scene visited
-     * @throws IOException
+     * @param event: next on the last scene visited
+     * @throws IOException associated to the event
      * @author Matteo
      */
     @FXML
@@ -450,7 +443,7 @@ public class GUIController implements Initializable {
     }
 
     /**
-     * Opens the waiting popup with schemes bollean true
+     * Opens the waiting popup with schemes boolean true
      *
      * @author Matteo
      */
@@ -462,7 +455,7 @@ public class GUIController implements Initializable {
     /**
      * Sets the reference of the SocketMessenger of the UI if connection is Socket
      *
-     * @param sm : the Messenger
+     * @param sm: the Messenger
      * @author Matteo
      */
     public static void setMessenger(SocketMessengerClient sm){
@@ -472,8 +465,8 @@ public class GUIController implements Initializable {
     /**
      * Sets the ranking when games ends
      *
-     * @param numP : number of players.
-     * @param rank : String of the entire ranking.
+     * @param numP: number of players.
+     * @param rank: String of the entire ranking.
      * @author Riccardo
      */
     void setPlayers(int numP, String rank){
