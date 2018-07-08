@@ -33,6 +33,7 @@ public class ClientMain {
     private String ip;
     private static final int PORT = 1337;
     private static final int MAX_PLAYERS = 4;
+    private static boolean gameStarted = false;
 
     /**
      * Private constructor of the ClientMain class
@@ -70,40 +71,49 @@ public class ClientMain {
             System.exit(0);
         }
         //CLI only
+        setUpConnection();
+    }
+
+    /**
+     * Set up the connection, can call startClientRMI or startClientSocket
+     *
+     * @author Andrea
+     */
+    private static void setUpConnection(){
         System.out.println("Which kind of connection do you want to use? [RMI or socket]");
         Scanner scanner = new Scanner(System.in);
         String string;
-        boolean check = false;
-        while (!check){
-            string = scanner.nextLine();
-            string = string.toLowerCase();
-            if (string.equals("rmi") || string.equals("socket")){
-                check = true;
-                boolean ipOK = false;
-                while (!ipOK){
-                    ClientMain clientMain = new ClientMain(askIP());
-                    if (string.equals("rmi")){
-                        try {
-                            clientMain.startClientRMI();
-                            ipOK = true;
-                        } catch (MalformedURLException | RemoteException e){
+        string = scanner.nextLine();
+        string = string.toLowerCase();
+        if (string.equals("rmi") || string.equals("socket")){
+            boolean ipOK = false;
+            while (!ipOK){
+                if (gameStarted)
+                    return;
+                ClientMain clientMain = new ClientMain(askIP());
+                if (string.equals("rmi")){
+                    try {
+                        clientMain.startClientRMI();
+                        ipOK = true;
+                    } catch (MalformedURLException | RemoteException e){
+                        System.out.println("IP not correct");
+                    }
+                } else {
+                    try {
+                        clientMain.startClientSocket();
+                        ipOK = true;
+                    } catch (IOException e) {
+                        if (!gameStarted){
                             System.out.println("IP not correct");
                         }
-                    } else {
-                        try {
-                            clientMain.startClientSocket();
-                            ipOK = true;
-                        } catch (IOException e) {
-                            System.out.println("IP not correct");
-                        } catch (NoSuchElementException e) {
-                            System.err.println("Nothing to read " + e.getMessage());
-                        }
+                    } catch (NoSuchElementException e) {
+                        System.err.println("Nothing to read " + e.getMessage());
                     }
                 }
-                break;
-            } else {
-                System.out.println("Invalid name. Type rmi or socket");
             }
+        } else {
+            System.out.println("Invalid name. Type rmi or socket");
+            setUpConnection();
         }
     }
 
@@ -169,7 +179,7 @@ public class ClientMain {
      *
      * @return the number of active players
      * @throws RemoteException if client has connection issues
-     * @author Andrea
+     * @author Matteo
      */
     public static int getPlayers() throws RemoteException {
         return serverRMI.playersInLobby();
@@ -259,8 +269,10 @@ public class ClientMain {
 
                     if (server.login(remoteRef)){
                         loginSuccess = true;
-                        if (server.hasStarted())
+                        if (server.hasStarted()){
+                            gameStarted = true;
                             return;
+                        }
                     } else {
                         if (server.getConnected().size() >= MAX_PLAYERS)
                             fullLobby = true;
@@ -289,8 +301,9 @@ public class ClientMain {
                     System.out.println("[Players in the lobby: " + server.playersInLobby() + "]");
                     num = server.playersInLobby();
                 } else if (server.hasStarted()){
+                    gameStarted = true;
                     executorService.shutdownNow();
-                    break;
+                    active = false;
                 }
             }
         } catch (NotBoundException e) {
@@ -323,6 +336,7 @@ public class ClientMain {
             do {
                 name = clientImplementationSocket.login();
                 if (clientImplementationSocket.isGameStarted()){
+                    gameStarted = true;
                     SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli, true);
                     messenger.close();
                 }
@@ -347,23 +361,18 @@ public class ClientMain {
                     if (num != i){
                         if (i == 999){
                             executorService.shutdownNow();
+                            gameStarted = true;
                             SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli);
                             messenger.close();
                         }
-                        System.out.println("[Players in the lobby: " + i + "]");
-                        num = i;
+                        if (!gameStarted){
+                            System.out.println("[Players in the lobby: " + i + "]");
+                            num = i;
+                        }
                     }
                     //TODO: SOLVE THIS WHILE(TRUE)
-                    //MOVE ALL THE METHODS TO CLIENT IMPLEMENTATION SOCKET, THE TO MESSENGER
                 }
             } while (!success);
-
-            //DOES NOTHING
-            while (!success){
-                Scanner s = new Scanner(System.in);
-                String t = s.nextLine();
-                System.err.println(t);
-            }
 
             scanner.close();
             in.close();
