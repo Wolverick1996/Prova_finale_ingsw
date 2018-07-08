@@ -27,7 +27,6 @@ public class IOhandler{
     private List<SocketUser> socketUserList = new ArrayList<>(); //this is the list of socket BY socketUser->name
     private List<DisconnectedPlayers> disconnectedSocket = new ArrayList<>();
     private List<Player> players;
-    private Observable ov = null;
     private Table table;
     private static final String DISCONNECTION = "disconnection";
     private static final String STATUS = "STATUS";
