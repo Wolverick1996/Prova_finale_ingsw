@@ -340,16 +340,16 @@ public class Game implements Observer {
 
         finalRank = calculateFinalRank(winner);
 
-        String s = "Game ended! Calculating points...\n";
+        String s = "Game ended! Calculating points...\n\n";
         for (Player p : finalRank)
             s += p.getUsername() + ": \t" + p.getPoints() + "\n";
 
         Controller.getMyIO(this).broadcast(s);
 
-        Controller.getMyIO(this).finishGameSocket();
-        Controller.getMyIO(this).finishGameRMI();
+        //Controller.getMyIO(this).finishGameSocket();
+        //Controller.getMyIO(this).finishGameRMI();
         //TODO SOLVE FINAL SCREEN FOR GUI
-        System.exit(0);
+        //System.exit(0);
     }
 
     /**

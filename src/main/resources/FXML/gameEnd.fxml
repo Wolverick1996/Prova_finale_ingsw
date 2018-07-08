@@ -125,19 +125,20 @@
                   <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                   <GridPane fx:id="player4" prefWidth="500.0" style="-fx-background-color: #DA8A67;">
                      <children>
-                        <Text fx:id="player4Name" strokeType="OUTSIDE" strokeWidth="0.0" text="Fourth player" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <Text fx:id="player4Name" strokeType="OUTSIDE" strokeWidth="0.0" text="Fourth player" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <font>
                               <Font name="Century Gothic" size="20.0" />
                            </font>
                         </Text>
-                        <Text fx:id="player4Score" strokeType="OUTSIDE" strokeWidth="0.0" text="Score4" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                        <Text fx:id="player4Score" strokeType="OUTSIDE" strokeWidth="0.0" text="Score4" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                            <font>
                               <Font name="Century Gothic" size="20.0" />
                            </font>
                         </Text>
                      </children>
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="398.0" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
                      <rowConstraints>
