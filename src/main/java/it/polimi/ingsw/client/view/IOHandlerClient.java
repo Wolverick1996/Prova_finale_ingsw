@@ -76,6 +76,13 @@ public class IOHandlerClient{
     private static final String FAIL = "999";
     private boolean tool8 = false;
 
+    /**
+     * Gets the message sent by Client and decodes it for the GUI.
+     * Each string correspond to a different mechanism that triggers different events
+     *
+     * @param message : the message sent from the client
+     * @author Matteo
+     */
     private void sendGUI(String message){
         if (debug) System.out.println(message);
         String playerdidnotdoitright = "Player " + activePlayer + " didn't do it right, try again\n";
@@ -206,6 +213,12 @@ public class IOHandlerClient{
         }
     }
 
+    /**
+     * Reads and sets the privOC
+     *
+     * @param message the message from the Server
+     * @author Matteo
+     */
     private void setPrivObj(String message) {
         if (!message.contains("has to choose a scheme")){
             privOC = false;
@@ -213,14 +226,33 @@ public class IOHandlerClient{
         }
     }
 
+    /**
+     * Triggers the Game End
+     *
+     * @param message : the message containing the ranking
+     * @return the right message to be read
+     * @author Matteo
+     */
     private boolean checkIfGameEnded(String message) {
         return (message.split("!")[0].equals("Game ended"));
     }
 
+    /**
+     * Sets the type of input requested on the GUIupdater
+     *
+     * @param requested : the type of input requested to the user
+     * @author Matteo
+     */
     private void setTypeRequested(GUIupdater.TypeRequested requested) {
         GUIupdater.setTypeRequested(requested);
     }
 
+    /**
+     * Triggers the algorithm to read the Schemes to be chosen
+     *
+     * @param message : the message from the server
+     * @author Matteo
+     */
     private void chooseSchemes(String message){
         if (lineReadNumber%2 != 0) {
             GUIupdater.getSchemesToChoose().add(message);
@@ -232,6 +264,13 @@ public class IOHandlerClient{
         }
     }
 
+    /**
+     * Checks from the message the right tool that was used and needs further examination
+     *
+     * @param message : the message from the server
+     * @return true if tool was used
+     * @author Matteo
+     */
     private boolean checkIfTool6or11(String message){
         String temp = message;
         if (temp.split(":")[0].equals("Dice rolled") || temp.split((":"))[0].equals("Dice extracted from the bag")){
@@ -242,12 +281,24 @@ public class IOHandlerClient{
             return false;
     }
 
+    /**
+     * Reads the active player and sets it
+     *
+     * @param message : the message from the server
+     * @author Matteo
+     */
     private void readActivePlayer(String message){
         activePlayer = message.split(",")[0];
         GUIupdater.setActivePlayer(activePlayer);
         readActivePlayer = false;
     }
 
+    /**
+     * Gets the STATUS from the Server and updates all the data for GUI refreshing
+     *
+     * @param message : the status
+     * @author Matteo
+     */
     private void getStatus(String message){
         if (message.equals("\n\n---------------------------------------------\n\n")) {
             GUIupdater.setCanGoToGame(true);
@@ -273,12 +324,23 @@ public class IOHandlerClient{
         }
     }
 
+    /**
+     * Clears all data in the GUIupdater
+     *
+     * @author Matteo
+     */
     private void resetGUIupdater() {
         GUIupdater.setToSend(null);
         setTypeRequested(null);
         GUIupdater.emptyToSendIntList();
     }
 
+    /**
+     * Request an input from the gui. toSendForced has maximum priority.
+     *
+     * @return the input of the player
+     * @author Matteo
+     */
     private String requestGUI(){
         if (debug) System.out.println("The context of the input request is " + GUIupdater.getTypeRequested());
         String forced = GUIupdater.getToSendForced();
@@ -315,6 +377,11 @@ public class IOHandlerClient{
         return output;
     }
 
+    /**
+     * The interface of the current user
+     *
+     * @author Matteo
+     */
     public enum Interface {
         CLI,
         GUI

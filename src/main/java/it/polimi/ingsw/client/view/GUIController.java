@@ -36,6 +36,11 @@ import java.util.TimerTask;
 
 import static it.polimi.ingsw.client.view.SchemesController.NEWLINE;
 
+/**
+ * Controller for the setup of the game (login phase) with GUI
+ *
+ * @author Riccardo
+ */
 public class GUIController implements Initializable {
 
     private static final int TIMEOUT = 19000;
@@ -92,11 +97,24 @@ public class GUIController implements Initializable {
     @FXML
     private Text player4Score;
 
+    /**
+     * Initialize the GUI
+     *
+     * @param location
+     * @param resources
+     * @author Riccardo
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources){
         System.out.println("Switching between scenes...");
     }
 
+    /**
+     * Popups an error message to the user
+     *
+     * @param error : the string of the error to be shown
+     * @author Riccardo
+     */
     private static void popup(String error){
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
@@ -121,6 +139,15 @@ public class GUIController implements Initializable {
         popup.showAndWait();
     }
 
+    /**
+     * Waiting popup. Blocks the execution for a given time while displaying a message
+     *
+     * @param timer : how long the popup will show
+     * @param numP : number of player
+     * @param schemes : changes the type of message to be shown
+     *                (waiting for schemes settings / waiting for game to start)
+     * @author Riccardo
+     */
     static void waiting(int timer, int numP, boolean schemes){
         if (activePopup != null)
             activePopup.close();
@@ -153,6 +180,12 @@ public class GUIController implements Initializable {
         popup.showAndWait();
     }
 
+    /**
+     * Loads the login scene
+     *
+     * @throws IOException
+     * @author Riccardo
+     */
     @FXML
     private void loadSecond() throws IOException {
         pane1 = FXMLLoader.load(getClass().getResource("/FXML/login.fxml"));
@@ -160,16 +193,34 @@ public class GUIController implements Initializable {
         rootPane.getChildren().setAll(pane1);
     }
 
+    /**
+     * Sets the username from the textfield
+     *
+     * @return the username
+     * @author Matteo
+     */
     @FXML
     private String setUsername(){
         return username.getText();
     }
 
+    /**
+     * Sets the IP from the textfield
+     *
+     * @return the ip
+     * @author Matteo
+     */
     @FXML
     private String setIP(){
         return ip.getText();
     }
 
+    /**
+     * Check the type of the connection (rmi/socket)
+     *
+     * @return the type of connection
+     * @author Matteo
+     */
     @FXML
     private String checkConnection(){
         if (rmiButton.isSelected()) return RMI;
@@ -180,6 +231,12 @@ public class GUIController implements Initializable {
     //       LOGIN PHASE         //
     //***************************//
 
+    /**
+     * Checks the setup: tries to connect first and then asks the Server for confirmation of the username
+     *
+     * @return true if login was succesfull
+     * @author Matteo
+     */
     @FXML
     private boolean trySetup(){
         String name = setUsername();
@@ -224,6 +281,11 @@ public class GUIController implements Initializable {
         }
     }
 
+    /**
+     * Sets the number of player during the login phase in order to know the player ID
+     * @param num : the player ID
+     * @author Matteo
+     */
     public void setNumPlayersAtBeginning(int num){
         numPlayersAtBeginning = num;
         GUIupdater.numPlayersAtBeginning = numPlayersAtBeginning;
@@ -231,7 +293,11 @@ public class GUIController implements Initializable {
         GUIupdater.numPlayers = numPlayers;
     }
 
-
+    /**
+     * Waits for the lobby to confirm that the game has started
+     *
+     * @author Matteo
+     */
     private void waitForGameStart(){
         if (isRMI) {
             try {
@@ -267,12 +333,25 @@ public class GUIController implements Initializable {
         }
     }
 
+    /**
+     * Loads the lobby with the gamesettings if player's ID is 1, else waits
+     *
+     * @param event: next button on login Scene
+     * @throws IOException
+     * @author Matteo
+     */
     @FXML
     private void loadThird(ActionEvent event) throws IOException {
         if (trySetup()) {
             if (numPlayersAtBeginning == 1) {
                 pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
                 pane1.getChildren().setAll(pane2);
+                /**
+                 * Tasks that prevents the sending of parameters after game has started.
+                 * After 19 seconds popups an error and disables the setParameters().
+                 *
+                 * @author Matteo
+                 */
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
@@ -296,6 +375,11 @@ public class GUIController implements Initializable {
 
     private static boolean checkParameters = true;
 
+    /**
+     * Sets the parameters of the game if possible, reading them from the scene
+     *
+     * @author Matteo
+     */
     @FXML
     private void setParameters(){
         if (!checkParameters) {
@@ -315,6 +399,12 @@ public class GUIController implements Initializable {
         setDelay(lobbyDelay);
     }
 
+    /**
+     * Sets the delay for the lobby
+     *
+     * @param delay : the delay in millisec
+     * @author Matteo
+     */
     private void setDelay(int delay){
         if (isRMI) {
             try {
@@ -327,6 +417,14 @@ public class GUIController implements Initializable {
         }
     }
 
+    /**
+     * Opens the scene for choosing the scheme. Waits if other players are choosing the scheme.
+     * Set parameters if current player's ID is 1
+     *
+     * @param event : next on the last scene visited
+     * @throws IOException
+     * @author Matteo
+     */
     @FXML
     private void loadSchemes(ActionEvent event) throws IOException {
         if (numPlayersAtBeginning == 1){
@@ -353,15 +451,33 @@ public class GUIController implements Initializable {
         appStage.show();
     }
 
+    /**
+     * Opens the waiting popup with schemes bollean true
+     *
+     * @author Matteo
+     */
     private void waitForSchemes(){
         while (GUIupdater.getSchemesToChoose().size() != 4)
             waiting(INFINITE, 0, true);
     }
 
+    /**
+     * Sets the reference of the SocketMessenger of the UI if connection is Socket
+     *
+     * @param sm : the Messenger
+     * @author Matteo
+     */
     public static void setMessenger(SocketMessengerClient sm){
         messenger = sm;
     }
 
+    /**
+     * Sets the ranking when games ends
+     *
+     * @param numP : number of players.
+     * @param rank : String of the entire ranking.
+     * @author Riccardo
+     */
     void setPlayers(int numP, String rank){
         if (numP <= 3)
             player4.setVisible(false);
