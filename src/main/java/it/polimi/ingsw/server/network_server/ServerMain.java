@@ -87,7 +87,7 @@ public class ServerMain {
                     executor.submit(new ServerImplementationSocket(socket, this.lobby));
                 } catch(IOException e) {
                     System.err.println(e.getMessage());
-                    //on = false;
+                    on = false;
                 }
             }
             executor.shutdown();

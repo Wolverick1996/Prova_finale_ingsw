@@ -362,6 +362,7 @@ public class ClientMain {
                         if (i == 999){
                             executorService.shutdownNow();
                             gameStarted = true;
+                            success = false;
                             SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli);
                             messenger.close();
                         }
@@ -370,8 +371,9 @@ public class ClientMain {
                             num = i;
                         }
                     }
-                    //TODO: SOLVE THIS WHILE(TRUE)
                 }
+                if (gameStarted)
+                    success = true;
             } while (!success);
 
             scanner.close();

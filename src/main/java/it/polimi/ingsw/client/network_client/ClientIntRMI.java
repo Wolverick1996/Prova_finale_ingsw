@@ -53,11 +53,4 @@ public interface ClientIntRMI extends Remote {
      */
     void startInterface() throws RemoteException;
 
-    /**
-     * Calls Sys.exit() to exit from the application when game ends
-     *
-     * @author Andrea
-     */
-    void finishGame() throws RemoteException;
-
 }

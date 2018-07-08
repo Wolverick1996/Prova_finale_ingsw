@@ -141,7 +141,7 @@ public class GameController {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    e.printStackTrace();
+                    //Error interrupting thread
                 }
                 refreshEffects();
             }
@@ -686,7 +686,7 @@ public class GameController {
         appStage.show();
     }
 
-     private synchronized void endGame(ActionEvent event) throws IOException {
+    private synchronized void endGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameEnd.fxml"));
         Parent root = loader.load();
         GUIController controller = loader.getController();
@@ -704,10 +704,9 @@ public class GameController {
     private void passTurn(ActionEvent event) {
         if (GUIupdater.getFinalMessage() != null) {
             try {
-                System.out.println(GUIupdater.getFinalMessage());
                 endGame(event);
             } catch (IOException e) {
-                e.printStackTrace();
+                //ERROR loading end game
             }
         } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
                 && !GUIupdater.getNeedsToReload()) {

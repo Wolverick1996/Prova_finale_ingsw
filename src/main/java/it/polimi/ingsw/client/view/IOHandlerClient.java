@@ -13,7 +13,7 @@ public class IOHandlerClient{
 
     //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
 
-    private boolean debug = true;
+    private boolean debug = false;
     private String name;
     private Interface outputInt;
     private CLI commandLine;
@@ -76,13 +76,11 @@ public class IOHandlerClient{
     private boolean readActivePlayer = false;
     private String activePlayer;
     private static final String FAIL = "999";
-    //"Player " + this.players.get(active).getUsername() +
-    //            " has used " + ToolHandler.getName(index) + " correctly! :)"
-    //STILL TODO
+
     private void sendGUI(String message){
         if (debug) System.out.println(message);
-        String PLAYERDIDNOTDOITRIGHT = "Player " + activePlayer + " didn't do it right, try again\n";
-        String EXCEPTIONCAUGHTNOTRIGHT = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
+        String playerdidnotdoitright = "Player " + activePlayer + " didn't do it right, try again\n";
+        String exceptioncaughtnotright = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
 
         if (checkIfGameEnded(message)) {
             readActivePlayer = false;
@@ -94,7 +92,7 @@ public class IOHandlerClient{
             return;
         }
 
-        if (message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
+        if (message.equals(playerdidnotdoitright) || message.equals(exceptioncaughtnotright)) {
             resetGUIupdater();
             //Undo the move, go back to standardchoice
             GUIupdater.setToSendForced("0");

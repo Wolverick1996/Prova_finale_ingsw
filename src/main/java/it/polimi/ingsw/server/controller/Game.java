@@ -21,7 +21,7 @@ public class Game implements Observer {
     private int active = -1;
     private int turn = 1;
     private static final String STATUS = "STATUS";
-    private static final int MAX_ROUNDS = 10;
+    private static final int MAX_ROUNDS = 1;
     private int count = 0;
     private boolean clockwise = true;
     private boolean toolUsed = false;
@@ -126,7 +126,7 @@ public class Game implements Observer {
                         break;
                     default:
                         System.err.println("FATAL ERROR, UNKNOWN INPUT");
-                        System.exit(-1); //TODO: implement input error manager
+                        System.exit(-1);
                 }
             }
         }
@@ -345,11 +345,6 @@ public class Game implements Observer {
             s += p.getUsername() + ": \t" + p.getPoints() + "\n";
 
         Controller.getMyIO(this).broadcast(s);
-
-        //Controller.getMyIO(this).finishGameSocket();
-        //Controller.getMyIO(this).finishGameRMI();
-        //TODO SOLVE FINAL SCREEN FOR GUI
-        //System.exit(0);
     }
 
     /**

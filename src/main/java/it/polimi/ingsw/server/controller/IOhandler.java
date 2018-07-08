@@ -230,37 +230,6 @@ public class IOhandler{
     }
 
     /**
-     * Invokes Sys.exit() in all clients RMI (game ended)
-     *
-     * @author Andrea
-     */
-    void finishGameRMI(){
-        for (ClientIntRMI c : usersRMI){
-            try {
-                c.finishGame();
-            } catch (RemoteException e) {
-                //RemoteException will be surely thrown after c.finishGame() will expire
-            }
-        }
-    }
-
-    /**
-     * Sends a specific message to notify clients (Socket) the game has ended
-     *
-     * @author Andrea
-     */
-    void finishGameSocket(){
-        for (SocketUser s : this.socketUserList){
-            try {
-                SocketMessengerServer.sendFinish(s.socket);
-                s.socket.close();
-            } catch (IOException e){
-                System.err.println("FINISHGAMESOCKET ERROR" + e.getMessage());
-            }
-        }
-    }
-
-    /**
      * Sends notifies to all clients combined with IOhandler
      *
      * @param message: the message to be printed to all users
