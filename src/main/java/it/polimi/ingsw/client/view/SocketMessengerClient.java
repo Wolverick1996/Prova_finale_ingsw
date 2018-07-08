@@ -20,7 +20,6 @@ public class SocketMessengerClient implements Runnable {
     private Socket socket;
 
     //DICTIONARY
-    private static final String FAILED = "";
     private static final String D_LEFT = "<";
     private static final String D_RIGHT = ">";
     private static final String GAMESTART = "gameStarts";

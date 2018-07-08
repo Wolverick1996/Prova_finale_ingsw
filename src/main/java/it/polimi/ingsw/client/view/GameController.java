@@ -141,7 +141,7 @@ public class GameController {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    e.printStackTrace();
+                    //Error interrupting thread
                 }
                 refreshEffects();
             }
@@ -295,7 +295,7 @@ public class GameController {
             ImageView img = new ImageView(new Image("/images/" + color.get(0) + value.get(0) + ".jpeg",
                     60, 60, false, false));
 
-            Stage popup = new Stage(); //TODO: SOLVE INVOCATIONEXCEPTION
+            Stage popup = new Stage();
             popup.initModality(Modality.APPLICATION_MODAL);
             popup.setTitle("Advertisement");
             Label label1 = new Label(TOOL);
@@ -683,7 +683,7 @@ public class GameController {
         appStage.show();
     }
 
-     private synchronized void endGame(ActionEvent event) throws IOException {
+    private synchronized void endGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameEnd.fxml"));
         Parent root = loader.load();
         GUIController controller = loader.getController();
@@ -701,10 +701,9 @@ public class GameController {
     private void passTurn(ActionEvent event) {
         if (GUIupdater.getFinalMessage() != null) {
             try {
-                System.out.println(GUIupdater.getFinalMessage());
                 endGame(event);
             } catch (IOException e) {
-                e.printStackTrace();
+                //ERROR loading end game
             }
         } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
                 && !GUIupdater.getNeedsToReload()) {

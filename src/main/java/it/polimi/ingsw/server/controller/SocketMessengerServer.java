@@ -21,7 +21,6 @@ class SocketMessengerServer {
     private static final String GAMESTART = "gameStarts";
     private static final String NAME = "name";
     private static final String OK = "ok";
-    private static final String FINISH = "finish";
     private static final String PRINT = "print";
     private static final String REQUEST = "requestData";
     private static final String NEWLINE = "%%%nnn%%%";
@@ -80,22 +79,6 @@ class SocketMessengerServer {
         message = cleanString(message);
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         String output = PRINT + D_LEFT + message + D_RIGHT;
-        System.out.println("I'm sending this message: " + output + " to " + socket);
-        out.println(output);
-        out.flush();
-        askIfReceived(socket);
-    }
-
-    /**
-     * Sends a specific message to communicate that game ended
-     *
-     * @param socket: socket which will receives the message
-     * @throws IOException if socket has connection issues
-     * @author Matteo
-     */
-    static synchronized void sendFinish(Socket socket) throws IOException{
-        PrintWriter out = new PrintWriter(socket.getOutputStream());
-        String output = FINISH;
         System.out.println("I'm sending this message: " + output + " to " + socket);
         out.println(output);
         out.flush();
