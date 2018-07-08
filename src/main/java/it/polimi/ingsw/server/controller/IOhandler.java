@@ -15,7 +15,7 @@ import java.util.*;
  *
  * @author Matteo
  */
-public class IOhandler implements Observer {
+public class IOhandler{
 
     //***************************//
     //        Attributes         //
@@ -759,12 +759,5 @@ public class IOhandler implements Observer {
     }
 
     ////////////////////////////////////////////////////////////////
-
-    //TODO: Realize JavaDoc comment when GUI will be implemented
-    @Override
-    public void update(Observable o, Object arg){
-        if (o == ov)
-            System.out.println(ov);
-    }
 
 }

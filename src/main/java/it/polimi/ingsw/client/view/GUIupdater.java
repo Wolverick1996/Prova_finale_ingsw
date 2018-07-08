@@ -44,6 +44,8 @@ public class GUIupdater {
     private static String tools;
     private static List<String> players = new ArrayList<>();
 
+    private static String finalMessage;
+
     static synchronized String getPlayer(int number){
         int count = 1;
         for (String p: players) {
@@ -119,6 +121,10 @@ public class GUIupdater {
         return toSend;
     }
 
+    static synchronized String getFinalMessage(){
+        return finalMessage;
+    }
+
     static synchronized String getToSendForced(){
         String out = toSendForced;
         toSendForced = null;
@@ -159,6 +165,10 @@ public class GUIupdater {
 
     static synchronized void setActivePlayer(String value){
         activePlayer = value;
+    }
+
+    static synchronized void setFinalMessage(String value){
+        finalMessage = value;
     }
 
     static synchronized void setTypeRequested(TypeRequested value){
