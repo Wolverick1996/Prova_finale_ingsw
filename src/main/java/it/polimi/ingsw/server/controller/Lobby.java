@@ -96,7 +96,11 @@ public class Lobby {
                     }
 
                 };
-                this.timer.schedule(task, delay);
+                if (this.players.size() == 4){
+                    this.timer.schedule(task, 1);
+                }
+                else
+                    this.timer.schedule(task, delay);
             }
 
             this.streetlight = true;

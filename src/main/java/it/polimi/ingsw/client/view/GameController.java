@@ -27,6 +27,11 @@ import java.util.ArrayList;
 import static it.polimi.ingsw.client.view.GUIController.myFont;
 import static it.polimi.ingsw.client.view.SchemesController.*;
 
+/**
+ * Controller class for the Game Stage in the GUI
+ *
+ * @author Riccardo
+ */
 public class GameController {
 
     private boolean taskIsRunning = false;
@@ -89,6 +94,11 @@ public class GameController {
     @FXML
     private Text turn;
 
+    /**
+     * This method switches on and off all the interactive elements of the stage
+     *
+     * @author Matteo
+     */
     private synchronized void refreshEffects(){
         if (gridEffectOn)
             for (ImageView i:gridIMG)
@@ -132,6 +142,11 @@ public class GameController {
             refresh.setEffect(null);
     }
 
+    /**
+     * This task calls the refreshEffects() method every 1000 ms
+     *
+     * @author Matteo
+     */
     private Task keepRefreshing = new Task<Void>() {
         @Override
         protected Void call() {
@@ -149,34 +164,83 @@ public class GameController {
         }
     };
 
-    ArrayList getRoundtrackIMG(){
-        return roundtrackIMG;
-    }
+    /**
+     * Gets the Roundtrack ImageView arraylist
+     *
+     * @return roundtrackIMG
+     * @author Matteo
+     */
+    ArrayList getRoundtrackIMG(){ return roundtrackIMG; }
 
+    /**
+     * Sets the effect of the grid on/off
+     *
+     * @param : on
+     * @author Matteo
+     */
     static synchronized void highlightGrid(boolean on){
         gridEffectOn = on;
     }
 
+    /**
+     * Sets the effect of the draft on/off
+     *
+     * @param : on
+     * @author Matteo
+     */
     static synchronized void highlightDraft(boolean on){
         reserveEffectOn = on;
     }
 
+    /**
+     * Sets the effect of the roundtrack on/off
+     *
+     * @param : on
+     * @author Matteo
+     */
     static synchronized void highlightRoundtrack(boolean on){
         roundtrackEffectOn = on;
     }
 
+    /**
+     * Sets the effect of the Tools on/off
+     *
+     * @param : on
+     * @author Matteo
+     */
     static synchronized void highlightTool(boolean on){
         toolEffectOn = on;
     }
 
+    /**
+     * Sets the effect of the Pass Button on/off
+     *
+     * @param : on
+     * @author Matteo
+     */
     static synchronized void highlightPass(boolean on){
         passEffectOn = on;
     }
 
+    /**
+     * Sets the effect of the Refresh button on/off
+     *
+     * @param : on
+     * @author Matteo
+     */
     static synchronized void highlightRefresh(boolean on){
         refreshEffectOn = on;
     }
 
+    /**
+     * Opens a popup for a boolean choice
+     *
+     * @param message : the message to be shown
+     * @param option1 : +1 or y choice
+     * @param option2 : -1 or n choice
+     * @param isOne : boolean that influences the follow-up of the popup
+     * @author Riccardo
+     */
     static void choicePopup(String message, String option1, String option2, boolean isOne){
         Platform.runLater(() -> {
             Stage popup = new Stage();
@@ -227,6 +291,11 @@ public class GameController {
         });
     }
 
+    /**
+     * Popup made to choose a specific value for a dice
+     *
+     * @author Riccardo
+     */
     static void chooseValuePopup(){
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
@@ -283,6 +352,12 @@ public class GameController {
         popup.showAndWait();
     }
 
+    /**
+     * Shows a popup with a dice
+     *
+     * @param message: the dice to be shown
+     * @author Riccardo
+     */
     static void dicePopup(String message){
         Platform.runLater(() -> {
             String[] divide;
@@ -321,6 +396,14 @@ public class GameController {
         });
     }
 
+    /**
+     * Decode a String for scheme printing
+     *
+     * @param imageColor : Color vector to be printed
+     * @param imageValue : Value vector to be printed
+     * @param divide : The string to decode
+     * @author Riccardo
+     */
     private static synchronized void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
         for (String s:divide) {
             if (s.contains("31m"))
@@ -356,6 +439,14 @@ public class GameController {
         }
     }
 
+    /**
+     * Loads the Window Pattern on the GUI
+     *
+     * @param wp : the String of the window pattern to be loaded
+     * @param toFill : the list of ImageViews to fill
+     * @param gridObj : the grid on the Scene
+     * @author Riccardo
+     */
     static synchronized void loadScheme(String wp, ArrayList<ImageView> toFill, GridPane gridObj){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
@@ -413,6 +504,12 @@ public class GameController {
             });
     }
 
+    /**
+     * Loads the draft on the GUI
+     *
+     * @param draft : the String of the draft to be loaded
+     * @author Riccardo
+     */
     private synchronized void loadReserve(String draft){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
@@ -443,6 +540,12 @@ public class GameController {
             });
     }
 
+    /**
+     * Loads the Roundtrack on the GUI
+     *
+     * @param track : the String of the Roundtrack to be loaded
+     * @author Riccardo
+     */
     private synchronized void loadRoundtrack(String track){
         ArrayList<String> imageColor = new ArrayList<>();
         ArrayList<String> imageValue = new ArrayList<>();
@@ -484,10 +587,24 @@ public class GameController {
             });
     }
 
+    /**
+     * Loads an image on the button
+     *
+     * @param path : url of the image to be shown
+     * @param button : button to fill
+     * @author Riccardo
+     */
     private synchronized void setButtonImage(String path, Button button){
         button.setStyle("-fx-background-image: url('" + path + "')");
     }
 
+    /**
+     * Loads all the Objective cards to the GUI
+     *
+     * @param privateOC : the string of the private Objective card
+     * @param table : the string of the entire table, to be split
+     * @author Riccardo
+     */
     private synchronized void loadObjectiveCards(String privateOC, String table){
         String[] divide;
         String[] privOCs = {"Red", "Green", "Yellow", "Blue", "Purple"};
@@ -520,6 +637,12 @@ public class GameController {
         }
     }
 
+    /**
+     * Loads the tools on the GUI
+     *
+     * @param activeTools : the String of the tools to be loaded
+     * @author Riccardo
+     */
     private synchronized void loadTools(String activeTools){
         String[] divide;
         String[] tools = {"Grozing Pliers", "Eglomise Brush", "Copper Foil Burnisher", "Lathekin", "Lens Cutter", "Flux Brush",
@@ -569,6 +692,12 @@ public class GameController {
         });
     }
 
+    /**
+     * Called  from the refresh button. Updates the GUI with parameters from the
+     * GUIupdater if needed and turns off the button.
+     *
+     * @author Riccardo
+     */
     @FXML
     synchronized void refreshScreen(){
             GUIupdater.setNeedsToReload(false);
@@ -578,6 +707,18 @@ public class GameController {
                     GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());
     }
 
+    /**
+     * Reloads the GUI, resetting all the parameters from Strings. Starts the task that refreshes the effects
+     *
+     * @param numP : number of players
+     * @param scheme : scheme of the current player
+     * @param privateOC : the privOC card of the current player
+     * @param table : the current table
+     * @param activeTools : the tools
+     * @param me : the current player
+     * @param activePlayer : the player that is playing
+     * @author Riccardo
+     */
     @FXML
     synchronized void reloadGame(int numP, String scheme, String privateOC, String table, String activeTools, String me, String activePlayer){
         for (ImageView i:gridIMG)
@@ -640,6 +781,13 @@ public class GameController {
         }
     }
 
+    /**
+     * Loads the first player in the game (that is not the current player)
+     *
+     * @param event : the trigger of the method
+     * @throws IOException
+     * @author Riccardo
+     */
     @FXML
     private void loadPlayer1(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/player.fxml"));
@@ -656,6 +804,13 @@ public class GameController {
         appStage.show();
     }
 
+    /**
+     * Loads the second player in the game (that is not the current player)
+     *
+     * @param event : the trigger of the method
+     * @throws IOException
+     * @author Riccardo
+     */
     @FXML
     private void loadPlayer2(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/player.fxml"));
@@ -672,6 +827,13 @@ public class GameController {
         appStage.show();
     }
 
+    /**
+     * Loads the third player in the game (that is not the current player)
+     *
+     * @param event : the trigger of the method
+     * @throws IOException
+     * @author Riccardo
+     */
     @FXML
     private void loadPlayer3(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/player.fxml"));
@@ -688,6 +850,13 @@ public class GameController {
         appStage.show();
     }
 
+    /**
+     * Triggers the end of the game and changes the scene to the final rank
+     *
+     * @param event : the event that fires the method (pass button on Game screen)
+     * @throws IOException
+     * @author Riccardo
+     */
     private synchronized void endGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameEnd.fxml"));
         Parent root = loader.load();
@@ -702,6 +871,12 @@ public class GameController {
         appStage.show();
     }
 
+    /**
+     * Pass the turn to the next player, or calls endGame() if rounds are finished
+     *
+     * @param event: the press of the pass button
+     * @author Riccardo
+     */
     @FXML
     private void passTurn(ActionEvent event) {
         if (GUIupdater.getFinalMessage() != null) {

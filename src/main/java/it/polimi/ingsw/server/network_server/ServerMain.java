@@ -17,8 +17,8 @@ import java.util.concurrent.Executors;
  */
 public class ServerMain {
 
-    private static final int PORTRMI = 1099; //default port
-    private static final int PORTSOCKET = 1337; //default port
+    private static int portrmi = 1099; //default port
+    private static int portsocket = 1337; //default port
     private Lobby lobby;
 
     /**
@@ -37,6 +37,13 @@ public class ServerMain {
      * @author Andrea
      */
     public static void main(String[] args){
+        try {
+            portrmi = Integer.parseInt(args[0]);
+            portsocket = Integer.parseInt(args[1]);
+        } catch (ArrayIndexOutOfBoundsException n){
+            portrmi = 1099;
+            portsocket = 1337;
+        }
         ServerMain serverMain = new ServerMain();
         serverMain.startServerRMI();
         serverMain.startServerSocket();
@@ -48,10 +55,16 @@ public class ServerMain {
      * @author Andrea
      */
     private void startServerRMI(){
+        int i = 0;
         try {
-            LocateRegistry.createRegistry(PORTRMI);
+            i++;
+            LocateRegistry.createRegistry(portrmi);
         } catch (RemoteException e) {
             System.err.println("There is already a registry!");
+            if (i < 2){
+                portrmi = 1099;
+                startServerRMI();
+            }
         }
         try {
             ServerImplementationRMI serverImplementation = new ServerImplementationRMI(this.lobby);
@@ -76,8 +89,10 @@ public class ServerMain {
     private void startServerSocket (){
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket = null;
+        int i = 0;
         try {
-            serverSocket = new ServerSocket(PORTSOCKET);
+            i++;
+            serverSocket = new ServerSocket(portsocket);
 
             System.out.println("[Socket Server]\tServer is ready...");
             boolean on = true;
@@ -92,6 +107,10 @@ public class ServerMain {
             }
             executor.shutdown();
         } catch (IOException e) {
+            if (i < 2){
+                portsocket = 1337; //default
+                startServerSocket();
+            }
             System.err.println(e.getMessage()); //port not available
         } finally {
             try {
