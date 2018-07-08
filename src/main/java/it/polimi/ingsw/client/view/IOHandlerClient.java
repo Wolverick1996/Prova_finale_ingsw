@@ -168,6 +168,7 @@ public class IOHandlerClient{
                 setTypeRequested(GUIupdater.TypeRequested.ROUNDTRACK);
                 break;
             case "Insert the place of the dice in the reserve":
+                resetGUIupdater();
                 setTypeRequested(GUIupdater.TypeRequested.RESERVE);
                 break;
             case "Insert the coordinates of the dice to be placed, one at a time (x, y)":
