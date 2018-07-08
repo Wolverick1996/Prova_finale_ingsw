@@ -75,6 +75,7 @@ public class IOHandlerClient{
     private boolean readStatus = false;
     private boolean readActivePlayer = false;
     private String activePlayer;
+    private static final String FAIL = "999";
     //"Player " + this.players.get(active).getUsername() +
     //            " has used " + ToolHandler.getName(index) + " correctly! :)"
     //STILL TODO
@@ -160,9 +161,14 @@ public class IOHandlerClient{
                 break;
             case "Choose a dice from round track [from 1 to N]":
                 resetGUIupdater();
+                if (GUIupdater.getController().getRoundtrackIMG().isEmpty()) {
+                    GUIupdater.setToSend(FAIL);
+                    break;
+                }
                 setTypeRequested(GUIupdater.TypeRequested.ROUNDTRACK);
                 break;
             case "Insert the place of the dice in the reserve":
+                resetGUIupdater();
                 setTypeRequested(GUIupdater.TypeRequested.RESERVE);
                 break;
             case "Insert the coordinates of the dice to be placed, one at a time (x, y)":

@@ -149,6 +149,8 @@ public class GameController {
         }
     };
 
+    ArrayList getRoundtrackIMG() { return roundtrackIMG; }
+
     static synchronized void highlightGrid(boolean on){
         gridEffectOn = on;
     }
