@@ -31,7 +31,7 @@ public class ClientMain {
 
     private static ServerIntRMI serverRMI;
     private String ip;
-    private static int port = 1337;
+    private static int port = 1337; //default
     private static final int MAX_PLAYERS = 4;
     private static boolean gameStarted = false;
 
@@ -66,9 +66,12 @@ public class ClientMain {
         String checkUI;
         try {
             checkUI = args[0];
-            port = Integer.parseInt(args[1]);
         }catch (ArrayIndexOutOfBoundsException n){
             checkUI = "gui"; // default
+        }
+        try {
+            port = Integer.parseInt(args[1]);
+        }catch (ArrayIndexOutOfBoundsException n){
             port = 1337; // default
         }
         if (checkUI.equals("gui")){
@@ -102,7 +105,7 @@ public class ClientMain {
                         clientMain.startClientRMI();
                         ipOK = true;
                     } catch (MalformedURLException | RemoteException e){
-                        System.out.println("IP not correct");
+                        System.out.println("IP not correct (think about reloading the app with a different port)");
                     }
                 } else {
                     try {
@@ -110,7 +113,7 @@ public class ClientMain {
                         ipOK = true;
                     } catch (IOException e) {
                         if (!gameStarted){
-                            System.out.println("IP not correct");
+                            System.out.println("IP not correct (think about reloading the app with a different port)");
                         }
                     } catch (NoSuchElementException e) {
                         System.err.println("Nothing to read " + e.getMessage());
