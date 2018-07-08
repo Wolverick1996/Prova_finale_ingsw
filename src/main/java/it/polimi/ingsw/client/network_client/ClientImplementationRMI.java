@@ -80,12 +80,12 @@ public class ClientImplementationRMI extends Observable implements ClientIntRMI 
     }
 
     /**
-     * Calls Sys.exit() to exit from the application when game has ended
+     * Calls Sys.exit() to exit from the application when game ends
      *
      * @author Andrea
      */
     public void finishGame(){
-        System.out.println("bye bye :)");
+        System.out.println("Bye bye <3");
         System.exit(0);
     }
 

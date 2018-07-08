@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Enum;
-import it.polimi.ingsw.server.network_server.ServerMain;
 
 import java.util.*;
 
@@ -342,7 +341,7 @@ public class Game implements Observer {
 
         Controller.getMyIO(this).broadcast("Game ended! Calculating points...\n");
         for (Player p : finalRank)
-            Controller.getMyIO(this).broadcast( p.getUsername() + ": \t" +p.getPoints());
+            Controller.getMyIO(this).broadcast(p.getUsername() + ": \t" +p.getPoints());
 
         Controller.getMyIO(this).finishGameSocket();
         Controller.getMyIO(this).finishGameRMI();

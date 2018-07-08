@@ -75,7 +75,7 @@ public class ClientMain {
     }
 
     /**
-     * Set up the connection, can call startClientRMI or startClientSocket
+     * Sets up the connection, can calls startClientRMI or startClientSocket
      *
      * @author Andrea
      */
