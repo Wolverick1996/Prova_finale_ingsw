@@ -214,7 +214,6 @@
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <HBox prefHeight="100.0" prefWidth="200.0" />
                         <Button fx:id="refresh" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#refreshScreen" prefHeight="40.0" prefWidth="100.0" text="Refresh" />
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                         <Button fx:id="pass" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#passTurn" prefHeight="40.0" prefWidth="100.0" text="End turn" />

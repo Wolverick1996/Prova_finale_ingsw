@@ -231,7 +231,7 @@ public class IOhandler implements Observer {
     }
 
     /**
-     * Sends a specific message to notify client (Socket) the game has ended
+     * Sends a specific message to notify clients (Socket) the game has ended
      *
      * @author Andrea
      */
@@ -242,6 +242,21 @@ public class IOhandler implements Observer {
                 s.socket.close();
             } catch (IOException e){
                 System.err.println("FINISHGAMESOCKET ERROR" + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Invokes Sys.exit() in all clients RMI (game ended)
+     *
+     * @author Andrea
+     */
+    void finishGameRMI(){
+        for (ClientIntRMI c : usersRMI){
+            try {
+                c.finishGame();
+            } catch (RemoteException e) {
+                //RemoteException will be surely thrown after c.finishGame() will expire
             }
         }
     }

@@ -3,18 +3,25 @@ package it.polimi.ingsw.client.view;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static it.polimi.ingsw.client.view.GUIController.myFont;
 
 public class SchemesController {
 
@@ -55,6 +62,40 @@ public class SchemesController {
     private RadioButton grid2Button;
     @FXML
     private RadioButton grid3Button;
+
+    @FXML
+    private void showPrivOC(){
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Private Objective Card");
+        Label label = new Label("This is your Private Objective Card\n");
+        label.setFont(myFont);
+        Button button = new Button("Ok");
+        button.setFont(myFont);
+
+        String privateOC = GUIupdater.getPrivObj();
+
+        String[] privOCs = {"Red", "Green", "Yellow", "Blue", "Purple"};
+        String[] divide;
+        divide = privateOC.split(NEWLINE);
+        ImageView img = new ImageView();
+        for (String s:privOCs) {
+            if (divide[1].contains(s)) {
+                String path = "/images/priv_" + s.toLowerCase() + ".jpeg";
+                img = new ImageView(new Image(path, 300, 410, false, false));
+            }
+        }
+
+        button.setOnAction(e -> popup.close());
+        VBox layout = new VBox(40);
+        layout.getChildren().addAll(label, img, button);
+        layout.setAlignment(Pos.CENTER);
+        Scene popupScene = new Scene(layout, 500, 600);
+        popup.setScene(popupScene);
+        popup.setResizable(false);
+        popup.setIconified(false);
+        popup.showAndWait();
+    }
 
     private void imageFactory(String restriction, int paneIndex, int row, int col){
         ArrayList<GridPane> panes = new ArrayList<>();

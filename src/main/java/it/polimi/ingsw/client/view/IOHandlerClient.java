@@ -70,6 +70,7 @@ public class IOHandlerClient implements Observer {
     }
 
     private boolean chooseSchemes = false;
+    private boolean privOC = false;
     private int lineReadNumber = 0;
     private boolean readStatus = false;
     private boolean readActivePlayer = false;
@@ -82,13 +83,11 @@ public class IOHandlerClient implements Observer {
         String PLAYERDIDNOTDOITRIGHT = "Player " + activePlayer + " didn't do it right, try again\n";
         String EXCEPTIONCAUGHTNOTRIGHT = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
 
-        if (checkIfTool6(message)){
-            resetGUIupdater();
-            GameController.dicePopup(message);
+        if (checkIfTool6or11(message)){
             return;
         }
 
-        if(message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
+        if (message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
             resetGUIupdater();
             //Undo the move, go back to standardchoice
             GUIupdater.setToSendForced("0");
@@ -100,6 +99,11 @@ public class IOHandlerClient implements Observer {
 
         if (chooseSchemes) { chooseSchemes(message); }
 
+        if (privOC) {
+            privOC = false;
+            GUIupdater.setPrivObj(message);
+        }
+
         switch (message){
             case "Do you want to use custom window patterns?" :
                 if (GUIupdater.getCustomSchemes()){
@@ -107,6 +111,10 @@ public class IOHandlerClient implements Observer {
                 } else {
                     GUIupdater.setToSend("n");
                 }
+                break;
+            case "Custom window patterns enabled!":
+            case "Old school, only standard window patterns!":
+                privOC = true;
                 break;
             case "CHOOSE A SCHEME :" :
                 chooseSchemes = true;
@@ -184,11 +192,19 @@ public class IOHandlerClient implements Observer {
         }
     }
 
-    private boolean checkIfTool6(String message){
-        if (message.split(":")[0].equals("Dice rolled")){
+    private boolean checkIfTool6or11(String message){
+        String temp = message;
+        if (temp.split(":")[0].equals("Dice rolled") || temp.split((":"))[0].equals("Dice extracted from the bag")){
+            resetGUIupdater();
+            GameController.dicePopup(message);
             return true;
         }
-        else
+        else if (temp.split((":"))[0].equals("Dice extracted from the bag")) {
+            resetGUIupdater();
+            GameController.dicePopup(message);
+            GameController.chooseValuePopup();
+            return true;
+        } else
             return false;
     }
 

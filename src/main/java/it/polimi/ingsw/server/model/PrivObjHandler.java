@@ -136,7 +136,7 @@ public class PrivObjHandler {
      * @author Andrea
      */
     public static String getCard(Player player){
-        return Enum.Color.PURPLE.escape() + "Private Objective card: \n" + Enum.Color.RESET +
+        return Enum.Color.PURPLE.escape() + "Private Objective Card: \n" + Enum.Color.RESET +
                 getColor(player).escape() + getName(player) + Enum.Color.RESET + "\n" + getDescription(player) + "\n";
     }
 
