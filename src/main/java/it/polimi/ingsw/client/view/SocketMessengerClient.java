@@ -44,13 +44,13 @@ public class SocketMessengerClient implements Runnable {
             this.username = n;
             this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             this.out = new PrintWriter(s.getOutputStream());
-            if (ui == cli){
-                this.handler = new IOHandlerClient(this.username, cli);
+            if (ui == CLI){
+                this.handler = new IOHandlerClient(this.username, CLI);
                 this.handler.startInterface();
                 this.waitStart();
             } else {
                 //GUI
-                this.handler = new IOHandlerClient(this.username, gui);
+                this.handler = new IOHandlerClient(this.username, GUI);
                 this.handler.startInterface();
             }
         } catch (IOException e) {
@@ -76,13 +76,13 @@ public class SocketMessengerClient implements Runnable {
                 this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
                 this.out = new PrintWriter(s.getOutputStream());
                 this.gameHasStarted = true;
-                if (ui == cli){
-                    this.handler = new IOHandlerClient(this.username, cli);
+                if (ui == CLI){
+                    this.handler = new IOHandlerClient(this.username, CLI);
                     this.handler.startInterface();
                     this.game();
                 } else {
                     //GUI
-                    this.handler = new IOHandlerClient(this.username, gui);
+                    this.handler = new IOHandlerClient(this.username, GUI);
                     this.handler.startInterface();
                 }
             } catch (IOException e) {
