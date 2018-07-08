@@ -76,11 +76,16 @@ public class IOHandlerClient{
     private boolean readActivePlayer = false;
     private String activePlayer;
     private static final String FAIL = "999";
+    private boolean tool8 = false;
 
     private void sendGUI(String message){
         if (debug) System.out.println(message);
         String playerdidnotdoitright = "Player " + activePlayer + " didn't do it right, try again\n";
         String exceptioncaughtnotright = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
+
+        if (message.contains(" is using Tool 8")){
+            tool8 = true;
+        }
 
         if (checkIfGameEnded(message)) {
             readActivePlayer = false;
@@ -139,7 +144,13 @@ public class IOHandlerClient{
             case "Here is the status: " :
                 readStatus = true;
                 break;
-            case "Turn passed": case "Used tool 8, so is passing the turn..." :
+            case "Used tool 8, so is passing the turn..." :
+            case "Turn passed":
+                GUIupdater.setDraftDisabled(false);
+                if (!tool8)
+                    GUIupdater.setToolDisabled(false);
+                else
+                    tool8 = false;
                 resetGUIupdater();
                 readActivePlayer = true;
                 break;
@@ -153,9 +164,13 @@ public class IOHandlerClient{
             case "Something went wrong... :(" :
             case "Someone is trying to place a dice TWICE... YOU CAAAAAAAAAAAAAN'T" :
             case "Nope, nothing done" :
-            case "Dice correctly placed!" :
-            case "HOORAY!" :
                 resetGUIupdater();
+                break;
+            case "Dice correctly placed!" :
+                GUIupdater.setDraftDisabled(true);
+                break;
+            case "HOORAY!" :
+                GUIupdater.setToolDisabled(true);
                 break;
             case "Choose a dice from round track [from 1 to N]":
                 resetGUIupdater();

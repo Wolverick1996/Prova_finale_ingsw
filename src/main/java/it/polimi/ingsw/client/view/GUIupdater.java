@@ -260,12 +260,22 @@ public class GUIupdater {
         STANDARDREQUEST;
     }
 
+    private static boolean toolDisabled = false;
+    private static boolean draftDisabled = false;
+
+    static void setToolDisabled(boolean value) { toolDisabled = value; }
+    static void setDraftDisabled(boolean value) { draftDisabled = value; }
+    static boolean getToolDisabled() { return toolDisabled; }
+    static boolean getDraftDisabled() { return draftDisabled; }
+
     private static synchronized void notifyGUI(boolean turnOn){
         if (requested == null) return;
         switch (requested) {
             case STANDARDREQUEST:
-                GameController.highlightTool(turnOn);
-                GameController.highlightDraft(turnOn);
+                if (!getToolDisabled())
+                    GameController.highlightTool(turnOn);
+                if (!getDraftDisabled())
+                    GameController.highlightDraft(turnOn);
                 GameController.highlightPass(turnOn);
                 break;
             case RESERVE:

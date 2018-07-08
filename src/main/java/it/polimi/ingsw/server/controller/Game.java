@@ -21,7 +21,7 @@ public class Game implements Observer {
     private int active = -1;
     private int turn = 1;
     private static final String STATUS = "STATUS";
-    private static final int MAX_ROUNDS = 1;
+    private static final int MAX_ROUNDS = 10;
     private int count = 0;
     private boolean clockwise = true;
     private boolean toolUsed = false;
