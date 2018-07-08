@@ -31,7 +31,7 @@ public class ClientMain {
 
     private static ServerIntRMI serverRMI;
     private String ip;
-    private static final int PORT = 1337;
+    private static int port = 1337;
     private static final int MAX_PLAYERS = 4;
     private static boolean gameStarted = false;
 
@@ -63,8 +63,14 @@ public class ClientMain {
      * @author Andrea
      */
     public static void main(String[] args){
-        //String checkUI = args[0];
-        String checkUI = "gui";
+        String checkUI;
+        try {
+            checkUI = args[0];
+            port = Integer.parseInt(args[1]);
+        }catch (ArrayIndexOutOfBoundsException n){
+            checkUI = "gui"; // default
+            port = 1337; // default
+        }
         if (checkUI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
@@ -158,7 +164,7 @@ public class ClientMain {
         Socket socket = null;
         String feedback = "";
         try {
-            socket = new Socket(ip, PORT);
+            socket = new Socket(ip, port);
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             System.out.println("Connection established");
@@ -327,7 +333,7 @@ public class ClientMain {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         try {
-            socket = new Socket(ip, PORT);
+            socket = new Socket(ip, port);
             Scanner scanner = new Scanner(System.in);
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
