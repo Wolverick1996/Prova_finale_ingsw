@@ -413,7 +413,7 @@ public class ToolCard {
                     return false;
             }
         }
-        ToolHandler.notify(player, Controller.STATUS );
+
         ToolHandler.notify(player,"Insert the NEW coordinates of the FIRST dice to be moved, one at a time (x, y)");
         coord1NEW = getCoordinates(player);
 
@@ -428,7 +428,7 @@ public class ToolCard {
             if (!ToolHandler.getYesOrNo(player))
                 return true; }
 
-        ToolHandler.notify(player, player.getOwnScheme().toString());
+        ToolHandler.notify(player, Controller.STATUS);        
         ToolHandler.notify(player,"Insert the OLD coordinates of the SECOND dice to be moved, one at a time (x, y)");
         coord2OLD = getCoordinates(player);
 
