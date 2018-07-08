@@ -63,9 +63,9 @@ public class ClientMain {
      * @author Andrea
      */
     public static void main(String[] args){
-        //String check_UI = args[0];
-        String check_UI = "gui";
-        if (check_UI.equals("gui")){
+        //String checkUI = args[0];
+        String checkUI = "gui";
+        if (checkUI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
             System.exit(0);
@@ -131,7 +131,7 @@ public class ClientMain {
         ServerIntRMI server;
         server = (ServerIntRMI) Naming.lookup("//" + this.ip + "/MyServer");
         serverRMI = server;
-        ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.gui);
+        ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.GUI);
 
         ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 
@@ -168,7 +168,7 @@ public class ClientMain {
         } catch (NoSuchElementException e) {
             System.err.println("NOTHING TO READ "+e.getMessage());
         } finally {
-            SocketMessengerClient s = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.gui);
+            SocketMessengerClient s = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.GUI);
             GUIController.setMessenger(s);
         }
         return feedback;
@@ -263,7 +263,7 @@ public class ClientMain {
                     text = "*";
                 }
                 if (!text.equals("*")){
-                    ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.cli);
+                    ClientImplementationRMI client = new ClientImplementationRMI(text, IOHandlerClient.Interface.CLI);
 
                     ClientIntRMI remoteRef = (ClientIntRMI) UnicastRemoteObject.exportObject(client, 0);
 
@@ -337,7 +337,7 @@ public class ClientMain {
                 name = clientImplementationSocket.login();
                 if (clientImplementationSocket.isGameStarted()){
                     gameStarted = true;
-                    SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli, true);
+                    SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.CLI, true);
                     messenger.close();
                 }
                 activePlayers = Integer.parseInt(in.readLine());
@@ -363,7 +363,7 @@ public class ClientMain {
                             executorService.shutdownNow();
                             gameStarted = true;
                             success = false;
-                            SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.cli);
+                            SocketMessengerClient messenger = new SocketMessengerClient(socket, name, IOHandlerClient.Interface.CLI);
                             messenger.close();
                         }
                         if (!gameStarted){

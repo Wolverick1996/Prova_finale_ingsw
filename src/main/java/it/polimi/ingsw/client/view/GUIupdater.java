@@ -46,6 +46,12 @@ public class GUIupdater {
 
     private static String finalMessage;
 
+    /**
+     *
+     *
+     * @param number:
+     * @return
+     */
     static synchronized String getPlayer(int number){
         int count = 1;
         for (String p: players) {
@@ -60,6 +66,11 @@ public class GUIupdater {
         return getOwnPlayer();
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getActivePlayer(){
         for (String p : players) {
             String temp = p;
@@ -69,6 +80,11 @@ public class GUIupdater {
         return players.get(0);
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getOwnPlayer(){
         for (String p : players) {
             String temp = p;
@@ -78,6 +94,11 @@ public class GUIupdater {
         return players.get(0);
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public static synchronized String getOwnScheme(){
         String me = getOwnPlayer();
         String[] split = me.split("\n");
@@ -85,92 +106,202 @@ public class GUIupdater {
         return me;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized boolean getNeedsToReload(){
         return needsToReload;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized boolean getHasGameEnded(){
         return hasGameEnded;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public static synchronized boolean getHasGetStatus(){
         return hasGetStatus;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized TypeRequested getTypeRequested(){
         return requested;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public static synchronized String getOwnUsername(){
         return ownUsername;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized boolean getCustomSchemes(){
         return customSchemes;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized int getSchemeChosen(){
         return schemeChosen;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized boolean getCanGoToGame(){
         return canGoToGame;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getToSend(){
         return toSend;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getFinalMessage(){
         return finalMessage;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getToSendForced(){
         String out = toSendForced;
         toSendForced = null;
         return out;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized List getSchemesToChoose(){
         return schemesToChoose;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized int getNumPlayers(){
         return numPlayers;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public static synchronized String getTable(){
         return table;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public static synchronized List getPlayers(){
         return players;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getPrivObj(){
         return privObj;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getTools(){
         return tools;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setNeedsToReload(boolean value){
         needsToReload = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     public static synchronized void setHasGameEnded(boolean value){
         hasGameEnded = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setActivePlayer(String value){
         activePlayer = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setFinalMessage(String value){
         finalMessage = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setTypeRequested(TypeRequested value){
         if (value == TypeRequested.REFRESH) {
             setNeedsToReload(true);
@@ -186,72 +317,155 @@ public class GUIupdater {
         }
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setOwnUsername(String value){
         ownUsername = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setCustomSchemes(boolean value){
         customSchemes = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setSchemeChosen(int value){
         schemeChosen = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setCanGoToGame(boolean value){
         canGoToGame = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setToSend(String value){
         toSend = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setToSendForced(String value){
         toSendForced = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     public static synchronized void setTable(String value){
         table = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setTools(String value){
         tools = value;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void setPrivObj(String value){
         privObj = value;
     }
 
+
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void addPlayer(String value){
         players.add(value);
     }
 
+    /**
+     *
+     *
+     */
     static synchronized void clearPlayers(){
         players.clear();
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     static synchronized void addToSendIntList(String value){
         toSendList.add(value);
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized String getToSendList(){
         String res = toSendList.get(0);
         toSendList.remove(0);
         return res;
     }
 
+    /**
+     *
+     *
+     * @param value:
+     */
     public static synchronized void setHasGetStatus(boolean value){
         hasGetStatus = value;
     }
 
+    /**
+     *
+     *
+     */
     static synchronized void emptyToSendIntList(){
         toSendList.clear();
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     static synchronized boolean isToSendIntListEmpty(){
         return toSendList.isEmpty();
     }
 
+    /**
+     *
+     *
+     */
     enum TypeRequested {
         REFRESH,
         ROUNDTRACK,
@@ -268,6 +482,11 @@ public class GUIupdater {
     static boolean getToolDisabled() { return toolDisabled; }
     static boolean getDraftDisabled() { return draftDisabled; }
 
+    /**
+     *
+     *
+     * @param turnOn:
+     */
     private static synchronized void notifyGUI(boolean turnOn){
         if (requested == null) return;
         switch (requested) {

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.view;
 
-import java.util.*;
-
-import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.cli;
+import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.CLI;
 
 /**
  * Class intended for GUI/CLI message sorting
@@ -37,7 +35,7 @@ public class IOHandlerClient{
      * @author Matteo
      */
     public void startInterface(){
-        if (this.outputInt == cli)
+        if (this.outputInt == CLI)
             this.commandLine = new CLI();
     }
 
@@ -48,7 +46,7 @@ public class IOHandlerClient{
      * @author Matteo
      */
     public void send(String message){
-        if (this.outputInt == cli){
+        if (this.outputInt == CLI){
             commandLine.output(message);
         } else {
             sendGUI(message);
@@ -62,7 +60,7 @@ public class IOHandlerClient{
      * @author Matteo
      */
     public String request(){
-        if (this.outputInt == cli){
+        if (this.outputInt == CLI){
             return commandLine.input();
         } else {
             return requestGUI();
@@ -209,9 +207,7 @@ public class IOHandlerClient{
     }
 
     private void setPrivObj(String message) {
-        if (message.contains("has to choose a scheme")){
-            return;
-        } else {
+        if (!message.contains("has to choose a scheme")){
             privOC = false;
             GUIupdater.setPrivObj(message);
         }
@@ -320,8 +316,8 @@ public class IOHandlerClient{
     }
 
     public enum Interface {
-        cli,
-        gui
+        CLI,
+        GUI
     }
 
 }
