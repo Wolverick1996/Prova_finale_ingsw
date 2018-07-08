@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Enum;
+import it.polimi.ingsw.server.network_server.ServerMain;
 
 import java.util.*;
 
@@ -94,7 +95,7 @@ public class Game implements Observer {
      * @author Matteo
      */
     private void next(){
-        if (this.turn > this.players.size()*2*MAX_ROUNDS || howManyActivePlayers() <= 1){
+        if (this.turn > this.players.size()*2*1 || howManyActivePlayers() <= 1){
             //End Game
             gameEnding();
         } else {
@@ -343,8 +344,9 @@ public class Game implements Observer {
             Controller.getMyIO(this).broadcast( p.getUsername() + ": \t" +p.getPoints());
 
         Controller.getMyIO(this).finishGameSocket();
+        Controller.getMyIO(this).finishGameRMI();
 
-        System.exit(-1);
+        System.exit(0);
     }
 
     /**
