@@ -19,7 +19,9 @@ public class GUIMain extends Application {
      * @param args: list of strings received from the user during the JAR execution
      * @author Riccardo
      */
-    public static void main(String[] args) { launch(args); }
+    public static void main(String[] args){
+        launch(args);
+    }
 
     /**
      * Overrides start method of interface Application, loads the first stage of the application
@@ -29,7 +31,7 @@ public class GUIMain extends Application {
      * @author Riccardo
      */
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/FXML/firstWindow.fxml"));
         primaryStage.setTitle("Sagrada");
         primaryStage.setScene(new Scene(root));

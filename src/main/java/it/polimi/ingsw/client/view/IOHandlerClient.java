@@ -7,7 +7,7 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.CLI;
  *
  * @author Matteo
  */
-public class IOHandlerClient{
+public class IOHandlerClient {
 
     //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
 
@@ -85,7 +85,7 @@ public class IOHandlerClient{
             tool8 = true;
         }
 
-        if (checkIfGameEnded(message)) {
+        if (checkIfGameEnded(message)){
             readActivePlayer = false;
             GUIupdater.setFinalMessage(message);
             return;
@@ -103,9 +103,9 @@ public class IOHandlerClient{
 
         if (readActivePlayer){ readActivePlayer(message); return; }
 
-        if (readStatus) { getStatus(message); return; }
+        if (readStatus){ getStatus(message); return; }
 
-        if (chooseSchemes) { chooseSchemes(message); }
+        if (chooseSchemes){ chooseSchemes(message); }
 
         if (privOC) {
             setPrivObj(message);
@@ -206,25 +206,25 @@ public class IOHandlerClient{
         }
     }
 
-    private void setPrivObj(String message) {
+    private void setPrivObj(String message){
         if (!message.contains("has to choose a scheme")){
             privOC = false;
             GUIupdater.setPrivObj(message);
         }
     }
 
-    private boolean checkIfGameEnded(String message) {
+    private boolean checkIfGameEnded(String message){
         return (message.split("!")[0].equals("Game ended"));
     }
 
-    private void setTypeRequested(GUIupdater.TypeRequested requested) {
+    private void setTypeRequested(GUIupdater.TypeRequested requested){
         GUIupdater.setTypeRequested(requested);
     }
 
     private void chooseSchemes(String message){
-        if (lineReadNumber%2 != 0) {
+        if (lineReadNumber%2 != 0)
             GUIupdater.getSchemesToChoose().add(message);
-        }
+
         lineReadNumber++;
         if (lineReadNumber == 8){
             chooseSchemes = false;
@@ -255,7 +255,7 @@ public class IOHandlerClient{
             readStatus = false;
             lineReadNumber = 0;
         } else {
-            switch (lineReadNumber) {
+            switch (lineReadNumber){
                 case 0:
                     GUIupdater.setTable(message);
                     break;
@@ -273,7 +273,7 @@ public class IOHandlerClient{
         }
     }
 
-    private void resetGUIupdater() {
+    private void resetGUIupdater(){
         GUIupdater.setToSend(null);
         setTypeRequested(null);
         GUIupdater.emptyToSendIntList();

@@ -246,7 +246,7 @@ public class GUIController implements Initializable {
                     waitForGameStart();
                 }
             } catch (RemoteException e) {
-                System.out.println("server is down :(");
+                System.out.println("Server is down :(");
             }
         } else {
             int k = 0;
@@ -298,19 +298,17 @@ public class GUIController implements Initializable {
 
     @FXML
     private void setParameters(){
-        if (!checkParameters) {
+        if (!checkParameters)
             return;
-        }
-        if (!customSchemesButtonNo.isSelected()) {
+
+        if (!customSchemesButtonNo.isSelected())
             GUIupdater.setCustomSchemes(true);
-        }
+
         try {
             lobbyDelay = Integer.parseInt(delayTextField.getText());
             GUIupdater.lobbyDelay = lobbyDelay;
         } catch (NumberFormatException e) {
-            Platform.runLater(() -> {
-                popup("Invalid delay, was set to 20");
-            });
+            Platform.runLater(() -> popup("Invalid delay, was set to 20"));
         }
         setDelay(lobbyDelay);
     }
@@ -329,7 +327,7 @@ public class GUIController implements Initializable {
 
     @FXML
     private void loadSchemes(ActionEvent event) throws IOException {
-        if (numPlayersAtBeginning == 1){
+        if (numPlayersAtBeginning == 1) {
             setParameters();
             timer.cancel();
         }
