@@ -93,7 +93,7 @@ class SocketMessengerServer {
      * @throws IOException if socket has connection issues
      * @author Matteo
      */
-    static synchronized String get(Socket socket) throws IOException{
+    static synchronized String get(Socket socket) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         String response;
