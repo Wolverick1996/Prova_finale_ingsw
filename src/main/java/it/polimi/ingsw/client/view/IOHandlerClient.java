@@ -166,6 +166,8 @@ public class IOHandlerClient{
                 setTypeRequested(GUIupdater.TypeRequested.RESERVE);
                 break;
             case "Insert the coordinates of the dice to be placed, one at a time (x, y)":
+            case "Insert the OLD coordinates of the dice to be moved, one at a time (x, y)" :
+            case "Insert the NEW coordinates of the dice to be moved, one at a time (x, y)" :
             case "Insert the OLD coordinates of the FIRST dice to be moved, one at a time (x, y)" :
             case "Insert the NEW coordinates of the FIRST dice to be moved, one at a time (x, y)" :
             case "Insert the OLD coordinates of the SECOND dice to be moved, one at a time (x, y)" :
