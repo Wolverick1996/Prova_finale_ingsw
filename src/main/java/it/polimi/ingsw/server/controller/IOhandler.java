@@ -519,6 +519,30 @@ public class IOhandler{
     }
 
     /**
+     * Sends the STATUS message to a single player
+     *
+     * @param player: the player whom message needs to be sent to
+     * @author Matteo
+     */
+    private synchronized void notifyStatus(String player) {
+        this.notify(player, DIVISOR);
+        this.notify(player, "Here is the status: ");
+        this.notify(player, table.toString());
+        String tools = "\nTool Cards on table:\n";
+        for (int i = 0; i<3; i++) {
+            tools = tools + Enum.Color.YELLOW.escape() + ToolHandler.getName(i) + "\n" + Enum.Color.RESET +
+                    ToolHandler.getDescription(i) + Enum.Color.YELLOW.escape() + "\n Tokens on: " +
+                    Enum.Color.RESET + ToolHandler.getTokens(i) + "\n";
+        }
+        this.notify(player, tools);
+        this.notify(player, PrivObjHandler.getCard(Controller.getMyGame(this).getPlayer(player)));
+        for (Player p: getListOfActive()){
+            this.notify(player, p.toString());
+        }
+        this.notify(player, DIVISOR);
+    }
+
+    /**
      * Sends the message to be printed to a specific player
      *
      * @param player: the player whom message needs to be sent to
@@ -526,6 +550,12 @@ public class IOhandler{
      * @author Matteo
      */
     public synchronized void notify(String player, String message) {
+
+        if (message.equals(STATUS)) {
+            notifyStatus(player);
+            return;
+        }
+
         int index = -1;
         int oneToBeDelete = -1;
         for (int i = 0; i < usersRMI.size(); i++){
