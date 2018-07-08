@@ -9,7 +9,7 @@ import static it.polimi.ingsw.client.view.IOHandlerClient.Interface.cli;
  *
  * @author Matteo
  */
-public class IOHandlerClient implements Observer {
+public class IOHandlerClient{
 
     //THIS CLASS IS INTENDED FOR GUI/CLI MESSAGE SORTING
 
@@ -302,11 +302,6 @@ public class IOHandlerClient implements Observer {
         } while (output == null);
         if (debug) System.out.println("I'm sending from list: " + output);
         return output;
-    }
-
-    @Override
-    public void update(Observable o, Object arg){
-
     }
 
     public enum Interface {

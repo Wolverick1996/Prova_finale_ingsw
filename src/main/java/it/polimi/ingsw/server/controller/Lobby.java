@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author Matteo
  */
-public class Lobby /*extends Observer*/ {
+public class Lobby {
 
     //***************************//
     //        Attributes         //
