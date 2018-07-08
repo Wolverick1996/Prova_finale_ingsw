@@ -71,6 +71,7 @@ public class ServerImplementationSocket implements Runnable {
                     playerConnected = null;
                 }
             } catch (InterruptedException i) {
+                Thread.currentThread().interrupt();
                 System.out.println("WAITFORDELAY WAS INTERRUPTED");
             }
         }

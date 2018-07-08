@@ -139,6 +139,7 @@ public class GameController {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     e.printStackTrace();
                 }
                 refreshEffects();
@@ -286,7 +287,7 @@ public class GameController {
         ImageView img = new ImageView(new Image("/images/" + color.get(0) + value.get(0) + ".jpeg",
                 60, 60, false, false));
 
-        Stage popup = new Stage();
+        Stage popup = new Stage(); //TODO: SOLVE INVOCATIONEXCEPTION
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Advertisement");
         Label label1 = new Label(TOOL);
@@ -673,14 +674,12 @@ public class GameController {
         appStage.show();
     }
 
-    private void endGame(ActionEvent event) throws IOException {
+     private synchronized void endGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameEnd.fxml"));
         Parent root = loader.load();
         GUIController controller = loader.getController();
 
-        String rank = "Game ended!\n\ningconti: \t1000000\nn1zzo: \t100\nmichele-bertone: \t100\nvalerio-castelli: \t10";
-
-        controller.setPlayers(4, rank);
+        controller.setPlayers(GUIupdater.getNumPlayers(), GUIupdater.getFinalMessage());
 
         Scene scene = new Scene(root);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -690,14 +689,18 @@ public class GameController {
     }
 
     @FXML
-    private void passTurn(ActionEvent event) throws IOException {
-        if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
+    private void passTurn(ActionEvent event) {
+        if (GUIupdater.getFinalMessage() != null) {
+            try {
+                System.out.println(GUIupdater.getFinalMessage());
+                endGame(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.STANDARDREQUEST
                 && !GUIupdater.getNeedsToReload()) {
             GUIupdater.addToSendIntList("q");
         }
-        //if (TURN IS THE LAST OF THE GAME)
-        //endGame(event);
-        //else
     }
 
 }

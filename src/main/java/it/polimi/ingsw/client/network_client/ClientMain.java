@@ -63,8 +63,8 @@ public class ClientMain {
      * @author Andrea
      */
     public static void main(String[] args){
-        //String check_UI = args[0];
-        String check_UI = "gui";
+        String check_UI = args[0];
+        //String check_UI = "gui";
         if (check_UI.equals("gui")){
             GUIMain.main(args);
             System.out.println("bye bye :)");
@@ -419,7 +419,7 @@ public class ClientMain {
         public void run(){
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-                int delay;
+                int delay = 0;
                 String delayString = null;
                 do {
                     System.out.println("Please set a timer (min 15s, max 60s)");
@@ -433,6 +433,7 @@ public class ClientMain {
                     } catch (InterruptedException e) {
                         System.out.println("Never mind... you were too slow");
                         this.finished = false;
+                        Thread.currentThread().interrupt();
                         return;
                     } catch (NumberFormatException n) {
                         delay = -1;
@@ -464,6 +465,7 @@ public class ClientMain {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
                     System.out.println("GETRESULT INTERRUPTED");
+                    Thread.currentThread().interrupt();
                 }
             }
             return this.result;

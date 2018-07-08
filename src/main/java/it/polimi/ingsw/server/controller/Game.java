@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.Enum;
-import it.polimi.ingsw.server.network_server.ServerMain;
 
 import java.util.*;
 
@@ -93,9 +92,10 @@ public class Game implements Observer {
      * @author Matteo
      */
     private void next(){
-        if (this.turn > this.players.size()*2*1 || howManyActivePlayers() <= 1){
+        if (this.turn > this.players.size()*2*MAX_ROUNDS || howManyActivePlayers() <= 1){
             //End Game
             gameEnding();
+            return;
         } else {
             boolean end = false;
             Controller.getMyIO(this).broadcast(players.get(active).getUsername() + ", it's your turn!");
@@ -340,13 +340,15 @@ public class Game implements Observer {
 
         finalRank = calculateFinalRank(winner);
 
-        Controller.getMyIO(this).broadcast("Game ended! Calculating points...\n");
+        String s = "Game ended! Calculating points...\n";
         for (Player p : finalRank)
-            Controller.getMyIO(this).broadcast( p.getUsername() + ": \t" +p.getPoints());
+            s += p.getUsername() + ": \t" + p.getPoints() + "\n";
+
+        Controller.getMyIO(this).broadcast(s);
 
         Controller.getMyIO(this).finishGameSocket();
         Controller.getMyIO(this).finishGameRMI();
-
+        //TODO SOLVE FINAL SCREEN FOR GUI
         System.exit(0);
     }
 

@@ -83,6 +83,12 @@ public class IOHandlerClient implements Observer {
         String PLAYERDIDNOTDOITRIGHT = "Player " + activePlayer + " didn't do it right, try again\n";
         String EXCEPTIONCAUGHTNOTRIGHT = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
 
+        if (checkIfGameEnded(message)) {
+            readActivePlayer = false;
+            GUIupdater.setFinalMessage(message);
+            return;
+        }
+
         if (checkIfTool6or11(message)){
             return;
         }
@@ -100,8 +106,8 @@ public class IOHandlerClient implements Observer {
         if (chooseSchemes) { chooseSchemes(message); }
 
         if (privOC) {
-            privOC = false;
-            GUIupdater.setPrivObj(message);
+            setPrivObj(message);
+            return;
         }
 
         switch (message){
@@ -124,6 +130,7 @@ public class IOHandlerClient implements Observer {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
                         e.printStackTrace();
                         System.exit(777);
                     }
@@ -156,10 +163,13 @@ public class IOHandlerClient implements Observer {
                 setTypeRequested(GUIupdater.TypeRequested.ROUNDTRACK);
                 break;
             case "Insert the place of the dice in the reserve":
-                if (GUIupdater.getTypeRequested() != GUIupdater.TypeRequested.STANDARDREQUEST)
                 setTypeRequested(GUIupdater.TypeRequested.RESERVE);
                 break;
             case "Insert the coordinates of the dice to be placed, one at a time (x, y)":
+            case "Insert the OLD coordinates of the FIRST dice to be moved, one at a time (x, y)" :
+            case "Insert the NEW coordinates of the FIRST dice to be moved, one at a time (x, y)" :
+            case "Insert the OLD coordinates of the SECOND dice to be moved, one at a time (x, y)" :
+            case "Insert the NEW coordinates of the SECOND dice to be moved, one at a time (x, y)" :
                 resetGUIupdater();
                 setTypeRequested(GUIupdater.TypeRequested.WINDOWPATTERN);
                 break;
@@ -175,6 +185,19 @@ public class IOHandlerClient implements Observer {
                 break;
             default: break;
         }
+    }
+
+    private void setPrivObj(String message) {
+        if (message.contains("has to choose a scheme")){
+            return;
+        } else {
+            privOC = false;
+            GUIupdater.setPrivObj(message);
+        }
+    }
+
+    private boolean checkIfGameEnded(String message) {
+        return (message.split("!")[0].equals("Game ended"));
     }
 
     private void setTypeRequested(GUIupdater.TypeRequested requested) {
@@ -256,6 +279,7 @@ public class IOHandlerClient implements Observer {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     e.printStackTrace();
                 }
                 return requestGUI();
@@ -268,6 +292,7 @@ public class IOHandlerClient implements Observer {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 System.out.println(e.getMessage());
             }
         }
