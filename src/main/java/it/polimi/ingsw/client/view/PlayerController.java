@@ -18,6 +18,11 @@ import static it.polimi.ingsw.client.view.SchemesController.COLORS;
 import static it.polimi.ingsw.client.view.SchemesController.DIVISOR;
 import static it.polimi.ingsw.client.view.SchemesController.NEWLINE;
 
+/**
+ * Controller class for the Player Stage in the GUI
+ *
+ * @author Riccardo
+ */
 public class PlayerController {
 
     private ArrayList<ImageView> playerIMG = new ArrayList<>();
@@ -35,6 +40,13 @@ public class PlayerController {
     @FXML
     private Text schemeDifficulty;
 
+    /**
+     * Re-loads the game screen
+     *
+     * @param event: button event
+     * @throws IOException
+     * @author Riccardo
+     */
     @FXML
     private void loadGameFromPlayer(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/gameScreen.fxml"));
@@ -53,6 +65,13 @@ public class PlayerController {
         appStage.show();
     }
 
+    /**
+     * Loads the player's grid
+     *
+     * @param player: the player whose grid is loaded
+     * @param draftIMG: reserve
+     * @author Matteo
+     */
     void loadGrid(String player, ArrayList<ImageView> draftIMG){
         String[] divide;
 

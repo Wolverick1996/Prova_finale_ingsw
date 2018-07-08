@@ -142,11 +142,6 @@ public class GameController {
             refresh.setEffect(null);
     }
 
-    /**
-     * This task calls the refreshEffects() method every 1000 ms
-     *
-     * @author Matteo
-     */
     private Task keepRefreshing = new Task<Void>() {
         @Override
         protected Void call() {
