@@ -392,7 +392,7 @@ public class GameController {
     }
 
     /**
-     * Decode a String for scheme printing
+     * Decodes a String for scheme printing
      *
      * @param imageColor: Color vector to be printed
      * @param imageValue: Value vector to be printed

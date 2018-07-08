@@ -336,7 +336,7 @@ public class IOHandlerClient {
     }
 
     /**
-     * Request an input from the GUI. toSendForced has maximum priority.
+     * Requests an input from the GUI. toSendForced has maximum priority.
      *
      * @return the input of the player
      * @author Matteo

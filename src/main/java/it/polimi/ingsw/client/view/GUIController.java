@@ -98,7 +98,7 @@ public class GUIController implements Initializable {
     private Text player4Score;
 
     /**
-     * Initialize the GUI
+     * Initializes the GUI
      *
      * @param location: URL location
      * @param resources: ResourceBundle resources
@@ -215,7 +215,7 @@ public class GUIController implements Initializable {
     }
 
     /**
-     * Check the type of the connection (rmi/socket)
+     * Checks the type of the connection (rmi/socket)
      *
      * @return the type of connection
      * @author Matteo

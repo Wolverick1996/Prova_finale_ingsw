@@ -123,7 +123,7 @@ public class GUIupdater {
     }
 
     /**
-     * Check if the GUI needs to refresh the Scene
+     * Checks if the GUI needs to refresh the Scene
      *
      * @return true if the scene has to be reloaded
      * @author Matteo
@@ -277,7 +277,7 @@ public class GUIupdater {
     }
 
     /**
-     * gets the Private Objective of the current player
+     * Gets the Private Objective of the current player
      *
      * @return the String of the PrivOC
      * @author Matteo
@@ -378,7 +378,7 @@ public class GUIupdater {
     }
 
     /**
-     * Set if the Client can proceed to the game
+     * Sets if the Client can proceed to the game
      *
      * @param value: true if he can go
      * @author Matteo
