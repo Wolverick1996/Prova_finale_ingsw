@@ -31,6 +31,7 @@ public class GameController {
     private static final String COMMA = ",";
     private static final String PUBOC = "Public Objective Cards:";
     private static final String TAB = "\t";
+    private static final String TOOL = "USING TOOL CARD...\n";
     private static final int MAX_HEIGHT_ROUNDTRACK = 27;
     private ArrayList<ImageView> draftIMG = new ArrayList<>();
     private ArrayList<ImageView> roundtrackIMG = new ArrayList<>();
@@ -173,7 +174,7 @@ public class GameController {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Make a decision!");
-        Label label1 = new Label("USING TOOL CARD...\n");
+        Label label1 = new Label(TOOL);
         label1.setFont(myFont);
         Label label2 = new Label("You have to make a decision...\n");
         label2.setFont(myFont);
@@ -204,6 +205,44 @@ public class GameController {
         popup.showAndWait();
     }
 
+    static void chooseValuePopup(){
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.setTitle("Choose a dice value!");
+        Label label1 = new Label(TOOL);
+        label1.setFont(myFont);
+        Label label2 = new Label("You have to choose a value for the extracted dice...\n");
+        label2.setFont(myFont);
+
+        Button button1 = new Button("1");
+        button1.setFont(myFont);
+        button1.setOnAction(e -> popup.close());
+        Button button2 = new Button("2");
+        button2.setFont(myFont);
+        button2.setOnAction(e -> popup.close());
+        Button button3 = new Button("3");
+        button3.setFont(myFont);
+        button3.setOnAction(e -> popup.close());
+        Button button4 = new Button("4");
+        button4.setFont(myFont);
+        button4.setOnAction(e -> popup.close());
+        Button button5 = new Button("5");
+        button5.setFont(myFont);
+        button5.setOnAction(e -> popup.close());
+        Button button6 = new Button("6");
+        button6.setFont(myFont);
+        button6.setOnAction(e -> popup.close());
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(label1, label2, button1, button2, button3, button4, button5, button6);
+        layout.setAlignment(Pos.CENTER);
+        Scene popupScene = new Scene(layout, 500, 350);
+        popup.setScene(popupScene);
+        popup.setResizable(false);
+        popup.setIconified(false);
+        popup.showAndWait();
+    }
+
     private static void dicePopup(String message){
         String[] divide;
         String[] toBePrepared = new String[1];
@@ -218,7 +257,7 @@ public class GameController {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         popup.setTitle("Advertisement");
-        Label label1 = new Label("USING TOOL CARD...\n");
+        Label label1 = new Label(TOOL);
         label1.setFont(myFont);
         Label label2 = new Label(divide[0]+":");
         label2.setFont(myFont);

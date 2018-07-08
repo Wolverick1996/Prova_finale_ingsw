@@ -239,7 +239,13 @@
             <Region prefHeight="20.0" VBox.vgrow="ALWAYS" />
             <HBox prefHeight="50.0">
                <children>
-                  <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <Region prefHeight="200.0" prefWidth="150.0" />
+                  <Button mnemonicParsing="false" onAction="#showPrivOC" stylesheets="@../CSS/900x720.css" text="Click to see your Private Objective Card">
+                     <font>
+                        <Font name="Century Gothic" size="18.0" />
+                     </font>
+                  </Button>
+                  <Region prefHeight="37.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
                   <Button mnemonicParsing="false" onAction="#loadGame" stylesheets="@../CSS/900x720.css" text="Next &gt;">
                      <font>
                         <Font name="Century Gothic" size="18.0" />

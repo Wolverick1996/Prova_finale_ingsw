@@ -68,9 +68,7 @@ public class Game implements Observer {
 
         Collections.shuffle(Arrays.asList(schemes));
         for (Player p:this.players){
-            Controller.getMyIO(this).notify(p.getUsername(), "This is your Private Objective Card:\n" +
-            PrivObjHandler.getColor(p).escape() + PrivObjHandler.getName(p) + "\n" + Enum.Color.RESET +
-            PrivObjHandler.getDescription(p) + "\n");
+            Controller.getMyIO(this).notify(p.getUsername(), PrivObjHandler.getCard(p));
             Controller.getMyIO(this).broadcast(p.getUsername() + " has to choose a scheme");
 
             i = schemes[this.players.indexOf(p)];

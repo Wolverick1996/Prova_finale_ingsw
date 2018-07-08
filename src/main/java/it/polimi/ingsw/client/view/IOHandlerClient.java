@@ -70,6 +70,7 @@ public class IOHandlerClient implements Observer {
     }
 
     private boolean chooseSchemes = false;
+    private boolean privOC = false;
     private int lineReadNumber = 0;
     private boolean readStatus = false;
     private boolean readActivePlayer = false;
@@ -82,7 +83,7 @@ public class IOHandlerClient implements Observer {
         String PLAYERDIDNOTDOITRIGHT = "Player " + activePlayer + " didn't do it right, try again\n";
         String EXCEPTIONCAUGHTNOTRIGHT = "EXCEPTION CAUGHT! Player " + activePlayer + " didn't do it right, try again\n";
 
-        if(message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
+        if (message.equals(PLAYERDIDNOTDOITRIGHT) || message.equals(EXCEPTIONCAUGHTNOTRIGHT)) {
             resetGUIupdater();
             //Undo the move, go back to standardchoice
             GUIupdater.setToSend("0");
@@ -94,6 +95,11 @@ public class IOHandlerClient implements Observer {
 
         if (chooseSchemes) { chooseSchemes(message); }
 
+        if (privOC) {
+            privOC = false;
+            GUIupdater.setPrivObj(message);
+        }
+
         switch (message){
             case "Do you want to use custom window patterns?" :
                 if (GUIupdater.getCustomSchemes()){
@@ -101,6 +107,10 @@ public class IOHandlerClient implements Observer {
                 } else {
                     GUIupdater.setToSend("n");
                 }
+                break;
+            case "Custom window patterns enabled!":
+            case "Old school, only standard window patterns!":
+                privOC = true;
                 break;
             case "CHOOSE A SCHEME :" :
                 chooseSchemes = true;
