@@ -63,6 +63,11 @@ public class SchemesController {
     @FXML
     private RadioButton grid3Button;
 
+    /**
+     * Method used to show Private Objective Cards when users are choosing their own scheme
+     *
+     * @author Riccardo
+     */
     @FXML
     private void showPrivOC(){
         Stage popup = new Stage();
@@ -97,6 +102,15 @@ public class SchemesController {
         popup.showAndWait();
     }
 
+    /**
+     * Associates the restriction string to the corresponding image
+     *
+     * @param restriction: type of cell restriction
+     * @param paneIndex: index of the pane
+     * @param row: row of the pane
+     * @param col: column of the pane
+     * @author Riccardo
+     */
     private void imageFactory(String restriction, int paneIndex, int row, int col){
         ArrayList<GridPane> panes = new ArrayList<>();
         panes.add(grid1);
@@ -180,6 +194,15 @@ public class SchemesController {
         }
     }
 
+    /**
+     * Sets the four window patterns received from the controller
+     *
+     * @param s1: first window pattern
+     * @param s2: second window pattern
+     * @param s3: third window pattern
+     * @param s4: fourth window pattern
+     * @author Riccardo
+     */
     void setSchemes(String s1, String s2, String s3, String s4){
         ArrayList<String> schemes = new ArrayList<>();
         schemes.add(s1.replaceAll(COLORS, ""));
@@ -221,6 +244,13 @@ public class SchemesController {
 
     }
 
+    /**
+     * Loads the game screen
+     *
+     * @param event: button event
+     * @throws IOException
+     * @author Riccardo
+     */
     @FXML
     private void loadGame(ActionEvent event) throws IOException {
 

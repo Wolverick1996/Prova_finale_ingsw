@@ -175,7 +175,7 @@ public class GameController {
     /**
      * Sets the effect of the grid on/off
      *
-     * @param : on
+     * @param on: boolean to set
      * @author Matteo
      */
     static synchronized void highlightGrid(boolean on){
@@ -185,7 +185,7 @@ public class GameController {
     /**
      * Sets the effect of the draft on/off
      *
-     * @param : on
+     * @param on: boolean to set
      * @author Matteo
      */
     static synchronized void highlightDraft(boolean on){
@@ -195,7 +195,7 @@ public class GameController {
     /**
      * Sets the effect of the roundtrack on/off
      *
-     * @param : on
+     * @param on: boolean to set
      * @author Matteo
      */
     static synchronized void highlightRoundtrack(boolean on){
@@ -205,7 +205,7 @@ public class GameController {
     /**
      * Sets the effect of the Tools on/off
      *
-     * @param : on
+     * @param on: boolean to set
      * @author Matteo
      */
     static synchronized void highlightTool(boolean on){
@@ -215,7 +215,7 @@ public class GameController {
     /**
      * Sets the effect of the Pass Button on/off
      *
-     * @param : on
+     * @param on: boolean to set
      * @author Matteo
      */
     static synchronized void highlightPass(boolean on){
@@ -225,7 +225,7 @@ public class GameController {
     /**
      * Sets the effect of the Refresh button on/off
      *
-     * @param : on
+     * @param on: boolean to set
      * @author Matteo
      */
     static synchronized void highlightRefresh(boolean on){
