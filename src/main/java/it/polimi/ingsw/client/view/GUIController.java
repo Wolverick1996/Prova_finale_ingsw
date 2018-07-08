@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.client.network_client.ClientMain;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,24 +31,27 @@ import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static it.polimi.ingsw.client.view.SchemesController.NEWLINE;
 
 public class GUIController implements Initializable {
 
+    private static final int TIMEOUT = 19000;
     private static final int STARTED = 999;
     static final int INFINITE = 5;
     private static final String RMI = "rmi";
     private static final String SOCKET = "socket";
     private static final String RANK_DIVISOR = ": \t";
     private static SocketMessengerClient messenger = GUIupdater.messenger;
-    private int lobbyDelay = GUIupdater.lobbyDelay;
+    private int lobbyDelay = 20000;
     private int numPlayersAtBeginning = GUIupdater.numPlayersAtBeginning;
     private int numPlayers = GUIupdater.numPlayers;
     private boolean isRMI = GUIupdater.isRMI;
-    private boolean customSchemes = GUIupdater.getCustomSchemes();
     private static Stage activePopup;
     static Font myFont = new Font("Century Gothic", 18);
+    private static Timer timer = new Timer();
 
     @FXML
     private AnchorPane rootPane;
@@ -110,7 +114,7 @@ public class GUIController implements Initializable {
         VBox layout = new VBox(40);
         layout.getChildren().addAll(label1, label2, text, button);
         layout.setAlignment(Pos.CENTER);
-        Scene popupScene = new Scene(layout, 400, 350);
+        Scene popupScene = new Scene(layout, 600, 350);
         popup.setScene(popupScene);
         popup.setResizable(false);
         popup.setIconified(false);
@@ -248,7 +252,6 @@ public class GUIController implements Initializable {
             int k = 0;
             try {
                 k = messenger.waitForGameStart();
-                System.out.println("I read " + k);
             } catch (IOException e) {
                 System.out.println("SOMETHING IS WRONG WITH THE SERVER, IOEXC ON CHECKNEWPLAYERS");
             }
@@ -270,6 +273,17 @@ public class GUIController implements Initializable {
             if (numPlayersAtBeginning == 1) {
                 pane2 = FXMLLoader.load(getClass().getResource("/FXML/lobby.fxml"));
                 pane1.getChildren().setAll(pane2);
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        checkParameters = false;
+                        Platform.runLater(() -> {
+                            popup("\t\t\t\t You were too slow... \nParameters set to 20 sec and NO custom window patterns");
+                        });
+                        GUIupdater.setCustomSchemes(false);
+                    }
+                };
+                timer.schedule(task, TIMEOUT);
             } else {
                 loadSchemes(event);
             }
@@ -280,17 +294,23 @@ public class GUIController implements Initializable {
     //       SETUP PHASE         //
     //***************************//
 
+    private static boolean checkParameters = true;
+
     @FXML
     private void setParameters(){
+        if (!checkParameters) {
+            return;
+        }
         if (!customSchemesButtonNo.isSelected()) {
-            customSchemes = true;
-            GUIupdater.setCustomSchemes(customSchemes);
+            GUIupdater.setCustomSchemes(true);
         }
         try {
             lobbyDelay = Integer.parseInt(delayTextField.getText());
             GUIupdater.lobbyDelay = lobbyDelay;
         } catch (NumberFormatException e) {
-            System.out.println("Invalid delay, was set to 20");
+            Platform.runLater(() -> {
+                popup("Invalid delay, was set to 20");
+            });
         }
         setDelay(lobbyDelay);
     }
@@ -311,7 +331,7 @@ public class GUIController implements Initializable {
     private void loadSchemes(ActionEvent event) throws IOException {
         if (numPlayersAtBeginning == 1){
             setParameters();
-            //TODO: CHECK FOR LATE "NEXT"
+            timer.cancel();
         }
 
         waitForGameStart();

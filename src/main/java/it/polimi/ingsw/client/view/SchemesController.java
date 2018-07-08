@@ -241,7 +241,6 @@ public class SchemesController {
         GameController controller = loader.getController();
         GUIupdater.setController(controller);
 
-        System.out.println("THIS IS THE NUMPLAYER " + GUIupdater.getNumPlayers());
         controller.reloadGame(GUIupdater.getNumPlayers(), GUIupdater.getOwnScheme(),
                 GUIupdater.getPrivObj(), GUIupdater.getTable(), GUIupdater.getTools(),
                 GUIupdater.getOwnPlayer(), GUIupdater.getActivePlayer());

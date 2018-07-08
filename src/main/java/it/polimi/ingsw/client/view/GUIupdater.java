@@ -22,7 +22,7 @@ public class GUIupdater {
     private static String ownUsername;
     private static String activePlayer;
     static SocketMessengerClient messenger;
-    static int lobbyDelay = 20;
+    static int lobbyDelay = 20000;
     static int numPlayersAtBeginning;
     static int numPlayers;
     static boolean isRMI = false;
