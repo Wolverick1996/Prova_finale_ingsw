@@ -237,8 +237,8 @@ public class GUIController implements Initializable {
                     if (activePopup!=null)
                     activePopup.close();
                 } else {
-                    numPlayers = n;
                     GUIupdater.numPlayers = numPlayers;
+                    numPlayers = n;
                     waitForGameStart();
                 }
             } catch (RemoteException e) {
@@ -256,8 +256,8 @@ public class GUIController implements Initializable {
                 if (activePopup!=null)
                 activePopup.close();
             } else {
-                numPlayers = k;
                 GUIupdater.numPlayers = numPlayers;
+                numPlayers = k;
                 waiting(INFINITE, numPlayers, false);
                 waitForGameStart();
             }

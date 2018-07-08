@@ -229,12 +229,6 @@ public class IOHandlerClient{
             resetGUIupdater();
             GameController.dicePopup(message);
             return true;
-        }
-        else if (temp.split((":"))[0].equals("Dice extracted from the bag")) {
-            resetGUIupdater();
-            GameController.dicePopup(message);
-            GameController.chooseValuePopup();
-            return true;
         } else
             return false;
     }

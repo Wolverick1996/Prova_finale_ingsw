@@ -428,7 +428,7 @@ public class ToolCard {
             if (!ToolHandler.getYesOrNo(player))
                 return true; }
 
-        ToolHandler.notify(player, Controller.STATUS);        
+        ToolHandler.notify(player, Controller.STATUS);
         ToolHandler.notify(player,"Insert the OLD coordinates of the SECOND dice to be moved, one at a time (x, y)");
         coord2OLD = getCoordinates(player);
 
