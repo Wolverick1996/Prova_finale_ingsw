@@ -9,6 +9,14 @@
 Final test of the software engineering course (A.Y. 2017/2018).  
 Realization of "Sagrada" game.
 
+## Notes for the use
+The program is composed by both GUI and CLI, and by both socket and RMI connections. For details about JAR parameterization please refer to [config_README.md](/Deliverables/config_README.md)
+
+### GUI
+The final rank is shown to the last player when he clicks the "End turn" button; other players can also visualize the last game screen clicking the "End turn" button after last player's turn.
+
+We have implemented a "Refresh" button in the main game screen, which needs to be clicked whenever a game action is performed (dice placements, tool cards usages, turn changes). A Drop Shadow effect will guide you in your gaming experience!
+
 ## Game's short description 
 - 4 Window Frame Player Boards;
 - 12 Window Pattern Cards;
