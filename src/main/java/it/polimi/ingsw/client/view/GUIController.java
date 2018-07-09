@@ -142,7 +142,7 @@ public class GUIController implements Initializable {
     /**
      * Waiting popup. Blocks the execution for a given time while displaying a message
      *
-     * @param timer: how long the popup will show
+     * @param timer: how long the popup will be shown
      * @param numP: number of player
      * @param schemes: changes the type of message to be shown (waiting for schemes settings / waiting for game to start)
      * @author Riccardo
@@ -215,7 +215,7 @@ public class GUIController implements Initializable {
     }
 
     /**
-     * Checks the type of the connection (rmi/socket)
+     * Checks the type of the connection (RMI/socket)
      *
      * @return the type of connection
      * @author Matteo
@@ -282,7 +282,8 @@ public class GUIController implements Initializable {
 
     /**
      * Sets the number of player during the login phase in order to know the player ID
-     * @param num : the player ID
+     *
+     * @param num: the player ID
      * @author Matteo
      */
     public void setNumPlayersAtBeginning(int num){
@@ -465,8 +466,8 @@ public class GUIController implements Initializable {
     /**
      * Sets the ranking when games ends
      *
-     * @param numP: number of players.
-     * @param rank: String of the entire ranking.
+     * @param numP: number of players
+     * @param rank: string of the entire ranking
      * @author Riccardo
      */
     void setPlayers(int numP, String rank){

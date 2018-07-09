@@ -70,7 +70,7 @@ public class PlayerController {
      *
      * @param player: the player whose grid is loaded
      * @param draftIMG: reserve
-     * @author Matteo
+     * @author Riccardo
      */
     void loadGrid(String player, ArrayList<ImageView> draftIMG){
         String[] divide;

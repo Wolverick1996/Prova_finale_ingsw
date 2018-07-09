@@ -3,6 +3,11 @@ package it.polimi.ingsw.client.view;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class which manages GUI and updates it with controller's data
+ *
+ * @author Matteo
+ */
 public class GUIupdater {
 
     private static GameController controller;
@@ -61,8 +66,8 @@ public class GUIupdater {
     /**
      * Gets a particular player from the data
      *
-     * @param number: the id of the player
-     * @return the String of the corresponding player
+     * @param number: the ID of the player
+     * @return the string of the corresponding player
      * @author Matteo
      */
     static synchronized String getPlayer(int number){
@@ -82,7 +87,7 @@ public class GUIupdater {
     /**
      * Reads the active player that is currently playing
      *
-     * @return the String of the player
+     * @return the string of the player
      * @author Matteo
      */
     static synchronized String getActivePlayer(){
@@ -97,7 +102,7 @@ public class GUIupdater {
     /**
      * Gets the current player in the setup
      *
-     * @return the String of the Own player
+     * @return the string relative to the own player
      * @author Matteo
      */
     static synchronized String getOwnPlayer(){
@@ -112,7 +117,7 @@ public class GUIupdater {
     /**
      * Gets the scheme of the current player
      *
-     * @return the String of the own scheme
+     * @return the string of the own scheme
      * @author Matteo
      */
     public static synchronized String getOwnScheme(){
@@ -203,10 +208,9 @@ public class GUIupdater {
     }
 
     /**
-     * Gets the toSend variable This variable has medium priority, and is sended only if the Type requested
-     * is not specified and no toSendForced is defined
+     * Gets the toSend variable This variable has medium priority, and is sended only if the Type requested is not specified and no toSendForced is defined
      *
-     * @return the String to be sent to the Server
+     * @return the string to be sent to the Server
      * @author Matteo
      */
     static synchronized String getToSend(){
@@ -214,9 +218,9 @@ public class GUIupdater {
     }
 
     /**
-     * Gets the String that contains the ranking of the game.
+     * Gets the string that contains the ranking of the game.
      *
-     * @return the String of the ranking
+     * @return the string of the ranking
      * @author Matteo
      */
     static synchronized String getFinalMessage(){
@@ -226,7 +230,7 @@ public class GUIupdater {
     /**
      * Gets the toSendForced variable. This variable has maximum priority and if defined, is sent to the server
      *
-     * @return the Forced toSend String
+     * @return the toSendForced string
      * @author Matteo
      */
     static synchronized String getToSendForced(){
@@ -238,7 +242,7 @@ public class GUIupdater {
     /**
      * Gets the list of schemes that can be chosen in the prep phase, before the game
      *
-     * @return : the String containing the 4 schemes
+     * @return the string containing the 4 schemes
      * @author Matteo
      */
     static synchronized List getSchemesToChoose(){
@@ -259,7 +263,7 @@ public class GUIupdater {
     /**
      * Returns the string of the table in the current setup
      *
-     * @return the String of the table
+     * @return the string of the table
      * @author Matteo
      */
     public static synchronized String getTable(){
@@ -279,7 +283,7 @@ public class GUIupdater {
     /**
      * Gets the Private Objective of the current player
      *
-     * @return the String of the PrivOC
+     * @return the string of the PrivOC
      * @author Matteo
      */
     static synchronized String getPrivObj(){
@@ -319,7 +323,7 @@ public class GUIupdater {
     /**
      * Sets the message with the ranking
      *
-     * @param value: the String of the ranking
+     * @param value: the string of the ranking
      * @author Matteo
      */
     static synchronized void setFinalMessage(String value){
@@ -327,7 +331,7 @@ public class GUIupdater {
     }
 
     /**
-     * Sets the Type of input requested, to show the user with effect what to do and to prevent invalid inputs
+     * Sets the type of input requested, to show the user with effect what to do and to prevent invalid inputs
      *
      * @param value: the Type that is requested
      * @author matteo
@@ -390,7 +394,7 @@ public class GUIupdater {
     /**
      * Sets the toSend variable (check the get method for further information)
      *
-     * @param value: the String to be sent
+     * @param value: the string to be sent
      */
     static synchronized void setToSend(String value){
         toSend = value;
@@ -419,7 +423,7 @@ public class GUIupdater {
     /**
      * Sets the tools for the current setup
      *
-     * @param value: the String of the tools
+     * @param value: the string of the tools
      * @author Matteo
      */
     static synchronized void setTools(String value){
@@ -429,7 +433,7 @@ public class GUIupdater {
     /**
      * Sets the PrivOC for the current setup
      *
-     * @param value: String of the privOC
+     * @param value: string of the private objective card
      * @author Matteo
      */
     static synchronized void setPrivObj(String value){
@@ -439,7 +443,7 @@ public class GUIupdater {
     /**
      * Adds a player to the current setup
      *
-     * @param value: the String of the player
+     * @param value: the string of the player
      * @author Matteo
      */
     static synchronized void addPlayer(String value){
@@ -456,7 +460,7 @@ public class GUIupdater {
     }
 
     /**
-     * Adds a String to the list of consecutive outputs from the Client to the Server
+     * Adds a string to the list of consecutive outputs from the Client to the Server
      *
      * @param value: the message to add
      * @author Matteo
@@ -528,7 +532,9 @@ public class GUIupdater {
      * @param value: true if the tools needs to be disabled
      * @author Matteo
      */
-    static synchronized void setToolDisabled(boolean value) { toolDisabled = value; }
+    static synchronized void setToolDisabled(boolean value){
+        toolDisabled = value;
+    }
 
     /**
      * Sets the Draft's effect "disabled" on the GUI
@@ -536,7 +542,9 @@ public class GUIupdater {
      * @param value: true if the draft needs to be disabled
      * @author Matteo
      */
-    static synchronized void setDraftDisabled(boolean value) { draftDisabled = value; }
+    static synchronized void setDraftDisabled(boolean value){
+        draftDisabled = value;
+    }
 
     /**
      * Gets the "disabled" flag of the Tools on the GUI
@@ -544,7 +552,9 @@ public class GUIupdater {
      * @return true if the tools needs to be disabled
      * @author Matteo
      */
-    private static synchronized boolean getToolDisabled() { return toolDisabled; }
+    private static synchronized boolean getToolDisabled(){
+        return toolDisabled;
+    }
 
     /**
      * Gets the "disabled" flag of the Draft on the GUI
@@ -552,7 +562,9 @@ public class GUIupdater {
      * @return true if the draft needs to be disabled
      * @author Matteo
      */
-    private static synchronized boolean getDraftDisabled() { return draftDisabled; }
+    private static synchronized boolean getDraftDisabled(){
+        return draftDisabled;
+    }
 
     /**
      * Sends the controller the right flags in order to trigger the right effects

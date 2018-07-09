@@ -165,7 +165,9 @@ public class GameController {
      * @return roundtrackIMG
      * @author Matteo
      */
-    ArrayList getRoundtrackIMG(){ return roundtrackIMG; }
+    ArrayList getRoundtrackIMG(){
+        return roundtrackIMG;
+    }
 
     /**
      * Sets the effect of the grid on/off
@@ -392,11 +394,11 @@ public class GameController {
     }
 
     /**
-     * Decodes a String for scheme printing
+     * Decodes a string for scheme printing
      *
-     * @param imageColor: Color vector to be printed
-     * @param imageValue: Value vector to be printed
-     * @param divide: The string to decode
+     * @param imageColor: color vector to be printed
+     * @param imageValue: value vector to be printed
+     * @param divide: the string to decode
      * @author Riccardo
      */
     private static synchronized void prepareString(ArrayList<String> imageColor, ArrayList<String> imageValue, String[] divide){
@@ -437,7 +439,7 @@ public class GameController {
     /**
      * Loads the Window Pattern on the GUI
      *
-     * @param wp: the String of the window pattern to be loaded
+     * @param wp: the string of the window pattern to be loaded
      * @param toFill: the list of ImageViews to fill
      * @param gridObj: the grid on the Scene
      * @author Riccardo
@@ -502,7 +504,7 @@ public class GameController {
     /**
      * Loads the draft on the GUI
      *
-     * @param draft: the String of the draft to be loaded
+     * @param draft: the string of the draft to be loaded
      * @author Riccardo
      */
     private synchronized void loadReserve(String draft){
@@ -538,7 +540,7 @@ public class GameController {
     /**
      * Loads the Roundtrack on the GUI
      *
-     * @param track: the String of the Roundtrack to be loaded
+     * @param track: the string of the Roundtrack to be loaded
      * @author Riccardo
      */
     private synchronized void loadRoundtrack(String track){
@@ -635,7 +637,7 @@ public class GameController {
     /**
      * Loads the tools on the GUI
      *
-     * @param activeTools: the String of the tools to be loaded
+     * @param activeTools: the string of the tools to be loaded
      * @author Riccardo
      */
     private synchronized void loadTools(String activeTools){
@@ -688,8 +690,7 @@ public class GameController {
     }
 
     /**
-     * Called from the refresh button. Updates the GUI with parameters from the
-     * GUIupdater if needed and turns off the button.
+     * Called from the refresh button. Updates the GUI with parameters from the GUIupdater if needed and turns off the button.
      *
      * @author Riccardo
      */
@@ -779,7 +780,7 @@ public class GameController {
     /**
      * Loads the first player in the game (that is not the current player)
      *
-     * @param event : the trigger of the method
+     * @param event: the trigger of the method
      * @throws IOException associated to the event
      * @author Riccardo
      */

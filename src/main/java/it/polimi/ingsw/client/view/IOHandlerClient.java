@@ -77,7 +77,7 @@ public class IOHandlerClient {
     private boolean tool8 = false;
 
     /**
-     * Gets the message sent by Client and decodes it for the GUI.
+     * Gets the message sent by Client and decodes it for the GUI
      * Each string correspond to a different mechanism that triggers different events
      *
      * @param message: the message sent from the client
@@ -214,9 +214,9 @@ public class IOHandlerClient {
     }
 
     /**
-     * Reads and sets the privOC
+     * Reads and sets the private objective card on the GUI
      *
-     * @param message the message from the Server
+     * @param message: the message from the Server
      * @author Matteo
      */
     private void setPrivObj(String message){
@@ -227,7 +227,7 @@ public class IOHandlerClient {
     }
 
     /**
-     * Triggers the Game End
+     * Triggers the game ending
      *
      * @param message: the message containing the ranking
      * @return the right message to be read
@@ -240,7 +240,7 @@ public class IOHandlerClient {
     /**
      * Sets the type of input requested on the GUIupdater
      *
-     * @param requested : the type of input requested to the user
+     * @param requested: the type of input requested to the user
      * @author Matteo
      */
     private void setTypeRequested(GUIupdater.TypeRequested requested) {
@@ -294,7 +294,7 @@ public class IOHandlerClient {
     }
 
     /**
-     * Gets the STATUS from the Server and updates all the data for GUI refreshing
+     * Gets the STATUS from the server and updates all the data for GUI refreshing
      *
      * @param message: the status
      * @author Matteo
@@ -336,7 +336,7 @@ public class IOHandlerClient {
     }
 
     /**
-     * Requests an input from the GUI. toSendForced has maximum priority.
+     * Requests an input from the GUI. toSendForced has maximum priority
      *
      * @return the input of the player
      * @author Matteo
