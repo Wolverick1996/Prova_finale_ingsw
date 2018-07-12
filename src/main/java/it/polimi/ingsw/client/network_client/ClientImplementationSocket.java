@@ -62,7 +62,7 @@ class ClientImplementationSocket {
                             System.out.println("Login failed, this userID is already used");
                         else if (result.equals("started")){
                             this.gameStarted = true;
-                            if(in.readLine().equals("true")){
+                            if (in.readLine().equals("true")){
                                 return string;
                             }
                             System.out.println("Your friends started without you :(\n\nGet better friends");

@@ -85,7 +85,7 @@ public class PrivateOC implements ObjectiveCard {
         for (int i = 0; i<Scheme.MAX_ROW; i++){
             for (int j = 0; j<Scheme.MAX_COL; j++){
                 try {
-                    if(grid[i][j].getDice().getColor() == this.color)
+                    if (grid[i][j].getDice().getColor() == this.color)
                         points += grid[i][j].getDice().getValue();
                 } catch (NullPointerException e) {
                     // grid[x][y] doesn't contains any dice so this position has to be ignored

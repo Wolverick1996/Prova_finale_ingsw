@@ -137,7 +137,7 @@ public class PublicOC implements ObjectiveCard {
                     // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
-            if(checkColor.size() == 5)
+            if (checkColor.size() == 5)
                 points += 6;
             checkColor.clear();
         }
@@ -166,7 +166,7 @@ public class PublicOC implements ObjectiveCard {
                     // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
-            if(checkColor.size() == 4)
+            if (checkColor.size() == 4)
                 points += 5;
             checkColor.clear();
         }
@@ -195,7 +195,7 @@ public class PublicOC implements ObjectiveCard {
                     // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
-            if(checkValue.size() == 5)
+            if (checkValue.size() == 5)
                 points += 5;
             checkValue.clear();
         }
@@ -224,7 +224,7 @@ public class PublicOC implements ObjectiveCard {
                     // grid[x][y] doesn't contains any dice so this position has to be ignored
                 }
             }
-            if(checkValue.size() == 4)
+            if (checkValue.size() == 4)
                 points += 4;
             checkValue.clear();
         }

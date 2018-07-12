@@ -66,12 +66,12 @@ public class ClientMain {
         String checkUI;
         try {
             checkUI = args[0];
-        }catch (ArrayIndexOutOfBoundsException n){
+        } catch (ArrayIndexOutOfBoundsException n){
             checkUI = "gui"; // default
         }
         try {
             port = Integer.parseInt(args[1]);
-        }catch (ArrayIndexOutOfBoundsException n){
+        } catch (ArrayIndexOutOfBoundsException n){
             port = 1337; // default
         }
         if (checkUI.equals("gui")){

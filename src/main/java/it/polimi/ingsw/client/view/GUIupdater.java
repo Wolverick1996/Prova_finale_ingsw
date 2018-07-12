@@ -482,16 +482,6 @@ public class GUIupdater {
     }
 
     /**
-     * Sets if the GUIupdater has got the STATUS of the game
-     *
-     * @param value: true if Status was sent
-     * @author Matteo
-     */
-    public static synchronized void setHasGetStatus(boolean value){
-        hasGetStatus = value;
-    }
-
-    /**
      * Empties the list of consecutive outputs to be sent to the server
      *
      * @author Matteo

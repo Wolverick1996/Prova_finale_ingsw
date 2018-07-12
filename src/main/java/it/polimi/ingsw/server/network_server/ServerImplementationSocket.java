@@ -164,7 +164,7 @@ public class ServerImplementationSocket implements Runnable {
                             out.println("true");
                             out.flush();
                             return;
-                        } else{
+                        } else {
                             out.println("false");
                             out.flush();
                             return;

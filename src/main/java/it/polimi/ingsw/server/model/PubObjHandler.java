@@ -101,7 +101,7 @@ public class PubObjHandler {
     @Override
     public String toString() {
         String s = "These are the active PublicOCs:\n";
-        for(PublicOC p:activeID)
+        for (PublicOC p:activeID)
             s = s + p.toString() + "\n";
         return s;
     }

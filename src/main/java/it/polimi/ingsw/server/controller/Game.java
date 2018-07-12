@@ -303,7 +303,7 @@ public class Game implements Observer {
      * @author Andrea
      */
     private void gameEnding(){
-        List<Player> finalRank = null;
+        List<Player> finalRank = new ArrayList<>();
         Player winner = null;
 
         for (Player p : this.players)

@@ -124,7 +124,7 @@ public class Table {
         if (redExt==18 && purpleExt==18 && blueExt ==18 && greenExt==18 && yellowExt==18){
             System.err.println("Bag is empty");
             return null; }
-        while(!isAVB){
+        while (!isAVB){
             color = Enum.Color.getRandomColor();
             switch (color){
                 case RED: if (redExt < 18) { isAVB = true; redExt++;} break;
@@ -204,7 +204,7 @@ public class Table {
     public  boolean rerollReserve(){
         if (clockwise) return false;
 
-        for(Dice d:reserve)
+        for (Dice d:reserve)
             d.rollDice();
 
         return true;
@@ -218,7 +218,7 @@ public class Table {
      * @author Matteo
      */
     public Dice checkDiceFromReserve(int dicePos){
-        if(dicePos >= 0 && dicePos < reserve.size())
+        if (dicePos >= 0 && dicePos < reserve.size())
             return reserve.get(dicePos);
         return null;
     }
@@ -231,7 +231,7 @@ public class Table {
      * @author Matteo
      */
     public Dice checkDiceFromRoundtrack(int dicePos){
-        if(dicePos >= 0 && dicePos < roundTrack.size())
+        if (dicePos >= 0 && dicePos < roundTrack.size())
             return roundTrack.get(dicePos);
         return null;
     }
@@ -393,7 +393,7 @@ public class Table {
     @Override
     public String toString(){
         String s = "\n";
-        for(int i = 0; i<NUM_CARDS ; i++){
+        for (int i = 0; i<NUM_CARDS ; i++){
             s += Enum.Color.RED.escape() + PubObjHandler.getName(i) + Enum.Color.RESET + "\n";
             s += PubObjHandler.getDescription(i) + "\n";
         }

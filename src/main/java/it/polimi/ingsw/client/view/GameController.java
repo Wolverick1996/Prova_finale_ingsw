@@ -253,7 +253,7 @@ public class GameController {
             Button button1 = new Button(option1);
             button1.setFont(myFont);
             button1.setOnAction(e -> {
-                if(isOne)
+                if (isOne)
                     GUIupdater.setToSend("+1");
                 else
                     GUIupdater.setToSend("y");
@@ -484,10 +484,10 @@ public class GameController {
 
         for (ImageView i: toFill)
             i.setOnMouseClicked(e -> {
-                if(GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.WINDOWPATTERN
+                if (GUIupdater.getTypeRequested() == GUIupdater.TypeRequested.WINDOWPATTERN
                         && !GUIupdater.getNeedsToReload()){
                     int posx = toFill.indexOf(i);
-                    if(posx<5)
+                    if (posx<5)
                         posx = 1;
                     else if (posx<10)
                         posx = 2;
@@ -770,7 +770,7 @@ public class GameController {
         divide = divide[1].split(DIVISOR);
         tokensP.setText(divide[1]);
 
-        if(!taskIsRunning){
+        if (!taskIsRunning){
             Thread refresh = new Thread(keepRefreshing);
             refresh.setDaemon(true);
             refresh.start();

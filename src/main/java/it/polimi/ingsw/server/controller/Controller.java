@@ -21,7 +21,8 @@ public class Controller {
     /* These attributes only serve as controller's addresses */
 
     /**
-     * Private constructor
+     * Private constructor of the Controller class
+     *
      * @author Andrea
      */
     private Controller(){

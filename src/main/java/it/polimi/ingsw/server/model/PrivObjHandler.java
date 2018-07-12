@@ -42,7 +42,7 @@ public class PrivObjHandler {
         for (int i = 0; i<numPlayers; i++){
             boolean isAVB = false;
             Enum.Color color;
-            while(!isAVB){
+            while (!isAVB){
                 color = Enum.Color.getRandomColor();
                 switch (color){
                     case RED:
@@ -149,7 +149,7 @@ public class PrivObjHandler {
     @Override
     public String toString() {
         String s = "These are the active PrivateOCs (from player 1):\n";
-        for(PrivateOC p: activeID)
+        for (PrivateOC p: activeID)
             s = s + p.toString() + "\n";
         return s;
     }

@@ -65,7 +65,7 @@ public class Box extends Observable {
      * @author Andrea
      */
     public boolean isEmployableNoCol(Dice dice, boolean print){
-        if(((this.restrictionNum == 0) || dice.getValue() == this.restrictionNum) && !isFull)
+        if (((this.restrictionNum == 0) || dice.getValue() == this.restrictionNum) && !isFull)
             return true;
         else {
             if (this.restrictionNum != 0 && dice.getValue() != this.restrictionNum) {
@@ -88,7 +88,7 @@ public class Box extends Observable {
      * @author Andrea
      */
     public boolean isEmployableNoNum(Dice dice, boolean print){
-        if(((this.restrictionCol == null) || dice.getColor() == this.restrictionCol) && !isFull)
+        if (((this.restrictionCol == null) || dice.getColor() == this.restrictionCol) && !isFull)
             return true;
         else {
             if (this.restrictionCol != null && dice.getColor() != this.restrictionCol) {
@@ -112,7 +112,7 @@ public class Box extends Observable {
         Dice tempDice = this.diceInside;
         if (!this.isFull)
             return null;
-        else{
+        else {
             this.isFull = false;
             this.diceInside = null;
             return tempDice;
@@ -129,7 +129,7 @@ public class Box extends Observable {
     public boolean setDice(Dice dice){
         if (isFull)
             return false;
-        else{
+        else {
             this.diceInside = dice;
             this.isFull = true;
             return true;
@@ -188,10 +188,10 @@ public class Box extends Observable {
     @Override
     public String toString(){
         String escape;
-        if(this.diceInside == null || !isFull){
-            if(this.restrictionCol == null && this.restrictionNum == 0)
+        if (this.diceInside == null || !isFull){
+            if (this.restrictionCol == null && this.restrictionNum == 0)
                 return "[ ]\t";
-            else if(this.restrictionCol != null) {
+            else if (this.restrictionCol != null) {
                 escape = this.restrictionCol.escape();
                 return escape+"["+this.restrictionCol.toString().substring(0,1)+"]\t"+Enum.Color.RESET;
             } else
